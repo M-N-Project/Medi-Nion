@@ -13,7 +13,7 @@
         android:layout_marginTop="53dp"
         android:layout_marginBottom="14dp"
         android:background="#8085AFD6"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editText_Title"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp" />
@@ -27,10 +27,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_Title" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editText_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -46,28 +46,29 @@
         android:background="@android:color/transparent"/>
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/editText_Content"
         android:layout_width="385dp"
         android:layout_height="511dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:ems="10"
-        android:inputType="textPersonName"
         android:gravity="top"
         android:hint="내용을 입력하세요."
+        android:inputType="textPersonName"
         android:textColorHint="#8085AFD6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <ImageButton
-        android:id="@+id/imageButton7"
+        android:id="@+id/imageButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.743"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toEndOf="@+id/editText_Title"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:srcCompat="@drawable/image_icon1" />
 
