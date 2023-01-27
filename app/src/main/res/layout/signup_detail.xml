@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+
+    <TextView
+        android:id="@+id/nickname_view"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="닉네임"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/nickname_editText"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:ems="5"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:hint="닉네임을 입력하세요."
+        android:textColor="#676767" />
+
+    <TextView
+        android:id="@+id/nickname_warning"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:visibility="gone"
+        android:text="" />
+
+
+
+
+    <TextView
+        android:id="@+id/id_view"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:text="아이디"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/id_editText"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:ems="5"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:hint="아이디를 입력하세요."
+        android:textColor="#676767" />
+
+    <TextView
+        android:id="@+id/id_warning"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:visibility="gone"
+        android:text="" />
+
+
+
+
+    <TextView
+        android:id="@+id/passwd_textView"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:text="비밀번호"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/passwd_editText"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:ems="5"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:hint="숫자, 문자, 특수문자 중 2가지 포함(8~15자)"
+        android:textColor="#676767" />
+
+    <TextView
+        android:id="@+id/passwd_warning"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:visibility="gone"
+        android:text="" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/passwdCheck_textView"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:text="비밀번호 확인"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/passwdCheck_editText"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:ems="5"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:hint="비밀번호를 한 번 더 입력하세요."
+        android:textColor="#676767" />
+
+    <TextView
+        android:id="@+id/passwdCheck_warning"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        android:text="" />
+
+</LinearLayout>

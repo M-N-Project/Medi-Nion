@@ -6,11 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <TextView
+        android:id="@+id/notDone_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="50dp"
+        android:text="모든 항목을 채워주세요."
+        android:textColor="#FF0000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <include layout="@layout/signup_done"
+        android:id="@+id/signUpDone"
+        android:visibility="gone"/>
+
+    <ScrollView
+        android:id="@+id/signUpDetail"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/informView">
+
+        <include layout="@layout/signup_detail" />
+    </ScrollView>
+
     <ImageView
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="78dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +51,7 @@
         android:id="@+id/userType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="30dp"
         android:text="회원 종류"
         android:textColor="#000000"
         android:textSize="20sp"
@@ -28,7 +59,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
-        <RadioGroup
+    <RadioGroup
             android:id="@+id/userType_RadioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,6 +93,100 @@
                 android:gravity="center"
                 android:text="기업 회원"
                 android:textSize="16sp" />
-        </RadioGroup>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/basicUser_RadioGroup"
+        android:layout_width="152dp"
+        android:layout_height="244dp"
+        android:layout_marginStart="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userType_RadioGroup"
+        android:background="@drawable/selector_radio_button_group"
+
+
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/doctor_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_top"
+            android:button="@null"
+            android:text="의사"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/nurse_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_middle"
+            android:button="@null"
+            android:text="간호사"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/MediTech_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_middle"
+            android:button="@null"
+            android:text="의료기사"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/office_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_middle"
+            android:button="@null"
+            android:text="사무직"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/student_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/selector_radio_button_bottom"
+            android:button="@null"
+            android:text="학생"
+            android:textAlignment="center" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/informView"
+        android:layout_width="327dp"
+        android:layout_height="0dp"
+        android:text="회원의 유형을 선택해주세요."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userType_RadioGroup" />
+
+    <Button
+        android:id="@+id/signUpBtn"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#8BE0C4"
+        android:text="회원가입"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpDetail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
