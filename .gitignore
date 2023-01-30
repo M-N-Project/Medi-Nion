@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/src/main/assets/tessdata/eng.traineddata
+/app/src/main/assets/tessdata/kor.traineddata
+/app/src/main/java/com/example/medi_nion/Login.kt
