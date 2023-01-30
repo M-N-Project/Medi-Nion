@@ -24,17 +24,16 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
+        android:backgroundTint="#86C9C6"
         android:ems="10"
         android:hint="ID"
         android:inputType="textPersonName"
         android:singleLine="false"
+        android:textColorHint="#8BCEE0"
+        android:textCursorDrawable="@color/textCursorDrawable_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        android:backgroundTint="#86C9C6"
-        android:textCursorDrawable="#86C9C6"
-        android:textColorHint="#8BCEE0"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <!-- password input -->
     <EditText
@@ -49,7 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id"
         android:backgroundTint="#86C9C6"
-        android:textCursorDrawable="#86C9C6"
+        android:textCursorDrawable="@color/textCursorDrawable_login"
         android:textColorHint="#8BCEE0"
         />
 
