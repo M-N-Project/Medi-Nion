@@ -57,12 +57,12 @@
         android:inputType="textPersonName"
         android:textColorHint="#8085AFD6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintHorizontal_bias="0.615"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/imageButton_gallery"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"

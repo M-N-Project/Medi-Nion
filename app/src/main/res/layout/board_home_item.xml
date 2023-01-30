@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/textView_commentcount"
+        android:layout_width="8dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="16dp"
+        android:text="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.029"
+        app:layout_constraintStart_toEndOf="@+id/imageView_comment"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText_BoardContent" />
+
+    <EditText
+        android:id="@+id/editText_BoardTitle"
+        android:layout_width="160dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:maxLines="2"
+        android:text="This is title"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.063"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_BoardTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.237"
+        app:layout_constraintStart_toEndOf="@+id/editText_BoardTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextText_BoardContent"
+        android:layout_width="245dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="18dp"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:maxLines="3"
+        android:singleLine="false"
+        android:text="This is content hello worl.."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_BoardTitle" />
+
+    <ImageView
+        android:id="@+id/imageView_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.433"
+        app:layout_constraintStart_toEndOf="@+id/editTextText_BoardContent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/imageView_like"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText_BoardContent"
+        app:srcCompat="@drawable/favorite_border" />
+
+    <TextView
+        android:id="@+id/textView_likecount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.028"
+        app:layout_constraintStart_toEndOf="@+id/imageView_like"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText_BoardContent" />
+
+    <ImageView
+        android:id="@+id/imageView_comment"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_likecount"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText_BoardContent"
+        app:srcCompat="@drawable/comment_icon" />
+
+    <ImageView
+        android:id="@+id/imageView_bookmark"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toEndOf="@+id/textView_commentcount"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText_BoardContent"
+        app:srcCompat="@drawable/bookmark_icon" />
+
+    <TextView
+        android:id="@+id/textView_bookmarkcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toEndOf="@+id/imageView_bookmark"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText_BoardContent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
