@@ -33,7 +33,8 @@
         android:textCursorDrawable="@color/color3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        />
 
     <!-- password input -->
     <EditText
@@ -49,7 +50,8 @@
         android:textCursorDrawable="@color/color3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
+        app:layout_constraintTop_toBottomOf="@+id/id"
+        />
 
     <android.widget.Button
         android:id="@+id/loginBtn"

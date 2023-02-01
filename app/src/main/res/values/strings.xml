@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Medi-Nion</string>
+    <string name="textCursorDrawable_var">textCursorDrawable</string>
 </resources>
