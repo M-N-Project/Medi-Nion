@@ -20,6 +20,7 @@ import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import com.googlecode.tesseract.android.TessBaseAPI
 import java.io.*
+import java.util.*
 import java.util.regex.Pattern
 
 
