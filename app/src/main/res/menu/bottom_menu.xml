@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Home"
+        android:icon="@drawable/bottom_home_icon"/>
+    <item
+        android:id="@+id/menuFragment"
+        android:title="Menu"
+        android:icon="@drawable/bottom_menu_icon"/>
+    <item
+        android:id="@+id/scheduleFragment"
+        android:title="Schedule"
+        android:icon="@drawable/bottom_schedule_icon"/>
+    <item
+        android:id="@+id/businessFragment"
+        android:title="Business"
+        android:icon="@drawable/bottom_business_icon"/>
+    <item
+        android:id="@+id/profileFragment"
+        android:title="Profile"
+        android:icon="@drawable/bottom_profile_icon"/>
+
+
+</menu>
