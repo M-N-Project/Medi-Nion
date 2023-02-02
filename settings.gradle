@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 rootProject.name = "Medi-Nion"
 include ':app'
 include ':opencv'
-include ':sdkopencv1'
