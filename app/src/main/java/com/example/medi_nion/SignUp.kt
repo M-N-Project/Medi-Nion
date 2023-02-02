@@ -1,7 +1,6 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -18,7 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.googlecode.tesseract.android.TessBaseAPI
+import org.json.JSONObject
 import java.io.*
 import java.util.*
 import java.util.regex.Pattern
@@ -213,17 +216,24 @@ class SignUp : AppCompatActivity() {
                     notDone_warning.visibility = View.INVISIBLE
                 }, 2000)
             } else {
+                var url = "http://seonho.dothome.co.kr/Register.php"
+                signUPRequest(
+                    url,
+                    nickname_editText,
+                    id_editText,
+                    passwd_editText,
+                    passwdCheck_editText
+                )
+
                 setContentView(R.layout.signup_done)
 
                 var goSignIn = findViewById<Button>(R.id.goSignInBtn)
-                goSignIn.setOnClickListener {
+                /*goSignIn.setOnClickListener {
                     //로그인 페이지로 이동.
                     val intent = Intent(applicationContext, Login::class.java)
                     startActivity(intent)
-                }
+                }*/
             }
-
-
         }
 
         //val tempImage : File = null
@@ -282,6 +292,71 @@ class SignUp : AppCompatActivity() {
         storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     }
+
+    //db 연동 시작
+    private fun signUPRequest(
+        url: String,
+        nickname_editText: EditText?,
+        id_editText: EditText?,
+        passwd_editText: EditText?,
+        passwdCheck_editText: EditText?
+    ) {
+            //POST 방식으로 db에 데이터 전송
+            val request = JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                null,
+                { response ->   //JSON을 파싱한 JSONObject 객체 전달
+                    val success: Boolean = response.getBoolean("success")
+
+                    val nickname_editText = response.getString("nickname_editText")
+                    val id_editText = response.getString("id_editText ")
+                    val passwd_editText = response.getString("passwd_editText")
+                    val passwdCheck_editText = response.getString("passwdCheck_editText")
+
+                    Log.d("success", "$nickname_editText, $id_editText, $passwd_editText, $passwdCheck_editText")
+
+                    //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
+                    if (passwd_editText.equals(passwdCheck_editText)) {
+                        if (success) {
+                            Toast.makeText(
+                                applicationContext,
+                                String.format("%s님 가입을 환영합니다. 로그인 해주세요.", id_editText),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //회원가입 되면 로그인 화면으로 이동
+                            //val intent = Intent(applicationContext, Login::class.java)
+                            //startActivity(intent)
+                        }
+                    }
+                    else {
+                        Toast.makeText(
+                            applicationContext,
+                            "비밀번호를 다시 확인해주세요.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            ) { error -> Log.d("failed", "error......$error") }
+
+                fun getParams(): MutableMap<String, String> {
+                    val params: MutableMap<String, String> = HashMap()
+                    params["Nickname"] = nickname_editText.toString()
+                    params["ID"] = id_editText.toString()
+                    params["PW"] = passwd_editText.toString()
+                    params["chkPW"] = passwdCheck_editText.toString()
+                    return params
+                }
+
+            //RequestQueue를 이용해 StringRequest에 담은 정보를 서버에 요청
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
+
+    }
+
+    //db 연동 끝
+
+
 
     private fun copyFile(lang: String) {
         try {
