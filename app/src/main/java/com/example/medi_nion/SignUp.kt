@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley
 import com.googlecode.tesseract.android.TessBaseAPI
 import org.json.JSONObject
 import java.io.*
+import java.util.*
 import java.util.regex.Pattern
 
 
