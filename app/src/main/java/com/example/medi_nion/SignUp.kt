@@ -1,6 +1,7 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -18,12 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.*
 import com.googlecode.tesseract.android.TessBaseAPI
-import org.json.JSONObject
 import java.io.*
-import java.util.*
 import java.util.regex.Pattern
 
 
@@ -46,7 +45,7 @@ class SignUp : AppCompatActivity() {
     var photoFile: File? = null
     val tempImage: String = "" //이미지 이름.
 
-    @SuppressLint("WrongThread")
+    @SuppressLint("WrongThread", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
@@ -216,23 +215,27 @@ class SignUp : AppCompatActivity() {
                     notDone_warning.visibility = View.INVISIBLE
                 }, 2000)
             } else {
-                var url = "http://seonho.dothome.co.kr/Register.php"
+                var url = "http://seonho.dothome.co.kr/SignUP.php"
+                var nickname_editText = findViewById<EditText>(R.id.nickname_editText).text.toString()
+
+                var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
+
+                var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
+
+                var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
+
                 signUPRequest(
-                    url,
-                    nickname_editText,
-                    id_editText,
-                    passwd_editText,
-                    passwdCheck_editText
+                    url, nickname_editText, id_editText, passwd_editText, passwdCheck_editText
                 )
 
                 setContentView(R.layout.signup_done)
 
                 var goSignIn = findViewById<Button>(R.id.goSignInBtn)
-                /*goSignIn.setOnClickListener {
+                goSignIn.setOnClickListener {
                     //로그인 페이지로 이동.
                     val intent = Intent(applicationContext, Login::class.java)
                     startActivity(intent)
-                }*/
+                }
             }
         }
 
@@ -242,7 +245,7 @@ class SignUp : AppCompatActivity() {
             if (it) {
                 setViews()
             } else {
-                Toast.makeText(baseContext, "권한을 승인해야 앱을 사용할 수 있습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "권한을 승인해야 앱을 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -251,7 +254,7 @@ class SignUp : AppCompatActivity() {
             if (it) {
                 openCamera()
             } else {
-                Toast.makeText(baseContext, "권한을 승인해야 카메라를 사용할 수 있습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "권한을 승인해야 카메라를 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -264,23 +267,28 @@ class SignUp : AppCompatActivity() {
 
                 dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
 
-                checkFile(File(dataPath+"tessdata/"),"kor") //사용할 언어파일의 이름 지정
-                checkFile(File(dataPath+"tessdata/"),"eng")
+                checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+                checkFile(File(dataPath + "tessdata/"), "eng")
 
-                val lang : String = "kor+eng"
+                val lang: String = "kor+eng"
                 tess = TessBaseAPI() //api준비
-                tess.init(dataPath,lang) //해당 사용할 언어데이터로 초기화
+                tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
 
 
                 // OCR 동작 버튼
-                lateinit var bitmap : Bitmap
-                try{
-                    bitmap = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, photoUri!!))
-                    } else{
+                lateinit var bitmap: Bitmap
+                try {
+                    bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        ImageDecoder.decodeBitmap(
+                            ImageDecoder.createSource(
+                                contentResolver,
+                                photoUri!!
+                            )
+                        )
+                    } else {
                         MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
                     }
-                }catch(e : IOException){
+                } catch (e: IOException) {
                     e.printStackTrace()
                 }
                 idImgView.setImageBitmap(bitmap)
@@ -293,69 +301,96 @@ class SignUp : AppCompatActivity() {
 
     }
 
+
     //db 연동 시작
     private fun signUPRequest(
         url: String,
-        nickname_editText: EditText?,
-        id_editText: EditText?,
-        passwd_editText: EditText?,
-        passwdCheck_editText: EditText?
+        nickname_editText: String,
+        id_editText: String,
+        passwd_editText: String,
+        passwdCheck_editText: String
     ) {
-            //POST 방식으로 db에 데이터 전송
-            val request = JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                null,
-                { response ->   //JSON을 파싱한 JSONObject 객체 전달
-                    val success: Boolean = response.getBoolean("success")
+        // Instantiate the cache
+        val cache = DiskBasedCache(cacheDir, 1024 * 1024) // 1MB cap
 
-                    val nickname_editText = response.getString("nickname_editText")
-                    val id_editText = response.getString("id_editText ")
-                    val passwd_editText = response.getString("passwd_editText")
-                    val passwdCheck_editText = response.getString("passwdCheck_editText")
+        // Set up the network to use HttpURLConnection as the HTTP client.
+        val network = BasicNetwork(HurlStack())
 
-                    Log.d("success", "$nickname_editText, $id_editText, $passwd_editText, $passwdCheck_editText")
+        // Instantiate the RequestQueue with the cache and network. Start the queue.
+        val requestQueue = RequestQueue(cache, network).apply {
+            start()
+        }
 
-                    //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
-                    if (passwd_editText.equals(passwdCheck_editText)) {
-                        if (success) {
-                            Toast.makeText(
-                                applicationContext,
-                                String.format("%s님 가입을 환영합니다. 로그인 해주세요.", id_editText),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //회원가입 되면 로그인 화면으로 이동
-                            //val intent = Intent(applicationContext, Login::class.java)
-                            //startActivity(intent)
-                        }
-                    }
-                    else {
+        //POST 방식으로 db에 데이터 전송
+        val request = StringRequest(
+            Request.Method.POST,
+            url,
+            { response ->   //JSON을 파싱한 JSONObject 객체 전달
+                val success = true
+
+                val nickname_editText: String = response.toString()
+                val id_editText: String = response.toString()
+                val passwd_editText: String = response.toString()
+                val passwdCheck_editText: String = response.toString()
+
+                //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
+                if (passwd_editText == passwdCheck_editText) {
+                    if (success) {
                         Toast.makeText(
                             applicationContext,
-                            "비밀번호를 다시 확인해주세요.",
+                            String.format("%s님 가입을 환영합니다. 로그인 해주세요.", id_editText),
                             Toast.LENGTH_SHORT
                         ).show()
+                        Log.d(
+                            "success",
+                            "$nickname_editText, $id_editText, $passwd_editText, $passwdCheck_editText"
+                        )
                     }
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "비밀번호를 다시 확인해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            ) { error -> Log.d("failed", "error......$error") }
+            }
+        ) { error -> Log.d("failed", "error......$error") }
 
-                fun getParams(): MutableMap<String, String> {
-                    val params: MutableMap<String, String> = HashMap()
-                    params["Nickname"] = nickname_editText.toString()
-                    params["ID"] = id_editText.toString()
-                    params["PW"] = passwd_editText.toString()
-                    params["chkPW"] = passwdCheck_editText.toString()
-                    return params
-                }
-
-            //RequestQueue를 이용해 StringRequest에 담은 정보를 서버에 요청
-            val queue = Volley.newRequestQueue(this)
-            queue.add(request)
-
+        //RequestQueue를 이용해 StringRequest에 담은 정보를 서버에 요청
+        val register = RegisterRequest(
+            nickname_editText = nickname_editText,
+            id_editText = id_editText,
+            passwd_editText = passwd_editText,
+            passwdCheck_editText = passwdCheck_editText, request
+        )
+        val queue = Volley.newRequestQueue(this)
+        requestQueue.add(request)
+        requestQueue.add(register)
+        queue.add(register)
+        queue.add(request)
+        Log.d("sssssssssssssss", "$queue")
     }
-
     //db 연동 끝
 
+    @SuppressLint("SuspiciousIndentation")
+    private fun RegisterRequest(
+        nickname_editText: String, id_editText: String,
+        passwd_editText: String, passwdCheck_editText: String, response: StringRequest
+    ): StringRequest {
+        var url = "http://seonho.dothome.co.kr/SignUP.php"
+
+        var param = HashMap<String, String>()
+        param.put("nickname_editText", nickname_editText)
+        param.put("id_editText", id_editText)
+        param.put("passwd_editText", passwd_editText)
+        param.put("passwdCheck_editText", passwdCheck_editText)
+        param.put("response", response.toString())
+
+        Log.d("dddddddddddd", "$response")
+        Log.d("iiiiiiiiiiiiiiiii", "$param")
+
+        return response
+    }
 
 
     private fun copyFile(lang: String) {
@@ -400,17 +435,17 @@ class SignUp : AppCompatActivity() {
      *  -> 파일 없으면 파일 생성
      *  -> 있으면 언어 종류 데이터 파일 복사
      */
-    private fun checkFile(dir : File, lang : String){
+    private fun checkFile(dir: File, lang: String) {
 
         //파일의 존재여부 확인 후 내부로 복사
-        if(!dir.exists()&&dir.mkdirs()){
+        if (!dir.exists() && dir.mkdirs()) {
             copyFile(lang)
         }
 
-        if(dir.exists()){
-            val datafilePath : String = "$dataPath/tessdata/$lang.traineddata"
-            val dataFile : File = File(datafilePath)
-            if(!dataFile.exists()){
+        if (dir.exists()) {
+            val datafilePath: String = "$dataPath/tessdata/$lang.traineddata"
+            val dataFile: File = File(datafilePath)
+            if (!dataFile.exists()) {
                 copyFile(lang)
             }
         }
@@ -421,11 +456,11 @@ class SignUp : AppCompatActivity() {
      *  이미지에서 텍스트 추출해서 결과뷰에 보여주는 기능
      *  @param bitmap: 이미지 비트맵
      */
-    private fun processImage(bitmap : Bitmap){
-        Toast.makeText(applicationContext,"잠시 기다려 주세요", Toast.LENGTH_LONG).show()
-        var ocrResult : String? = null;
+    private fun processImage(bitmap: Bitmap) {
+        Toast.makeText(applicationContext, "잠시 기다려 주세요", Toast.LENGTH_LONG).show()
+        var ocrResult: String? = null;
 //        tess.setImage(photoFile)
-        tess.setImage(bitmap.copy(Bitmap.Config.ARGB_8888,true))
+        tess.setImage(bitmap.copy(Bitmap.Config.ARGB_8888, true))
         ocrResult = tess.utF8Text
         val result = findViewById<TextView>(R.id.text_result)
         result.text = ocrResult
@@ -454,7 +489,6 @@ class SignUp : AppCompatActivity() {
 
         cameraLauncher.launch(photoUri)
     }
-
 
 
 }
