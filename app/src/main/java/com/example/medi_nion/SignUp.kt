@@ -20,6 +20,7 @@ import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.Response
 import com.android.volley.toolbox.*
 import com.googlecode.tesseract.android.TessBaseAPI
 import java.io.*
@@ -215,18 +216,9 @@ class SignUp : AppCompatActivity() {
                     notDone_warning.visibility = View.INVISIBLE
                 }, 2000)
             } else {
-                var url = "http://seonho.dothome.co.kr/SignUP.php"
-                var nickname_editText = findViewById<EditText>(R.id.nickname_editText).text.toString()
+                val url = "http://seonho.dothome.co.kr/SignUP.php"
 
-                var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
-
-                var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
-
-                var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
-
-                signUPRequest(
-                    url, nickname_editText, id_editText, passwd_editText, passwdCheck_editText
-                )
+                signUPRequest(url)
 
                 setContentView(R.layout.signup_done)
 
@@ -303,47 +295,35 @@ class SignUp : AppCompatActivity() {
 
 
     //db 연동 시작
-    private fun signUPRequest(
-        url: String,
-        nickname_editText: String,
-        id_editText: String,
-        passwd_editText: String,
-        passwdCheck_editText: String
-    ) {
-        // Instantiate the cache
-        val cache = DiskBasedCache(cacheDir, 1024 * 1024) // 1MB cap
+    private fun signUPRequest(url: String) {
 
-        // Set up the network to use HttpURLConnection as the HTTP client.
-        val network = BasicNetwork(HurlStack())
-
-        // Instantiate the RequestQueue with the cache and network. Start the queue.
-        val requestQueue = RequestQueue(cache, network).apply {
-            start()
-        }
+        var nickname_editText = findViewById<EditText>(R.id.nickname_editText).text.toString()
+        var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
+        var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
+        var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
 
         //POST 방식으로 db에 데이터 전송
-        val request = StringRequest(
+        val request = CustomStringRequest(
             Request.Method.POST,
             url,
             { response ->   //JSON을 파싱한 JSONObject 객체 전달
                 val success = true
 
-                val nickname_editText: String = response.toString()
-                val id_editText: String = response.toString()
-                val passwd_editText: String = response.toString()
-                val passwdCheck_editText: String = response.toString()
-
                 //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
                 if (passwd_editText == passwdCheck_editText) {
                     if (success) {
+                        nickname_editText = response.toString()
+                        id_editText = response.toString()
+                        passwd_editText = response.toString()
+
                         Toast.makeText(
-                            applicationContext,
+                            baseContext,
                             String.format("%s님 가입을 환영합니다. 로그인 해주세요.", id_editText),
                             Toast.LENGTH_SHORT
                         ).show()
                         Log.d(
                             "success",
-                            "$nickname_editText, $id_editText, $passwd_editText, $passwdCheck_editText"
+                            "$nickname_editText, $id_editText, $passwd_editText"
                         )
                     }
                 } else {
@@ -353,45 +333,18 @@ class SignUp : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }
-        ) { error -> Log.d("failed", "error......$error") }
-
-        //RequestQueue를 이용해 StringRequest에 담은 정보를 서버에 요청
-        val register = RegisterRequest(
-            nickname_editText = nickname_editText,
-            id_editText = id_editText,
-            passwd_editText = passwd_editText,
-            passwdCheck_editText = passwdCheck_editText, request
+            },
+            { Log.d("failed", "error......${error(applicationContext)}") },
+            hashMapOf("nickname_editText" to nickname_editText,
+                "id_editText" to id_editText,
+                "passwd_editText" to passwd_editText
+            )
         )
         val queue = Volley.newRequestQueue(this)
-        requestQueue.add(request)
-        requestQueue.add(register)
-        queue.add(register)
         queue.add(request)
         Log.d("sssssssssssssss", "$queue")
     }
     //db 연동 끝
-
-    @SuppressLint("SuspiciousIndentation")
-    private fun RegisterRequest(
-        nickname_editText: String, id_editText: String,
-        passwd_editText: String, passwdCheck_editText: String, response: StringRequest
-    ): StringRequest {
-        var url = "http://seonho.dothome.co.kr/SignUP.php"
-
-        var param = HashMap<String, String>()
-        param.put("nickname_editText", nickname_editText)
-        param.put("id_editText", id_editText)
-        param.put("passwd_editText", passwd_editText)
-        param.put("passwdCheck_editText", passwdCheck_editText)
-        param.put("response", response.toString())
-
-        Log.d("dddddddddddd", "$response")
-        Log.d("iiiiiiiiiiiiiiiii", "$param")
-
-        return response
-    }
-
 
     private fun copyFile(lang: String) {
         try {
