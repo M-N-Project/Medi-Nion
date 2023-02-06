@@ -19,8 +19,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView_Profile"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:src="@drawable/basic_profile1"
@@ -46,6 +46,27 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_Profile" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_viewpager_main"
+        android:layout_width="404dp"
+        android:layout_height="319dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tl_navigation_view"
+        app:layout_constraintVertical_bias="1.0"></androidx.viewpager2.widget.ViewPager2>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hospital_name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
