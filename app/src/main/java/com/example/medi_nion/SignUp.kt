@@ -1,6 +1,7 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -202,39 +203,41 @@ class SignUp : AppCompatActivity() {
 
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
         signUpButton.setOnClickListener {
-            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
-                TextUtils.isEmpty(id_editText.text.toString()) ||
-                TextUtils.isEmpty(passwd_editText.text.toString()) ||
-                TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
-                (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
-            ) {
-
-                var notDone_warning = findViewById<TextView>(R.id.notDone_warning)
-                notDone_warning.visibility = View.VISIBLE
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    notDone_warning.visibility = View.INVISIBLE
-                }, 2000)
-            } else {
-                var url = "http://seonho.dothome.co.kr/Register.php"
-                signUPRequest(
-                    url,
-                    nickname_editText,
-                    id_editText,
-                    passwd_editText,
-                    passwdCheck_editText
-                )
+            //일단 흐름을 위해 주석처리...........................................
+//            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
+//                TextUtils.isEmpty(id_editText.text.toString()) ||
+//                TextUtils.isEmpty(passwd_editText.text.toString()) ||
+//                TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
+//                (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
+//            ) {
+//
+//                var notDone_warning = findViewById<TextView>(R.id.notDone_warning)
+//                notDone_warning.visibility = View.VISIBLE
+//
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    notDone_warning.visibility = View.INVISIBLE
+//                }, 2000)
+//            } else {
+//                var url = "http://seonho.dothome.co.kr/Register.php"
+//                signUPRequest(
+//                    url,
+//                    nickname_editText,
+//                    id_editText,
+//                    passwd_editText,
+//                    passwdCheck_editText
+//                )
+            //......................................................................
 
                 setContentView(R.layout.signup_done)
 
                 var goSignIn = findViewById<Button>(R.id.goSignInBtn)
-                /*goSignIn.setOnClickListener {
+                goSignIn.setOnClickListener {
                     //로그인 페이지로 이동.
                     val intent = Intent(applicationContext, Login::class.java)
                     startActivity(intent)
-                }*/
+                }
             }
-        }
+
 
         //val tempImage : File = null
 
