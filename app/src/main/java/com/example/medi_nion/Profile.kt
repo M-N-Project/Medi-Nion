@@ -24,7 +24,6 @@ class Profile : Fragment(R.layout.profile) {
         val view = binding.root
 
         binding.item1.setOnClickListener{
-
             val item1ListLayout = binding.item1ListLayout
             if(item1ListLayout.visibility == View.GONE) item1ListLayout.visibility = View.VISIBLE
             else item1ListLayout.visibility = View.GONE

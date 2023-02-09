@@ -165,6 +165,7 @@ class SignUp : AppCompatActivity() {
             id_warning.text = "입력하는 중..." //디비 연동되면 중복여부 파악할 것이에요!
         }
 
+        //비밀번호 확인 먼저 입력하고 비밀번호 입력하면 동일하지 않게 뜬다.... -> 고치기
         //비밀번호 정규식 확인 -> 숫자, 문자, 특수문자 중 2가지 포함(8~15자)
         passwd_editText.addTextChangedListener {
             passwd_warning.visibility = View.VISIBLE
@@ -202,20 +203,20 @@ class SignUp : AppCompatActivity() {
 
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
         signUpButton.setOnClickListener {
-            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
-                TextUtils.isEmpty(id_editText.text.toString()) ||
-                TextUtils.isEmpty(passwd_editText.text.toString()) ||
-                TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
-                (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
-            ) {
-
-                var notDone_warning = findViewById<TextView>(R.id.notDone_warning)
-                notDone_warning.visibility = View.VISIBLE
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    notDone_warning.visibility = View.INVISIBLE
-                }, 2000)
-            } else {
+//            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
+//                TextUtils.isEmpty(id_editText.text.toString()) ||
+//                TextUtils.isEmpty(passwd_editText.text.toString()) ||
+//                TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
+//                (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
+//            ) {
+//
+//                var notDone_warning = findViewById<TextView>(R.id.notDone_warning)
+//                notDone_warning.visibility = View.VISIBLE
+//
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    notDone_warning.visibility = View.INVISIBLE
+//                }, 2000)
+//            } else {
                 val url = "http://seonho.dothome.co.kr/SignUP.php"
 
                 signUPRequest(url)
@@ -228,7 +229,7 @@ class SignUp : AppCompatActivity() {
                     val intent = Intent(applicationContext, Login::class.java)
                     startActivity(intent)
                 }
-            }
+//            }
         }
 
         //val tempImage : File = null
