@@ -11,7 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class HospitalProfile : AppCompatActivity() {
 
-    private lateinit var binding: HospitalProfileBinding
+    private lateinit var binding: HospitalProfileBinding //HospitalProfileBinding 맞는지 모름 아직,,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
