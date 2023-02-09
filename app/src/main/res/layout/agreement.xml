@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.widget.Button
+        android:id="@+id/agreeDeatil4"
+        android:layout_width="22dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/detail_button"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeNextBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <android.widget.Button
+        android:id="@+id/agreeDeatil3"
+        android:layout_width="22dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_button"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText4"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <android.widget.Button
+        android:id="@+id/agreeDeatil2"
+        android:layout_width="22dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_button"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText3"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <android.widget.Button
+        android:id="@+id/agreeDeatil1"
+        android:layout_width="22dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/detail_button"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText2"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/agree_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:text="만나서 반가워요!"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/agreement_logo" />
+
+    <TextView
+        android:id="@+id/agree_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="이용약관에 동의"
+        android:textColor="#86C9C6"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/agree_text1" />
+
+    <TextView
+        android:id="@+id/agree_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="먼저,"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/agree_text" />
+
+    <TextView
+        android:id="@+id/agree_text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="19dp"
+        android:text="해주세요."
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/agree_text2"
+        app:layout_constraintTop_toBottomOf="@+id/agree_text1" />
+
+    <ImageView
+        android:id="@+id/agreement_logo"
+        android:layout_width="96dp"
+        android:layout_height="118dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/agreeText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="17dp"
+        android:text="이용 약관 동의 (필수)"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText2"
+        app:layout_constraintStart_toEndOf="@+id/agreeBtn1" />
+
+    <TextView
+        android:id="@+id/agreeText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="18dp"
+        android:text="개인정보 수집 및 활용 동의(필수)"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText3"
+        app:layout_constraintStart_toEndOf="@+id/agreeBtn2" />
+
+    <TextView
+        android:id="@+id/agreeText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="16dp"
+        android:text="광고성 정보 수집 동의(선택)"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText4"
+        app:layout_constraintStart_toEndOf="@+id/agreeBtn3" />
+
+    <TextView
+        android:id="@+id/agreeText4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="32dp"
+        android:text="위치 정보 동의(선택)"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeNextBtn"
+        app:layout_constraintStart_toEndOf="@+id/agreeBtn4" />
+
+    <android.widget.CheckBox
+        android:id="@+id/allAgreeBtn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/agreeBtn1"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/allAgreeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="34dp"
+        android:text="약관 전체 동의"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText1"
+        app:layout_constraintStart_toEndOf="@+id/allAgreeBtn" />
+
+    <View
+        android:layout_width="350dp"
+        android:layout_height="0.5dp"
+        android:background="#85AFD6"
+        android:backgroundTint="#85AFD6"
+        app:layout_constraintBottom_toTopOf="@+id/agreeText1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allAgreeText" />
+
+    <android.widget.CheckBox
+        android:id="@+id/agreeBtn2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/agreeBtn3"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <android.widget.CheckBox
+        android:id="@+id/agreeBtn3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/agreeBtn4"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <android.widget.CheckBox
+        android:id="@+id/agreeBtn4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="32dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/agreeNextBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <android.widget.CheckBox
+        android:id="@+id/agreeBtn1"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/agreeBtn2"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <android.widget.Button
+        android:id="@+id/agreeNextBtn"
+        android:layout_width="342dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/login_round_button"
+        android:backgroundTint="#8BE0C4"
+        android:text="다음"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
