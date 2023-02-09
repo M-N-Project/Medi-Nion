@@ -2,6 +2,7 @@
 <androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     app:contentInsetStart="0dp"
@@ -47,11 +48,12 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
-            android:padding="7dp"
-            android:gravity="center"
-            android:scaleType="fitCenter"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/bell_icon" />
+            android:gravity="center"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/bell_icon"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/search_icon"
@@ -60,13 +62,14 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:scaleType="fitCenter"
-            android:layout_marginRight="57dp"
             android:layout_marginTop="2dp"
-            android:padding="8dp"
+            android:layout_marginRight="57dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/search_icon" />
+            android:gravity="center"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/search_icon"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageView
             android:id="@+id/alarm_red_dot"
