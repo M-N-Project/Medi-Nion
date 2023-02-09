@@ -9,7 +9,7 @@ import com.android.volley.toolbox.HttpHeaderParser
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
-class CustomStringRequest(
+class SignUP_Request(
     method: Int,
     url: String,
     listener: Response.Listener<String>,
@@ -44,9 +44,6 @@ class CustomStringRequest(
         val parsed: String = try {
             String(response.data, Charset.forName(HttpHeaderParser.parseCharset(response?.headers)))
         } catch (e: UnsupportedEncodingException) {
-            // Since minSdkVersion = 8, we can't call
-            // new String(response.data, Charset.defaultCharset())
-            // So suppress the warning instead.
             String(response.data)
         }
 

@@ -8,5 +8,7 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
+        val url = "http://seonho.dothome.co.kr/Login.php"
+
     }
 }

@@ -19,8 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
 import com.android.volley.toolbox.*
 import com.googlecode.tesseract.android.TessBaseAPI
 import java.io.*
@@ -303,7 +301,7 @@ class SignUp : AppCompatActivity() {
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
 
         //POST 방식으로 db에 데이터 전송
-        val request = CustomStringRequest(
+        val request = SignUP_Request(
             Request.Method.POST,
             url,
             { response ->   //JSON을 파싱한 JSONObject 객체 전달
@@ -318,7 +316,7 @@ class SignUp : AppCompatActivity() {
 
                         Toast.makeText(
                             baseContext,
-                            String.format("%s님 가입을 환영합니다. 로그인 해주세요.", id_editText),
+                            String.format("가입을 환영합니다. 로그인 해주세요."),
                             Toast.LENGTH_SHORT
                         ).show()
                         Log.d(
