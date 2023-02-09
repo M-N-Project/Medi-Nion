@@ -80,7 +80,7 @@
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/basic_profile" />
+        tools:srcCompat="@drawable/basic_profile1" />
 
     <TextView
         android:id="@+id/textView_anonymous"
