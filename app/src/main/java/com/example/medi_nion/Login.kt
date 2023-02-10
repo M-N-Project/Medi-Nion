@@ -23,7 +23,7 @@ class Login : AppCompatActivity() {
         loginBtn.setOnClickListener{
             if(id.length()==0 || password.length()==0) {
                 Toast.makeText(baseContext,
-                    String.format("아이디나 비밀번호를 다시 입력해주세요."),
+                    String.format("아이디와 비밀번호 모두 입력해주세요."),
                     Toast.LENGTH_SHORT).show()
             }
             else {
@@ -46,7 +46,6 @@ class Login : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-
             if (response.equals("Login Success")) {
                 id = response.toString()
                 password = response.toString()
