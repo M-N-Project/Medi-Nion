@@ -295,7 +295,6 @@ class SignUp : AppCompatActivity() {
     //db 연동 시작
     private fun signUPRequest(url: String) {
 
-        var userType_RadioGroup = findViewById<RadioGroup>(R.id.userType_RadioGroup)
         var basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
         var corpUserBtn = findViewById<RadioButton>(R.id.corpUser_RadioBtn)
 
@@ -318,16 +317,8 @@ class SignUp : AppCompatActivity() {
                         nickname_editText = response.toString()
                         id_editText = response.toString()
                         passwd_editText = response.toString()
-                        userType_RadioGroup.setOnClickListener {
-                            if(basicUserBtn.isChecked) {
-                                basicUserBtn.text = response.toString()
-                            }
-                            if(corpUserBtn.isChecked) {
-                                corpUserBtn.text = response.toString()
-                            }
-
-                        }
-
+                        basicUserBtn.text = response.toString()
+                        corpUserBtn.text = response.toString()
 
                         Toast.makeText(
                             baseContext,
