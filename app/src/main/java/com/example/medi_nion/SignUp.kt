@@ -9,7 +9,6 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -21,9 +20,7 @@ import androidx.core.widget.addTextChangedListener
 import com.android.volley.Request
 import com.android.volley.toolbox.*
 import com.googlecode.tesseract.android.TessBaseAPI
-import org.json.JSONObject
 import java.io.*
-import java.util.*
 import java.util.regex.Pattern
 
 
@@ -131,7 +128,7 @@ class SignUp : AppCompatActivity() {
             basicUserGroup.visibility = View.GONE
 
             userType = "corp"
-            basicUserBtn.text = "일반회원"
+            basicUserBtn.text = "일반 회원"
             informView.text = informCorp
         }
 
@@ -298,16 +295,21 @@ class SignUp : AppCompatActivity() {
     //db 연동 시작
     private fun signUPRequest(url: String) {
 
+        var userType_RadioGroup = findViewById<RadioGroup>(R.id.userType_RadioGroup)
+        var basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
+        var corpUserBtn = findViewById<RadioButton>(R.id.corpUser_RadioBtn)
+
         var nickname_editText = findViewById<EditText>(R.id.nickname_editText).text.toString()
         var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
         var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
 
+
         //POST 방식으로 db에 데이터 전송
         val request = SignUP_Request(
             Request.Method.POST,
             url,
-            { response ->   //JSON을 파싱한 JSONObject 객체 전달
+            { response ->
                 val success = true
 
                 //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
@@ -316,6 +318,16 @@ class SignUp : AppCompatActivity() {
                         nickname_editText = response.toString()
                         id_editText = response.toString()
                         passwd_editText = response.toString()
+                        userType_RadioGroup.setOnClickListener {
+                            if(basicUserBtn.isChecked) {
+                                basicUserBtn.text = response.toString()
+                            }
+                            if(corpUserBtn.isChecked) {
+                                corpUserBtn.text = response.toString()
+                            }
+
+                        }
+
 
                         Toast.makeText(
                             baseContext,
@@ -324,7 +336,7 @@ class SignUp : AppCompatActivity() {
                         ).show()
                         Log.d(
                             "success",
-                            "$nickname_editText, $id_editText, $passwd_editText"
+                            "$nickname_editText, $id_editText, $passwd_editText, $basicUserBtn, $corpUserBtn"
                         )
                     }
                 } else {
@@ -336,10 +348,19 @@ class SignUp : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            hashMapOf("nickname_editText" to nickname_editText,
-                "id_editText" to id_editText,
-                "passwd_editText" to passwd_editText
-            )
+            if(basicUserBtn.isChecked) {
+                hashMapOf("nickname" to nickname_editText,
+                    "id" to id_editText,
+                    "passwd" to passwd_editText,
+                    "userType" to basicUserBtn.text.toString()
+                )
+            } else {
+                hashMapOf("nickname" to nickname_editText,
+                    "id" to id_editText,
+                    "passwd" to passwd_editText,
+                    "userType" to corpUserBtn.text.toString()
+                )
+            }
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)

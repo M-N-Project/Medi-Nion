@@ -13,11 +13,17 @@ class Login : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Login.php"
 
         val loginBtn = findViewById<Button>(R.id.loginBtn)
-
+        val signupBtn = findViewById<Button>(R.id.signupBtn)
         loginBtn.setOnClickListener{
             var newIntent : Intent = Intent(this, MainActivity::class.java);
             startActivity(newIntent);
         }
+
+        signupBtn.setOnClickListener{
+
+        }
+
+
 
     }
 }

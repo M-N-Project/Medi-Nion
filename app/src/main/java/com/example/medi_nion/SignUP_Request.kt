@@ -14,7 +14,7 @@ class SignUP_Request(
     url: String,
     listener: Response.Listener<String>,
     errorListener: Response.ErrorListener?,
-    private val params: MutableMap<String, String>
+    private val params: HashMap<String, String>
 ) : Request<String>(method, url, errorListener) {
 
     private val lock = Any()
