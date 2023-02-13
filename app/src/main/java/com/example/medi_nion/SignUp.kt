@@ -9,6 +9,8 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -43,7 +45,7 @@ class SignUp : AppCompatActivity() {
     var photoFile: File? = null
     val tempImage: String = "" //이미지 이름.
 
-    @SuppressLint("WrongThread", "MissingInflatedId")
+    @SuppressLint("WrongThread", "MissingInflatedId", "LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
@@ -149,18 +151,117 @@ class SignUp : AppCompatActivity() {
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText)
         var passwdCheck_warning = findViewById<TextView>(R.id.passwdCheck_warning)
 
+        //닉네임 중복 여부 및 정규식 확인
+        val nickname_queue = Volley.newRequestQueue(this)
+        Handler(Looper.getMainLooper()).postDelayed({
+            nickname_editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    nickname_warning.visibility = View.VISIBLE
+                }
 
-        //닉네임 중복 여부 확인
-        nickname_editText.addTextChangedListener {
-            nickname_warning.visibility = View.VISIBLE
-            nickname_warning.text = "입력하는중..." //디비 연동되면 중복여부 파악할 것이에요!
-        }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    var nickname_editText =
+                        findViewById<EditText>(R.id.nickname_editText).text.toString()
+                    var url_nicknamevalidate = "http://seonho.dothome.co.kr/nicknameValidate.php"
+                    var request = SignUP_Request(
+                        Request.Method.POST,
+                        url_nicknamevalidate,
+                        { response ->
+                            if(nickname_editText.isEmpty()) {
+                                nickname_warning.setTextColor(Color.RED)
+                                nickname_warning.text = "닉네임을 입력해주세요."
+                            }
+                            if (response.equals("nickname_Validate Success")) {
+                                nickname_editText = response.toString()
+
+                                nickname_warning.setTextColor(Color.BLUE)
+                                nickname_warning.text = "사용가능한 닉네임입니다."
+
+                                Log.d(
+                                    "nickname_validate",
+                                    nickname_editText
+                                )
+                            } else {
+                                nickname_warning.setTextColor(Color.RED)
+                                nickname_warning.text = "이미 사용중인 닉네임입니다."
+                            }
+                        },
+                        {
+                            Log.d(
+                                "nickname_validate failed",
+                                "error......${error(applicationContext)}"
+                            )
+                        },
+                        hashMapOf(
+                            "nickname" to nickname_editText
+                        )
+                    )
+                    nickname_queue.add(request)
+                    Log.d("nickname request", "$request, $nickname_queue")
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    nickname_warning.visibility = View.VISIBLE
+                }
+            })
+        }, 2000)
+
 
         //아이디 중복 여부 및 정규식 확인
-        id_editText.addTextChangedListener {
-            id_warning.visibility = View.VISIBLE
-            id_warning.text = "입력하는 중..." //디비 연동되면 중복여부 파악할 것이에요!
-        }
+        val id_queue = Volley.newRequestQueue(this)
+        Handler(Looper.getMainLooper()).postDelayed({
+            id_editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    id_warning.visibility = View.VISIBLE
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    var url_idvalidate = "http://seonho.dothome.co.kr/idValidate.php"
+                    var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
+
+                    var request = SignUP_Request(
+                        Request.Method.POST,
+                        url_idvalidate,
+                        { response ->
+                            if(id_editText.isEmpty()) {
+                                id_warning.text = "아이디를 입력해주세요."
+                                id_warning.setTextColor(Color.RED)
+                            }
+                            if (response.equals("id_Validate Success")) {
+                                id_editText = response.toString()
+                                id_warning.setTextColor(Color.BLUE)
+                                id_warning.text = "사용가능한 아이디입니다."
+
+                                Log.d(
+                                    "id_validate",
+                                    "$id_editText"
+                                )
+                            } else {
+                                id_warning.setTextColor(Color.RED)
+                                id_warning.text = "이미 사용중인 아이디입니다."
+                            }
+                        },
+                        { Log.d("id_validate failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "id" to id_editText
+                        )
+                    )
+                    id_queue.add(request)
+                    Log.d("idrequest", "$request, $id_queue")
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    id_warning.visibility = View.VISIBLE
+                }
+            })
+        }, 2000)
+
 
         //비밀번호 확인 먼저 입력하고 비밀번호 입력하면 동일하지 않게 뜬다.... -> 고치기
         //비밀번호 정규식 확인 -> 숫자, 문자, 특수문자 중 2가지 포함(8~15자)
@@ -200,6 +301,7 @@ class SignUp : AppCompatActivity() {
 
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
         signUpButton.setOnClickListener {
+            val validate = true
 //            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
 //                TextUtils.isEmpty(id_editText.text.toString()) ||
 //                TextUtils.isEmpty(passwd_editText.text.toString()) ||
@@ -213,10 +315,17 @@ class SignUp : AppCompatActivity() {
 //                Handler(Looper.getMainLooper()).postDelayed({
 //                    notDone_warning.visibility = View.INVISIBLE
 //                }, 2000)
-//            } else {
-                val url = "http://seonho.dothome.co.kr/SignUP.php"
+            if (!validate) {
+                Toast.makeText(baseContext,
+                    "중복된 아이디와 닉네임이 있는지 확인해주세요.",
+                    Toast.LENGTH_SHORT).show()
+            }
 
-                signUPRequest(url)
+//            } else {
+                val url_SignUP = "http://seonho.dothome.co.kr/SignUP.php"
+
+
+                signUPRequest(url_SignUP)
 
                 setContentView(R.layout.signup_done)
 
