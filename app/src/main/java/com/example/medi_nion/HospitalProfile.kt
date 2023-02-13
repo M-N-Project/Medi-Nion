@@ -32,6 +32,8 @@ class HospitalProfile : AppCompatActivity() {
         binding.vpViewpagerMain.apply {
             adapter = viewPager2Adatper
 
+            Log.d("asdfasdf", "$adapter")
+
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     Log.e("YMC", "ViewPager position: $position")

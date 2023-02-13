@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.LinearLayout
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -15,11 +17,18 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.signup_done.*
+import kotlinx.android.synthetic.main.signup_done.view.*
 
 class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레그먼트 제어를 담당
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        bottomNavigationView.itemIconTintList = null
+        //bottomNavigationView.itemBackground = null
+        bottomNavigationView.itemTextColor = null
 
         var bnv = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
