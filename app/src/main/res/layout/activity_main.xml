@@ -17,7 +17,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/bottom_nav"
-        />
+        >
+    </LinearLayout>
+
+    <include
+        layout="@layout/top_toolbar"
+        android:id="@+id/toolbar"
+    />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

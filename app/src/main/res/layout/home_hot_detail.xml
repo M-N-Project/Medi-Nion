@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/home_hot"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:text="좋아요 댓글 가장 많은 게시물 제목"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/home_hot_likeImg"
+        android:layout_width="15dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        app:layout_constraintStart_toEndOf="@+id/home_hot"
+        app:layout_constraintTop_toTopOf="@+id/home_hot"
+        app:srcCompat="@drawable/favorite_border" />
+
+    <ImageView
+        android:id="@+id/home_hot_commImg"
+        android:layout_width="15dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toEndOf="@+id/home_hot_likeImg"
+        app:layout_constraintTop_toTopOf="@+id/home_hot_likeImg"
+        app:srcCompat="@drawable/comment_icon" />
+
+    <TextView
+        android:id="@+id/home_hot_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="20"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/home_hot_likeImg"
+        app:layout_constraintEnd_toStartOf="@+id/home_hot_commImg"
+        app:layout_constraintStart_toEndOf="@+id/home_hot_likeImg"
+        app:layout_constraintTop_toTopOf="@+id/home_hot_likeImg" />
+
+    <TextView
+        android:id="@+id/home_hot_comm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="20"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/home_hot_commImg"
+        app:layout_constraintStart_toEndOf="@+id/home_hot_commImg"
+        app:layout_constraintTop_toTopOf="@+id/home_hot_commImg" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,7 @@
             android:layout_width="79dp"
             android:layout_height="75dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/business_profile"
+            android:background="@drawable/business_profile_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.056"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:text=" "
+        android:id="@+id/detail_box"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/home_qna_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="SpeakableTextPresentCheck"
+        />
+
+    <TextView
+        android:id="@+id/home_qna_title"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:elevation="5dp"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:singleLine="true"
+        android:text="여기는 QnA 게시판의 최근 게시물을 표시합니다"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/home_qna_titleStart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintHeight="50dp"
+        app:layout_constraintStart_toStartOf="@+id/detail_box"
+        app:layout_constraintTop_toBottomOf="@+id/home_qna_title"
+        app:layout_constraintWidth="50dp"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        android:elevation="5dp"/>
+
+    <TextView
+        android:id="@+id/home_qna_detail"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="여기는 QnA 게시판 최근 게시물의 상세 내용을 표시하는 공간으로써 이렇게 하면 자연스럽게 글자가 끊어질때까지 슬슬 말줄임표로 표시되어야할듯"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/home_qna_title"
+        android:elevation="5dp"/>
+
+    <TextView
+        android:id="@+id/home_qna_titleStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:elevation="5dp"
+        android:text="Q."
+        android:textColor="@color/color3"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/detail_box"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
