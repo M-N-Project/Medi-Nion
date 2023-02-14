@@ -30,9 +30,10 @@
         android:id="@+id/profileImg"
         android:layout_width="130dp"
         android:layout_height="117dp"
-        android:layout_marginTop="230dp"
-        android:background="@drawable/business_profile_img"
+        android:layout_marginTop="228dp"
+        android:background="@drawable/business_profile"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
