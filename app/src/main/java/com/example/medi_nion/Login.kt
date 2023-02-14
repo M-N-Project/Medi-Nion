@@ -43,13 +43,12 @@ class Login : AppCompatActivity() {
                     ).show()
                 } else {
                     loginRequest(url)
-                    var newIntent: Intent = Intent(this, MainActivity::class.java);
-                    startActivity(newIntent);
+//                    var newIntent: Intent = Intent(this, MainActivity::class.java);
+//                    startActivity(newIntent);
                 }
             }
 
         } else {
-            Log.d("slkdjslf", "first not")
             var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
             startActivity(newIntent);
         }

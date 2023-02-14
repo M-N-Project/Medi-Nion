@@ -9,6 +9,7 @@ package com.example.medi_nion
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
 
     private lateinit var qnaBtn: Button
+    private lateinit var basicBoard: Button
     private lateinit var academyBtn: Button
     private lateinit var employeeInfoBtn: Button
     private lateinit var hospitalHomePageBtn: Button
@@ -18,6 +19,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        basicBoard = view.findViewById(R.id.menu1)
         qnaBtn = view.findViewById(R.id.menu6)
         academyBtn = view.findViewById(R.id.menu7)
         employeeInfoBtn = view.findViewById(R.id.menu8)
@@ -28,6 +30,13 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         employeeInfoBtn.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
                 val intent = Intent(context, HospitalProfile::class.java)
+                startActivity(intent)
+            }
+        }
+
+        basicBoard.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
+            activity?.let{
+                val intent = Intent(context, Board::class.java)
                 startActivity(intent)
             }
         }
