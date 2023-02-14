@@ -17,8 +17,6 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.login)
 
         //최초 실행 여부 판단하는 구문
-        //최초 실행 여부 판단하는 구문
-
         val pref: SharedPreferences = getSharedPreferences("isFirst", Activity.MODE_PRIVATE)
         val first: Boolean = pref.getBoolean("isFirst", false)
 
