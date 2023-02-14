@@ -18,6 +18,7 @@ class Login : AppCompatActivity() {
 
         //최초 실행 여부 판단하는 구문
         //최초 실행 여부 판단하는 구문
+
         val pref: SharedPreferences = getSharedPreferences("isFirst", Activity.MODE_PRIVATE)
         val first: Boolean = pref.getBoolean("isFirst", false)
 
@@ -45,10 +46,10 @@ class Login : AppCompatActivity() {
                 } else {
                     loginRequest(url)
                 }
-
+                var newIntent: Intent = Intent(this, MainActivity::class.java);
+                startActivity(newIntent);
             }
-            var newIntent: Intent = Intent(this, MainActivity::class.java);
-            startActivity(newIntent);
+
         } else {
             Log.d("slkdjslf", "first not")
             var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
