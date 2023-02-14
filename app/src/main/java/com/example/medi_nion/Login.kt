@@ -43,9 +43,9 @@ class Login : AppCompatActivity() {
                     ).show()
                 } else {
                     loginRequest(url)
+                    var newIntent: Intent = Intent(this, MainActivity::class.java);
+                    startActivity(newIntent);
                 }
-                var newIntent: Intent = Intent(this, MainActivity::class.java);
-                startActivity(newIntent);
             }
 
         } else {
