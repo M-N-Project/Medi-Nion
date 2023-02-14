@@ -5,26 +5,29 @@
     android:layout_height="match_parent">
 
     <TableLayout
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:stretchColumns="0, 1, 2"
+
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toTopOf="parent"
-
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
-            android:layout_width="422dp"
-            android:layout_height="131dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1">
 
             <android.widget.Button
                 android:id="@+id/menu1"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
                 android:gravity="start"
                 android:padding="10dp"
@@ -35,9 +38,12 @@
 
             <android.widget.Button
                 android:id="@+id/menu2"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/menu_button"
                 android:gravity="start"
                 android:padding="10dp"
@@ -48,9 +54,11 @@
 
             <android.widget.Button
                 android:id="@+id/menu3"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/menu_button"
                 android:gravity="start"
                 android:padding="10dp"
@@ -69,7 +77,9 @@
                 android:id="@+id/menu4"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
                 android:gravity="start"
                 android:padding="10dp"
@@ -95,7 +105,9 @@
                 android:id="@+id/menu6"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/menu_button"
                 android:backgroundTint="#8BE0C4"
                 android:gravity="start"
@@ -115,7 +127,9 @@
                 android:id="@+id/menu7"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
                 android:backgroundTint="#8BE0C4"
                 android:gravity="start"
@@ -143,7 +157,9 @@
                 android:id="@+id/menu9"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/menu_button"
                 android:backgroundTint="#8BE0C4"
                 android:gravity="start"
@@ -163,7 +179,9 @@
                 android:id="@+id/menu10"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
-                android:layout_margin="6dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
                 android:backgroundTint="#8BE0C4"
                 android:gravity="start"
@@ -177,7 +195,7 @@
                 android:id="@+id/menu11"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
-                android:layout_margin="6dp"
+                android:layout_margin="4dp"
                 android:background="@drawable/menu_button"
                 android:backgroundTint="#8BE0C4"
                 android:gravity="start"
