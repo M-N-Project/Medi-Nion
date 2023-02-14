@@ -1,55 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="401dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="14dp"
-        android:background="#8085AFD6"
-        app:layout_constraintBottom_toTopOf="@+id/editText_Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/profile_basicBtn1"
+        app:layout_constraintTop_toBottomOf="@+id/board_select"
+        android:visibility="gone">
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="370dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#8085AFD6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Title" />
+
+        <RadioButton
+            android:id="@+id/free_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전체 게시판"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/job_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="직종별 게시판"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/department_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="진료과별 게시판"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/my_hospital_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="우리 병원 게시판"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/market_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="장터 게시판"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/QnA_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="QnA 게시판"
+            android:textAlignment="center" />
+
+    </RadioGroup>
+
 
     <EditText
         android:id="@+id/editText_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/transparent"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="제목"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
         android:textColorHint="#8085AFD6"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.142"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        android:background="@android:color/transparent"/>
+        app:layout_constraintTop_toBottomOf="@+id/board_select" />
+
+    <ImageButton
+        android:id="@+id/imageButton_gallery"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toEndOf="@+id/editText_Title"
+        app:layout_constraintTop_toBottomOf="@+id/post_Btn"
+        app:srcCompat="@drawable/image_icon1"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <EditText
         android:id="@+id/editText_Content"
         android:layout_width="385dp"
         android:layout_height="511dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:gravity="top"
@@ -57,22 +106,54 @@
         android:inputType="textPersonName"
         android:textColorHint="#8085AFD6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.615"
+        app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"/>
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-    <ImageButton
-        android:id="@+id/imageButton_gallery"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="12dp"
+    <View
+        android:id="@+id/view2"
+        android:layout_width="370dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="40dp"
+        android:background="#8085AFD6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.743"
-        app:layout_constraintStart_toEndOf="@+id/editText_Title"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        app:srcCompat="@drawable/image_icon1" />
+        app:layout_constraintHorizontal_bias="0.463"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_Title" />
 
+    <Button
+        android:id="@+id/post_Btn"
+        android:layout_width="81dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#8BE0C4"
+        android:text="업로드"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <android.widget.Button
+        android:id="@+id/profile_basicBtn1"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/profile_triangle_button"
+        android:rotation="-270"
+        app:layout_constraintEnd_toStartOf="@+id/board_select"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/board_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="19dp"
+        android:text="게시판 종류 선택"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
