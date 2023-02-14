@@ -32,5 +32,12 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
+        manageBusinessBtn.setOnClickListener { //
+            activity?.let{
+                val intent = Intent(context, BusinessManageActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
     }
 }
