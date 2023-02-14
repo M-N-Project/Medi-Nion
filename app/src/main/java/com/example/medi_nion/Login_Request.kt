@@ -9,7 +9,7 @@ import com.android.volley.toolbox.HttpHeaderParser
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
-class SignUP_Request(
+class Login_Request(
     method: Int,
     url: String,
     listener: Response.Listener<String>,
@@ -23,7 +23,7 @@ class SignUP_Request(
     private var listener: Response.Listener<String>? = listener
 
     override fun getParams(): MutableMap<String, String> {
-        Log.d("SIGNUP", "$params")
+        Log.d("LOGIN", "$params")
         return params
     }
 
