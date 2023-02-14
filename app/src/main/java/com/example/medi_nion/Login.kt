@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -21,41 +20,42 @@ class Login : AppCompatActivity() {
         //최초 실행 여부 판단하는 구문
         val pref: SharedPreferences = getSharedPreferences("isFirst", Activity.MODE_PRIVATE)
         val first: Boolean = pref.getBoolean("isFirst", false)
+
         if (first == false) {
             val url = "http://seonho.dothome.co.kr/Login.php"
 
+            val id = findViewById<EditText>(R.id.id)
+            val password = findViewById<EditText>(R.id.password)
             val loginBtn = findViewById<Button>(R.id.loginBtn)
-        val id = findViewById<EditText>(R.id.id)
-        val password = findViewById<EditText>(R.id.password)
-        val loginBtn = findViewById<Button>(R.id.loginBtn)
-        val signupBtn = findViewById<Button>(R.id.signupBtn)
+            val signupBtn = findViewById<Button>(R.id.signupBtn)
 
-            loginBtn.setOnClickListener{
-                var newIntent : Intent = Intent(this, MainActivity::class.java);
-                startActivity(newIntent);
+            signupBtn.setOnClickListener {
+                //회원가입 화면으로 이동
+                val intent = Intent(applicationContext, SignUp::class.java)
+                startActivity(intent)
             }
+
+            loginBtn.setOnClickListener {
+                if (id.length() == 0 || password.length() == 0) {
+                    Toast.makeText(
+                        baseContext,
+                        String.format("아이디와 비밀번호 모두 입력해주세요."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    loginRequest(url)
+                }
+
+            }
+            var newIntent: Intent = Intent(this, MainActivity::class.java);
+            startActivity(newIntent);
         } else {
             Log.d("slkdjslf", "first not")
-            var newIntent : Intent = Intent(this, FirstTimeActivity::class.java);
+            var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
             startActivity(newIntent);
-
-        loginBtn.setOnClickListener{
-            if(id.length()==0 || password.length()==0) {
-                Toast.makeText(baseContext,
-                    String.format("아이디와 비밀번호 모두 입력해주세요."),
-                    Toast.LENGTH_SHORT).show()
-            }
-            else {
-                loginRequest(url)
-            }
-        }
-
-        signupBtn.setOnClickListener{
-            //회원가입 화면으로 이동
-            val intent = Intent(applicationContext, SignUp::class.java)
-            startActivity(intent)
         }
     }
+
 
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
