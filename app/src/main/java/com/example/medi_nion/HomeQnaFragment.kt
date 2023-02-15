@@ -11,18 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.home_qna.*
 
-class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 프레그먼트(게시판 구분은 추후에)
-
-    class PagerRecyclerAdapter(private val qnaTitle: ArrayList<String>, private val qnaDetail: ArrayList<String>) : RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
+class HomeQnaFragment : Fragment(R.layout.home){
+    class PagerRecyclerAdapter(private val bgColors: ArrayList<String>) : RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
 
         inner class PagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             private val qna_title: TextView = itemView.findViewById(R.id.home_qna_title)
-            private val qna_content: TextView = itemView.findViewById(R.id.home_qna_detail)
 
             fun bind(position: Int) {
-                qna_title.text = qnaTitle[position]
-                qna_content.text = qnaDetail[position]
+                qna_title.text = "Page ${position+1}"
             }
         }
 
@@ -39,7 +36,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             holder.bind(position)
         }
 
-        override fun getItemCount(): Int = 5
+        override fun getItemCount(): Int = bgColors.size
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,14 +47,14 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home, container, false)
+        return inflater.inflate(R.layout.home_qna, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // 나중에 DB에서 받아올 것
-        var qnaTitle = arrayListOf<String>(
+        // Adapter를 생성하면서 넘길 색상이 담긴 ArrayList<Int> 생성
+        var bgColors = arrayListOf<String>(
             "page1",
             "page2",
             "page3",
@@ -65,16 +62,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             "page5",
         )
 
-        var qnaContent = arrayListOf<String>(
-            "page1111111111111111111111111",
-            "page22222222222222222222222222222",
-            "page333333333333333333333333333333",
-            "page44444444444444444444444444",
-            "page55555555555555555555555",
-        )
-
         // RecyclerView.Adapter<ViewHolder>()
-        viewPager.adapter = PagerRecyclerAdapter(qnaTitle, qnaContent)
+        viewPager.adapter = PagerRecyclerAdapter(bgColors)
         // ViewPager의 Paging 방향은 Horizontal
         viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
