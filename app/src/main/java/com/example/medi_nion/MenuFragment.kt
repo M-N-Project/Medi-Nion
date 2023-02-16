@@ -14,6 +14,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     private lateinit var hospitalHomePageBtn: Button
     private lateinit var medicalNewsBtn: Button
     private lateinit var manageBusinessBtn: Button
+    private lateinit var basicBoard: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

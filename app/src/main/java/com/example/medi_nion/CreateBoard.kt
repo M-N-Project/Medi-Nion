@@ -3,18 +3,22 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.loader.content.CursorLoader
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import java.io.FileNotFoundException
+
 
 class CreateBoard : AppCompatActivity() {
 
@@ -92,6 +96,8 @@ class CreateBoard : AppCompatActivity() {
                 builder.show()
             } else {
                 createBoardRequest(url_Post)
+                var intent = Intent(applicationContext, Board::class.java)
+                startActivity(intent)
             }
 
         }
@@ -107,12 +113,10 @@ class CreateBoard : AppCompatActivity() {
             postUrl,
             { response ->
                 val success = true
-
                 if (success) {
                     postTitle = response.toString()
                     postContent = response.toString()
                     board_select = response.toString()
-
 
                     Toast.makeText(
                         baseContext,
@@ -133,21 +137,22 @@ class CreateBoard : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "board" to board_select,
-                "title" to postTitle,
-                "content" to postContent
-            )
+
+                hashMapOf(
+                    "board" to board_select,
+                    "title" to postTitle,
+                    "content" to postContent
+                )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
-        Log.d("dkfksdnfskl", "$queue, $request")
     }
 
     @Override
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //사진 첨부시 갤러리로 이동시켜주는,,
         super.onActivityResult(requestCode, resultCode, data)
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
+        var postbtn = findViewById<Button>(R.id.post_Btn)
 
         if( resultCode == Activity.RESULT_OK) { //호출 코드 확인
             if( requestCode ==  GALLERY)
@@ -155,14 +160,57 @@ class CreateBoard : AppCompatActivity() {
                 var ImageData: Uri? = data?.data
                 imgbtn.setImageURI(ImageData)
 
-                var imagePath = getRealPath(ImageData)
-                Toast.makeText(this, imagePath, Toast.LENGTH_SHORT ).show()
-                Log.d("Path??????", "$ImageData, $imagePath")
                 try {
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
                     imgbtn.setImageBitmap(bitmap)
+
+                    var imagePath = ImageData?.let { getPath(context = baseContext, it) }.toString()
+
+                    Log.d("<<<<<<<<<<<<<<<<<<<<<<", imagePath)
+
+                    AlertDialog.Builder(this).setMessage(imagePath).create().show()
+
+                    val request = SignUP_Request(
+                        Request.Method.POST,
+                        url = "http://seonho.dothome.co.kr/Image.php",
+                        { response ->
+                            val success = true
+                            if (success) {
+                                imagePath = response.toString()
+
+                                Toast.makeText(
+                                    baseContext,
+                                    String.format("이미지를 불러왔습니다."),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                Log.d(
+                                    "Image success",
+                                    "$imagePath"
+                                )
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "이미지를 불러오는 데 실패했습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        },
+                        { Log.d("failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "imagePath" to imagePath
+                        )
+                    )
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(request)
+
                 }
                 catch (e:Exception)
+                {
+                    e.printStackTrace()
+                }
+                catch (e: FileNotFoundException)
                 {
                     e.printStackTrace()
                 }
@@ -170,28 +218,65 @@ class CreateBoard : AppCompatActivity() {
         }
     }
 
-    private fun getRealPath(uri: Uri?): String? {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val loader = uri?.let { CursorLoader(this, it, proj, null, null, null) }
-        val cursor: Cursor? = loader?.loadInBackground()
-        val column_index: Int? = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor?.moveToFirst()
-        val result: String? = column_index?.let { cursor.getString(it) }
-        cursor?.close()
-        return result
+
+    fun getPath(context: Context, uri: Uri): String? {
+        val isKitKat: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            if (isMediaDocument(uri)) {
+                val docId: String = DocumentsContract.getDocumentId(uri)
+                val split = docId.split(":").toTypedArray()
+                val type = split[0]
+                var contentUri: Uri? = null
+                if ("image" == type) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                } else if ("video" == type) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                } else if ("audio" == type) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                }
+                val selection = "_id=?"
+                val selectionArgs = arrayOf(
+                    split[1]
+                )
+                return getDataColumn(context, contentUri, selection, selectionArgs)
+            }
+        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+            return getDataColumn(context, uri, null, null)
+        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+            return uri.path
+        }
+        return null
     }
 
-
-    private fun loadImage() {
-        //db
+    fun getDataColumn(
+        context: Context, uri: Uri?, selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
+        var cursor: Cursor? = null
+        val column = "_data"
+        val projection = arrayOf(
+            column
+        )
+        try {
+            cursor = uri?.let {
+                context.getContentResolver().query(
+                    it, projection, selection, selectionArgs,
+                    null
+                )
+            }
+            if (cursor != null && cursor.moveToFirst()) {
+                val column_index = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(column_index)
+            }
+        } finally {
+            cursor?.close()
+        }
+        return null
     }
 
-    private fun uploadPost() {
-
+    fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
     }
-
-
-
-
-
 }

@@ -133,6 +133,7 @@
                 android:value="" />
         </activity>
 
+        <uses-library android:name="org.apache.http.params" android:required="false"/>
         <provider
             android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
