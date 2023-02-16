@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+    import android.app.Application
     import android.content.Intent
     import android.os.Bundle
     import android.view.View
@@ -14,16 +15,23 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     private lateinit var hospitalHomePageBtn: Button
     private lateinit var medicalNewsBtn: Button
     private lateinit var manageBusinessBtn: Button
+    private lateinit var freeBoard: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        freeBoard = view.findViewById(R.id.menu1)
         qnaBtn = view.findViewById(R.id.menu6)
         academyBtn = view.findViewById(R.id.menu7)
         employeeInfoBtn = view.findViewById(R.id.menu8)
         hospitalHomePageBtn = view.findViewById(R.id.menu9)
         medicalNewsBtn = view.findViewById(R.id.menu10)
         manageBusinessBtn = view.findViewById(R.id.menu11)
+
+        freeBoard.setOnClickListener { //전체 게시판으로 이동
+                val intent = Intent(context, CreateBoard::class.java)
+                startActivity(intent)
+        }
 
         employeeInfoBtn.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
