@@ -2,6 +2,7 @@ package com.example.medi_nion
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 
 class BusinessAdapter(private val itemList : List<BusinessBoardItem>) : Adapter<BusinessBoardViewHolder>() {
@@ -9,8 +10,8 @@ class BusinessAdapter(private val itemList : List<BusinessBoardItem>) : Adapter<
         return itemList.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusinessBoardViewHolder {
-        val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.business_board_items, parent, false)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): BusinessBoardViewHolder {
+        val inflatedView = LayoutInflater.from(viewGroup.context).inflate(R.layout.business_board_items, viewGroup, false)
         return BusinessBoardViewHolder(inflatedView)
     }
 
