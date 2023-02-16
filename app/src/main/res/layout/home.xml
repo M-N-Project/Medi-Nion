@@ -13,12 +13,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <!-- 최신 qna -->
-
-
             <include
-                layout="@layout/home_qna_detail" />
+                layout="@layout/home_qna"
 
+                />
+
+            <!-- 첫번째 광고 -->
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
@@ -27,22 +29,151 @@
                 android:layout_marginEnd="8dp"
                 app:srcCompat="@drawable/ad1" />
 
+            <!-- 즐겨찾는 게시판 -->
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/home_boardList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:paddingBottom="16dp"
+                android:background="@drawable/home_qna_detail"
+                >
 
-                <View
-                    android:id="@+id/detail_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                <TextView
+                    android:id="@+id/home_boardList_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/home_qna_detail"
+                    android:layout_marginTop="10dp"
+                    android:text="즐겨찾는 게시판"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/home_boardList"
+                    app:layout_constraintTop_toTopOf="@+id/home_boardList" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    app:layout_constraintTop_toBottomOf="@+id/home_boardList_title">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+
+                        <TextView
+                            android:id="@+id/home_boardList1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="전체 게시판"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_boardList2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="직종별 게시판"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_boardList3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="진료과별 게시판"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_boardList4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="우리 병원 게시판"
+                            android:textSize="12sp" />
+
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/home_boardList5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="QnA 게시판"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_boardList6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="학회 및 세미나 정보"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_boardList7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="채용 정보"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/home_boardList8"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:text="의료 뉴스"
+                            android:textSize="12sp" />
+
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- HOT 게시물 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detail_box"
+                android:background="@drawable/home_qna_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingLeft="8dp"
+                android:paddingBottom="16dp"
+                android:layout_margin="16dp">
 
                 <TextView
                     android:id="@+id/home_hot_title"
@@ -63,6 +194,7 @@
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginLeft="8dp"
                     app:layout_constraintEnd_toEndOf="@+id/detail_box"
                     app:layout_constraintStart_toStartOf="@+id/detail_box"
                     app:layout_constraintTop_toBottomOf="@+id/home_hot_title" />
@@ -73,6 +205,7 @@
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
                     app:layout_constraintEnd_toEndOf="@+id/detail_box"
                     app:layout_constraintStart_toStartOf="@+id/detail_box"
                     app:layout_constraintTop_toBottomOf="@+id/hot_detail1" />
@@ -83,20 +216,22 @@
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
                     app:layout_constraintEnd_toEndOf="@+id/detail_box"
                     app:layout_constraintStart_toStartOf="@+id/detail_box"
                     app:layout_constraintTop_toBottomOf="@+id/hot_detail2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- 구독 채널 새소식 -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout2"
+                android:id="@+id/home_business"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <View
-                    android:id="@+id/detail_box2"
+                    android:id="@+id/home_subsc_box"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="160dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
@@ -116,9 +251,9 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box2"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box2"
-                    app:layout_constraintTop_toTopOf="@+id/detail_box2" />
+                    app:layout_constraintEnd_toEndOf="@+id/home_subsc_box"
+                    app:layout_constraintStart_toStartOf="@+id/home_subsc_box"
+                    app:layout_constraintTop_toTopOf="@+id/home_subsc_box" />
 
                 <ImageView
                     android:id="@+id/imageView6"
@@ -126,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box2"
+                    app:layout_constraintStart_toStartOf="@+id/home_subsc_box"
                     app:layout_constraintTop_toBottomOf="@+id/home_business_title"
                     app:srcCompat="@drawable/business_profile_img" />
 
@@ -137,38 +272,41 @@
                     android:layout_marginTop="16dp"
                     android:text="종근당 건강"
                     android:textColor="@color/black"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box2"
+                    app:layout_constraintEnd_toEndOf="@+id/home_subsc_box"
                     app:layout_constraintHorizontal_bias="0.44"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
                     app:layout_constraintTop_toBottomOf="@+id/home_business_title" />
 
                 <TextView
                     android:id="@+id/home_business_detail"
-                    android:layout_width="250dp"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:maxLines="4"
                     android:text="종근당, ‘첨단 기술 기반 신성장 동력 발굴’ 다짐.. 2023년도 시무식 거행…디지털 경영 통해 지속가능한 성장기반 마련 이장한 회장은 신년사를 통해 올해 경영 목표를 ‘첨단 기술 기반의 신성장 동력 발굴’로 제시"
                     android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/home_subsc_box"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
                     app:layout_constraintTop_toBottomOf="@+id/home_business_name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- 그냥 여백용 -->
             <View
                 android:id="@+id/marginView"
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/home_business" />
 
+            <!-- 추천 비즈니스채널 프로필 -->
             <include layout="@layout/business_newby"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- 광고2 -->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
