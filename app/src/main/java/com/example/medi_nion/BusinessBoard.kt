@@ -19,6 +19,6 @@ class BusinessBoard : AppCompatActivity() {
         )
 
         val adapter = BusinessAdapter(businessBoard)
-        //
+        
     }
 }
