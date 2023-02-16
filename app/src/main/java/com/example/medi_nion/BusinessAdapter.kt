@@ -11,7 +11,7 @@ class BusinessAdapter(private val itemList : List<BusinessBoardItem>) : Adapter<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusinessBoardViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.business_board_items, parent, false)
-        return BusinessBoardViewHolder(inflatedView);
+        return BusinessBoardViewHolder(inflatedView)
     }
 
     override fun onBindViewHolder(holder: BusinessBoardViewHolder, position: Int) {
