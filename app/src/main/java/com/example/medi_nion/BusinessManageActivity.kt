@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.business_home.*
 
@@ -44,10 +45,12 @@ class BusinessManageActivity : AppCompatActivity() {
 
         profileImg.setOnClickListener {
             //프로필 이미지 수정하게 하는,,
+            Toast.makeText(this, "동그란 맘속에 피어난 how is the life", Toast.LENGTH_SHORT).show()
         }
 
         backgroundImg.setOnClickListener {
             //배경 이미지 수정하게 하는,,
+            Toast.makeText(this, "사람 찾아 인생을 찾아~", Toast.LENGTH_SHORT).show()
         }
     }
 }
