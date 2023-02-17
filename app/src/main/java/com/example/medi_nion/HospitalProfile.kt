@@ -13,7 +13,7 @@ class HospitalProfile : AppCompatActivity() {
 
     private lateinit var binding: HospitalProfileBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) { //병원 정보 프로필 액티비티
         super.onCreate(savedInstanceState)
         binding = HospitalProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -21,7 +21,7 @@ class HospitalProfile : AppCompatActivity() {
         initViewPager()
     }
 
-    private fun initViewPager() {
+    private fun initViewPager() { //병원 프로필 액티비티 속 병원정보, 채용정보, 병원리뷰 프레그먼트 연결, viewpage2 adapter로
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = ViewPager2Adapter(this)
         viewPager2Adatper.addFragment(EmployeeInfoFragment())
