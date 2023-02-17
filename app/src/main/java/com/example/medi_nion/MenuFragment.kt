@@ -34,7 +34,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
-        basicBoard.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
+        basicBoard.setOnClickListener { //게시판으로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 startActivity(intent)
