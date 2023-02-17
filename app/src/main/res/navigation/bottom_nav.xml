@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/businessFragment"
-        android:name="com.example.medi_nion.BusinessFragment"
+        android:name="com.example.medi_nion.BusinessMainFragment"
         android:label="BusinessFragment" >
         <action
             android:id="@+id/action_businessFragment_to_profileFragment"

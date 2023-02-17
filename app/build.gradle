@@ -55,6 +55,7 @@ dependencies {
 
     // viewpager2
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.core:core:1.9.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -62,5 +63,5 @@ dependencies {
 
     implementation 'com.rmtheis:tess-two:9.1.0' // 신분증 인식을 위한 의존성
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation "androidx.viewpager2:viewpager2:1.0.0" //viewpage2 사용을 위해
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
 }
