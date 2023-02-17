@@ -6,13 +6,16 @@ import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
+import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -51,6 +54,20 @@ class SignUp : AppCompatActivity() {
         setContentView(R.layout.sign_up)
         //test
 
+        //키보드 숨기기
+        val focusView: View? = currentFocus
+        val imm: InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (focusView != null) {
+            imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+            focusView.clearFocus()
+        }
+
+
+        //프래그먼트일때는
+        //InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         var userTypeGroup = findViewById<RadioGroup>(R.id.userType_RadioGroup)
         var userType: String = "" //사용자의 유형을 저장할 변수.
 
@@ -81,6 +98,9 @@ class SignUp : AppCompatActivity() {
                 findViewById<RadioGroup>(R.id.basicUser_RadioGroup); // 일반회원의 종류를 담은 RadioGroup, RadioButton
             basicUserGroup.visibility = View.VISIBLE // 일반회원의 종류를 담은 RadioGroup 활성화
             informView.text = "" //회원 종류에 따른 안내멘트 초기화
+
+            //키보드 숨기기
+            imm.hideSoftInputFromWindow(basicUserBtn.getWindowToken(), 0);
 
             basicDocBtn.setOnClickListener {
                 userType = "doctor"
@@ -128,6 +148,9 @@ class SignUp : AppCompatActivity() {
             val basicUserGroup =
                 findViewById<RadioGroup>(R.id.basicUser_RadioGroup); // 일반회원의 종류를 담은 RadioGroup, RadioButton
             basicUserGroup.visibility = View.GONE
+
+            //키보드 숨기기
+            imm.hideSoftInputFromWindow(corpUserBtn.getWindowToken(), 0);
 
             userType = "corp"
             basicUserBtn.text = "일반 회원"
@@ -565,6 +588,22 @@ class SignUp : AppCompatActivity() {
         cameraLauncher.launch(photoUri)
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView: View? = currentFocus
+        if (focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                val imm: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
 
 }
 
