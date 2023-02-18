@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 
 class BusinessAdapter(private val itemList : List<BusinessBoardItem>) : Adapter<BusinessBoardViewHolder>() {
     override fun getItemCount(): Int {
+        Log.d("size", itemList.size.toString())
         return itemList.size
     }
 
