@@ -21,7 +21,7 @@ class BusinessManageActivity : AppCompatActivity() {
 //            BusinessBoardItem("title1", "2023년 2월 16일 오전 11시 10분",
 //                BitmapFactory.decodeResource(resources, R.drawable.logo), "이것은 내용1입니다", 1, 1)
 //        ) //businessBoard end
-        //일단 더미데이터, db 연동해야함
+//        일단 더미데이터, db 연동해야함
 
         val businessBoard = ArrayList<BusinessBoardItem>()
         businessBoard.add(BusinessBoardItem(getDrawable(R.drawable.business_profile_img)!!, "개강전 이벤트!!", "2023년 2월 15일 오후 1시 30분",

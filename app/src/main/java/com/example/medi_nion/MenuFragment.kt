@@ -47,6 +47,5 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 startActivity(intent)
             }
         }
-
     }
 }
