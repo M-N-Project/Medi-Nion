@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory.*
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_items.*
 import kotlinx.android.synthetic.main.business_home.*
 
@@ -21,7 +22,9 @@ class BusinessBoard : AppCompatActivity() {
         )
 
         val adapter = BusinessAdapter(businessBoard)
-        this.BusinessBoardRecyclerView.adapter = adapter
-        BusinessBoardRecyclerView.layoutManager= LinearLayoutManager(this)
+
+        var recycler = findViewById<RecyclerView>(R.id.BusinessBoardRecyclerView)
+        recycler.adapter = adapter
+        recycler.layoutManager= LinearLayoutManager(this)
     }
 }
