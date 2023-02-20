@@ -1,7 +1,6 @@
 package com.example.medi_nion
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -39,11 +38,8 @@ class Board : AppCompatActivity() {
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         wrtingFAB.setOnClickListener{
-            val intent = Intent(applicationContext, CreateBoard::class.java)
+            val intent = Intent(applicationContext, BoardWrite::class.java)
             startActivity(intent)
-            //SignUp::class.java 대신 글쓰기 kt 파일로 이동.
-            //val intent = Intent(applicationContext, BoardWrite::class.java)
-            //startActivity(intent)
         }
 
         //게시판 상세

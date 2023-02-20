@@ -26,7 +26,7 @@ import java.io.IOException
 import java.net.URLEncoder
 
 
-class CreateBoard : AppCompatActivity() {
+class BoardWrite : AppCompatActivity() {
 
     private val GALLERY = 1
 
