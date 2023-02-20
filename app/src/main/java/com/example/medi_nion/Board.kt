@@ -30,7 +30,7 @@ class Board : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/Board.php"
 
-        Log.d("pppppppp", "llll")
+
         fetchData()
 
         val adapter = BoardListAdapter(items)
@@ -76,26 +76,19 @@ class Board : AppCompatActivity() {
             Response.Listener { response ->
                 try {
                     val jsonObject = JSONObject(response)
-                    if (jsonObject.getString("title") == null) {
-                        Toast.makeText(
-                            this@Board,
-                            "Please enter valid id.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        val title = jsonObject.getString("title")
-                        val content = jsonObject.getString("content")
-                        val boardItem = BoardItem(title, content)
-                        items.add(boardItem)
-                        val adapter = BoardListAdapter(items)
-                        boardRecyclerView.adapter = adapter
-                        Log.d("lllaaa", boardItem.title)
+                    val title = jsonObject.getString("title")
+                    val content = jsonObject.getString("content")
+                    val boardItem = BoardItem(title, content)
+                    items.add(boardItem)
+                    val adapter = BoardListAdapter(items)
+                    boardRecyclerView.adapter = adapter
+                    Log.d("lllaaa", boardItem.title)
 
-                    }
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
             }, Response.ErrorListener { error -> // method to handle errors.
+                Log.d("pppppppp", "Fail to get course$error")
                 Toast.makeText(this@Board, "Fail to get course$error", Toast.LENGTH_SHORT)
                     .show()
             }) {
