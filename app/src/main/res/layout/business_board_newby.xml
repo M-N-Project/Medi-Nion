@@ -19,7 +19,7 @@
             android:orientation="vertical" >
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/BusinessBoardRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="714dp"
                 android:orientation="vertical"

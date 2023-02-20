@@ -9,12 +9,12 @@ package com.example.medi_nion
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
 
     private lateinit var qnaBtn: Button
-    private lateinit var basicBoard: Button
     private lateinit var academyBtn: Button
     private lateinit var employeeInfoBtn: Button
     private lateinit var hospitalHomePageBtn: Button
     private lateinit var medicalNewsBtn: Button
     private lateinit var manageBusinessBtn: Button
+    private lateinit var basicBoard: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,6 +37,13 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         basicBoard.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
+                startActivity(intent)
+            }
+        }
+
+        manageBusinessBtn.setOnClickListener { //비즈니스 관리(프로필수정, 글쓰기 화면으로 이동)
+            activity?.let{
+                val intent = Intent(context, BusinessManageActivity::class.java)
                 startActivity(intent)
             }
         }
