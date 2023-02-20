@@ -9,7 +9,8 @@
     <TextView
         android:id="@+id/boardTitle"
         android:layout_width="160dp"
-        android:layout_height="35dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:ems="10"
@@ -17,129 +18,119 @@
         android:maxLines="2"
         android:text="This is title"
         android:textColor="#000000"
-        android:textSize="30dp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
-        android:id="@+id/textView_BoardTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/boardContent"
+        android:layout_width="272dp"
+        android:layout_height="35dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:ellipsize="end"
+        android:ems="10"
+        android:maxLines="2"
+        android:text="This is content hello world"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/boardTitle" />
+
+    <ImageView
+        android:id="@+id/imageView_image"
+        android:layout_width="71dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/boardContent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_BoardTime"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView_BoardTime"
+        android:layout_width="143dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
         android:text="2023년 2월 14일 오후 2시 52분"
+        android:textAlignment="viewEnd"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.237"
+        app:layout_constraintHorizontal_bias="0.638"
         app:layout_constraintStart_toEndOf="@+id/boardTitle"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/contentLayout"
-        android:layout_width="377dp"
-        android:layout_height="62dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardTitle">
-
-        <TextView
-            android:id="@+id/boardContent"
-            android:layout_width="277dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="7dp"
-            android:background="@android:color/transparent"
-            android:ellipsize="end"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:maxLines="1"
-            android:text="This is content hello worl.."
-            android:textColor="#000000" />
-
-        <ImageView
-            android:id="@+id/imageView_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/imageView_like"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.041"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contentLayout"
+        app:layout_constraintTop_toBottomOf="@+id/boardContent"
         app:srcCompat="@drawable/favorite_border" />
-
-    <TextView
-        android:id="@+id/textView_likecount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="12dp"
-        android:text="4"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView_like"
-        app:layout_constraintTop_toBottomOf="@+id/contentLayout" />
-
-    <ImageView
-        android:id="@+id/imageView_comment"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView_likecount"
-        app:layout_constraintTop_toBottomOf="@+id/contentLayout"
-        app:srcCompat="@drawable/comment_icon" />
-
-    <TextView
-        android:id="@+id/textView_commentcount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="12dp"
-        android:text="1"
-        app:layout_constraintStart_toEndOf="@+id/imageView_comment"
-        app:layout_constraintTop_toBottomOf="@+id/contentLayout" />
-
-    <ImageView
-        android:id="@+id/imageView_bookmark"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.034"
-        app:layout_constraintStart_toEndOf="@+id/textView_commentcount"
-        app:layout_constraintTop_toBottomOf="@+id/contentLayout"
-        app:srcCompat="@drawable/bookmark_icon" />
 
     <TextView
         android:id="@+id/textView_bookmarkcount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
         android:text="2"
         app:layout_constraintStart_toEndOf="@+id/imageView_bookmark"
-        app:layout_constraintTop_toBottomOf="@+id/contentLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/boardContent" />
+
+    <ImageView
+        android:id="@+id/imageView_bookmark"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/textView_commentcount"
+        app:layout_constraintTop_toBottomOf="@+id/boardContent"
+        app:srcCompat="@drawable/bookmark_icon" />
+
+    <TextView
+        android:id="@+id/textView_commentcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="1"
+        app:layout_constraintStart_toEndOf="@+id/imageView_comment"
+        app:layout_constraintTop_toBottomOf="@+id/boardContent" />
+
+    <ImageView
+        android:id="@+id/imageView_comment"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_likecount"
+        app:layout_constraintTop_toBottomOf="@+id/boardContent"
+        app:srcCompat="@drawable/comment_icon" />
+
+    <TextView
+        android:id="@+id/textView_likecount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="4"
+        app:layout_constraintStart_toEndOf="@+id/imageView_like"
+        app:layout_constraintTop_toBottomOf="@+id/boardContent" />
 
     <View
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:background="#85AFD6"
         android:backgroundTint="#CDCDCD"
         app:layout_constraintTop_toBottomOf="@+id/imageView_comment"

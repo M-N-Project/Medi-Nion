@@ -3,8 +3,12 @@ package com.example.medi_nion
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +23,7 @@ class Login : AppCompatActivity() {
         //최초 실행 여부 판단하는 구문
         val pref: SharedPreferences = getSharedPreferences("isFirst", Activity.MODE_PRIVATE)
         val first: Boolean = pref.getBoolean("isFirst", false)
-
+        Log.d("slslslslsl", first.toString())
         if (first == false) {
             val url = "http://seonho.dothome.co.kr/Login.php"
 
@@ -95,5 +99,22 @@ class Login : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView: View? = currentFocus
+        if (focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                val imm: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }
