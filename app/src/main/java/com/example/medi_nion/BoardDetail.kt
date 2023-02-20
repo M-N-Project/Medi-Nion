@@ -20,6 +20,8 @@ class BoardDetail : AppCompatActivity() {
 
 
 
+
+
     }
 
 }

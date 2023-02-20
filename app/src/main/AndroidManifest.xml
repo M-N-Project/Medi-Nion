@@ -42,8 +42,6 @@
         <activity android:name=".Board" />
         <activity android:name=".SignUp" />
         <activity android:name=".HospitalProfile" />
-        <activity android:name=".BoardWrite" />
-
         <activity
             android:name=".BusinessManageActivity"
             android:exported="true">
@@ -72,6 +70,20 @@
                 android:value="" />
         </activity>
 
+        <activity android:name=".BoardWrite"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <uses-library android:name="org.apache.http.params" android:required="false"/>
         <provider
             android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
