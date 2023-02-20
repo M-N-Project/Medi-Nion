@@ -20,10 +20,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.business_board_item.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
+import java.sql.Time
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import kotlin.time.milliseconds
 
 
 class BoardWrite : AppCompatActivity() {
@@ -109,6 +114,7 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()

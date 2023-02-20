@@ -54,9 +54,6 @@ class Board : AppCompatActivity() {
         wrtingFAB.setOnClickListener{
             val intent = Intent(applicationContext, BoardWrite::class.java)
             startActivity(intent)
-            //SignUp::class.java 대신 글쓰기 kt 파일로 이동.
-            val intent = Intent(applicationContext, BoardWrite::class.java)
-            startActivity(intent)
         }
 
     }
