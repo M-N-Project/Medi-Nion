@@ -288,7 +288,7 @@ class SignUp : AppCompatActivity() {
 
         //비밀번호 확인 먼저 입력하고 비밀번호 입력하면 동일하지 않게 뜬다.... -> 고치기
         //비밀번호 정규식 확인 -> 숫자, 문자, 특수문자 중 2가지 포함(8~15자)
-        passwd_editText.addTextChangedListener {
+        passwd_editText.setOnClickListener {
             passwd_warning.visibility = View.VISIBLE
 
             val passwdInput = passwd_editText.text
@@ -307,7 +307,7 @@ class SignUp : AppCompatActivity() {
         }
 
         //비밀번호 정확성 확인
-        passwdCheck_editText.addTextChangedListener {
+        passwdCheck_editText.setOnClickListener {
             passwdCheck_warning.visibility = View.VISIBLE
 
             val passwdInput = passwd_editText.text.toString()

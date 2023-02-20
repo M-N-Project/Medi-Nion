@@ -5,13 +5,2570 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="schedule"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.widget.Button
+                android:id="@+id/schedule_btn"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/schedule_btn"
+                android:text="내 스케줄 1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <TableLayout
+                android:id="@+id/schedult_tableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/schedule_round"
+                android:backgroundTint="#85AFD6"
+                android:orientation="vertical">
+
+                <!--  ================================요일==================================    -->
+                <TableRow
+                    android:id="@+id/weekRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/blank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="월"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="화"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="수"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="목"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="금"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="토"
+                        android:textColor="#0000FF"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:height="37dp"
+                        android:gravity="center"
+                        android:text="일"
+                        android:textColor="#FF0000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================00시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_00"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="00"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <!--  ================================01시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="01"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================02시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="02"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================03시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="03"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================04시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_04"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="04"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================05시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_05"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="05"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================06시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_06"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="06"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================07시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_07"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="07"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================08시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_08"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="08"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================09시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_09"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="09"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================10시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="10"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================11시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row11"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="11"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================12시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row12"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="12"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================03시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row13"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="13"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================14시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row14"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="14"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================15시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row15"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="15"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================16시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row16"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="16"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================17시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row17"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="17"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================18시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row18"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="18"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================19시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row19"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="19"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================20시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row20"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="20"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================21시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row21"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="21"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================22시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row22"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="22"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+
+                <!--  ================================23시==================================    -->
+
+                <TableRow
+                    android:id="@+id/row23"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#85AFD6">
+
+                    <TextView
+                        android:id="@+id/time_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_time_cell"
+                        android:gravity="center"
+                        android:text="23"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Mon_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Tue_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Wed_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Thu_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Fri_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sat_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/Sun_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:height="30dp"
+                        android:background="@drawable/schedule_basic_cell"
+                        android:gravity="center"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
