@@ -19,5 +19,4 @@ class HospitalInfoFragment : Fragment() { //ActivityMainBinding
         _binding = HospitalInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 }
