@@ -1,15 +1,34 @@
 package com.example.medi_nion
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
+import android.widget.Gallery
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.business_home.*
+import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
+import kotlinx.android.synthetic.main.business_manage_create.*
 
 class BusinessManageActivity : AppCompatActivity() {
+    //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
+
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        // Handle the returned Uri
+    }
+
+    private val OPEN_GALLERY = 1
+
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,23 +53,87 @@ class BusinessManageActivity : AppCompatActivity() {
         val adapter = BusinessRecyclerAdapter(businessBoard)
         BusinessBoardRecyclerView.adapter = adapter
 
-        var write = findViewById<Button>(R.id.write_btn)
-        var profileImg = findViewById<ImageView>(R.id.profileImg)
-        var backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
+        val write = findViewById<Button>(R.id.write_btn)
+        val profileImg = findViewById<ImageView>(R.id.profileImg)
+        val backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
 
         write.setOnClickListener {
-            var newIntent = Intent(this, BusinessWriting::class.java)
+            var newIntent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
             startActivity(newIntent)
         }
 
         profileImg.setOnClickListener {
             //프로필 이미지 수정하게 하는,,
             Toast.makeText(this, "동그란 맘속에 피어난 how is the life", Toast.LENGTH_SHORT).show()
+            openGallery() //갤러리로 이동
         }
 
         backgroundImg.setOnClickListener {
             //배경 이미지 수정하게 하는,,
             Toast.makeText(this, "사람 찾아 인생을 찾아~", Toast.LENGTH_SHORT).show()
+            openGallery() //갤러리로 이동
         }
     }
+
+    private fun openGallery() {
+        val intent : Intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, OPEN_GALLERY)
+    }
+
+//    private fun openGallery1() {
+//        val intent : Intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        startActivityForResult(intent, OPEN_GALLERY)
+//    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            if(requestCode == OPEN_GALLERY) {
+                val currentImgUri : Uri? = data?.data
+
+                if(profileImg.isClickable) {
+                    try {
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+                        profileImg.setImageBitmap(bitmap)
+                    } catch (e:Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                else if(backgroundImg.isClickable) {
+                    try {
+                        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+                        backgroundImg.setImageBitmap(bitmap)
+                    } catch (e:Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+            } else {
+                Log.d("activity result", "wrong")
+            }
+        }
+    }
+
+//    fun onActivityResult1(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (resultCode == Activity.RESULT_OK) {
+//            if(requestCode == OPEN_GALLERY) {
+//                val currentImgUri : Uri? = data?.data
+//
+//                try {
+//                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+//                    backgroundImg.setImageBitmap(bitmap)
+//                } catch (e:Exception) {
+//                    e.printStackTrace()
+//                }
+//            } else {
+//                Log.d("activity result", "wrong")
+//            }
+//        }
+//    }
 }
