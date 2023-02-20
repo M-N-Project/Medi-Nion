@@ -3,21 +3,27 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.database.Cursor
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
+import java.io.IOException
+import java.net.URLEncoder
 
 
 class CreateBoard : AppCompatActivity() {
@@ -107,6 +113,7 @@ class CreateBoard : AppCompatActivity() {
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
+        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
 
         val request = SignUP_Request(
             Request.Method.POST,
@@ -117,6 +124,9 @@ class CreateBoard : AppCompatActivity() {
                     postTitle = response.toString()
                     postContent = response.toString()
                     board_select = response.toString()
+                    image = response.toString()
+
+                    Log.d("123456", "123456")
 
                     Toast.makeText(
                         baseContext,
@@ -126,7 +136,7 @@ class CreateBoard : AppCompatActivity() {
 
                     Log.d(
                         "Post success",
-                        "$postTitle, $postContent, $board_select"
+                        "$postTitle, $postContent, $board_select, $image"
                     )
                 } else {
                     Toast.makeText(
@@ -137,22 +147,23 @@ class CreateBoard : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-
                 hashMapOf(
                     "board" to board_select,
                     "title" to postTitle,
-                    "content" to postContent
+                    "content" to postContent,
+                    "image" to image
                 )
         )
+        Log.d("hash???", "12345678")
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     @Override
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //사진 첨부시 갤러리로 이동시켜주는,,
         super.onActivityResult(requestCode, resultCode, data)
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
-        var postbtn = findViewById<Button>(R.id.post_Btn)
 
         if( resultCode == Activity.RESULT_OK) { //호출 코드 확인
             if( requestCode ==  GALLERY)
@@ -161,122 +172,69 @@ class CreateBoard : AppCompatActivity() {
                 imgbtn.setImageURI(ImageData)
 
                 try {
-                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
+                    var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
                     imgbtn.setImageBitmap(bitmap)
+                    Log.d("1", "1111111")
 
-                    var imagePath = ImageData?.let { getPath(context = baseContext, it) }.toString()
+                    var source: ImageDecoder.Source? =
+                        ImageData?.let { ImageDecoder.createSource(contentResolver, it) }
+                    Log.d("2", "2222222")
+                    bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
-                    Log.d("<<<<<<<<<<<<<<<<<<<<<<", imagePath)
+                    Log.d("3", "3333333")
 
-                    AlertDialog.Builder(this).setMessage(imagePath).create().show()
+                    bitmap = resize(bitmap)
 
-                    val request = SignUP_Request(
-                        Request.Method.POST,
-                        url = "http://seonho.dothome.co.kr/Image.php",
-                        { response ->
-                            val success = true
-                            if (success) {
-                                imagePath = response.toString()
+                    Log.d("4", "4444444")
 
-                                Toast.makeText(
-                                    baseContext,
-                                    String.format("이미지를 불러왔습니다."),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                    var image = BitMapToString(bitmap)
 
-                                Log.d(
-                                    "Image success",
-                                    "$imagePath"
-                                )
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "이미지를 불러오는 데 실패했습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        },
-                        { Log.d("failed", "error......${error(applicationContext)}") },
+                    Log.d("5", "555555")
+                    Log.d("image!!", "$image")
 
-                        hashMapOf(
-                            "imagePath" to imagePath
-                        )
-                    )
-                    val queue = Volley.newRequestQueue(this)
-                    queue.add(request)
-
-                }
-                catch (e:Exception)
-                {
+                } catch (e: FileNotFoundException) {
+                    // TODO Auto-generated catch block
                     e.printStackTrace()
-                }
-                catch (e: FileNotFoundException)
-                {
+                } catch (e: IOException) {
+                    // TODO Auto-generated catch block
                     e.printStackTrace()
+                } catch (e: OutOfMemoryError) {
+                    Toast.makeText(applicationContext, "이미지 용량이 너무 큽니다.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
     }
 
-
-    fun getPath(context: Context, uri: Uri): String? {
-        val isKitKat: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            if (isMediaDocument(uri)) {
-                val docId: String = DocumentsContract.getDocumentId(uri)
-                val split = docId.split(":").toTypedArray()
-                val type = split[0]
-                var contentUri: Uri? = null
-                if ("image" == type) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                } else if ("video" == type) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                } else if ("audio" == type) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-                }
-                val selection = "_id=?"
-                val selectionArgs = arrayOf(
-                    split[1]
-                )
-                return getDataColumn(context, contentUri, selection, selectionArgs)
-            }
-        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
-            return getDataColumn(context, uri, null, null)
-        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
-            return uri.path
-        }
-        return null
+    private fun resize(bitmap: Bitmap): Bitmap? {
+        var bitmap: Bitmap? = bitmap
+        val config: Configuration = Resources.getSystem().configuration
+        bitmap = if (config.smallestScreenWidthDp >= 800) Bitmap.createScaledBitmap(
+            bitmap!!,
+            400,
+            240,
+            true
+        ) else if (config.smallestScreenWidthDp >= 600) Bitmap.createScaledBitmap(
+            bitmap!!, 300, 180, true
+        ) else if (config.smallestScreenWidthDp >= 400) Bitmap.createScaledBitmap(
+            bitmap!!, 200, 120, true
+        ) else if (config.smallestScreenWidthDp >= 360) Bitmap.createScaledBitmap(
+            bitmap!!, 180, 108, true
+        ) else Bitmap.createScaledBitmap(bitmap!!, 160, 96, true)
+        return bitmap
     }
 
-    fun getDataColumn(
-        context: Context, uri: Uri?, selection: String?,
-        selectionArgs: Array<String>?
-    ): String? {
-        var cursor: Cursor? = null
-        val column = "_data"
-        val projection = arrayOf(
-            column
-        )
+    fun BitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos) //bitmap compress
+        val arr = baos.toByteArray()
+        val image: String = Base64.encodeToString(arr, Base64.DEFAULT)
+        var temp = ""
         try {
-            cursor = uri?.let {
-                context.getContentResolver().query(
-                    it, projection, selection, selectionArgs,
-                    null
-                )
-            }
-            if (cursor != null && cursor.moveToFirst()) {
-                val column_index = cursor.getColumnIndexOrThrow(column)
-                return cursor.getString(column_index)
-            }
-        } finally {
-            cursor?.close()
+            temp = URLEncoder.encode(image, "utf-8")
+        } catch (e: Exception) {
+            Log.e("exception", e.toString())
         }
-        return null
-    }
-
-    fun isMediaDocument(uri: Uri): Boolean {
-        return "com.android.providers.media.documents" == uri.authority
+        return temp
     }
 }
