@@ -40,9 +40,9 @@ class BusinessManageActivity : AppCompatActivity() {
 //            BusinessBoardItem("title1", "2023년 2월 16일 오전 11시 10분",
 //                BitmapFactory.decodeResource(resources, R.drawable.logo), "이것은 내용1입니다", 1, 1)
 //        ) //businessBoard end
-//        일단 더미데이터, db 연동해야함
 
-        val businessBoard = ArrayList<BusinessBoardItem>()
+
+        val businessBoard = ArrayList<BusinessBoardItem>() //일단 더미데이터, db 연동해야함
         businessBoard.add(BusinessBoardItem(getDrawable(R.drawable.business_profile_img)!!, "개강전 이벤트!!", "2023년 2월 15일 오후 1시 30분",
         "이것은 내용입니다. 약사세요~ 줄바꿈도 해야한답니다", 1, 2))
 
@@ -56,6 +56,7 @@ class BusinessManageActivity : AppCompatActivity() {
         val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
         val backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
+        val saveBtn = findViewById<Button>(R.id.save_btn)
 
         write.setOnClickListener {
             var newIntent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
@@ -72,6 +73,10 @@ class BusinessManageActivity : AppCompatActivity() {
             //배경 이미지 수정하게 하는,,
             Toast.makeText(this, "사람 찾아 인생을 찾아~", Toast.LENGTH_SHORT).show()
             openGallery() //갤러리로 이동
+        }
+
+        saveBtn.setOnClickListener {
+            Toast.makeText(this, "저장을 할 예정인 버튼이에요~", Toast.LENGTH_SHORT).show()
         }
     }
 
