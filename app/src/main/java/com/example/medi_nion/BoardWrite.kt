@@ -35,6 +35,7 @@ class BoardWrite : AppCompatActivity() {
 
     private val GALLERY = 1
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

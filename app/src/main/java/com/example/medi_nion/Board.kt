@@ -61,9 +61,8 @@ class Board : AppCompatActivity() {
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         wrtingFAB.setOnClickListener {
-            val intent = Intent(applicationContext, CreateBoard::class.java)
+            val intent = Intent(applicationContext, BoardWrite::class.java)
             startActivity(intent)
-            //SignUp::class.java 대신 글쓰기 kt 파일로 이동.)
         }
     }
 
