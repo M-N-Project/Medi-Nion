@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,6 +16,9 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
         bottomNavigationView.itemTextColor = null
 
         var bnv = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val currentId = intent.getStringExtra("id")
+        var bundle = Bundle()
+        bundle.putString("id", currentId)
 
         bnv.run { setOnItemSelectedListener {
             when(it.itemId) {
@@ -25,6 +29,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                 }
                 R.id.menuFragment -> {
                     val menuFragment = MenuFragment()
+                    menuFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
                 }
                 R.id.scheduleFragment -> {
@@ -33,6 +38,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                 }
                 R.id.businessFragment -> {
                     val businessFragment = BusinessMainFragment()
+                    businessFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, businessFragment).commit()
                 }
                 R.id.profileFragment -> {
