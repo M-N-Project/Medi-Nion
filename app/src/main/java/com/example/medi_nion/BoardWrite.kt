@@ -38,6 +38,8 @@ class BoardWrite : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_writing)
 
+        var id = intent.getStringExtra("id")
+
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
@@ -107,6 +109,7 @@ class BoardWrite : AppCompatActivity() {
             } else {
                 createBoardRequest(url_Post)
                 var intent = Intent(applicationContext, Board::class.java)
+                intent.putExtra("id", id)
                 startActivity(intent)
             }
 
