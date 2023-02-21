@@ -78,6 +78,7 @@ class Login : AppCompatActivity() {
                 ).show()
 
                 var intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("id",id)
                 startActivity(intent)
 
                 Log.d(
