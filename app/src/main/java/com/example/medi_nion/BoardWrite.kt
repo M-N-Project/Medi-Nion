@@ -110,13 +110,14 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
-    lateinit var loginRequest: Login_Request
+    //lateinit var loginRequest: Login_Request
 
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
-        var id: String = loginRequest.params["id"].toString()
-        Log.d("id123", "$id")
+        //var id: String = loginRequest.params["id"].toString()
+        //Log.d("id123", "$id")
+        var id :String = ""
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
@@ -134,7 +135,7 @@ class BoardWrite : AppCompatActivity() {
                     board_select = response.toString()
                     image = response.toString()
 
-                    Log.d("id456", "$id")
+                    Log.d("id456", response.toString())
 
                     Log.d("123456", "123456")
 
@@ -145,8 +146,8 @@ class BoardWrite : AppCompatActivity() {
                     ).show()
 
                     Log.d(
-                        "Post success",
-                        "$id, $postTitle, $postContent, $board_select, $image"
+                        "Post success1",
+                        "$id"
                     )
                 } else {
                     Toast.makeText(
@@ -158,7 +159,6 @@ class BoardWrite : AppCompatActivity() {
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
                 hashMapOf(
-                    "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
