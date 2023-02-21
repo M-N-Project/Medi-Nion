@@ -59,7 +59,4 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
         }
     }
 
-
-
-
 }
