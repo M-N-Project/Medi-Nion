@@ -69,7 +69,6 @@ class Login : AppCompatActivity() {
             { response ->
             if (!response.equals("Login Failed")) {
                 id = response.toString()
-                Log.d("lllll", id)
 
                 Toast.makeText(
                     baseContext,
@@ -78,6 +77,7 @@ class Login : AppCompatActivity() {
                 ).show()
 
                 var intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("id",id)
                 startActivity(intent)
 
                 Log.d(
