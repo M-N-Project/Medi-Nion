@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
         //bottomNavigationView.itemBackground = null
         bottomNavigationView.itemTextColor = null
 
+        val id = intent.getStringExtra("id")
+
         var bnv = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         bnv.run { setOnItemSelectedListener {
@@ -25,6 +27,9 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                 }
                 R.id.menuFragment -> {
                     val menuFragment = MenuFragment()
+                    var bundle = Bundle()
+                    bundle.putString("id",id)
+                    menuFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
                 }
                 R.id.scheduleFragment -> {
