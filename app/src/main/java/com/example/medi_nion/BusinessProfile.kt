@@ -3,21 +3,18 @@ package com.example.medi_nion
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.business_home.*
 import org.json.JSONException
 import org.json.JSONObject
 
 
-var businessitems = ArrayList<BusinessBoardItem>()
+var businessitems = ArrayList<BusinessProfileItem>()
 //val viewModel = BoardViewModel()
 lateinit var businessadapter : BusinessRecyclerAdapter
 lateinit var businessmJsonString1: String
@@ -31,11 +28,11 @@ class BusinessProfile : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
 
-
         fetchData()
 
-        val adapter = BusinessRecyclerAdapter(businessitems)
-        BusinessBoardRecyclerView.adapter = adapter
+
+//        val adapter = BusinessRecyclerAdapter(businessitems)
+//        BusinessBoardRecyclerView.adapter = adapter
 
 //        val dataObserver: Observer<ArrayList<BoardItem>> = Observer {
 //            items.value = it
@@ -75,13 +72,13 @@ class BusinessProfile : AppCompatActivity() {
             Response.Listener { response ->
                 try {
                     val jsonObject = JSONObject(response)
-                    val title = jsonObject.getString("title")
-                    val content = jsonObject.getString("content")
-                    val boardItem = BoardItem(title, content)
-                    items.add(boardItem)
-                    val adapter = BoardListAdapter(items)
-                    boardRecyclerView.adapter = adapter
-                    Log.d("lllaaa", boardItem.title)
+                    val name = jsonObject.getString("Channel_Name")
+                    val message = jsonObject.getString("Channel_Message")
+                    //val BusinessProfileItem = BusinessProfileItem(name, message, "", "", "")
+                    //businessitems.add(BusinessProfileItem)
+                    //val adapter = BusinessRecyclerAdapter(businessitems)
+                    //BusinessBoardRecyclerView.adapter = adapter
+                    //Log.d("lllaaa", BusinessProfileItem.Channel_Name)
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -102,5 +99,5 @@ class BusinessProfile : AppCompatActivity() {
 
     }
 
-    data class JsonObj(val result: List<BoardItem>)
+    data class JsonObj(val result: List<BusinessProfileItem>)
 }
