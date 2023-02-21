@@ -1,7 +1,5 @@
 package com.example.medi_nion
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
@@ -10,10 +8,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
-import android.widget.Gallery
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.business_home.*
@@ -43,10 +39,10 @@ class BusinessManageActivity : AppCompatActivity() {
 
 
         val businessBoard = ArrayList<BusinessBoardItem>() //일단 더미데이터, db 연동해야함
-        businessBoard.add(BusinessBoardItem(getDrawable(R.drawable.business_profile_img)!!, "개강전 이벤트!!", "2023년 2월 15일 오후 1시 30분",
-        "이것은 내용입니다. 약사세요~ 줄바꿈도 해야한답니다", 1, 2))
+        businessBoard.add(BusinessBoardItem("개강전 이벤트!!", "2023년 2월 15일 오후 1시 30분",getDrawable(R.drawable.business_profile_img)!!,
+            "이것은 내용입니다. 약사세요~ 줄바꿈도 해야한답니다", 1, 2))
 
-        businessBoard.add(BusinessBoardItem(getDrawable(R.drawable.business_profile_img)!!, "1월 이벤트!!", "2023년 1월 11일 오전 10시 30분",
+        businessBoard.add(BusinessBoardItem("1월 이벤트!!", "2023년 1월 11일 오전 10시 30분",getDrawable(R.drawable.business_profile_img)!!,
             "반가워요 1월이 밝았네요 이벤트 어쩌구 저쩌구", 3, 2))
 
         //이벤트 연결중,,,

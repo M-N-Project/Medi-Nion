@@ -42,6 +42,7 @@
         <activity android:name=".Board" />
         <activity android:name=".SignUp" />
         <activity android:name=".HospitalProfile" />
+
         <activity
             android:name=".BusinessManageActivity"
             android:exported="true">
