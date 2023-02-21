@@ -27,7 +27,7 @@ class BusinessProfile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.board_home)
+        setContentView(R.layout.business_home)
 
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
 
