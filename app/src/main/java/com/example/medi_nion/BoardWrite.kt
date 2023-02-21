@@ -24,6 +24,8 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class BoardWrite : AppCompatActivity() {
@@ -115,13 +117,15 @@ class BoardWrite : AppCompatActivity() {
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
-        //var id: String = loginRequest.params["id"].toString()
-        //Log.d("id123", "$id")
         var id :String = ""
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
         var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
+
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초")
+        val postTime = current.format(formatter)
 
         val request = SignUP_Request(
             Request.Method.POST,
@@ -162,6 +166,7 @@ class BoardWrite : AppCompatActivity() {
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
+                    "time" to postTime,
                     "image" to image
                 )
         )
