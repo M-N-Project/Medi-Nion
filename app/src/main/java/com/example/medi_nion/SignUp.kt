@@ -21,7 +21,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.widget.addTextChangedListener
 import com.android.volley.Request
 import com.android.volley.toolbox.*
 import com.googlecode.tesseract.android.TessBaseAPI

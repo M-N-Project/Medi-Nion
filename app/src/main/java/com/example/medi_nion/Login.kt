@@ -67,9 +67,9 @@ class Login : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-            if (response.equals("Login Success")) {
+            if (!response.equals("Login Failed")) {
                 id = response.toString()
-                password = response.toString()
+                Log.d("lllll", id)
 
                 Toast.makeText(
                     baseContext,

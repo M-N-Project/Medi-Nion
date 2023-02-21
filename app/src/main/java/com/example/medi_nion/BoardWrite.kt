@@ -20,15 +20,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_board_item.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
-import java.sql.Time
-import java.sql.Timestamp
-import java.time.LocalDateTime
-import kotlin.time.milliseconds
 
 
 class BoardWrite : AppCompatActivity() {
@@ -115,8 +110,14 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
+    //lateinit var loginRequest: Login_Request
+
+    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
+        //var id: String = loginRequest.params["id"].toString()
+        //Log.d("id123", "$id")
+        var id :String = ""
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
@@ -128,10 +129,13 @@ class BoardWrite : AppCompatActivity() {
             { response ->
                 val success = true
                 if (success) {
+                    id = response.toString()
                     postTitle = response.toString()
                     postContent = response.toString()
                     board_select = response.toString()
                     image = response.toString()
+
+                    Log.d("id456", response.toString())
 
                     Log.d("123456", "123456")
 
@@ -142,8 +146,8 @@ class BoardWrite : AppCompatActivity() {
                     ).show()
 
                     Log.d(
-                        "Post success",
-                        "$postTitle, $postContent, $board_select, $image"
+                        "Post success1",
+                        "$id"
                     )
                 } else {
                     Toast.makeText(
