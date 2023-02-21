@@ -21,7 +21,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = arguments?.getInt("id")
+        val id = arguments?.getString("id")
 
         basicBoard = view.findViewById(R.id.menu1)
         qnaBtn = view.findViewById(R.id.menu6)
@@ -49,6 +49,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         manageBusinessBtn.setOnClickListener { //비즈니스 관리(프로필수정, 글쓰기 화면으로 이동)
             activity?.let{
                 val intent = Intent(context, BusinessManageActivity::class.java)
+                intent.putExtra("id", id)
                 startActivity(intent)
             }
         }

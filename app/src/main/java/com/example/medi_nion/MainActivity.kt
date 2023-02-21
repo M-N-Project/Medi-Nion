@@ -2,6 +2,7 @@ package com.example.medi_nion
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     val menuFragment = MenuFragment()
                     var bundle = Bundle()
                     bundle.putString("id",id)
+                    Log.d("menufragment id", id.toString())
                     menuFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
                 }

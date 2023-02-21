@@ -17,12 +17,15 @@ class BusinessManageActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
     private val OPEN_GALLERY = 1
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
+        val id:String? = this.intent.getStringExtra("id")
 
         val businessBoard = ArrayList<BusinessBoardItem>() //일단 더미데이터, db 연동해야함
-        businessBoard.add(BusinessBoardItem("개강전 이벤트!!", "2023년 2월 15일 오후 1시 30분",getDrawable(R.drawable.business_profile_img)!!,
+        businessBoard.add(BusinessBoardItem(
+            id.toString(), "2023년 2월 15일 오후 1시 30분",getDrawable(R.drawable.business_profile_img)!!,
             "이것은 내용입니다. 약사세요~ 줄바꿈도 해야한답니다", 1, 2))
 
         businessBoard.add(BusinessBoardItem("1월 이벤트!!", "2023년 1월 11일 오전 10시 30분",getDrawable(R.drawable.business_profile_img)!!,

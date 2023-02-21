@@ -68,7 +68,7 @@ class Login : AppCompatActivity() {
             url,
             { response ->
             if (!response.equals("Login Failed")) {
-                id = response.toString()
+                //id = response.toString()
 
                 Toast.makeText(
                     baseContext,
