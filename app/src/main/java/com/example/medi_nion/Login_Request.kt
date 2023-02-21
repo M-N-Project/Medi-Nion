@@ -24,8 +24,6 @@ class Login_Request(
 
     public override fun getParams(): MutableMap<String, String> {
         Log.d("LOGIN", "$params")
-        val id = params["id"]
-        Log.d("id", "$id")
         return params
     }
 

@@ -444,7 +444,7 @@ class SignUp : AppCompatActivity() {
 
                 //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
                 if (passwd_editText == passwdCheck_editText) {
-                    if (success) {
+                    if (!response.equals("SignUP fail")) {
                         nickname_editText = response.toString()
                         id_editText = response.toString()
                         passwd_editText = response.toString()

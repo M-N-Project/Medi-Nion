@@ -20,6 +20,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.login.*
+import kotlinx.android.synthetic.main.signup_detail.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -35,6 +37,7 @@ class BoardWrite : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_writing)
+
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
@@ -110,34 +113,24 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
-    //lateinit var loginRequest: Login_Request
-
-    @SuppressLint("NewApi")
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
-        //var id: String = loginRequest.params["id"].toString()
-        //Log.d("id123", "$id")
-        var id :String = ""
+        var id = intent?.getStringExtra("id").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
         var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
 
+        Log.d("Write id", "$id")
+
         val request = SignUP_Request(
             Request.Method.POST,
             postUrl,
             { response ->
-                val success = true
-                if (success) {
-                    id = response.toString()
+                if (!response.equals("upload fail")) {
                     postTitle = response.toString()
                     postContent = response.toString()
                     board_select = response.toString()
                     image = response.toString()
-
-                    Log.d("id456", response.toString())
-
-                    Log.d("123456", "123456")
 
                     Toast.makeText(
                         baseContext,
@@ -147,8 +140,10 @@ class BoardWrite : AppCompatActivity() {
 
                     Log.d(
                         "Post success1",
-                        "$id"
+                        "$id, $board_select, $postTitle, $postContent, $image"
                     )
+
+                    Log.d("response", "${response}")
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -159,6 +154,7 @@ class BoardWrite : AppCompatActivity() {
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
                 hashMapOf(
+                    "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,

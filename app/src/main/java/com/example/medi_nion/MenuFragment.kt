@@ -21,7 +21,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = arguments?.getInt("id")
+        val id = arguments?.getString("id")
 
         basicBoard = view.findViewById(R.id.menu1)
         qnaBtn = view.findViewById(R.id.menu6)
@@ -42,6 +42,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }

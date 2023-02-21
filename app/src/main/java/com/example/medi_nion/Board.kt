@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +15,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.login.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -29,6 +31,8 @@ class Board : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
+
+        var id = intent.getStringExtra("id")
 
         val url = "http://seonho.dothome.co.kr/Board.php"
 
@@ -62,6 +66,7 @@ class Board : AppCompatActivity() {
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         wrtingFAB.setOnClickListener {
             val intent = Intent(applicationContext, BoardWrite::class.java)
+            intent.putExtra("id", id)
             startActivity(intent)
         }
     }
@@ -104,5 +109,5 @@ class Board : AppCompatActivity() {
 
     }
 
-    data class JsonObj(val result: List<BoardItem>)
+    data class JsonObj(val result: String)
 }
