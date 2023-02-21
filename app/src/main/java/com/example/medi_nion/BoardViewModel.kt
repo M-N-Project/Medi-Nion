@@ -12,11 +12,6 @@ class BoardViewModel: ViewModel() {
 
     init {
         val recyclerViewItems: ArrayList<BoardItem> = ArrayList()
-        recyclerViewItems.add(BoardItem("title1", "subtitle1"))
-        recyclerViewItems.add(BoardItem( "title2", "subtitle2"))
-        recyclerViewItems.add(BoardItem("title3", "subtitle3"))
-        recyclerViewItems.add(BoardItem( "title4", "subtitle4"))
-        recyclerViewItems.add(BoardItem( "title5", "subtitle5"))
 
         _itemList.value = recyclerViewItems
     }

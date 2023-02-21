@@ -26,6 +26,8 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class BoardWrite : AppCompatActivity() {
@@ -117,13 +119,16 @@ class BoardWrite : AppCompatActivity() {
     }
 
     private fun createBoardRequest(postUrl: String) {
-        var id = intent?.getStringExtra("id").toString()
+        var id :String = ""
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
         var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
 
-        Log.d("Write id", "$id")
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초")
+        val postTime = current.format(formatter)
+
 
         val request = SignUP_Request(
             Request.Method.POST,
@@ -145,8 +150,6 @@ class BoardWrite : AppCompatActivity() {
                         "Post success1",
                         "$id, $board_select, $postTitle, $postContent, $image"
                     )
-
-                    Log.d("response", "${response}")
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -161,6 +164,7 @@ class BoardWrite : AppCompatActivity() {
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
+                    "time" to postTime,
                     "image" to image
                 )
         )

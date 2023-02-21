@@ -8,16 +8,14 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
+import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.login.*
 import org.json.JSONException
 import org.json.JSONObject
+import org.json.JSONArray
 
 
 var items =ArrayList<BoardItem>()
@@ -66,7 +64,6 @@ class Board : AppCompatActivity() {
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         wrtingFAB.setOnClickListener {
             val intent = Intent(applicationContext, BoardWrite::class.java)
-            intent.putExtra("id", id)
             startActivity(intent)
         }
     }
@@ -74,37 +71,43 @@ class Board : AppCompatActivity() {
     fun fetchData() {
         // url to post our data
         val url = "http://seonho.dothome.co.kr/Board.php"
+        val jsonArray : JSONArray
 
-        val queue = Volley.newRequestQueue(this@Board)
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                val jsonArray = JSONArray(response)
+                for (i in jsonArray.length()-1  downTo  0) {
+                    val item = jsonArray.getJSONObject(i)
 
-        val request: StringRequest = object : StringRequest(
-            Method.POST, url,
-            Response.Listener { response ->
-                try {
-                    val jsonObject = JSONObject(response)
-                    val title = jsonObject.getString("title")
-                    val content = jsonObject.getString("content")
-                    val boardItem = BoardItem(title, content)
+                    val title = item.getString("title")
+                    val content = item.getString("content")
+                    val time = item.getString("time")
+                    val image = item.getString("image")
+                    val boardItem = BoardItem(title, content, time, image)
                     items.add(boardItem)
                     val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
-                    Log.d("lllaaa", boardItem.title)
 
-                } catch (e: JSONException) {
-                    e.printStackTrace()
+                    //게시판 상세
+                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                            Intent(this@Board, BoardDetail::class.java).apply {
+                                putExtra("data", data.toString())
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }.run { startActivity(this) }
+                        }
+
+                    })
+
                 }
-            }, Response.ErrorListener { error -> // method to handle errors.
-                Log.d("pppppppp", "Fail to get course$error")
-                Toast.makeText(this@Board, "Fail to get course$error", Toast.LENGTH_SHORT)
-                    .show()
-            }) {
-            override fun getBodyContentType(): String {
-                // as we are passing data in the form of url encoded
-                // so we are passing the content type below
-                return "application/x-www-form-urlencoded; charset=UTF-8"
-            }
 
-        }
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
         queue.add(request)
 
     }
