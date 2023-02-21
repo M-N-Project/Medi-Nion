@@ -22,8 +22,10 @@ class Login_Request(
     @GuardedBy("lock")
     private var listener: Response.Listener<String>? = listener
 
-    override fun getParams(): MutableMap<String, String> {
+    public override fun getParams(): MutableMap<String, String> {
         Log.d("LOGIN", "$params")
+        val id = params["id"]
+        Log.d("id", "$id")
         return params
     }
 
