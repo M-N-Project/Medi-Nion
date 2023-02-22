@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,9 @@ class BoardDetail : AppCompatActivity() {
 
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
+        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
+        val Like_count = findViewById<TextView>(R.id.textView_likecount2) //좋아요 숫자 부분
+
         var manager : InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager //키보드 내리기
 
@@ -48,6 +52,50 @@ class BoardDetail : AppCompatActivity() {
             Comment_editText.setText(null) //댓글입력창 clear
 
         }
+
+        Like_Btn.setOnClickListener {
+            //좋아요 눌렀을때,,
+            LikeRequest()
+        }
+    }
+
+    fun LikeRequest() {  //좋아요 DB연동중
+        var id = intent?.getStringExtra("id").toString()
+        var heart = findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
+        val url = "http://seonho.dothome.co.kr/Heart.php"
+
+        val request = Login_Request (
+            Request.Method.POST,
+            url,
+            { response ->
+                if(!response.equals("Like fail")) {
+                    heart = response.toString()
+
+                    Toast.makeText(
+                        baseContext,
+                        String.format("댓글이 등록되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "lion heart",
+                        "$id, $heart"
+                    )
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "lionh heart fail",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "id" to id,
+                "comment" to heart
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
     }
 
 
