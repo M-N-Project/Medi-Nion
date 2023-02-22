@@ -20,10 +20,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.login.*
+import kotlinx.android.synthetic.main.signup_detail.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class BoardWrite : AppCompatActivity() {
@@ -35,6 +39,9 @@ class BoardWrite : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_writing)
+
+        var id = intent.getStringExtra("id")
+
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
@@ -104,40 +111,36 @@ class BoardWrite : AppCompatActivity() {
             } else {
                 createBoardRequest(url_Post)
                 var intent = Intent(applicationContext, Board::class.java)
+                intent.putExtra("id", id)
                 startActivity(intent)
             }
 
         }
     }
 
-    //lateinit var loginRequest: Login_Request
-
-    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
-        //var id: String = loginRequest.params["id"].toString()
-        //Log.d("id123", "$id")
-        var id :String = ""
+        var id = intent?.getStringExtra("id").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
         var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
 
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초")
+        val postTime = current.format(formatter)
+
+
         val request = SignUP_Request(
             Request.Method.POST,
             postUrl,
             { response ->
-                val success = true
-                if (success) {
+                if (!response.equals("upload fail")) {
                     id = response.toString()
                     postTitle = response.toString()
                     postContent = response.toString()
                     board_select = response.toString()
                     image = response.toString()
-
-                    Log.d("id456", response.toString())
-
-                    Log.d("123456", "123456")
 
                     Toast.makeText(
                         baseContext,
@@ -147,7 +150,7 @@ class BoardWrite : AppCompatActivity() {
 
                     Log.d(
                         "Post success1",
-                        "$id"
+                        "$id, $board_select, $postTitle, $postContent, $image"
                     )
                 } else {
                     Toast.makeText(
@@ -159,9 +162,11 @@ class BoardWrite : AppCompatActivity() {
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
                 hashMapOf(
+                    "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
+                    "time" to postTime,
                     "image" to image
                 )
         )

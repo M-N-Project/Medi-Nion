@@ -42,6 +42,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
