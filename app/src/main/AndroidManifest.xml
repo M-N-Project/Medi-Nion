@@ -43,7 +43,7 @@
         <activity android:name=".HospitalProfile" />
 
         <activity android:name=".BoardDetail"
-            android:windowSoftInputMode="adjustUnspecified"/>
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity
             android:name=".BusinessManageActivity"

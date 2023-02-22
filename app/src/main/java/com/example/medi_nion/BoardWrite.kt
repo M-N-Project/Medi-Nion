@@ -118,8 +118,9 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
-        var id :String = ""
+        var id = intent?.getStringExtra("id").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
@@ -135,6 +136,7 @@ class BoardWrite : AppCompatActivity() {
             postUrl,
             { response ->
                 if (!response.equals("upload fail")) {
+                    id = response.toString()
                     postTitle = response.toString()
                     postContent = response.toString()
                     board_select = response.toString()
