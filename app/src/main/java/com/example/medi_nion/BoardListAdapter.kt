@@ -50,8 +50,8 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
             itemContents.text = item.contents
             itemTime.text = item.time
 
-            val bitmap: Bitmap? = StringToBitmaps(item.image)
-            itemImg.setImageBitmap(bitmap)
+            //val bitmap: Bitmap? = StringToBitmaps(item.image)
+            //itemImg.setImageBitmap(bitmap)
 
 
 //            val bImage: ByteArray = Base64.decode(item.image, 0)
@@ -78,7 +78,7 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
     }
 
     // String -> Bitmap 변환
-    fun StringToBitmaps(image: String?): Bitmap? {
+    /*fun StringToBitmaps(image: String?): Bitmap? {
         try {
             val encodeByte: ByteArray = Base64.decode(image, Base64.DEFAULT)
             Log.d("0909009", encodeByte.toString())
@@ -88,7 +88,7 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
             e.message
             return null
         }
-    }
+    }*/
 
 
 

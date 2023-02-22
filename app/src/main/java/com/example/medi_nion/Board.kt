@@ -53,6 +53,7 @@ class Board : AppCompatActivity() {
         adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
             override fun onItemClick(v: View, data: BoardItem, pos: Int) {
                 Intent(this@Board, BoardDetail::class.java).apply {
+                    putExtra("id", id)
                     putExtra("data", data.toString())
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { startActivity(this) }
@@ -64,12 +65,14 @@ class Board : AppCompatActivity() {
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         wrtingFAB.setOnClickListener {
             val intent = Intent(applicationContext, BoardWrite::class.java)
+            intent.putExtra("id", id)
             startActivity(intent)
         }
     }
 
     fun fetchData() {
         // url to post our data
+        var id = intent.getStringExtra("id")
         val url = "http://seonho.dothome.co.kr/Board.php"
         val jsonArray : JSONArray
 
@@ -94,6 +97,7 @@ class Board : AppCompatActivity() {
                     adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                         override fun onItemClick(v: View, data: BoardItem, pos: Int) {
                             Intent(this@Board, BoardDetail::class.java).apply {
+                                putExtra("id", id)
                                 putExtra("data", data.toString())
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             }.run { startActivity(this) }
