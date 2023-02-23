@@ -28,7 +28,6 @@ lateinit var Commentadapter : CommentListAdapter
 
 class BoardDetail : AppCompatActivity() {
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
