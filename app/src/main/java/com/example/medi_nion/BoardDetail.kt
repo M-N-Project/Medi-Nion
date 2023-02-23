@@ -33,6 +33,7 @@ class BoardDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
 
+        var isDefault = true //좋아요 빈하트, 채운하트 구분하기위함
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
         val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
@@ -54,8 +55,18 @@ class BoardDetail : AppCompatActivity() {
         }
 
         Like_Btn.setOnClickListener {
+
+            Log.d("asdfasdf", "clicked!")
             //좋아요 눌렀을때,,
             LikeRequest()
+            isDefault = !isDefault
+
+            if(isDefault) {
+                Like_Btn.setImageResource(R.drawable.favorite_border)
+            }
+            else
+                Like_Btn.setImageResource(R.drawable.favorite_fill)
+
         }
     }
 
@@ -73,7 +84,7 @@ class BoardDetail : AppCompatActivity() {
 
                     Toast.makeText(
                         baseContext,
-                        String.format("댓글이 등록되었습니다."),
+                        String.format("조아요 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d(
@@ -83,7 +94,7 @@ class BoardDetail : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "lionh heart fail",
+                        "lion heart fail",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
