@@ -33,6 +33,7 @@ class BoardDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
 
+        var count = 0
         var isDefault = true //좋아요 빈하트, 채운하트 구분하기위함
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
@@ -62,11 +63,15 @@ class BoardDetail : AppCompatActivity() {
             isDefault = !isDefault
 
             if(isDefault) {
+                count--
+                Like_count.text = count.toString()
                 Like_Btn.setImageResource(R.drawable.favorite_border)
             }
-            else
+            else {
+                count++
+                Like_count.text = count.toString()
                 Like_Btn.setImageResource(R.drawable.favorite_fill)
-
+            }
         }
     }
 
