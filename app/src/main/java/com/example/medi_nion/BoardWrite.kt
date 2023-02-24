@@ -127,11 +127,10 @@ class BoardWrite : AppCompatActivity() {
         var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
 
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val postTime = current.format(formatter)
 
-
-        val request = SignUP_Request(
+        val request = Login_Request(
             Request.Method.POST,
             postUrl,
             { response ->
@@ -170,7 +169,6 @@ class BoardWrite : AppCompatActivity() {
                     "image" to image
                 )
         )
-        Log.d("hash???", "12345678")
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
