@@ -7,18 +7,29 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/boardNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="num"
+        android:textSize="18sp"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/boardTitle"
-        android:layout_width="160dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
-        android:ems="10"
+        android:ems="7"
         android:inputType="textPersonName"
         android:maxLines="2"
         android:text="This is title"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +47,7 @@
         android:maxLines="2"
         android:text="This is content hello world"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/boardTitle" />
 

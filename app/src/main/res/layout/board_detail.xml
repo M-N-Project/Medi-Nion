@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="375dp"
+        android:layout_width="385dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="8dp"
@@ -26,13 +26,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageView_basicprofile"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.043"
                     app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:orientation="vertical">
@@ -53,17 +53,18 @@
                         android:layout_height="wrap_content"
                         android:text="익명"
                         android:textColor="@color/black"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/textView_time"
-                        android:layout_width="175dp"
-                        android:layout_height="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:text="2023년 1월 30일 오후 1시 25분"
-                        android:textSize="10dp"
+                        android:textSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:layout_editor_absoluteY="77dp" />
                 </LinearLayout>
@@ -71,10 +72,12 @@
 
             <TextView
                 android:id="@+id/textView_title"
-                android:layout_width="143dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="이것은 제목입니다"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.026"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="이것은 내용 입니다. 자동으로 줄바꿈될거에요"
-                android:textSize="12dp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.145"
                 app:layout_constraintStart_toStartOf="parent"
@@ -184,7 +187,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/CommentRecyclerView"
                 android:layout_width="385dp"
-                android:layout_height="450dp"
+                android:layout_height="475dp"
                 android:layout_marginTop="8dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -195,7 +198,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/board_comment_item" />
+                tools:listitem="@layout/board_comment_item"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -206,14 +211,18 @@
                     android:id="@+id/Comment_editText"
                     android:layout_width="290dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="0dp"
                     android:hint="댓글을 입력해주세요."
-                    android:singleLine="true"
-                    android:imeOptions="actionDone" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
                 <Button
                     android:id="@+id/Comment_Btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginLeft="10dp"
                     android:text="등록"/>
 
@@ -224,4 +233,4 @@
     </ScrollView>
 
 
-</RelativeLayout>
+</ScrollView>

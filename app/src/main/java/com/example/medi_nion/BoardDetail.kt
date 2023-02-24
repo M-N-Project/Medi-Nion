@@ -1,25 +1,18 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import android.view.View
+import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_detail.*
-import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
 
 var Comment_items =ArrayList<CommentItem>()
@@ -34,20 +27,43 @@ class BoardDetail : AppCompatActivity() {
 
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
+
         var manager : InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager //키보드 내리기
 
+
+
+        window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
+
+        //Board.kt에서 BoardDetail.kt로 데이터 intent
+        var id = intent.getStringExtra("id")
+
+        var title = intent.getStringExtra("title")
+        var content = intent.getStringExtra("content")
+        var time = intent.getStringExtra("time")
+
+        var title_textView = findViewById<TextView>(R.id.textView_title)
+        var content_textView = findViewById<TextView>(R.id.textView_content)
+        var time_textView = findViewById<TextView>(R.id.textView_time)
+
+        title_textView.setText(title)
+        content_textView.setText(content)
+        time_textView.setText(time)
+        //
 
         val Commentadapter = CommentListAdapter(Comment_items)
         CommentRecyclerView.adapter = Commentadapter
+
 
         Comment_Btn.setOnClickListener {
             CommentRequest()
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
-
         }
+
+
+
     }
 
 
@@ -93,6 +109,7 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     fun fetchData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val jsonArray : JSONArray
@@ -118,6 +135,29 @@ class BoardDetail : AppCompatActivity() {
                         val Commentadapter = CommentListAdapter(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
                         Log.d("comment5", "comment5")
+
+                        //댓글 아이템 하나 누르면
+                        var manager : InputMethodManager =
+                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
+                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
+                        val comment2_linearLayout = findViewById<LinearLayout>(R.id.comment2_linearLayout)
+
+                        Commentadapter.setOnItemClickListener(object : CommentListAdapter.OnItemClickListener {
+                            override fun onItemClick(v: View, data: CommentItem, pos: Int) {
+                                Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
+                                Comment_editText.requestFocus()
+                                manager.showSoftInput(Comment_editText, InputMethodManager.SHOW_IMPLICIT) //키보드 올리기
+                                Log.d("????", "123")
+
+                                Comment_Btn.setOnClickListener {
+                                    Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
+                                    //comment2_linearLayout.visibility = View.VISIBLE
+                                    //Log.d("comment2", "layout????")
+                                }
+
+                            }
+                        })
                     }
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },

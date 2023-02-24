@@ -1,8 +1,5 @@
 package com.example.medi_nion
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.io.ByteArrayInputStream
 
 class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerView.Adapter<BoardListAdapter.ViewHolder>()  {
 
@@ -21,7 +17,7 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
     }
     private var listener : OnItemClickListener? = null
 
-    fun setOnItemClickListener(listener : OnItemClickListener) {
+    fun setOnItemClickListener(listener: BoardListAdapter.OnItemClickListener) {
         Log.d("---", "---")
         this.listener = listener
     }

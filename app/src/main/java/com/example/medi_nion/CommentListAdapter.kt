@@ -1,15 +1,28 @@
 package com.example.medi_nion
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.compose.material.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
 
 class CommentListAdapter(private val itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>()  {
 
     var datas = mutableListOf<CommentItem>()
+
+    interface OnItemClickListener{
+        fun onItemClick(v:View, data: CommentItem, pos: Int)
+    }
+    private var listener : OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener : CommentListAdapter.OnItemClickListener) {
+        Log.d("ItemClick", "Event")
+        this.listener = listener
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.board_comment_item, parent, false)
@@ -31,6 +44,18 @@ class CommentListAdapter(private val itemList : ArrayList<CommentItem>) : Recycl
             itemComment.text = item.comment
             itemCommentTime.text = item.comment_time
 
+
+            val pos = adapterPosition
+            if(pos!= RecyclerView.NO_POSITION)
+            {
+                itemView.setOnClickListener {
+                    Log.d("ItemClick1", "Event1")
+                    listener?.onItemClick(itemView,item,pos)
+                }
+                itemComment.setOnClickListener {
+                    listener?.onItemClick(itemView,item,pos)
+                }
+            }
         }
     }
 }
