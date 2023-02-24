@@ -14,7 +14,8 @@ import org.json.JSONArray
 
 var items =ArrayList<BoardItem>()
 //val viewModel = BoardViewModel()
-lateinit var adapter : BoardListAdapter
+//lateinit var adapter : BoardListAdapter
+val adapter = BoardListAdapter(items)
 lateinit var mJsonString: String
 var errorString: String? = null
 
@@ -28,32 +29,7 @@ class Board : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/Board.php"
 
-
         fetchData()
-
-        val adapter = BoardListAdapter(items)
-        boardRecyclerView.adapter = adapter
-
-//        val dataObserver: Observer<ArrayList<BoardItem>> = Observer {
-//            items.value = it
-//            val adapter = BoardListAdapter(items)
-//            boardRecyclerView.adapter = adapter
-//        }
-//
-//        viewModel.itemList.observe(this, dataObserver)
-
-
-        //게시판 상세
-        adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                Intent(this@Board, BoardDetail::class.java).apply {
-                    putExtra("id", id)
-                    putExtra("data", data.toString())
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }.run { startActivity(this) }
-            }
-
-        })
 
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
@@ -74,7 +50,9 @@ class Board : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Log.d("//", response)
                 val jsonArray = JSONArray(response)
+                items.clear()
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
 
@@ -85,7 +63,7 @@ class Board : AppCompatActivity() {
                     val image = item.getString("image")
                     val boardItem = BoardItem(title, content, time, image)
                     items.add(boardItem)
-                    val adapter = BoardListAdapter(items)
+//                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
 
                     //게시판 상세
