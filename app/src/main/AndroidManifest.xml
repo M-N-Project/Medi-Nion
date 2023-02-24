@@ -38,10 +38,12 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".Agreement" />
         <activity android:name=".FirstTimeActivity" />
-        <activity android:name=".BoardDetail" />
         <activity android:name=".Board" />
         <activity android:name=".SignUp" />
         <activity android:name=".HospitalProfile" />
+
+        <activity android:name=".BoardDetail"
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity
             android:name=".BusinessManageActivity"
