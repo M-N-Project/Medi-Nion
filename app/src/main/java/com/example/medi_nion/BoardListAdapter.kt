@@ -48,19 +48,8 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
             itemContents.text = item.contents
             itemTime.text = item.time
 
-//            var byteArray : ByteArray
-//            for(i in 0 .. item.image.length-1 step(1)){
-//                var str_idx = i.toString()
-//                byteArray.plus(item.image[i])
-//            }
             val bitmap: Bitmap? = StringToBitmaps(item.image)
             itemImg.setImageBitmap(bitmap)
-
-
-//            val bImage: ByteArray = Base64.decode(item.image, 0)
-//            val bais = ByteArrayInputStream(bImage)
-//            val bm = BitmapFactory.decodeStream(bais)
-//            itemImg.setImageBitmap(bm);
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)

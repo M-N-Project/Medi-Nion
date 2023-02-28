@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -33,6 +34,8 @@ import java.util.Base64.getEncoder
 class BoardWrite : AppCompatActivity() {
 
     private val GALLERY = 1
+    lateinit var ImageData : Uri
+    lateinit var image : String
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
@@ -41,7 +44,6 @@ class BoardWrite : AppCompatActivity() {
         setContentView(R.layout.board_writing)
 
         var id = intent.getStringExtra("id")
-
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
@@ -110,9 +112,6 @@ class BoardWrite : AppCompatActivity() {
                 builder.show()
             } else {
                 createBoardRequest(url_Post)
-                var intent = Intent(applicationContext, Board::class.java)
-                intent.putExtra("id", id)
-                startActivity(intent)
             }
 
         }
@@ -120,38 +119,33 @@ class BoardWrite : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
+        val queue = Volley.newRequestQueue(this)
         var id = intent?.getStringExtra("id").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
-        var image = findViewById<TextView>(R.id.imageSrc).text.toString()
+        var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val postTime = current.format(formatter)
 
-        val request = Login_Request(
+        val request = Upload_Request(
             Request.Method.POST,
             postUrl,
             { response ->
                 if (!response.equals("upload fail")) {
-                    id = response.toString()
-                    postTitle = response.toString()
-                    postContent = response.toString()
-                    board_select = response.toString()
-                    image = response.toString()
-
                     Toast.makeText(
                         baseContext,
                         String.format("게시물 업로드가 완료되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    Log.d(
-                        "Post success1",
-                        "$id, $board_select, $postTitle, $postContent, $image"
-                    )
+                    var intent = Intent(applicationContext, Board::class.java)
+                    intent.putExtra("id", id)
+                    startActivity(intent)
+
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -170,8 +164,12 @@ class BoardWrite : AppCompatActivity() {
                     "image" to image
                 )
         )
-        val queue = Volley.newRequestQueue(this)
         queue.add(request)
+        Toast.makeText(
+            applicationContext,
+            "업로드 중...",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -183,28 +181,25 @@ class BoardWrite : AppCompatActivity() {
         if( resultCode == Activity.RESULT_OK) { //호출 코드 확인
             if( requestCode ==  GALLERY)
             {
-                var ImageData: Uri? = data?.data
+                ImageData = data?.data!!
                 imgbtn.setImageURI(ImageData)
-                findViewById<TextView>(R.id.imageSrc).text = getRealPathFromURI(ImageData)
+//                findViewById<TextView>(R.id.imageSrc).text = ImageData.toString()
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
                     imgbtn.setImageBitmap(bitmap)
-                    Log.d("1", "1111111")
 
                     var source: ImageDecoder.Source? =
                         ImageData?.let { ImageDecoder.createSource(contentResolver, it) }
-                    Log.d("2", "2222222")
                     bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
-                    Log.d("3", "3333333")
 
                     bitmap = resize(bitmap)
 
-                    Log.d("4", "4444444")
 
-                    var image = BitMapToString(bitmap)
-//                    findViewById<TextView>(R.id.imageSrc).text = image
+//                    image = bitmapToByteArray(bitmap)
+                    image = BitMapToString(bitmap)
+                    findViewById<TextView>(R.id.imageSrc).text = image
 
                     Log.d("5", "555555")
                     Log.d("image!!", "$image")
@@ -221,6 +216,53 @@ class BoardWrite : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun bitmapToByteArray(bitmap : Bitmap) : String {
+        var image : String
+        var stream : ByteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        var byteArray : ByteArray = stream.toByteArray()
+        image = "&image=" + byteArrayToBinaryString(byteArray)
+        return image
+    }
+
+    fun byteArrayToBinaryString(b : ByteArray) : String{
+        var sb : StringBuilder = StringBuilder()
+        for(i in 0..b.size-1){
+            sb.append(byteToBinaryString(b[i]));
+        }
+        return sb.toString()
+    }
+
+    fun byteToBinaryString(n : Byte) : String{
+        var sb : StringBuilder = StringBuilder("00000000")
+        for(bit in 0..7){
+            if(((n.toInt() shr bit) and 1) > 0){
+                sb.setCharAt(7-bit, '1')
+            }
+        }
+        return sb.toString()
+    }
+
+    @SuppressLint("Range")
+    fun getPath(uri : Uri) : String{
+        var cursor : Cursor? = getContentResolver().query(uri, null, null, null, null)
+        var document_id : String = ""
+        var path : String = ""
+        if (cursor != null) {
+            cursor.moveToFirst()
+            document_id = cursor.getString(0)
+            document_id = document_id.substring(document_id.lastIndexOf(":")+1)
+        }
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID+"=?",
+            arrayOf(document_id), null)
+        if (cursor != null) {
+            cursor.moveToFirst()
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+            cursor.close()
+        }
+        return path
     }
 
     //Convert the image URI to the direct file system path of the image file
@@ -261,12 +303,11 @@ class BoardWrite : AppCompatActivity() {
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
         val arr = baos.toByteArray()
-        Log.d("slfjwoe", arr.toString())
-
+        val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
 //        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
-        val image: ByteArray? = Base64.encode(arr,0)
+//        val image: ByteArray? = Base64.encode(arr,0)
 //        val image: String = getEncoder(arr)
-        Log.d("23l2i3o", Base64.decode(image,0).toString())
+//        Log.d("23l2i3o", Base64.decode(image,0).toString())
         var temp = ""
         try {
             //temp = URLEncoder.encode(image, "utf-8")
@@ -274,6 +315,6 @@ class BoardWrite : AppCompatActivity() {
             Log.e("exception", e.toString())
         }
         Log.d("ooooo", temp)
-        return image.toString()
+        return base64Image
     }
 }
