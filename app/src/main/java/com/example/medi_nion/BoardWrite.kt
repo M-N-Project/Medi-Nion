@@ -20,14 +20,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.login.*
-import kotlinx.android.synthetic.main.signup_detail.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Base64.getEncoder
 
 
 class BoardWrite : AppCompatActivity() {
@@ -124,9 +124,10 @@ class BoardWrite : AppCompatActivity() {
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
-        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
+//        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
+        var image = findViewById<TextView>(R.id.imageSrc).text.toString()
 
-        val current = LocalDateTime.now()
+        val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val postTime = current.format(formatter)
 
@@ -184,6 +185,7 @@ class BoardWrite : AppCompatActivity() {
             {
                 var ImageData: Uri? = data?.data
                 imgbtn.setImageURI(ImageData)
+                findViewById<TextView>(R.id.imageSrc).text = getRealPathFromURI(ImageData)
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
@@ -202,6 +204,7 @@ class BoardWrite : AppCompatActivity() {
                     Log.d("4", "4444444")
 
                     var image = BitMapToString(bitmap)
+//                    findViewById<TextView>(R.id.imageSrc).text = image
 
                     Log.d("5", "555555")
                     Log.d("image!!", "$image")
@@ -218,6 +221,21 @@ class BoardWrite : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    //Convert the image URI to the direct file system path of the image file
+    fun getRealPathFromURI(contentUri: Uri?): String? {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = managedQuery(
+            contentUri,
+            proj,  // Which columns to return
+            null,  // WHERE clause; which rows to return (all rows)
+            null,  // WHERE clause selection arguments (none)
+            null
+        ) // Order-by clause (ascending by name)
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(column_index)
     }
 
     private fun resize(bitmap: Bitmap): Bitmap? {
@@ -238,17 +256,24 @@ class BoardWrite : AppCompatActivity() {
         return bitmap
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun BitMapToString(bitmap: Bitmap): String {
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos) //bitmap compress
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
         val arr = baos.toByteArray()
-        val image: String = Base64.encodeToString(arr, Base64.DEFAULT)
+        Log.d("slfjwoe", arr.toString())
+
+//        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
+        val image: ByteArray? = Base64.encode(arr,0)
+//        val image: String = getEncoder(arr)
+        Log.d("23l2i3o", Base64.decode(image,0).toString())
         var temp = ""
         try {
-            temp = URLEncoder.encode(image, "utf-8")
+            //temp = URLEncoder.encode(image, "utf-8")
         } catch (e: Exception) {
             Log.e("exception", e.toString())
         }
-        return temp
+        Log.d("ooooo", temp)
+        return image.toString()
     }
 }

@@ -48,7 +48,11 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
             itemContents.text = item.contents
             itemTime.text = item.time
 
-            Log.d("5555553333", item.image.javaClass.toString())
+//            var byteArray : ByteArray
+//            for(i in 0 .. item.image.length-1 step(1)){
+//                var str_idx = i.toString()
+//                byteArray.plus(item.image[i])
+//            }
             val bitmap: Bitmap? = StringToBitmaps(item.image)
             itemImg.setImageBitmap(bitmap)
 
