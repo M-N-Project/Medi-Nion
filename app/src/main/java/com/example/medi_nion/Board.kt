@@ -56,22 +56,23 @@ class Board : AppCompatActivity() {
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
 
-                    //val num = item.getInt("num")
+                    val num = item.getInt("num")
                     val title = item.getString("title")
                     val content = item.getString("content")
                     val time = item.getString("time")
                     val image = item.getString("image")
-                    val boardItem = BoardItem(title, content, time, image)
+                    val boardItem = BoardItem(num, title, content, time, image)
                     items.add(boardItem)
 //                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
+                    Log.d("><><><><><><", "$boardItem")
 
                     //게시판 상세
                     adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                         override fun onItemClick(v: View, data: BoardItem, pos: Int) {
                             Intent(this@Board, BoardDetail::class.java).apply {
                                 putExtra("id", id)
-                                //putExtra("num", num)
+                                putExtra("num", num)
                                 putExtra("title", title)
                                 putExtra("content", content)
                                 putExtra("time", time)
