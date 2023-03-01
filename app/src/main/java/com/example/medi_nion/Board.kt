@@ -46,7 +46,7 @@ class Board : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Board.php"
         val jsonArray : JSONArray
 
-        val request = Login_Request(
+        val request = Board_Request(
             Request.Method.POST,
             url,
             { response ->
@@ -84,9 +84,7 @@ class Board : AppCompatActivity() {
 
                 }
 
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-            )
+            }, { Log.d("login failed", "error......${error(applicationContext)}") }
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)

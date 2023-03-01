@@ -9,24 +9,22 @@ import com.android.volley.toolbox.HttpHeaderParser
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 
-class Upload_Request(
+class Board_Request(
     method: Int,
     url: String,
     listener: Response.Listener<String>,
-    errorListener: Response.ErrorListener?,
-    private val params: MutableMap<String, String>
+    errorListener: Response.ErrorListener?
 ) : Request<String>(method, url, errorListener) {
-
 
     private val lock = Any()
 
     @GuardedBy("lock")
     private var listener: Response.Listener<String>? = listener
 
-    public override fun getParams(): MutableMap<String, String> {
-        Log.d("1556", params.toString())
-        return params
-    }
+//    public override fun getParams(): MutableMap<String, String> {
+//        Log.d("1556", params.toString())
+//        return params
+//    }
 
     override fun cancel() {
         super.cancel()
@@ -35,7 +33,6 @@ class Upload_Request(
 
     override fun deliverResponse(response: String) {
         var listener: Response.Listener<String>?
-        Log.d("1556", response.toString())
         synchronized(lock) { listener = this.listener }
         if (listener != null) {
             listener!!.onResponse(response)
@@ -49,7 +46,6 @@ class Upload_Request(
             String(response.data)
         }
 
-        Log.d("1556", response.toString())
         return Response.success(
             parsed,
             HttpHeaderParser.parseCacheHeaders(response)

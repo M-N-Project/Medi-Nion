@@ -129,7 +129,8 @@ class BoardWrite : AppCompatActivity() {
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
         var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
-        Log.d("123", imageSrc.length.toString())
+        var img1 = image.substring(0,10313)
+        var img2 = image.substring(10313,20624)
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -140,7 +141,6 @@ class BoardWrite : AppCompatActivity() {
             postUrl,
             { response ->
                 if (!response.equals("upload fail")) {
-                    Log.d("1556", response)
                     Toast.makeText(
                         baseContext,
                         String.format("게시물 업로드가 완료되었습니다."),
@@ -166,12 +166,11 @@ class BoardWrite : AppCompatActivity() {
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
-                    "image" to image,
-                    "time" to postTime
-
+                    "time" to postTime,
+                    "image1" to img1,
+                    "image2" to img2
                 )
         )
-
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
 
