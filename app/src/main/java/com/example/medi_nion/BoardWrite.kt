@@ -29,6 +29,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Base64.getEncoder
+import kotlin.concurrent.thread
 
 
 class BoardWrite : AppCompatActivity() {
@@ -36,6 +37,7 @@ class BoardWrite : AppCompatActivity() {
     private val GALLERY = 1
     lateinit var ImageData : Uri
     lateinit var image : String
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
@@ -117,15 +119,17 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
-        val queue = Volley.newRequestQueue(this)
         var id = intent?.getStringExtra("id").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
         var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
+
+        Log.d("123", imageSrc.length.toString())
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -136,6 +140,7 @@ class BoardWrite : AppCompatActivity() {
             postUrl,
             { response ->
                 if (!response.equals("upload fail")) {
+                    Log.d("1556", response)
                     Toast.makeText(
                         baseContext,
                         String.format("게시물 업로드가 완료되었습니다."),
@@ -144,6 +149,7 @@ class BoardWrite : AppCompatActivity() {
 
                     var intent = Intent(applicationContext, Board::class.java)
                     intent.putExtra("id", id)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                     startActivity(intent)
 
                 } else {
@@ -155,21 +161,24 @@ class BoardWrite : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-                hashMapOf(
+                mutableMapOf<String, String>(
                     "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
-                    "time" to postTime,
-                    "image" to image
+                    "image" to image,
+                    "time" to postTime
+
                 )
         )
+
+        val queue = Volley.newRequestQueue(this)
         queue.add(request)
-        Toast.makeText(
-            applicationContext,
-            "업로드 중...",
-            Toast.LENGTH_SHORT
-        ).show()
+
+        findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
+        var progressBar = findViewById<ProgressBar>(R.id.progressbar)
+        progressBar.visibility = View.VISIBLE
+
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

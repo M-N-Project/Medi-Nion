@@ -14,7 +14,7 @@ class Upload_Request(
     url: String,
     listener: Response.Listener<String>,
     errorListener: Response.ErrorListener?,
-    private val params: HashMap<String, String>
+    private val params: MutableMap<String, String>
 ) : Request<String>(method, url, errorListener) {
 
     private val lock = Any()
@@ -22,9 +22,8 @@ class Upload_Request(
     @GuardedBy("lock")
     private var listener: Response.Listener<String>? = listener
 
-    public override fun getParams(): HashMap<String, String> {
-        Log.d("***","sfsdf")
-        Log.d("UPLOAD", "$params")
+    public override fun getParams(): MutableMap<String, String> {
+        Log.d("UPLOAD", params.toString())
         return params
     }
 
