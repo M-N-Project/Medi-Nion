@@ -65,7 +65,19 @@ class Board : AppCompatActivity() {
                     items.add(boardItem)
 //                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
-                    Log.d("><><><><><><", "$boardItem")
+
+                    Log.d("><><><><><><", "$num, $title, $content, $time")
+
+                        /*val intent = Intent(applicationContext, BoardDetail::class.java)
+                        intent.putExtra("id", id)
+                        intent.putExtra("num", num)
+                        intent.putExtra("title", title)
+                        intent.putExtra("content", content)
+                        intent.putExtra("time", time)
+                        startActivity(intent)
+                        Log.d("123", "$num")*/
+
+
 
                     //게시판 상세
                     adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
@@ -78,6 +90,11 @@ class Board : AppCompatActivity() {
                                 putExtra("time", time)
                                 putExtra("data", data.toString())
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                                Log.d(
+                                    "wowwowwowwoww",
+                                    "$num"
+                                )
                             }.run { startActivity(this) }
                         }
 

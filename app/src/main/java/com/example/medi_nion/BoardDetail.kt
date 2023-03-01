@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Layout
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 import android.view.inputmethod.InputMethodManager
@@ -21,10 +22,12 @@ import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
 
 var Comment_items =ArrayList<CommentItem>()
-lateinit var Commentadapter : CommentListAdapter
+val Commentadapter = CommentListAdapter(Comment_items)
+lateinit var datas : BoardItem
 
 class BoardDetail : AppCompatActivity() {
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
@@ -37,8 +40,8 @@ class BoardDetail : AppCompatActivity() {
         val Like_count = findViewById<TextView>(R.id.textView_likecount2) //좋아요 숫자 부분
 
 
-        var manager : InputMethodManager =
-            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager //키보드 내리기
+        val manager : InputMethodManager =
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
 
 
@@ -47,15 +50,17 @@ class BoardDetail : AppCompatActivity() {
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         var id = intent.getStringExtra("id")
+        val num = intent?.getIntExtra("num", 0).toString()
+        val title = intent.getStringExtra("title")
+        val content = intent.getStringExtra("content")
+        val time = intent.getStringExtra("time")
 
-        var title = intent.getStringExtra("title")
-        var content = intent.getStringExtra("content")
-        var time = intent.getStringExtra("time")
+        val textView_num = findViewById<TextView>(R.id.textView_Num)
+        val title_textView = findViewById<TextView>(R.id.textView_title)
+        val content_textView = findViewById<TextView>(R.id.textView_content)
+        val time_textView = findViewById<TextView>(R.id.textView_time)
 
-        var title_textView = findViewById<TextView>(R.id.textView_title)
-        var content_textView = findViewById<TextView>(R.id.textView_content)
-        var time_textView = findViewById<TextView>(R.id.textView_time)
-
+        textView_num.setText(num)
         title_textView.setText(title)
         content_textView.setText(content)
         time_textView.setText(time)
@@ -137,6 +142,7 @@ class BoardDetail : AppCompatActivity() {
 
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
+        var num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
         val url = "http://seonho.dothome.co.kr/Comment.php"
 
@@ -154,7 +160,7 @@ class BoardDetail : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "comment success",
-                        "$id, $comment"
+                        "$id, $num, $comment"
                     )
 
                 } else {
@@ -169,6 +175,7 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
+                "num" to num,
                 "comment" to comment
             )
         )
@@ -185,11 +192,12 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Comment_items.clear()
                 Log.d("comment2", "comment2")
                 val jsonArray = JSONArray(response)
 
                     Log.d("comment3", "comment3")
-                    for(i in 1 until jsonArray.length()) {
+                    for(i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
                         val comment = item.getString("comment")
@@ -199,7 +207,6 @@ class BoardDetail : AppCompatActivity() {
 
                         Comment_items.add(commentItem)
                         Log.d("comment4", "comment4")
-                        val Commentadapter = CommentListAdapter(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
                         Log.d("comment5", "comment5")
 
@@ -214,13 +221,13 @@ class BoardDetail : AppCompatActivity() {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
                                 Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
                                 Comment_editText.requestFocus()
-                                manager.showSoftInput(Comment_editText, InputMethodManager.SHOW_IMPLICIT) //키보드 올리기
+                                manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
                                 Log.d("????", "123")
 
                                 Comment_Btn.setOnClickListener {
                                     Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
                                     //comment2_linearLayout.visibility = View.VISIBLE
-                                    //Log.d("comment2", "layout????")
+                                    //Log.d("comment2_linear", "layout????")
                                 }
 
                             }
