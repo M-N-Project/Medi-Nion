@@ -256,9 +256,6 @@ class BoardDetail : AppCompatActivity() {
                         val comment_time = item.getString("comment_time")
                         val comment_num = item.getInt("comment_num")
 
-
-
-                        val commentItem = CommentItem(comment, comment_time)
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
