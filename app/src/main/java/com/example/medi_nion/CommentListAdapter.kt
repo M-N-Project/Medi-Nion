@@ -4,9 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.material.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 
 class CommentListAdapter(private val itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>()  {
@@ -39,11 +37,12 @@ class CommentListAdapter(private val itemList : ArrayList<CommentItem>) : Recycl
 
         private val itemComment: TextView = itemView.findViewById(R.id.comment_content)
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment_time)
+        private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
 
         fun bind(item: CommentItem) {
             itemComment.text = item.comment
             itemCommentTime.text = item.comment_time
-
+            itemCommentNum.text = item.comment_num.toString()
 
             val pos = adapterPosition
             if(pos!= RecyclerView.NO_POSITION)

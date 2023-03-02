@@ -38,6 +38,7 @@ class BoardWrite : AppCompatActivity() {
     lateinit var ImageData : Uri
     var image : String = "null"
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
