@@ -17,7 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_detail.*
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
 import org.json.JSONArray
+import org.w3c.dom.Text
 
 var Comment_items =ArrayList<CommentItem>()
 val Commentadapter = CommentListAdapter(Comment_items)
@@ -84,30 +87,55 @@ class BoardDetail : AppCompatActivity() {
 
 
 
-
         Like_Btn.setOnClickListener {
-
             Log.d("asdfasdf", "clicked!")
             //좋아요 눌렀을때,,
             LikeRequest()
+            //likeRequest()
+
             isDefault = !isDefault
 
             if(isDefault) {
                 count--
-                Like_count.text = count.toString()
+                Like_count.text = count.toString() //Like_count를 감소시키기
                 Like_Btn.setImageResource(R.drawable.favorite_border)
             }
             else {
                 count++
-                Like_count.text = count.toString()
+                Like_count.text = count.toString() //Like_count를 증가시키기
                 Like_Btn.setImageResource(R.drawable.favorite_fill)
             }
         }
     }
 
+//    fun likeRequest() {
+//        val url = "http://seonho.dothome.co.kr/Heart.php"
+//        val postParams = hashMapOf("id" to "1", "heart_count" to "10")
+//
+//        val client = OkHttpClient()
+//        val formBodyBuilder = FormBody.Builder()
+//
+//        for ((key, value) in postParams) {
+//            formBodyBuilder.add(key, value)
+//        }
+//
+//        val requestBody = formBodyBuilder.build()
+//        val request = Request.Method
+//            .url(url)
+//            .post(requestBody)
+//            .build()
+//
+//        val response = client.newCall(request).execute()
+//        val responseBody = response.body()?.string()
+//    }
+
+
+
     fun LikeRequest() {  //좋아요 DB연동중
-        var id = intent?.getStringExtra("id").toString()
+        var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
+        var num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
         var heart = findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
+        val heart_count = findViewById<TextView>(R.id.textView_likecount2)
         val url = "http://seonho.dothome.co.kr/Heart.php"
 
         val request = Login_Request (
@@ -116,6 +144,7 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 if(!response.equals("Like fail")) {
                     heart = response.toString()
+                    num = response.toString()
 
                     Toast.makeText(
                         baseContext,
@@ -124,7 +153,7 @@ class BoardDetail : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "lion heart",
-                        "$id, $heart"
+                        "$id, $num, $heart, $heart_count`"
                     )
                 } else {
                     Toast.makeText(
