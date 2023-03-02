@@ -36,8 +36,7 @@ class BoardWrite : AppCompatActivity() {
 
     private val GALLERY = 1
     lateinit var ImageData : Uri
-    lateinit var image : String
-
+    var image : String = "null"
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
@@ -129,8 +128,13 @@ class BoardWrite : AppCompatActivity() {
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
         var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
-        var img1 = image.substring(0,image.length/2+1)
-        var img2 = image.substring(image.length/2+1,image.length)
+        var img1 : String = ""
+        var img2 : String = ""
+        if(image != "null"){
+            img1 = image.substring(0,image.length/2+1)
+            img2 = image.substring(image.length/2+1,image.length)
+        }
+
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

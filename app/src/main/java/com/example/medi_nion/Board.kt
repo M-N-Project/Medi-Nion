@@ -83,6 +83,7 @@ class Board : AppCompatActivity() {
                     adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                         override fun onItemClick(v: View, data: BoardItem, pos: Int) {
                             val intent = Intent(applicationContext, BoardDetail::class.java)
+                            intent.putExtra("itemIndex", pos)
                             intent.putExtra("id", id)
                             intent.putExtra("num", num)
                             intent.putExtra("title", title)
