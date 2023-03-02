@@ -38,6 +38,8 @@ class BoardDetail : AppCompatActivity() {
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
         val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
         val Like_count = findViewById<TextView>(R.id.textView_likecount2) //좋아요 숫자 부분
+        val Book_Btn = findViewById<ImageView>(R.id.imageView_bookmark2) //북마크 imageview 부분
+        val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
 
 
         val manager : InputMethodManager =
@@ -54,6 +56,8 @@ class BoardDetail : AppCompatActivity() {
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
         val time = intent.getStringExtra("time")
+
+        val heart = intent?.getStringExtra("heart")
 
         val textView_num = findViewById<TextView>(R.id.textView_Num)
         val title_textView = findViewById<TextView>(R.id.textView_title)
@@ -131,7 +135,7 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "comment" to heart
+                "heart" to heart
             )
         )
         val queue = Volley.newRequestQueue(this)
