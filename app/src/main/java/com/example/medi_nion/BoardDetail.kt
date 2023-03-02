@@ -54,16 +54,18 @@ class BoardDetail : AppCompatActivity() {
         val itemPos = intent.getIntExtra("itemIndex", -1)
         Log.d("itemPost", itemPos.toString())
         var id = intent.getStringExtra("id")
+        val num = intent?.getIntExtra("num", 0).toString()
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
         val time = intent.getStringExtra("time")
         val image = intent.getStringExtra("image")
 
-        Log.d("~~~~~", "slak $id, $title, $content, $time")
-
+        val textView_num = findViewById<TextView>(R.id.textView_Num)
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
+        var comment_count = 0
+        val comment_num = findViewById<TextView>(R.id.comment_num)
 
 //        textView_num.setText(num)
         title_textView.setText(title)
@@ -78,12 +80,15 @@ class BoardDetail : AppCompatActivity() {
 
         }
         val Commentadapter = CommentListAdapter(Comment_items)
+        CommentRecyclerView.adapter = Commentadapter
 
 
         Comment_Btn.setOnClickListener {
             CommentRequest()
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
+            comment_count++
+            comment_num.text = comment_count.toString()
         }
 
 
@@ -152,7 +157,8 @@ class BoardDetail : AppCompatActivity() {
 
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
-        var num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
         val url = "http://seonho.dothome.co.kr/Comment.php"
 
@@ -162,6 +168,7 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 if (!response.equals("Comment fail")) {
                     comment = response.toString()
+                    comment_num = response.toString()
 
                     Toast.makeText(
                         baseContext,
@@ -170,7 +177,7 @@ class BoardDetail : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "comment success",
-                        "$id, $num, $comment"
+                        "$id, $post_num, $comment_num, $comment"
                     )
 
                 } else {
@@ -185,8 +192,55 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "num" to num,
+                "comment_num" to comment_num,
+                "post_num" to post_num,
                 "comment" to comment
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    fun Comment2Request() {
+        var id = intent?.getStringExtra("id").toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
+        var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
+        val url = "http://seonho.dothome.co.kr/Comment2.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                if (!response.equals("Comment2 fail")) {
+                    comment2 = response.toString()
+
+                    Log.d("MMMM", response)
+                    Toast.makeText(
+                        baseContext,
+                        String.format("대댓글이 등록되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "comment2 success",
+                        "$id, $post_num, $comment_num, $comment2"
+                    )
+
+                } else {
+
+                    Toast.makeText(
+                        applicationContext,
+                        "대댓글을 등록할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("Comment2 Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "id" to id,
+                "post_num" to post_num,
+                "comment_num" to comment_num,
+                "comment2" to comment2
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -215,8 +269,9 @@ class BoardDetail : AppCompatActivity() {
                         Log.d("4444445555", item.toString())
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
+                        val comment_num = item.getInt("comment_num")
 
-                        val commentItem = CommentItem(comment, comment_time)
+                        val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
                         Log.d("comment4", "comment4")
@@ -241,6 +296,8 @@ class BoardDetail : AppCompatActivity() {
                                     Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
                                     //comment2_linearLayout.visibility = View.VISIBLE
                                     //Log.d("comment2_linear", "layout????")
+                                    Comment2Request()
+                                    Log.d("9999", "9999")
                                 }
 
                             }
