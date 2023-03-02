@@ -36,7 +36,7 @@ class BoardWrite : AppCompatActivity() {
 
     private val GALLERY = 1
     lateinit var ImageData : Uri
-    lateinit var image : String
+    var image : String = ""
 
 
     @RequiresApi(Build.VERSION_CODES.O)
