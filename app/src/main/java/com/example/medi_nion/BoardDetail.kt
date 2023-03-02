@@ -42,11 +42,11 @@ class BoardDetail : AppCompatActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
 
-
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
+        val itemPos = intent.getIntExtra("itemIndex", -1)
         var id = intent.getStringExtra("id")
         val num = intent?.getIntExtra("num", 0).toString()
         val title = intent.getStringExtra("title")
@@ -251,10 +251,14 @@ class BoardDetail : AppCompatActivity() {
                     for(i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
+                        Log.d("4444445555", item.toString())
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
                         val comment_num = item.getInt("comment_num")
 
+
+
+                        val commentItem = CommentItem(comment, comment_time)
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
