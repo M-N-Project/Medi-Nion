@@ -36,14 +36,12 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val itemNum: TextView = itemView.findViewById(R.id.boardNum)
         private val itemTitle: TextView = itemView.findViewById(R.id.boardTitle)
         private val itemContents: TextView = itemView.findViewById(R.id.boardContent)
         private val itemTime : TextView = itemView.findViewById(R.id.textView_BoardTime)
         private val itemImg : ImageView = itemView.findViewById(R.id.imageView_image)
 
         fun bind(item: BoardItem) {
-            itemNum.text = item.num.toString()
             itemTitle.text = item.title
             itemContents.text = item.contents
             itemTime.text = item.time
