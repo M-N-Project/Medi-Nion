@@ -129,8 +129,8 @@ class BoardWrite : AppCompatActivity() {
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
         var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
-        var img1 = image.substring(0,10313)
-        var img2 = image.substring(10313,20624)
+        var img1 = image.substring(0,image.length/2+1)
+        var img2 = image.substring(image.length/2+1,image.length)
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

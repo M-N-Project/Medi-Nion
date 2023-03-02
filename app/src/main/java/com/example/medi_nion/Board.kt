@@ -82,20 +82,28 @@ class Board : AppCompatActivity() {
                     //게시판 상세
                     adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                         override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                            Intent(this@Board, BoardDetail::class.java).apply {
-                                putExtra("id", id)
-                                putExtra("num", num)
-                                putExtra("title", title)
-                                putExtra("content", content)
-                                putExtra("time", time)
-                                putExtra("data", data.toString())
-                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-                                Log.d(
-                                    "wowwowwowwoww",
-                                    "$num"
-                                )
-                            }.run { startActivity(this) }
+                            val intent = Intent(applicationContext, BoardDetail::class.java)
+                            intent.putExtra("id", id)
+                            intent.putExtra("num", num)
+                            intent.putExtra("title", title)
+                            intent.putExtra("content", content)
+                            intent.putExtra("time", time)
+                            startActivity(intent)
+                            Log.d("123", "$num")
+//                            Intent(this@Board, BoardDetail::class.java).apply {
+//                                putExtra("id", id)
+//                                putExtra("num", num)
+//                                putExtra("title", title)
+//                                putExtra("content", content)
+//                                putExtra("time", time)
+//                                putExtra("data", data.toString())
+//                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//
+//                                Log.d(
+//                                    "wowwowwowwoww",
+//                                    "$num"
+//                                )
+//                            }.run { startActivity(this) }
                         }
 
                     })
