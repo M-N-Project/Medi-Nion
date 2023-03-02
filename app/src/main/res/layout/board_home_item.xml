@@ -7,21 +7,10 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/boardNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="num"
-        android:textSize="18sp"
-        android:layout_marginTop="18dp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/boardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:ems="7"

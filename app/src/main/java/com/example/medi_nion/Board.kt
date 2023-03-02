@@ -10,6 +10,7 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
+import org.json.JSONObject
 
 
 var items =ArrayList<BoardItem>()
@@ -18,6 +19,7 @@ var items =ArrayList<BoardItem>()
 val adapter = BoardListAdapter(items)
 lateinit var mJsonString: String
 var errorString: String? = null
+var itemIndex = ArrayList<Int>()
 
 class Board : AppCompatActivity() {
 
@@ -26,8 +28,6 @@ class Board : AppCompatActivity() {
         setContentView(R.layout.board_home)
 
         var id = intent.getStringExtra("id")
-
-        val url = "http://seonho.dothome.co.kr/Board.php"
 
         fetchData()
 
@@ -43,12 +43,13 @@ class Board : AppCompatActivity() {
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
-        val url = "http://seonho.dothome.co.kr/Board.php"
+        val urlBoard = "http://seonho.dothome.co.kr/Board.php"
+        val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
         val jsonArray : JSONArray
 
         val request = Board_Request(
             Request.Method.POST,
-            url,
+            urlBoard,
             { response ->
                 Log.d("//", response)
                 val jsonArray = JSONArray(response)
@@ -63,48 +64,56 @@ class Board : AppCompatActivity() {
                     val image = item.getString("image")
                     val boardItem = BoardItem(num, title, content, time, image)
                     items.add(boardItem)
+                    itemIndex.add(num) //앞에다가 추가.
 //                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
 
                     Log.d("><><><><><><", "$num, $title, $content, $time")
 
-                        /*val intent = Intent(applicationContext, BoardDetail::class.java)
-                        intent.putExtra("id", id)
-                        intent.putExtra("num", num)
-                        intent.putExtra("title", title)
-                        intent.putExtra("content", content)
-                        intent.putExtra("time", time)
-                        startActivity(intent)
-                        Log.d("123", "$num")*/
 
 
+                    var detailId : String = ""
+                    var detailTitle : String = ""
+                    var detailContent : String = ""
+                    var detailTime : String = ""
+                    var detailImg : String = ""
 
                     //게시판 상세
                     adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                         override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                            val intent = Intent(applicationContext, BoardDetail::class.java)
-                            intent.putExtra("itemIndex", pos)
-                            intent.putExtra("id", id)
-                            intent.putExtra("num", num)
-                            intent.putExtra("title", title)
-                            intent.putExtra("content", content)
-                            intent.putExtra("time", time)
-                            startActivity(intent)
-                            Log.d("123", "$num")
-//                            Intent(this@Board, BoardDetail::class.java).apply {
-//                                putExtra("id", id)
-//                                putExtra("num", num)
-//                                putExtra("title", title)
-//                                putExtra("content", content)
-//                                putExtra("time", time)
-//                                putExtra("data", data.toString())
-//                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//
-//                                Log.d(
-//                                    "wowwowwowwoww",
-//                                    "$num"
-//                                )
-//                            }.run { startActivity(this) }
+                            val request = Login_Request(
+                                Request.Method.POST,
+                                urlDetail,
+                                { response ->
+                                    items.clear()
+//                                    for (i in jsonArray.length()-1  downTo  0) {
+                                    val jsonObject = JSONObject(response)
+
+                                    Log.d("//", "34234$jsonObject")
+
+                                    detailId = jsonObject.getString("id")
+                                    detailTitle = jsonObject.getString("title")
+                                    detailContent = jsonObject.getString("content")
+                                    detailTime = jsonObject.getString("time")
+                                    detailImg = jsonObject.getString("image")
+
+                                    val intent = Intent(applicationContext, BoardDetail::class.java)
+                                    intent.putExtra("itemIndex", itemIndex[pos])
+                                    intent.putExtra("id", detailId)
+                                    intent.putExtra("title", detailTitle)
+                                    intent.putExtra("content", detailContent)
+                                    intent.putExtra("time", detailTime)
+                                    intent.putExtra("image", detailImg)
+                                    startActivity(intent)
+
+
+                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                hashMapOf(
+                                    "post_num" to itemIndex[pos].toString()
+                                )
+                            )
+                            val queue = Volley.newRequestQueue(applicationContext)
+                            queue.add(request)
                         }
 
                     })

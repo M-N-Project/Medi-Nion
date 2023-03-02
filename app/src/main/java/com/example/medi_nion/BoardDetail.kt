@@ -1,8 +1,11 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Layout
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -49,25 +52,32 @@ class BoardDetail : AppCompatActivity() {
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val itemPos = intent.getIntExtra("itemIndex", -1)
+        Log.d("itemPost", itemPos.toString())
         var id = intent.getStringExtra("id")
-        val num = intent?.getIntExtra("num", 0).toString()
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
         val time = intent.getStringExtra("time")
+        val image = intent.getStringExtra("image")
 
-        val textView_num = findViewById<TextView>(R.id.textView_Num)
+        Log.d("~~~~~", "slak $id, $title, $content, $time")
+
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
 
-        textView_num.setText(num)
+//        textView_num.setText(num)
         title_textView.setText(title)
         content_textView.setText(content)
         time_textView.setText(time)
-        //
+        if (image != null) {
+            var postImg = findViewById<ImageView>(R.id.post_imgView)
+            postImg.visibility = View.VISIBLE
+            val bitmap: Bitmap? = StringToBitmaps(image)
+            postImg.setImageBitmap(bitmap)
 
+
+        }
         val Commentadapter = CommentListAdapter(Comment_items)
-        CommentRecyclerView.adapter = Commentadapter
 
 
         Comment_Btn.setOnClickListener {
@@ -186,6 +196,7 @@ class BoardDetail : AppCompatActivity() {
     @SuppressLint("SuspiciousIndentation")
     fun fetchData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
+        val itemPos = intent.getIntExtra("itemIndex", -1).toString()
         val jsonArray : JSONArray
 
         val request = Login_Request(
@@ -193,8 +204,9 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 Comment_items.clear()
-                Log.d("comment2", "comment2")
-                val jsonArray = JSONArray(response)
+                Log.d("comment2", response)
+                if(response != "no Comment"){
+                    val jsonArray = JSONArray(response)
 
                     Log.d("comment3", "comment3")
                     for(i in 0 until jsonArray.length()) {
@@ -203,8 +215,6 @@ class BoardDetail : AppCompatActivity() {
                         Log.d("4444445555", item.toString())
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
-
-
 
                         val commentItem = CommentItem(comment, comment_time)
 
@@ -236,12 +246,26 @@ class BoardDetail : AppCompatActivity() {
                             }
                         })
                     }
+                }
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
+                "post_num" to itemPos
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    // String -> Bitmap 변환
+    fun StringToBitmaps(image: String?): Bitmap? {
+        try {
+            val encodeByte = Base64.decode(image, Base64.DEFAULT)
+            val bitmap : Bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            return bitmap
+        } catch (e: Exception) {
+            e.message
+            return null
+        }
     }
 }
