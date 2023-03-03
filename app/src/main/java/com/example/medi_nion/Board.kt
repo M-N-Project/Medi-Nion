@@ -34,8 +34,11 @@ class Board : AppCompatActivity() {
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         wrtingFAB.setOnClickListener {
+            var board :String = ""
+            board = intent.getStringExtra("board").toString()
             val intent = Intent(applicationContext, BoardWrite::class.java)
             intent.putExtra("id", id)
+            intent.putExtra("board", board)
             startActivity(intent)
         }
     }
@@ -43,6 +46,8 @@ class Board : AppCompatActivity() {
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
+        var board :String = ""
+        board = intent.getStringExtra("board").toString()
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
         val jsonArray : JSONArray
@@ -109,7 +114,7 @@ class Board : AppCompatActivity() {
 
                                 }, { Log.d("login failed", "error......${error(applicationContext)}") },
                                 hashMapOf(
-                                    "post_num" to itemIndex[pos].toString()
+                                    "post_num" to data.num.toString()
                                 )
                             )
                             val queue = Volley.newRequestQueue(applicationContext)
@@ -120,7 +125,10 @@ class Board : AppCompatActivity() {
 
                 }
 
-            }, { Log.d("login failed", "error......${error(applicationContext)}") }
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "board" to board
+            )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)

@@ -13,7 +13,8 @@ class Board_Request(
     method: Int,
     url: String,
     listener: Response.Listener<String>,
-    errorListener: Response.ErrorListener?
+    errorListener: Response.ErrorListener?,
+    private val params: HashMap<String, String>
 ) : Request<String>(method, url, errorListener) {
 
     private val lock = Any()
@@ -21,10 +22,10 @@ class Board_Request(
     @GuardedBy("lock")
     private var listener: Response.Listener<String>? = listener
 
-//    public override fun getParams(): MutableMap<String, String> {
-//        Log.d("1556", params.toString())
-//        return params
-//    }
+    public override fun getParams(): MutableMap<String, String> {
+        Log.d("Board", "$params")
+        return params
+    }
 
     override fun cancel() {
         super.cancel()

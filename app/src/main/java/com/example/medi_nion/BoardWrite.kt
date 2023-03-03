@@ -3,6 +3,7 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -46,6 +47,7 @@ class BoardWrite : AppCompatActivity() {
         setContentView(R.layout.board_writing)
 
         var id = intent.getStringExtra("id")
+        var board = intent.getStringExtra("board").toString()
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
@@ -67,6 +69,8 @@ class BoardWrite : AppCompatActivity() {
             intent.type = "image/*" //intent.setType("image/*)
             startActivityForResult(intent, GALLERY)
         }
+
+        board_select.text = board
 
         board_select.setOnClickListener {
             select_RadioGroup.visibility = View.VISIBLE
@@ -123,12 +127,15 @@ class BoardWrite : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
         var id = intent?.getStringExtra("id").toString()
+        var board = intent.getStringExtra("board").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
         var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
+        var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
+        
         var img1 : String = ""
         var img2 : String = ""
         if(image != "null"){
@@ -154,6 +161,7 @@ class BoardWrite : AppCompatActivity() {
 
                     var intent = Intent(applicationContext, Board::class.java)
                     intent.putExtra("id", id)
+                    intent.putExtra("board", board)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                     startActivity(intent)
 

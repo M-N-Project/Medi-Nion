@@ -26,8 +26,8 @@
 
     <TextView
         android:id="@+id/boardContent"
-        android:layout_width="272dp"
-        android:layout_height="35dp"
+        android:layout_width="257dp"
+        android:layout_height="38dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
@@ -44,7 +44,7 @@
         android:id="@+id/imageView_image"
         android:layout_width="71dp"
         android:layout_height="67dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/boardContent"
         app:layout_constraintTop_toBottomOf="@+id/textView_BoardTime"

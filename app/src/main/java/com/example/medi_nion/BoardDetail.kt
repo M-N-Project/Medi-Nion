@@ -57,7 +57,7 @@ class BoardDetail : AppCompatActivity() {
         val itemPos = intent.getIntExtra("itemIndex", -1)
         Log.d("itemPost", itemPos.toString())
         var id = intent.getStringExtra("id")
-        val num = intent?.getIntExtra("num", 0).toString()
+        val post_num = intent?.getIntExtra("num", 0).toString()
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
         val time = intent.getStringExtra("time")
@@ -94,6 +94,7 @@ class BoardDetail : AppCompatActivity() {
             Comment_editText.setText(null) //댓글입력창 clear
             comment_count++
             comment_num.text = comment_count.toString()
+            Log.d("comment_num.text", "2"+comment_num.text.toString())
         }
 
 
@@ -189,6 +190,7 @@ class BoardDetail : AppCompatActivity() {
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
+//        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString() // java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.widget.TextView.getText()' on a null object reference
         var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
         val url = "http://seonho.dothome.co.kr/Comment.php"
