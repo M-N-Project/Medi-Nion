@@ -22,8 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_detail.*
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
 import org.json.JSONArray
 import org.w3c.dom.Text
 
