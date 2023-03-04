@@ -105,18 +105,27 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView3"
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView3"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:src="@drawable/line_sample"-->
+<!--            app:layout_constraintHorizontal_bias="0.825"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/imageView_bookmark2"-->
+<!--            android:layout_marginBottom="10dp"/>-->
+        <View
+            android:id="@+id/view3"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/line_sample"
-            app:layout_constraintHorizontal_bias="0.825"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_bookmark2"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginTop="10dp"
+            android:background="#85AFD6"
+            android:backgroundTint="#CDCDCD"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_comment"
+            tools:layout_editor_absoluteX="16dp" />
 
 
     </LinearLayout>
