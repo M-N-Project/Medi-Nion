@@ -32,7 +32,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-var CommentItems = MutableLiveData<ArrayList<CommentItem>>()
 var Comment_items =ArrayList<CommentItem>()
 var Commentadapter = CommentListAdapter(Comment_items)
 val viewModel: CommentViewModel = CommentViewModel()
