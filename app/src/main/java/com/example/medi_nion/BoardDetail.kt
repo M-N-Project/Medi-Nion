@@ -3,7 +3,6 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Insets.add
 import android.os.Bundle
 import android.text.Layout
 import android.util.Base64
@@ -23,8 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_detail.*
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
 import org.json.JSONArray
 import org.w3c.dom.Text
 
@@ -55,6 +52,16 @@ class BoardDetail : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
+
+        val dataObserver: Observer<ArrayList<CommentItem>> =
+            Observer { livedata ->
+                Comment_items = livedata
+                var newAdapter = CommentListAdapter(Comment_items)
+                CommentRecyclerView.adapter = newAdapter
+
+            }
+
+        viewModel.itemList.observe(this, dataObserver)
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val itemPos = intent.getIntExtra("itemIndex", -1)
@@ -123,30 +130,6 @@ class BoardDetail : AppCompatActivity() {
         }
     }
 
-//    fun likeRequest(id : String, heart : Int) {
-//        val url = "http://seonho.dothome.co.kr/Heart.php"
-//
-//        val postDataParams = HashMap<String, String>()
-//        postDataParams["id"] = id
-//        postDataParams["count"] = id.toString()
-//
-//        val request = Request.Builder()
-//            .url(url)
-//            .post(
-//                FormBody.Builder().apply {
-//                    postDataParams.forEach { (key, value) ->
-//                        add(key, value)
-//                    }
-//                }.build()
-//            )
-//            .build()
-//
-//        val client = OkHttpClient()
-//        val response = client.newCall(request).execute()
-//
-//        // Do something with the response, e.g. check for errors
-//    }
-
 //    fun likeRequest() {
 //        val url = "http://seonho.dothome.co.kr/Heart.php"
 //        val postParams = hashMapOf("id" to "1", "heart_count" to "10")
@@ -171,12 +154,11 @@ class BoardDetail : AppCompatActivity() {
 
 
     fun LikeRequest() {  //좋아요 DB연동중
-        //var id = intent.getStringExtra("id")
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
         var num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
-        //var heart = findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
-        var heart = findViewById<TextView>(R.id.textView_likecount2).text.toString()
-        var url = "http://seonho.dothome.co.kr/Heart.php"
+        var heart = findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
+        val heart_count = findViewById<TextView>(R.id.textView_likecount2)
+        val url = "http://seonho.dothome.co.kr/Heart.php"
 
         val request = Login_Request (
             Request.Method.POST,
@@ -193,7 +175,7 @@ class BoardDetail : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "lion heart",
-                        "$id, $num, $heart"
+                        "$id, $num, $heart, $heart_count`"
                     )
                 } else {
                     Toast.makeText(
@@ -206,7 +188,6 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "num" to num,
                 "heart" to heart
             )
         )

@@ -103,7 +103,7 @@ class Board : AppCompatActivity() {
                                     detailImg = jsonObject.getString("image")
 
                                     val intent = Intent(applicationContext, BoardDetail::class.java)
-                                    intent.putExtra("itemIndex", itemIndex[pos])
+                                    intent.putExtra("num", data.num)
                                     intent.putExtra("id", detailId)
                                     intent.putExtra("title", detailTitle)
                                     intent.putExtra("content", detailContent)

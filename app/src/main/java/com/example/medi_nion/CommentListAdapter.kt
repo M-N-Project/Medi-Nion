@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CommentListAdapter(private val itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>()  {
+class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>()  {
 
     var datas = mutableListOf<CommentItem>()
 
@@ -56,5 +57,11 @@ class CommentListAdapter(private val itemList : ArrayList<CommentItem>) : Recycl
                 }
             }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(newData:ArrayList<CommentItem>){
+        itemList = newData
+        notifyDataSetChanged()
     }
 }
