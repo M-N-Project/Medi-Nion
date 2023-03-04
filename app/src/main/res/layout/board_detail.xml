@@ -180,7 +180,7 @@
                             android:text="2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.026" />
-
+<!--
                         <ImageView
                             android:id="@+id/imageView_bookmark2"
                             android:layout_width="27dp"
@@ -190,6 +190,17 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.03"
                             app:srcCompat="@drawable/bookmark_icon" />
+-->
+                        <CheckBox
+                            android:id="@+id/checkbox_bookmark2"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginTop="6dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.03"
+                            android:button="@drawable/bookmark_checkbox"
+                            android:text="" />
 
                         <TextView
                             android:id="@+id/textView_bookmarkcount2"
