@@ -131,7 +131,7 @@ class BoardWrite : AppCompatActivity() {
         val postTime = current.format(formatter)
 
 
-        val request = SignUP_Request(
+        val request = Login_Request(
             Request.Method.POST,
             postUrl,
             { response ->
@@ -150,7 +150,7 @@ class BoardWrite : AppCompatActivity() {
 
                     Log.d(
                         "Post success1",
-                        "$id, $board_select, $postTitle, $postContent, $image"
+                        "id = $id,board= $board_select,postTitle= $postTitle, $postContent, $image"
                     )
                 } else {
                     Toast.makeText(
@@ -166,7 +166,6 @@ class BoardWrite : AppCompatActivity() {
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
-                    "time" to postTime,
                     "image" to image
                 )
         )

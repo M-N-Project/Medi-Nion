@@ -88,7 +88,9 @@ class Board : AppCompatActivity() {
                     val content = item.getString("content")
                     val time = item.getString("time")
                     val image = item.getString("image")
+                    //val num = item.getString("num")
                     val boardItem = BoardItem(title, content, time, image)
+                    //boardItem.setPostNum(num.toInt())
                     items.add(boardItem)
                     val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
@@ -99,6 +101,8 @@ class Board : AppCompatActivity() {
                             Intent(this@Board, BoardDetail::class.java).apply {
                                 putExtra("id", id)
                                 putExtra("data", data.toString())
+                                Log.d("onItemClick", data.toString())
+                                //Log.d("onItemClick", data.getPostNum().toString())
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             }.run { startActivity(this) }
                         }

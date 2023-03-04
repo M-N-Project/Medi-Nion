@@ -81,9 +81,20 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:text="2"
-        app:layout_constraintStart_toEndOf="@+id/imageView_bookmark"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_bookmark"
         app:layout_constraintTop_toBottomOf="@+id/boardContent" />
 
+    <CheckBox
+        android:id="@+id/checkbox_bookmark"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/textView_commentcount"
+        app:layout_constraintTop_toBottomOf="@+id/boardContent"
+        android:button="@drawable/bookmark_checkbox"
+        android:text="" />
+<!--
     <ImageView
         android:id="@+id/imageView_bookmark"
         android:layout_width="18dp"
@@ -93,7 +104,7 @@
         app:layout_constraintStart_toEndOf="@+id/textView_commentcount"
         app:layout_constraintTop_toBottomOf="@+id/boardContent"
         app:srcCompat="@drawable/bookmark_icon" />
-
+-->
     <TextView
         android:id="@+id/textView_commentcount"
         android:layout_width="wrap_content"
