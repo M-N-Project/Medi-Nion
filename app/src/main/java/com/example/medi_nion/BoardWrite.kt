@@ -3,9 +3,11 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -20,19 +22,23 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.login.*
-import kotlinx.android.synthetic.main.signup_detail.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.URLEncoder
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Base64.getEncoder
+import kotlin.concurrent.thread
 
 
 class BoardWrite : AppCompatActivity() {
 
     private val GALLERY = 1
+    lateinit var ImageData : Uri
+    var image : String = "null"
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
@@ -41,7 +47,7 @@ class BoardWrite : AppCompatActivity() {
         setContentView(R.layout.board_writing)
 
         var id = intent.getStringExtra("id")
-
+        var board = intent.getStringExtra("board").toString()
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
@@ -63,6 +69,8 @@ class BoardWrite : AppCompatActivity() {
             intent.type = "image/*" //intent.setType("image/*)
             startActivityForResult(intent, GALLERY)
         }
+
+        board_select.text = board
 
         board_select.setOnClickListener {
             select_RadioGroup.visibility = View.VISIBLE
@@ -110,48 +118,53 @@ class BoardWrite : AppCompatActivity() {
                 builder.show()
             } else {
                 createBoardRequest(url_Post)
-                var intent = Intent(applicationContext, Board::class.java)
-                intent.putExtra("id", id)
-                startActivity(intent)
             }
 
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
         var id = intent?.getStringExtra("id").toString()
+        var board = intent.getStringExtra("board").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
-        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
+//        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
+        var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분 ss초")
+        var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
+        
+        var img1 : String = ""
+        var img2 : String = ""
+        if(image != "null"){
+            img1 = image.substring(0,image.length/2+1)
+            img2 = image.substring(image.length/2+1,image.length)
+        }
+
+
+        val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val postTime = current.format(formatter)
 
-
-        val request = Login_Request(
+        val request = Upload_Request(
             Request.Method.POST,
             postUrl,
             { response ->
                 if (!response.equals("upload fail")) {
-                    id = response.toString()
-                    postTitle = response.toString()
-                    postContent = response.toString()
-                    board_select = response.toString()
-                    image = response.toString()
-
                     Toast.makeText(
                         baseContext,
                         String.format("게시물 업로드가 완료되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    Log.d(
-                        "Post success1",
-                        "id = $id,board= $board_select,postTitle= $postTitle, $postContent, $image"
-                    )
+                    var intent = Intent(applicationContext, Board::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("board", board)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                    startActivity(intent)
+
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -161,17 +174,23 @@ class BoardWrite : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-                hashMapOf(
+                mutableMapOf<String, String>(
                     "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
-                    "image" to image
+                    "time" to postTime,
+                    "image1" to img1,
+                    "image2" to img2
                 )
         )
-        Log.d("hash???", "12345678")
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+
+        findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
+        var progressBar = findViewById<ProgressBar>(R.id.progressbar)
+        progressBar.visibility = View.VISIBLE
+
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -183,26 +202,25 @@ class BoardWrite : AppCompatActivity() {
         if( resultCode == Activity.RESULT_OK) { //호출 코드 확인
             if( requestCode ==  GALLERY)
             {
-                var ImageData: Uri? = data?.data
+                ImageData = data?.data!!
                 imgbtn.setImageURI(ImageData)
+//                findViewById<TextView>(R.id.imageSrc).text = ImageData.toString()
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
                     imgbtn.setImageBitmap(bitmap)
-                    Log.d("1", "1111111")
 
                     var source: ImageDecoder.Source? =
                         ImageData?.let { ImageDecoder.createSource(contentResolver, it) }
-                    Log.d("2", "2222222")
                     bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
-                    Log.d("3", "3333333")
 
                     bitmap = resize(bitmap)
 
-                    Log.d("4", "4444444")
 
-                    var image = BitMapToString(bitmap)
+//                    image = bitmapToByteArray(bitmap)
+                    image = BitMapToString(bitmap)
+                    findViewById<TextView>(R.id.imageSrc).text = image
 
                     Log.d("5", "555555")
                     Log.d("image!!", "$image")
@@ -219,6 +237,68 @@ class BoardWrite : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun bitmapToByteArray(bitmap : Bitmap) : String {
+        var image : String
+        var stream : ByteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        var byteArray : ByteArray = stream.toByteArray()
+        image = "&image=" + byteArrayToBinaryString(byteArray)
+        return image
+    }
+
+    fun byteArrayToBinaryString(b : ByteArray) : String{
+        var sb : StringBuilder = StringBuilder()
+        for(i in 0..b.size-1){
+            sb.append(byteToBinaryString(b[i]));
+        }
+        return sb.toString()
+    }
+
+    fun byteToBinaryString(n : Byte) : String{
+        var sb : StringBuilder = StringBuilder("00000000")
+        for(bit in 0..7){
+            if(((n.toInt() shr bit) and 1) > 0){
+                sb.setCharAt(7-bit, '1')
+            }
+        }
+        return sb.toString()
+    }
+
+    @SuppressLint("Range")
+    fun getPath(uri : Uri) : String{
+        var cursor : Cursor? = getContentResolver().query(uri, null, null, null, null)
+        var document_id : String = ""
+        var path : String = ""
+        if (cursor != null) {
+            cursor.moveToFirst()
+            document_id = cursor.getString(0)
+            document_id = document_id.substring(document_id.lastIndexOf(":")+1)
+        }
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID+"=?",
+            arrayOf(document_id), null)
+        if (cursor != null) {
+            cursor.moveToFirst()
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
+            cursor.close()
+        }
+        return path
+    }
+
+    //Convert the image URI to the direct file system path of the image file
+    fun getRealPathFromURI(contentUri: Uri?): String? {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = managedQuery(
+            contentUri,
+            proj,  // Which columns to return
+            null,  // WHERE clause; which rows to return (all rows)
+            null,  // WHERE clause selection arguments (none)
+            null
+        ) // Order-by clause (ascending by name)
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(column_index)
     }
 
     private fun resize(bitmap: Bitmap): Bitmap? {
@@ -239,17 +319,23 @@ class BoardWrite : AppCompatActivity() {
         return bitmap
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun BitMapToString(bitmap: Bitmap): String {
         val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos) //bitmap compress
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
         val arr = baos.toByteArray()
-        val image: String = Base64.encodeToString(arr, Base64.DEFAULT)
+        val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
+//        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
+//        val image: ByteArray? = Base64.encode(arr,0)
+//        val image: String = getEncoder(arr)
+//        Log.d("23l2i3o", Base64.decode(image,0).toString())
         var temp = ""
         try {
-            temp = URLEncoder.encode(image, "utf-8")
+            //temp = URLEncoder.encode(image, "utf-8")
         } catch (e: Exception) {
             Log.e("exception", e.toString())
         }
-        return temp
+        Log.d("ooooo", temp)
+        return base64Image
     }
 }
