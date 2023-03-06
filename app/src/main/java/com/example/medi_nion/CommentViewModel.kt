@@ -16,6 +16,10 @@ class CommentViewModel: ViewModel() {
         _itemList.value = recyclerViewItems
     }
 
+    fun getItemIndexList(position : Int){
+        itemList.value?.get(position)
+    }
+
     fun setItemList(recyclerViewItems: ArrayList<CommentItem>) {
         _itemList.value = recyclerViewItems
     }

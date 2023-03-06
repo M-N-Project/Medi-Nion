@@ -3,6 +3,7 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.text.Layout
 import android.util.Base64
@@ -19,19 +20,27 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
 import org.w3c.dom.Text
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 var Comment_items =ArrayList<CommentItem>()
-val Commentadapter = CommentListAdapter(Comment_items)
+var Commentadapter = CommentListAdapter(Comment_items)
+val viewModel: CommentViewModel = CommentViewModel()
 lateinit var datas : BoardItem
 
 class BoardDetail : AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
@@ -53,6 +62,16 @@ class BoardDetail : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
+
+        val dataObserver: Observer<ArrayList<CommentItem>> =
+            Observer { livedata ->
+                Comment_items = livedata
+                var newAdapter = CommentListAdapter(Comment_items)
+                CommentRecyclerView.adapter = newAdapter
+
+            }
+
+        viewModel.itemList.observe(this, dataObserver)
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val itemPos = intent.getIntExtra("itemIndex", -1)
@@ -85,8 +104,9 @@ class BoardDetail : AppCompatActivity() {
 
 
         }
-        val Commentadapter = CommentListAdapter(Comment_items)
-        CommentRecyclerView.adapter = Commentadapter
+
+//        val Commentadapter = CommentListAdapter(Comment_items)
+//        CommentRecyclerView.adapter = Commentadapter
 
 
         Comment_Btn.setOnClickListener {
@@ -94,8 +114,8 @@ class BoardDetail : AppCompatActivity() {
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
             comment_count++
-            comment_num.text = comment_count.toString()
-            Log.d("comment_num.text", "2"+comment_num.text.toString())
+//            comment_num.text = comment_count.toString()
+//            Log.d("comment_num.text", "2"+comment_num.text.toString())
         }
 
 
@@ -151,6 +171,7 @@ class BoardDetail : AppCompatActivity() {
         val heart_count = findViewById<TextView>(R.id.textView_likecount2)
         val url = "http://seonho.dothome.co.kr/Heart.php"
 
+
         val request = Login_Request (
             Request.Method.POST,
             url,
@@ -188,21 +209,28 @@ class BoardDetail : AppCompatActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
 //        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString() // java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.widget.TextView.getText()' on a null object reference
-        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
+//        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
+
         val url = "http://seonho.dothome.co.kr/Comment.php"
+
+        val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val comment_time = current.format(formatter)
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
-                    comment = response.toString()
-                    comment_num = response.toString()
+                    Log.d("123123", response)
+//                    comment = response.toString()
+//                    comment_num = response.toString()
 
                     Toast.makeText(
                         baseContext,
@@ -211,8 +239,10 @@ class BoardDetail : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "comment success",
-                        "$id, $post_num, $comment_num, $comment"
+                        "$id, $post_num, $comment, $comment_time"
                     )
+
+                    fetchData()
 
                 } else {
 
@@ -226,9 +256,9 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "comment_num" to comment_num,
                 "post_num" to post_num,
-                "comment" to comment
+                "comment" to comment,
+                "comment_time" to comment_time
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -284,7 +314,7 @@ class BoardDetail : AppCompatActivity() {
     @SuppressLint("SuspiciousIndentation")
     fun fetchData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
-        val itemPos = intent.getIntExtra("itemIndex", -1).toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
         val jsonArray : JSONArray
 
         val request = Login_Request(
@@ -296,20 +326,30 @@ class BoardDetail : AppCompatActivity() {
                 if(response != "no Comment"){
                     val jsonArray = JSONArray(response)
 
+                    var  comment_user = HashMap<String, Int>()
+
+                    for(i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+                        var id = item.getString("id")
+                        if(!comment_user.containsKey(id)) comment_user[id] = comment_user.size+1
+                    }
+
                     Log.d("comment3", "comment3")
                     for(i in 0 until jsonArray.length()) {
+
                         val item = jsonArray.getJSONObject(i)
 
                         Log.d("4444445555", item.toString())
+                        val id = item.getString("id")
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
-                        val comment_num = item.getInt("comment_num")
+                        val comment_num = comment_user[id]!!
 
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
+                        viewModel.setItemList(Comment_items)
                         Log.d("comment4", "comment4")
-                        CommentRecyclerView.adapter = Commentadapter
                         Log.d("comment5", "comment5")
 
                         //댓글 아이템 하나 누르면
@@ -341,7 +381,7 @@ class BoardDetail : AppCompatActivity() {
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
-                "post_num" to itemPos
+                "post_num" to post_num
             )
         )
         val queue = Volley.newRequestQueue(this)
