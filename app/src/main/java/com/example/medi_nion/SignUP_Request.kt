@@ -23,7 +23,6 @@ class SignUP_Request(
     private var listener: Response.Listener<String>? = listener
 
     override fun getParams(): MutableMap<String, String> {
-        Log.d("SIGNUP", "$params")
         return params
     }
 

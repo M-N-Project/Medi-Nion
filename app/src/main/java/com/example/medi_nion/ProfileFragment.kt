@@ -19,12 +19,10 @@ class ProfileFragment : Fragment(R.layout.profile) {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        Log.d("ssosososo", "ssosososo" )
         mBinding = ProfileBinding.inflate(inflater, container, false)
 
         binding.item1.setOnClickListener{
             val item1ListLayout = binding.item1ListLayout
-            Log.d("ssosososo", "ssosososo" )
             if(item1ListLayout.visibility == View.GONE) item1ListLayout.visibility = View.VISIBLE
             else item1ListLayout.visibility = View.GONE
         }

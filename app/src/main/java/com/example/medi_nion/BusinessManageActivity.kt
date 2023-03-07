@@ -79,7 +79,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     try {
                         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
                         profileImg.setImageBitmap(bitmap)
-                        Log.d("bitmap", "bitmap")
                     } catch (e:Exception) {
                         e.printStackTrace()
                     }

@@ -35,7 +35,6 @@ class Upload_Request(
 
     override fun deliverResponse(response: String) {
         var listener: Response.Listener<String>?
-        Log.d("1556", response.toString())
         synchronized(lock) { listener = this.listener }
         if (listener != null) {
             listener!!.onResponse(response)
@@ -49,7 +48,6 @@ class Upload_Request(
             String(response.data)
         }
 
-        Log.d("1556", response.toString())
         return Response.success(
             parsed,
             HttpHeaderParser.parseCacheHeaders(response)
