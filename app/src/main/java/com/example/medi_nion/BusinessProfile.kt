@@ -84,7 +84,6 @@ class BusinessProfile : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }, Response.ErrorListener { error -> // method to handle errors.
-                Log.d("pppppppp", "Fail to get course$error")
                 Toast.makeText(this@BusinessProfile, "Fail to get course$error", Toast.LENGTH_SHORT)
                     .show()
             }) {

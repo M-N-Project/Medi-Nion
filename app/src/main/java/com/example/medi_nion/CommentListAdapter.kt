@@ -18,7 +18,6 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
     private var listener : OnItemClickListener? = null
 
     fun setOnItemClickListener(listener : CommentListAdapter.OnItemClickListener) {
-        Log.d("ItemClick", "Event")
         this.listener = listener
     }
 

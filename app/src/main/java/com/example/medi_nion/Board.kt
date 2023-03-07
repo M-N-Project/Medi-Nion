@@ -56,7 +56,6 @@ class Board : AppCompatActivity() {
             Request.Method.POST,
             urlBoard,
             { response ->
-                Log.d("//", response)
                 val jsonArray = JSONArray(response)
                 items.clear()
                 for (i in jsonArray.length()-1  downTo  0) {
@@ -72,9 +71,6 @@ class Board : AppCompatActivity() {
                     itemIndex.add(num) //앞에다가 추가.
 //                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
-
-                    Log.d("><><><><><><", "$num, $title, $content, $time")
-
 
 
                     var detailId : String = ""
@@ -94,8 +90,6 @@ class Board : AppCompatActivity() {
 //                                    for (i in jsonArray.length()-1  downTo  0) {
                                     val jsonObject = JSONObject(response)
 
-                                    Log.d("//", "34234$jsonObject")
-
                                     detailId = jsonObject.getString("id")
                                     detailTitle = jsonObject.getString("title")
                                     detailContent = jsonObject.getString("content")
@@ -104,7 +98,7 @@ class Board : AppCompatActivity() {
 
                                     val intent = Intent(applicationContext, BoardDetail::class.java)
                                     intent.putExtra("num", data.num)
-                                    intent.putExtra("id", detailId)
+                                    intent.putExtra("id", id)
                                     intent.putExtra("title", detailTitle)
                                     intent.putExtra("content", detailContent)
                                     intent.putExtra("time", detailTime)

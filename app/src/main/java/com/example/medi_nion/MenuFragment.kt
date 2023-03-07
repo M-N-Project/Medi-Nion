@@ -54,7 +54,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", "전체 게시판")
-                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
@@ -63,7 +62,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", "직종별 게시판")
-                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
@@ -72,7 +70,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", "진료과별 게시판")
-                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
@@ -81,7 +78,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", "우리 병원 게시판")
-                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
@@ -90,7 +86,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", "장터 게시판")
-                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
@@ -100,7 +95,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", "QnA 게시판")
-                Log.d("Menu id", "$id")
                 startActivity(intent)
             }
         }
@@ -114,7 +108,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, BusinessManageActivity::class.java)
                 intent.putExtra("id", id)
-                Log.d("business id", "$id")
                 startActivity(intent)
             }
         }

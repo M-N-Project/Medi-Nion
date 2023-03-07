@@ -222,8 +222,6 @@ class BoardWrite : AppCompatActivity() {
                     image = BitMapToString(bitmap)
                     findViewById<TextView>(R.id.imageSrc).text = image
 
-                    Log.d("5", "555555")
-                    Log.d("image!!", "$image")
 
                 } catch (e: FileNotFoundException) {
                     // TODO Auto-generated catch block
@@ -328,14 +326,12 @@ class BoardWrite : AppCompatActivity() {
 //        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
 //        val image: ByteArray? = Base64.encode(arr,0)
 //        val image: String = getEncoder(arr)
-//        Log.d("23l2i3o", Base64.decode(image,0).toString())
         var temp = ""
         try {
             //temp = URLEncoder.encode(image, "utf-8")
         } catch (e: Exception) {
             Log.e("exception", e.toString())
         }
-        Log.d("ooooo", temp)
         return base64Image
     }
 }

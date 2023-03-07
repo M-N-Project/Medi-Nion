@@ -23,7 +23,6 @@ class Login_Request(
     private var listener: Response.Listener<String>? = listener
 
     public override fun getParams(): MutableMap<String, String> {
-        Log.d("LOGIN", "$params")
         return params
     }
 
