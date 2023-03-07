@@ -28,7 +28,6 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
-import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -88,9 +87,7 @@ class BoardDetail : AppCompatActivity() {
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
-        var comment_count = 0
         val comment_num = findViewById<TextView>(R.id.comment_num)
-
 
 
 
@@ -115,7 +112,6 @@ class BoardDetail : AppCompatActivity() {
             CommentRequest()
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
-            comment_count++
 //            comment_num.text = comment_count.toString()
         }
 
@@ -471,6 +467,9 @@ class BoardDetail : AppCompatActivity() {
                 Comment_items.clear()
                 if(response != "no Comment"){
                     val jsonArray = JSONArray(response)
+
+                    val comment_count = jsonArray.length()
+                    findViewById<TextView>(R.id.textView_commentcount2).text = comment_count.toString()
 
                     var  comment_user = HashMap<String, Int>()
 
