@@ -75,7 +75,6 @@ class BoardDetail : AppCompatActivity() {
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val itemPos = intent.getIntExtra("itemIndex", -1)
-        Log.d("itemPost", itemPos.toString())
         var id = intent.getStringExtra("id")
         val post_num = intent?.getIntExtra("num", 0).toString()
         val title = intent.getStringExtra("title")
@@ -118,13 +117,11 @@ class BoardDetail : AppCompatActivity() {
             Comment_editText.setText(null) //댓글입력창 clear
             comment_count++
 //            comment_num.text = comment_count.toString()
-//            Log.d("comment_num.text", "2"+comment_num.text.toString())
         }
 
 
 
         Like_Btn.setOnClickListener {
-            Log.d("asdfasdf", "clicked!")
             //좋아요 눌렀을때,,
             LikeRequest()
             //likeRequest()
@@ -144,7 +141,6 @@ class BoardDetail : AppCompatActivity() {
         }
 
         Book_Btn.setOnClickListener {
-            Log.d("bookmark", "clicked")
             if(Book_Btn.isChecked()) {
                 Book_Create_request()
             }
@@ -198,10 +194,6 @@ class BoardDetail : AppCompatActivity() {
                         String.format("조아요 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.d(
-                        "lion heart",
-                        "$id, $num, $heart, $heart_count`"
-                    )
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -231,7 +223,6 @@ class BoardDetail : AppCompatActivity() {
             {
                     response ->
                 if(!response.equals("Bookmark fail")) {
-                    Log.d("bookmark delete", "started")
 
                     Toast.makeText(
                         baseContext,
@@ -274,7 +265,6 @@ class BoardDetail : AppCompatActivity() {
             {
                 response ->
                     if(!response.equals("Bookmark fail")) {
-                        Log.d("bookmark", "started")
 
                         Toast.makeText(
                             baseContext,
@@ -316,7 +306,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 Comment_items.clear()
-                Log.d("comment2", response)
                 if(response != "no Comment"){
                     val jsonArray = JSONArray(response)
 
@@ -328,12 +317,10 @@ class BoardDetail : AppCompatActivity() {
                         if(!comment_user.containsKey(id)) comment_user[id] = comment_user.size+1
                     }
 
-                    Log.d("comment3", "comment3")
                     for(i in 0 until jsonArray.length()) {
 
                         val item = jsonArray.getJSONObject(i)
 
-                        Log.d("4444445555", item.toString())
                         val id = item.getString("id")
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
@@ -343,8 +330,6 @@ class BoardDetail : AppCompatActivity() {
 
                         Comment_items.add(commentItem)
                         viewModel.setItemList(Comment_items)
-                        Log.d("comment4", "comment4")
-                        Log.d("comment5", "comment5")
 
                         //댓글 아이템 하나 누르면
                         var manager : InputMethodManager =
@@ -358,14 +343,11 @@ class BoardDetail : AppCompatActivity() {
                                 Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
                                 Comment_editText.requestFocus()
                                 manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
-                                Log.d("????", "123")
 
                                 Comment_Btn.setOnClickListener {
                                     Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
                                     //comment2_linearLayout.visibility = View.VISIBLE
-                                    //Log.d("comment2_linear", "layout????")
                                     Comment2Request()
-                                    Log.d("9999", "9999")
                                 }
 
                             }
@@ -403,7 +385,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
-                    Log.d("123123", response)
 //                    comment = response.toString()
 //                    comment_num = response.toString()
 
@@ -412,10 +393,6 @@ class BoardDetail : AppCompatActivity() {
                         String.format("댓글이 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.d(
-                        "comment success",
-                        "$id, $post_num, $comment, $comment_time"
-                    )
 
                     fetchData()
 
@@ -454,16 +431,11 @@ class BoardDetail : AppCompatActivity() {
                 if (!response.equals("Comment2 fail")) {
                     comment2 = response.toString()
 
-                    Log.d("MMMM", response)
                     Toast.makeText(
                         baseContext,
                         String.format("대댓글이 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.d(
-                        "comment2 success",
-                        "$id, $post_num, $comment_num, $comment2"
-                    )
 
                 } else {
 
@@ -497,7 +469,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 Comment_items.clear()
-                Log.d("comment2", response)
                 if(response != "no Comment"){
                     val jsonArray = JSONArray(response)
 
@@ -509,12 +480,10 @@ class BoardDetail : AppCompatActivity() {
                         if(!comment_user.containsKey(id)) comment_user[id] = comment_user.size+1
                     }
 
-                    Log.d("comment3", "comment3")
                     for(i in 0 until jsonArray.length()) {
 
                         val item = jsonArray.getJSONObject(i)
 
-                        Log.d("4444445555", item.toString())
                         val id = item.getString("id")
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
@@ -524,8 +493,6 @@ class BoardDetail : AppCompatActivity() {
 
                         Comment_items.add(commentItem)
                         viewModel.setItemList(Comment_items)
-                        Log.d("comment4", "comment4")
-                        Log.d("comment5", "comment5")
 
                         //댓글 아이템 하나 누르면
                         var manager : InputMethodManager =
@@ -539,14 +506,11 @@ class BoardDetail : AppCompatActivity() {
                                 Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
                                 Comment_editText.requestFocus()
                                 manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
-                                Log.d("????", "123")
 
                                 Comment_Btn.setOnClickListener {
                                     Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
                                     //comment2_linearLayout.visibility = View.VISIBLE
-                                    //Log.d("comment2_linear", "layout????")
                                     Comment2Request()
-                                    Log.d("9999", "9999")
                                 }
 
                             }

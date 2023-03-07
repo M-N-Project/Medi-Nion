@@ -23,7 +23,6 @@ class Login : AppCompatActivity() {
         //최초 실행 여부 판단하는 구문
         val pref: SharedPreferences = getSharedPreferences("isFirst", Activity.MODE_PRIVATE)
         val first: Boolean = pref.getBoolean("isFirst", false)
-        Log.d("slslslslsl", first.toString())
         if (first == false) {
             val url = "http://seonho.dothome.co.kr/Login.php"
 
@@ -80,10 +79,6 @@ class Login : AppCompatActivity() {
                 Log.d("Login id", "$id")
                 startActivity(intent)
 
-                Log.d(
-                    "login success",
-                    "$id, $password"
-                )
             } else {
                 Toast.makeText(
                     baseContext,

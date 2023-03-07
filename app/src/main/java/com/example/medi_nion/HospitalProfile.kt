@@ -32,18 +32,14 @@ class HospitalProfile : AppCompatActivity() {
         binding.vpViewpagerMain.apply {
             adapter = viewPager2Adatper
 
-            Log.d("asdfasdf", "$adapter")
-
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    Log.e("YMC", "ViewPager position: $position")
                     super.onPageSelected(position)
                 }
             })
         }
         //ViewPager, TabLayout 연결
         TabLayoutMediator(binding.tlNavigationView, binding.vpViewpagerMain) { tab, position ->
-            Log.e("YMC", "ViewPager position: $position")
             when (position) {
                 0 -> tab.text = "채용 정보"
                 1 -> tab.text = "병원 정보"
