@@ -79,15 +79,17 @@ class Board : AppCompatActivity() {
                                 for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo  0) {
                                     items.add(all_items[i])
                                     itemIndex.add(all_items[i].num) //앞에다가 추가.
+
+                                    var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                                    boardRecyclerView.adapter = adapter
+                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                    boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
                                 }
                             }
 
 
-                            var recyclerViewState =
-                                boardRecyclerView.getLayoutManager()?.onSaveInstanceState()
-                            boardRecyclerView.adapter = adapter
-                            boardRecyclerView.getLayoutManager()?.onRestoreInstanceState(recyclerViewState);
-                            boardRecyclerView.smoothScrollToPosition(scroll_pos) // 부드럽게
+
 
                         }
                     }
