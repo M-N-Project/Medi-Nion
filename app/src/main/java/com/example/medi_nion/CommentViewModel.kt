@@ -1,5 +1,8 @@
 package com.example.medi_nion
 
+import android.app.Application
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,5 +26,4 @@ class CommentViewModel: ViewModel() {
     fun setItemList(recyclerViewItems: ArrayList<CommentItem>) {
         _itemList.value = recyclerViewItems
     }
-
 }

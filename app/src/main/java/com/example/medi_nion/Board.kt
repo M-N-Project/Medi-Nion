@@ -73,10 +73,6 @@ class Board : AppCompatActivity() {
 //                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
 
-                    Log.d("><><><><><><", "$num, $title, $content, $time")
-
-
-
                     var detailId : String = ""
                     var detailTitle : String = ""
                     var detailContent : String = ""
@@ -104,7 +100,7 @@ class Board : AppCompatActivity() {
 
                                     val intent = Intent(applicationContext, BoardDetail::class.java)
                                     intent.putExtra("num", data.num)
-                                    intent.putExtra("id", detailId)
+                                    intent.putExtra("id", id)
                                     intent.putExtra("title", detailTitle)
                                     intent.putExtra("content", detailContent)
                                     intent.putExtra("time", detailTime)
