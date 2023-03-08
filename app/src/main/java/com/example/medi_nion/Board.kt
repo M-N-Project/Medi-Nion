@@ -72,6 +72,11 @@ class Board : AppCompatActivity() {
                                     items.add(all_items[i])
                                     itemIndex.add(all_items[i].num) //앞에다가 추가.
 
+                                    var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                                    boardRecyclerView.adapter = adapter
+                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                    boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
                                     scrollFlag = false
                                 }
                             }
@@ -80,13 +85,15 @@ class Board : AppCompatActivity() {
                                     items.add(all_items[i])
                                     itemIndex.add(all_items[i].num) //앞에다가 추가.
 
-                                    var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                                    boardRecyclerView.adapter = adapter
-                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-
                                 }
+                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                                boardRecyclerView.adapter = adapter
+                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
                             }
+
+
+
 
 
 
@@ -126,16 +133,16 @@ class Board : AppCompatActivity() {
                         val boardItem = BoardItem(num, title, content, time, image)
 
                         if(i >= jsonArray.length() - item_count*scroll_count){
-                            Log.d("111222",i.toString())
                             items.add(boardItem)
                             itemIndex.add(num) //앞에다가 추가.
                         }
 
                         all_items.add(boardItem)
                     }
-
-                    val adapter = BoardListAdapter(items)
-                    boardRecyclerView.adapter = adapter
+                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                boardRecyclerView.adapter = adapter
+                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
 
                     var detailId : String = ""
