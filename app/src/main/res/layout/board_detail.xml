@@ -94,20 +94,6 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textView_Num"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="10dp"
-                            android:text="Num"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.026"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:layout_editor_absoluteY="77dp" />
-
-                        <TextView
                             android:id="@+id/textView_title"
                             android:layout_width="261dp"
                             android:layout_height="wrap_content"
@@ -123,8 +109,8 @@
 
                         <TextView
                             android:id="@+id/textView_content"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="240dp"
+                            android:layout_height="50dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
                             android:text="이것은 내용 입니다"
@@ -197,10 +183,11 @@
                             android:layout_height="27dp"
                             android:layout_marginLeft="6dp"
                             android:layout_marginTop="6dp"
+                            android:button="@drawable/bookmark_checkbox"
+                            android:text=""
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.03"
-                            android:button="@drawable/bookmark_checkbox"
-                            android:text="" />
+                            tools:ignore="TouchTargetSizeCheck" />
 
                         <TextView
                             android:id="@+id/textView_bookmarkcount2"

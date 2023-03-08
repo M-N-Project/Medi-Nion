@@ -15,11 +15,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.state.ToggleableState
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_detail.*
+import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
+import kotlinx.android.synthetic.main.comment_comment_detail.*
 import org.json.JSONArray
+import org.json.JSONObject
+import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -27,7 +33,6 @@ import java.time.format.DateTimeFormatter
 var Comment_items =ArrayList<CommentItem>()
 var Commentadapter = CommentListAdapter(Comment_items)
 val viewModel: CommentViewModel = CommentViewModel()
-lateinit var datas : BoardItem
 
 class BoardDetail : AppCompatActivity() {
 
@@ -46,7 +51,6 @@ class BoardDetail : AppCompatActivity() {
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
 
-
         val manager : InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -54,15 +58,15 @@ class BoardDetail : AppCompatActivity() {
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
 
-        val dataObserver: Observer<ArrayList<CommentItem>> =
-            Observer { livedata ->
-                Comment_items = livedata
-                var newAdapter = CommentListAdapter(Comment_items)
-                CommentRecyclerView.adapter = newAdapter
-
-            }
-
-        viewModel.itemList.observe(this, dataObserver)
+//        val dataObserver: Observer<ArrayList<CommentItem>> =
+//            Observer { livedata ->
+//                Comment_items = livedata
+//                var newAdapter = CommentListAdapter(Comment_items)
+//                CommentRecyclerView.adapter = newAdapter
+//
+//            }
+//
+//        viewModel.itemList.observe(this, dataObserver)
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val board = intent.getStringExtra("board")
@@ -76,7 +80,6 @@ class BoardDetail : AppCompatActivity() {
 
         val heart = intent?.getStringExtra("heart")
 
-        val textView_num = findViewById<TextView>(R.id.textView_Num)
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
@@ -88,26 +91,33 @@ class BoardDetail : AppCompatActivity() {
         title_textView.setText(title)
         content_textView.setText(content)
         time_textView.setText(time)
+
         if (image != null) {
             var postImg = findViewById<ImageView>(R.id.post_imgView)
             postImg.visibility = View.VISIBLE
             val bitmap: Bitmap? = StringToBitmaps(image)
             postImg.setImageBitmap(bitmap)
-
-
         }
 
-//        val Commentadapter = CommentListAdapter(Comment_items)
-//        CommentRecyclerView.adapter = Commentadapter
-
+        val Commentadapter = CommentListAdapter(Comment_items)
+        CommentRecyclerView.adapter = Commentadapter
 
         Comment_Btn.setOnClickListener {
+            if(Comment_editText.text.toString().isEmpty()) {
+                Toast.makeText(baseContext, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                CommentRequest()
+                manager.hideSoftInputFromWindow(
+                    getCurrentFocus()?.getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                ) //Comment버튼 누르면 키보드 내리기
+                Comment_editText.setText(null) //댓글입력창 clear
+                comment_count++
             CommentRequest()
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
 //            comment_num.text = comment_count.toString()
         }
-
 
 
         Like_Btn.setOnClickListener {
@@ -372,8 +382,6 @@ class BoardDetail : AppCompatActivity() {
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
-//        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString() // java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.widget.TextView.getText()' on a null object reference
-//        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
@@ -395,6 +403,11 @@ class BoardDetail : AppCompatActivity() {
                         String.format("댓글이 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    Log.d(
+                        "comment success",
+                        "$id, $post_num, $comment, $comment_time"
+                    )
 
                     fetchData()
 
@@ -419,50 +432,10 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
-    fun Comment2Request() {
-        var id = intent?.getStringExtra("id").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
-        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
-        var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
-        val url = "http://seonho.dothome.co.kr/Comment2.php"
-
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                if (!response.equals("Comment2 fail")) {
-                    comment2 = response.toString()
-
-                    Toast.makeText(
-                        baseContext,
-                        String.format("대댓글이 등록되었습니다."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                } else {
-
-                    Toast.makeText(
-                        applicationContext,
-                        "대댓글을 등록할 수 없습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }, { Log.d("Comment2 Failed", "error......${error(applicationContext)}") },
-
-            hashMapOf(
-                "id" to id,
-                "post_num" to post_num,
-                "comment_num" to comment_num,
-                "comment2" to comment2
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-    }
-
     @SuppressLint("SuspiciousIndentation")
     fun fetchData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
+        val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
         val jsonArray : JSONArray
 
@@ -486,7 +459,6 @@ class BoardDetail : AppCompatActivity() {
                     }
 
                     for(i in 0 until jsonArray.length()) {
-
                         val item = jsonArray.getJSONObject(i)
 
                         val id = item.getString("id")
@@ -497,27 +469,48 @@ class BoardDetail : AppCompatActivity() {
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
-                        viewModel.setItemList(Comment_items)
+                        //viewModel.setItemList(Comment_items)
+                        CommentRecyclerView.adapter = Commentadapter
 
-                        //댓글 아이템 하나 누르면
-                        var manager : InputMethodManager =
-                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
-                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
-                        val comment2_linearLayout = findViewById<LinearLayout>(R.id.comment2_linearLayout)
+                        var detailId : String = ""
+                        var detailComment : String = ""
+                        var detailCommentTime : String = ""
 
                         Commentadapter.setOnItemClickListener(object : CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
-                                Comment_editText.requestFocus()
-                                manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
+                                Toast.makeText(applicationContext, "제발", Toast.LENGTH_SHORT).show()
 
-                                Comment_Btn.setOnClickListener {
-                                    Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
-                                    //comment2_linearLayout.visibility = View.VISIBLE
-                                    Comment2Request()
-                                }
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    urlDetail,
+                                    { response ->
+                                        items.clear()
+//                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val jsonObject = JSONObject(response)
 
+                                        Log.d("comment", "$jsonObject")
+
+                                        detailId = jsonObject.getString("id")
+                                        detailComment = jsonObject.getString("comment")
+                                        detailCommentTime = jsonObject.getString("comment_time")
+
+
+                                        val intent = Intent(applicationContext, CommentDetail::class.java)
+                                        intent.putExtra("comment_num", data.comment_num)
+                                        intent.putExtra("id", id)
+                                        intent.putExtra("comment", detailComment)
+                                        intent.putExtra("comment_time", detailCommentTime)
+
+                                        Log.d("commentdetail", "${data.comment_num}, $id, $detailComment, $detailCommentTime")
+                                        startActivity(intent)
+
+                                    }, { Log.d("Comment failed", "error......${error(applicationContext)}") },
+                                    hashMapOf(
+                                        "comment_num" to data.comment_num.toString()
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(applicationContext)
+                                queue.add(request)
                             }
                         })
                     }
