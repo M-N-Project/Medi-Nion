@@ -486,7 +486,6 @@ class SignUp : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
-        Log.d("sssssssssssssss", "$queue")
     }
     //db 연동 끝
 

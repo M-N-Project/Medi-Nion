@@ -2,9 +2,13 @@ package com.example.medi_nion
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -14,21 +18,27 @@ import org.json.JSONObject
 
 
 var items =ArrayList<BoardItem>()
+var all_items = ArrayList<BoardItem>()
+val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
+var scroll_count = 1
 //val viewModel = BoardViewModel()
 //lateinit var adapter : BoardListAdapter
-val adapter = BoardListAdapter(items)
+var adapter = BoardListAdapter(items)
 lateinit var mJsonString: String
 var errorString: String? = null
+var scrollFlag = false
 var itemIndex = ArrayList<Int>()
 
 class Board : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
 
-        var id = intent.getStringExtra("id")
+        items.clear()
+        all_items.clear()
 
+        var id = intent.getStringExtra("id")
+        items.clear()
         fetchData()
 
         //글쓰기
@@ -41,7 +51,51 @@ class Board : AppCompatActivity() {
             intent.putExtra("board", board)
             startActivity(intent)
         }
+
+
+        boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if(scrollFlag==false){
+                    if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
+                       fetchData()
+                    } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
+                        if(all_items.size > 20){
+                            val scrollLocation = IntArray(2)
+                            boardRecyclerView.getLocationOnScreen(scrollLocation)
+                            var scroll_pos = scrollLocation[1]
+
+                            scroll_count ++
+                            scrollFlag = true
+
+                            if(all_items.size - item_count*(scroll_count-1) > 20){
+                                for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo   all_items.size - item_count*scroll_count) {
+                                    items.add(all_items[i])
+                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
+
+                                    scrollFlag = false
+                                }
+                            }
+                            else{
+                                for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo  0) {
+                                    items.add(all_items[i])
+                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
+                                }
+                            }
+
+
+                            var recyclerViewState =
+                                boardRecyclerView.getLayoutManager()?.onSaveInstanceState()
+                            boardRecyclerView.adapter = adapter
+                            boardRecyclerView.getLayoutManager()?.onRestoreInstanceState(recyclerViewState);
+                            boardRecyclerView.smoothScrollToPosition(scroll_pos) // 부드럽게
+
+                        }
+                    }
+                }
+            }
+        })
     }
+
 
     fun fetchData() {
         // url to post our data
@@ -58,18 +112,27 @@ class Board : AppCompatActivity() {
             { response ->
                 val jsonArray = JSONArray(response)
                 items.clear()
-                for (i in jsonArray.length()-1  downTo  0) {
-                    val item = jsonArray.getJSONObject(i)
+                all_items.clear()
+                    for (i in jsonArray.length()-1  downTo  0) {
+                        val item = jsonArray.getJSONObject(i)
 
-                    val num = item.getInt("num")
-                    val title = item.getString("title")
-                    val content = item.getString("content")
-                    val time = item.getString("time")
-                    val image = item.getString("image")
-                    val boardItem = BoardItem(num, title, content, time, image)
-                    items.add(boardItem)
-                    itemIndex.add(num) //앞에다가 추가.
-//                    val adapter = BoardListAdapter(items)
+                        val num = item.getInt("num")
+                        val title = item.getString("title")
+                        val content = item.getString("content")
+                        val time = item.getString("time")
+                        val image = item.getString("image")
+                        val boardItem = BoardItem(num, title, content, time, image)
+
+                        if(i >= jsonArray.length() - item_count*scroll_count){
+                            Log.d("111222",i.toString())
+                            items.add(boardItem)
+                            itemIndex.add(num) //앞에다가 추가.
+                        }
+
+                        all_items.add(boardItem)
+                    }
+
+                    val adapter = BoardListAdapter(items)
                     boardRecyclerView.adapter = adapter
 
 
@@ -97,6 +160,7 @@ class Board : AppCompatActivity() {
                                     detailImg = jsonObject.getString("image")
 
                                     val intent = Intent(applicationContext, BoardDetail::class.java)
+                                    intent.putExtra("board", board)
                                     intent.putExtra("num", data.num)
                                     intent.putExtra("id", id)
                                     intent.putExtra("title", detailTitle)
@@ -117,7 +181,7 @@ class Board : AppCompatActivity() {
 
                     })
 
-                }
+
 
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(

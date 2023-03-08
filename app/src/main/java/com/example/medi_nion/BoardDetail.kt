@@ -1,28 +1,20 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.text.Layout
 import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
-import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -73,6 +65,7 @@ class BoardDetail : AppCompatActivity() {
         viewModel.itemList.observe(this, dataObserver)
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
+        val board = intent.getStringExtra("board")
         val itemPos = intent.getIntExtra("itemIndex", -1)
         var id = intent.getStringExtra("id")
         val post_num = intent?.getIntExtra("num", 0).toString()
@@ -145,6 +138,19 @@ class BoardDetail : AppCompatActivity() {
                 Book_Delete_request()
             }
         }
+    }
+
+    override fun onBackPressed() {
+        var id = intent.getStringExtra("id")
+        val board = intent.getStringExtra("board")
+
+        val intent =
+            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+        intent.putExtra("id", id)
+        intent.putExtra("board", board)
+        startActivity(intent) //인텐트 이동
+        finish() //현재 액티비티 종료
     }
 
 //    fun likeRequest() {
