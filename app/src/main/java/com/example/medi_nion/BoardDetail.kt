@@ -102,17 +102,12 @@ class BoardDetail : AppCompatActivity() {
         CommentRecyclerView.adapter = Commentadapter
 
         Comment_Btn.setOnClickListener {
-            if (Comment_editText.text.toString().isEmpty()) {
-                Toast.makeText(baseContext, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show()
-            } else {
-                CommentRequest()
-                manager.hideSoftInputFromWindow(
-                    getCurrentFocus()?.getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS
-                ) //Comment버튼 누르면 키보드 내리기
-                Comment_editText.setText(null) //댓글입력창 clear
+            CommentRequest()
+            manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
+            Comment_editText.setText(null) //댓글입력창 clear
 //            comment_num.text = comment_count.toString()
-            }
+        }
+
 
 
             Like_Btn.setOnClickListener {
@@ -142,7 +137,7 @@ class BoardDetail : AppCompatActivity() {
                 }
             }
         }
-    }
+
 
     override fun onBackPressed() {
         var id = intent.getStringExtra("id")
@@ -401,6 +396,7 @@ class BoardDetail : AppCompatActivity() {
                 if (!response.equals("Comment fail")) {
 //                    comment = response.toString()
 //                    comment_num = response.toString()
+                    Log.d("aaaaaaaa", response)
 
                     Toast.makeText(
                         baseContext,
@@ -557,3 +553,4 @@ class BoardDetail : AppCompatActivity() {
         }
     }
 }
+
