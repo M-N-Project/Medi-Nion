@@ -37,6 +37,8 @@ class Board : AppCompatActivity() {
         items.clear()
         all_items.clear()
 
+        boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
+
         var id = intent.getStringExtra("id")
         items.clear()
         fetchData()
@@ -55,6 +57,7 @@ class Board : AppCompatActivity() {
 
         boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                fetchData()
                 if(scrollFlag==false){
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                        fetchData()
@@ -71,14 +74,17 @@ class Board : AppCompatActivity() {
                                 for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo   all_items.size - item_count*scroll_count) {
                                     items.add(all_items[i])
                                     itemIndex.add(all_items[i].num) //앞에다가 추가.
-
-                                    var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                                    boardRecyclerView.adapter = adapter
-                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-
-                                    scrollFlag = false
                                 }
+
+                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                                var new_items = ArrayList<BoardItem>()
+                                new_items.addAll(items)
+                                adapter = BoardListAdapter(new_items)
+                                boardRecyclerView.adapter = adapter
+                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+                                scrollFlag = false
                             }
                             else{
                                 for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo  0) {
@@ -87,15 +93,13 @@ class Board : AppCompatActivity() {
 
                                 }
                                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                                var new_items = ArrayList<BoardItem>()
+                                new_items.addAll(items)
+                                adapter = BoardListAdapter(new_items)
                                 boardRecyclerView.adapter = adapter
                                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
                             }
-
-
-
-
-
 
 
                         }
@@ -140,6 +144,9 @@ class Board : AppCompatActivity() {
                         all_items.add(boardItem)
                     }
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                var new_items = ArrayList<BoardItem>()
+                new_items.addAll(items)
+                adapter = BoardListAdapter(new_items)
                 boardRecyclerView.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
@@ -169,6 +176,7 @@ class Board : AppCompatActivity() {
                                     detailImg = jsonObject.getString("image")
 
                                     val intent = Intent(applicationContext, BoardDetail::class.java)
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                                     intent.putExtra("board", board)
                                     intent.putExtra("num", data.num)
                                     intent.putExtra("id", id)

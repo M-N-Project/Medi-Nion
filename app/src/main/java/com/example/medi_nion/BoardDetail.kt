@@ -139,18 +139,20 @@ class BoardDetail : AppCompatActivity() {
         }
 
 
-    override fun onBackPressed() {
-        var id = intent.getStringExtra("id")
-        val board = intent.getStringExtra("board")
+//    override fun onBackPressed() {
+//        var id = intent.getStringExtra("id")
+//        val board = intent.getStringExtra("board")
+//
+//        val intent =
+//            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+//        intent.putExtra("id", id)
+//        intent.putExtra("board", board)
+//        startActivity(intent) //인텐트 이동
+//        finish() //현재 액티비티 종료
+//    }
 
-        val intent =
-            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-        intent.putExtra("id", id)
-        intent.putExtra("board", board)
-        startActivity(intent) //인텐트 이동
-        finish() //현재 액티비티 종료
-    }
+
 
 //    fun likeRequest() {
 //        val url = "http://seonho.dothome.co.kr/Heart.php"
@@ -396,6 +398,8 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
+//                    comment = response.toString()
+//                    comment_num = response.toString(
 
                     Toast.makeText(
                         baseContext,
@@ -437,7 +441,8 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
-        val jsonArray: JSONArray
+
+        Comment_items.clear()
 
         Comment_items.clear()
 
@@ -445,7 +450,6 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                Comment_items.clear()
                 if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
