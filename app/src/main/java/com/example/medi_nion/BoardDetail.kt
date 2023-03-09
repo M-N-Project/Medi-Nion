@@ -439,6 +439,8 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         val jsonArray: JSONArray
 
+        Comment_items.clear()
+
         val request = Login_Request(
             Request.Method.POST,
             url,
@@ -463,6 +465,7 @@ class BoardDetail : AppCompatActivity() {
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
+
                         val id = item.getString("id")
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
@@ -471,19 +474,21 @@ class BoardDetail : AppCompatActivity() {
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
+
+
+                        Log.d("commmentItem", "$post_num, $comment, $comment_num, $comment_time")
+
                         //viewModel.setItemList(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
 
                         var detailId: String = ""
                         var detailComment: String = ""
                         var detailCommentTime: String = ""
+                        var userId = intent?.getStringExtra("id").toString()
 
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(applicationContext, "제발", Toast.LENGTH_SHORT)
-                                    .show()
-
                                 val request = Login_Request(
                                     Request.Method.POST,
                                     urlDetail,
@@ -492,40 +497,25 @@ class BoardDetail : AppCompatActivity() {
 //                                    for (i in jsonArray.length()-1  downTo  0) {
                                         val jsonObject = JSONObject(response)
 
-                                        Log.d("comment", "$jsonObject")
-
                                         detailId = jsonObject.getString("id")
                                         detailComment = jsonObject.getString("comment")
                                         detailCommentTime = jsonObject.getString("comment_time")
-
-                                        Log.d(
-                                            "commentdetail123",
-                                            "${data.comment_num}, $id, $detailComment, $detailCommentTime"
-                                        )
-
 
                                         val intent = Intent(
                                             applicationContext,
                                             CommentDetail::class.java
                                         )
                                         intent.putExtra("comment_num", data.comment_num)
-                                        intent.putExtra("id", id)
+                                        intent.putExtra("id", userId)
                                         intent.putExtra("comment", detailComment)
                                         intent.putExtra("comment_time", detailCommentTime)
+                                        intent.putExtra("post_num", post_num)
+
+                                        Log.d("888", userId)
 
                                         startActivity(intent)
-                                        Log.d(    //안뜸...... startActivity가 문제인듯 ,, ?
-                                            "commentdetail",
-                                            "${data.comment_num}, $post_num, $id, $detailComment, $detailCommentTime"
-                                        )
-
                                     },
-                                    {
-                                        Log.d(
-                                            "Comment failed",
-                                            "error......${error(applicationContext)}"
-                                        )
-                                    },
+                                    { Log.d("Comment failed", "error......${error(applicationContext)}") },
                                     hashMapOf(
                                         "comment_num" to data.comment_num.toString(),
                                         "post_num" to post_num
@@ -537,7 +527,6 @@ class BoardDetail : AppCompatActivity() {
                         })
                     }
                 }
-
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "post_num" to post_num

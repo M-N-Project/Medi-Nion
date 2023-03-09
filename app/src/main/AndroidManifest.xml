@@ -39,6 +39,7 @@
         <activity android:name=".Agreement" />
         <activity android:name=".FirstTimeActivity" />
         <activity android:name=".Board" />
+        <activity android:name=".CommentDetail"/>
         <activity android:name=".SignUp" />
         <activity android:name=".HospitalProfile" />
 
