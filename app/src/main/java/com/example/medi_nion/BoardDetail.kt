@@ -128,12 +128,13 @@ class BoardDetail : AppCompatActivity() {
                 count--
                 Like_count.text = count.toString() //Like_count를 감소시키기
                 Like_Btn.setImageResource(R.drawable.favorite_border)
+                Like_Delete_request()
             }
             else {
                 count++
                 Like_count.text = count.toString() //Like_count를 증가시키기
                 Like_Btn.setImageResource(R.drawable.favorite_fill)
-                LikeRequest()
+                Like_Create_Request()
             }
         }
 
@@ -147,34 +148,12 @@ class BoardDetail : AppCompatActivity() {
         }
     }
 
-//    fun likeRequest() {
-//        val url = "http://seonho.dothome.co.kr/Heart.php"
-//        val postParams = hashMapOf("id" to "1", "heart_count" to "10")
-//
-//        val client = OkHttpClient()
-//        val formBodyBuilder = FormBody.Builder()
-//
-//        for ((key, value) in postParams) {
-//            formBodyBuilder.add(key, value)
-//        }
-//
-//        val requestBody = formBodyBuilder.build()
-//        val request = Request.Method
-//            .url(url)
-//            .post(requestBody)
-//            .build()
-//
-//        val response = client.newCall(request).execute()
-//        val responseBody = response.body()?.string()
-//    }
 
-
-
-    fun LikeRequest() {  //좋아요 DB연동중
+    fun Like_Create_Request() {  //좋아요 DB연동중
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
-        var num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
+        var post_num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
         var heart = findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
-        var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
+        var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString() //좋아요 숫자 표시
         val url = "http://seonho.dothome.co.kr/Heart.php"
 
         val request = Login_Request (
@@ -183,7 +162,7 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 if(!response.equals("Like fail")) {
                     heart_count = response.toString()
-                    num = response.toString()
+                    post_num = response.toString()
 
                     Toast.makeText(
                         baseContext,
@@ -201,12 +180,126 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "heart" to heart_count
+                "heart" to heart_count,
+                "post_num" to post_num
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
+
+    fun Like_Delete_request() {
+        var id = intent?.getStringExtra("id").toString()
+        var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString() //좋아요 숫자 표시
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        var url = "http://seonho.dothome.co.kr/HeartDelete.php"
+
+        val request = Login_Request (
+            Request.Method.POST,
+            url,
+            {
+                    response ->
+                if(!response.equals("Heart fail")) {
+
+                    Toast.makeText(
+                        baseContext,
+                        String.format("Heart가 해제되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "heart delete success",
+                        "$id, $post_num"
+                    )
+
+                    //fetchBookmarkData()
+                }  else {
+
+                    Toast.makeText(
+                        applicationContext,
+                        "heart 해제할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("heart Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "id" to id,
+                "post_num" to post_num,
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    fun fetchLikeData() {
+        val url = "http://seonho.dothome.co.kr/Heart_list.php"
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        val jsonArray : JSONArray
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                Comment_items.clear()
+                if(response != "no Comment"){
+                    val jsonArray = JSONArray(response)
+
+                    var  comment_user = HashMap<String, Int>()
+
+                    for(i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+                        var id = item.getString("id")
+                        if(!comment_user.containsKey(id)) comment_user[id] = comment_user.size+1
+                    }
+
+                    for(i in 0 until jsonArray.length()) {
+
+                        val item = jsonArray.getJSONObject(i)
+
+                        val id = item.getString("id")
+                        val comment = item.getString("comment")
+                        val comment_time = item.getString("comment_time")
+                        val comment_num = comment_user[id]!!
+
+                        val commentItem = CommentItem(comment, comment_num, comment_time)
+
+                        Comment_items.add(commentItem)
+                        viewModel.setItemList(Comment_items)
+
+                        //댓글 아이템 하나 누르면
+                        var manager : InputMethodManager =
+                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
+                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
+                        val comment2_linearLayout = findViewById<LinearLayout>(R.id.comment2_linearLayout)
+
+                        Commentadapter.setOnItemClickListener(object : CommentListAdapter.OnItemClickListener {
+                            override fun onItemClick(v: View, data: CommentItem, pos: Int) {
+                                Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
+                                Comment_editText.requestFocus()
+                                manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
+
+                                Comment_Btn.setOnClickListener {
+                                    Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
+                                    //comment2_linearLayout.visibility = View.VISIBLE
+                                    Comment2Request()
+                                }
+
+                            }
+                        })
+                    }
+                }
+
+            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+    ////////////////////////////////////////////////////////////////////like bookmart경계선
+
 
     fun Book_Delete_request() {
         var id = intent?.getStringExtra("id").toString()
