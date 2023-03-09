@@ -395,8 +395,7 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 if (!response.equals("Comment fail")) {
 //                    comment = response.toString()
-//                    comment_num = response.toString()
-                    Log.d("aaaaaaaa", response)
+//                    comment_num = response.toString(
 
                     Toast.makeText(
                         baseContext,
@@ -437,14 +436,16 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
-        val jsonArray: JSONArray
+
+        Comment_items.clear()
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
-                Comment_items.clear()
+                Log.d("---", response)
                 if (response != "no Comment") {
+                    Log.d("---", response)
                     val jsonArray = JSONArray(response)
 
                     val comment_count = jsonArray.length()
@@ -491,8 +492,6 @@ class BoardDetail : AppCompatActivity() {
                                         items.clear()
 //                                    for (i in jsonArray.length()-1  downTo  0) {
                                         val jsonObject = JSONObject(response)
-
-                                        Log.d("comment", "$jsonObject")
 
                                         detailId = jsonObject.getString("id")
                                         detailComment = jsonObject.getString("comment")
