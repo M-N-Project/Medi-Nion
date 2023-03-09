@@ -34,7 +34,6 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         private val itemComment: TextView = itemView.findViewById(R.id.comment_content)
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment_time)
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
@@ -44,12 +43,12 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemCommentTime.text = item.comment_time
             itemCommentNum.text = item.comment_num.toString()
 
-            val pos = adapterPosition
+            val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
             {
                 itemView.setOnClickListener {
-                    Log.d("ItemClick1", "Event1")
                     listener?.onItemClick(itemView,item,pos)
+                    Log.d("ItemClick1", "Event1")
                 }
                 itemComment.setOnClickListener {
                     listener?.onItemClick(itemView,item,pos)

@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/comment_linearLayout"
+        android:id="@+id/comment2_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -17,6 +17,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView_comment2_arrow"
+                android:layout_width="32dp"
+                android:layout_height="28dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.065"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/comment_arrow" />
 
             <ImageView
                 android:id="@+id/imageView_basicprofile1"
@@ -29,7 +39,7 @@
                 android:src="@drawable/basic_profile1" />
 
             <TextView
-                android:id="@+id/comment_name"
+                android:id="@+id/comment2_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -39,7 +49,7 @@
                 app:layout_constrainedWidth="true"/>
 
             <TextView
-                android:id="@+id/comment_num"
+                android:id="@+id/comment2_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -48,34 +58,25 @@
                 app:layout_constrainedWidth="true"/>
 
             <ImageView
-                android:id="@+id/imageView_comment_like"
+                android:id="@+id/imageView_comment2_like"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.041"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginLeft="240dp"
+                android:layout_marginLeft="230dp"
                 app:srcCompat="@drawable/favorite_border" />
-
-            <ImageView
-                android:id="@+id/imageView_comment_comment"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.041"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginLeft="5dp"
-                app:srcCompat="@drawable/comment_icon" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/comment_content"
+            android:id="@+id/comment2_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="comment"
+            android:text="comment2"
             android:textSize="16sp"
+            android:layout_marginLeft="33dp"
             android:layout_marginRight="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -86,14 +87,15 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="33dp">
 
             <TextView
-                android:id="@+id/comment_time"
+                android:id="@+id/comment2_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="comment_time"
+                android:text="comment2_time"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.076"
@@ -101,12 +103,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/command_content" />
 
             <TextView
-                android:id="@+id/comment_like_count"
+                android:id="@+id/comment2_like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="3dp"
-                android:text="comment_like_count"
+                android:text="comment2_like_count"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.076"
@@ -116,18 +118,6 @@
 
         </LinearLayout>
 
-        <!--        <ImageView-->
-        <!--            android:id="@+id/imageView3"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="1dp"-->
-
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            android:layout_marginTop="8dp"-->
-        <!--            android:src="@drawable/line_sample"-->
-        <!--            app:layout_constraintHorizontal_bias="0.825"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/imageView_bookmark2"-->
-        <!--            android:layout_marginBottom="10dp"/>-->
         <View
             android:id="@+id/view3"
             android:layout_width="match_parent"
@@ -137,7 +127,6 @@
             android:backgroundTint="#CDCDCD"
             app:layout_constraintTop_toBottomOf="@+id/imageView_comment"
             tools:layout_editor_absoluteX="16dp" />
-
 
     </LinearLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

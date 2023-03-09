@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerView.Adapter<BoardListAdapter.ViewHolder>()  {
 
-    var datas = mutableListOf<BoardItem>()
-
     interface OnItemClickListener{
         fun onItemClick(v:View, data: BoardItem, pos : Int)
     }
     private var listener : OnItemClickListener? = null
+
 
     fun setOnItemClickListener(listener: BoardListAdapter.OnItemClickListener) {
         this.listener = listener
@@ -32,7 +31,8 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
     override fun getItemCount(): Int = itemList.size //라이브데이터 사용할때는 datas사용, 지금은 더미 데이터라서 매개변수로 넘긴 itemList로 대체
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(itemList[position])
+        val safePosition = holder.absoluteAdapterPosition
+        holder.bind(itemList[safePosition])
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
