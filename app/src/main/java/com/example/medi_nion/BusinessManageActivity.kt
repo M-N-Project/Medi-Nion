@@ -41,8 +41,9 @@ class BusinessManageActivity : AppCompatActivity() {
         val saveBtn = findViewById<Button>(R.id.save_btn)
 
         write.setOnClickListener {
-            var newIntent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
-            startActivity(newIntent)
+            var intent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
+            intent.putExtra("id", id)
+            startActivity(intent)
         }
 
         profileImg.setOnClickListener {
