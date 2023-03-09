@@ -382,6 +382,8 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
+        var comment_count = 0
+        var comment_num = 1
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
 
@@ -394,9 +396,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
-//                    comment = response.toString()
-//                    comment_num = response.toString()
-                    Log.d("aaaaaaaa", response)
 
                     Toast.makeText(
                         baseContext,
@@ -406,7 +405,7 @@ class BoardDetail : AppCompatActivity() {
 
                     Log.d(
                         "comment success",
-                        "$id, $post_num, $comment, $comment_time"
+                        "$id, $post_num, $comment, $comment_time, $comment_num"
                     )
 
                     fetchData()
@@ -425,6 +424,7 @@ class BoardDetail : AppCompatActivity() {
                 "id" to id,
                 "post_num" to post_num,
                 "comment" to comment,
+                "comment_num" to comment_num.toString(),
                 "comment_time" to comment_time
             )
         )
@@ -455,7 +455,7 @@ class BoardDetail : AppCompatActivity() {
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
-                        var id = item.getString("id")
+                        val id = item.getString("id")
                         if (!comment_user.containsKey(id)) comment_user[id] =
                             comment_user.size + 1
                     }
@@ -498,6 +498,11 @@ class BoardDetail : AppCompatActivity() {
                                         detailComment = jsonObject.getString("comment")
                                         detailCommentTime = jsonObject.getString("comment_time")
 
+                                        Log.d(
+                                            "commentdetail123",
+                                            "${data.comment_num}, $id, $detailComment, $detailCommentTime"
+                                        )
+
 
                                         val intent = Intent(
                                             applicationContext,
@@ -508,11 +513,11 @@ class BoardDetail : AppCompatActivity() {
                                         intent.putExtra("comment", detailComment)
                                         intent.putExtra("comment_time", detailCommentTime)
 
-                                        Log.d(
-                                            "commentdetail",
-                                            "${data.comment_num}, $id, $detailComment, $detailCommentTime"
-                                        )
                                         startActivity(intent)
+                                        Log.d(    //안뜸...... startActivity가 문제인듯 ,, ?
+                                            "commentdetail",
+                                            "${data.comment_num}, $post_num, $id, $detailComment, $detailCommentTime"
+                                        )
 
                                     },
                                     {
@@ -522,7 +527,8 @@ class BoardDetail : AppCompatActivity() {
                                         )
                                     },
                                     hashMapOf(
-                                        "comment_num" to data.comment_num.toString()
+                                        "comment_num" to data.comment_num.toString(),
+                                        "post_num" to post_num
                                     )
                                 )
                                 val queue = Volley.newRequestQueue(applicationContext)
