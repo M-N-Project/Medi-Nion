@@ -3,11 +3,9 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -25,12 +23,9 @@ import com.android.volley.toolbox.Volley
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.net.URLEncoder
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Base64.getEncoder
-import kotlin.concurrent.thread
 
 
 class BoardWrite : AppCompatActivity() {
@@ -237,67 +232,7 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
-    fun bitmapToByteArray(bitmap : Bitmap) : String {
-        var image : String
-        var stream : ByteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        var byteArray : ByteArray = stream.toByteArray()
-        image = "&image=" + byteArrayToBinaryString(byteArray)
-        return image
-    }
 
-    fun byteArrayToBinaryString(b : ByteArray) : String{
-        var sb : StringBuilder = StringBuilder()
-        for(i in 0..b.size-1){
-            sb.append(byteToBinaryString(b[i]));
-        }
-        return sb.toString()
-    }
-
-    fun byteToBinaryString(n : Byte) : String{
-        var sb : StringBuilder = StringBuilder("00000000")
-        for(bit in 0..7){
-            if(((n.toInt() shr bit) and 1) > 0){
-                sb.setCharAt(7-bit, '1')
-            }
-        }
-        return sb.toString()
-    }
-
-    @SuppressLint("Range")
-    fun getPath(uri : Uri) : String{
-        var cursor : Cursor? = getContentResolver().query(uri, null, null, null, null)
-        var document_id : String = ""
-        var path : String = ""
-        if (cursor != null) {
-            cursor.moveToFirst()
-            document_id = cursor.getString(0)
-            document_id = document_id.substring(document_id.lastIndexOf(":")+1)
-        }
-        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID+"=?",
-            arrayOf(document_id), null)
-        if (cursor != null) {
-            cursor.moveToFirst()
-            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))
-            cursor.close()
-        }
-        return path
-    }
-
-    //Convert the image URI to the direct file system path of the image file
-    fun getRealPathFromURI(contentUri: Uri?): String? {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = managedQuery(
-            contentUri,
-            proj,  // Which columns to return
-            null,  // WHERE clause; which rows to return (all rows)
-            null,  // WHERE clause selection arguments (none)
-            null
-        ) // Order-by clause (ascending by name)
-        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor.moveToFirst()
-        return cursor.getString(column_index)
-    }
 
     private fun resize(bitmap: Bitmap): Bitmap? {
         var bitmap: Bitmap? = bitmap

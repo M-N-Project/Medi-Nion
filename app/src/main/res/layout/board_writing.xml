@@ -99,7 +99,7 @@
         android:id="@+id/editText_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="36dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="제목"
