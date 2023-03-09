@@ -139,18 +139,20 @@ class BoardDetail : AppCompatActivity() {
         }
 
 
-    override fun onBackPressed() {
-        var id = intent.getStringExtra("id")
-        val board = intent.getStringExtra("board")
+//    override fun onBackPressed() {
+//        var id = intent.getStringExtra("id")
+//        val board = intent.getStringExtra("board")
+//
+//        val intent =
+//            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+//        intent.putExtra("id", id)
+//        intent.putExtra("board", board)
+//        startActivity(intent) //인텐트 이동
+//        finish() //현재 액티비티 종료
+//    }
 
-        val intent =
-            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-        intent.putExtra("id", id)
-        intent.putExtra("board", board)
-        startActivity(intent) //인텐트 이동
-        finish() //현재 액티비티 종료
-    }
+
 
 //    fun likeRequest() {
 //        val url = "http://seonho.dothome.co.kr/Heart.php"
