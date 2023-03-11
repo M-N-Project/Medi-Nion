@@ -39,6 +39,9 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                 }
                 R.id.businessFragment -> {
                     val businessFragment = BusinessMainFragment()
+                    var bundle = Bundle()
+                    bundle.putString("id",id)
+                    businessFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, businessFragment).commit()
                 }
                 R.id.profileFragment -> {

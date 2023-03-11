@@ -6,18 +6,16 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
-class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
-    RecyclerView.Adapter<BusinessRecyclerAdapter.ViewHolder>() {
+class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
+    RecyclerView.Adapter<BusinessManageRecyclerAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: BusinessRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BusinessManageRecyclerAdapter.ViewHolder, position: Int) {
         val item = items[position]
         val listener = View.OnClickListener { it ->
             Toast.makeText(it.context, "Clicked: ${item.title}", Toast.LENGTH_SHORT).show()
@@ -62,7 +60,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 view.businessMG_postImg3.visibility = View.VISIBLE
                 view.businessMG_postImg3.setImageBitmap(bitmap)
             }
-
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()
 

@@ -40,7 +40,6 @@ class Board : AppCompatActivity() {
         boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
 
         var id = intent.getStringExtra("id")
-        items.clear()
         fetchData()
 
         //글쓰기
@@ -117,7 +116,6 @@ class Board : AppCompatActivity() {
         board = intent.getStringExtra("board").toString()
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
-        val jsonArray : JSONArray
 
         val request = Board_Request(
             Request.Method.POST,
