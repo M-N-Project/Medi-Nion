@@ -65,5 +65,4 @@ dependencies {
     implementation 'com.rmtheis:tess-two:9.1.0' // 신분증 인식을 위한 의존성
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 }

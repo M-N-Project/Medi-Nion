@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.board_detail.*
 import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
 import kotlinx.android.synthetic.main.comment_comment_detail.*
 import org.json.JSONArray
+import org.json.JSONObject
+import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -31,7 +33,6 @@ import java.time.format.DateTimeFormatter
 var Comment_items =ArrayList<CommentItem>()
 var Commentadapter = CommentListAdapter(Comment_items)
 val viewModel: CommentViewModel = CommentViewModel()
-lateinit var datas : BoardItem
 
 class BoardDetail : AppCompatActivity() {
 
@@ -50,25 +51,25 @@ class BoardDetail : AppCompatActivity() {
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
 
-
-        val manager : InputMethodManager =
+        val manager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
 
-        val dataObserver: Observer<ArrayList<CommentItem>> =
-            Observer { livedata ->
-                Comment_items = livedata
-                var newAdapter = CommentListAdapter(Comment_items)
-                CommentRecyclerView.adapter = newAdapter
-
-            }
-
-        viewModel.itemList.observe(this, dataObserver)
+//        val dataObserver: Observer<ArrayList<CommentItem>> =
+//            Observer { livedata ->
+//                Comment_items = livedata
+//                var newAdapter = CommentListAdapter(Comment_items)
+//                CommentRecyclerView.adapter = newAdapter
+//
+//            }
+//
+//        viewModel.itemList.observe(this, dataObserver)
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
+        val board = intent.getStringExtra("board")
         val itemPos = intent.getIntExtra("itemIndex", -1)
         var id = intent.getStringExtra("id")
         val post_num = intent?.getIntExtra("num", 0).toString()
@@ -79,25 +80,22 @@ class BoardDetail : AppCompatActivity() {
 
         val heart = intent?.getStringExtra("heart")
 
-        val textView_num = findViewById<TextView>(R.id.textView_Num)
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
         val comment_num = findViewById<TextView>(R.id.comment_num)
 
 
-
 //        textView_num.setText(num)
         title_textView.setText(title)
         content_textView.setText(content)
         time_textView.setText(time)
+
         if (image != null) {
             var postImg = findViewById<ImageView>(R.id.post_imgView)
             postImg.visibility = View.VISIBLE
             val bitmap: Bitmap? = StringToBitmaps(image)
             postImg.setImageBitmap(bitmap)
-
-
         }
 
         val Commentadapter = CommentListAdapter(Comment_items)
@@ -112,19 +110,19 @@ class BoardDetail : AppCompatActivity() {
 
 
 
-            Like_Btn.setOnClickListener {
-                //좋아요 눌렀을때,,
+        Like_Btn.setOnClickListener {
+            //좋아요 눌렀을때,,
 
-                //likeRequest()
+            //likeRequest()
 
-                isDefault = !isDefault
+            isDefault = !isDefault
 
-            if(isDefault) {
+            if (isDefault) {
                 count--
                 Like_count.text = count.toString() //Like_count를 감소시키기
                 Like_Btn.setImageResource(R.drawable.favorite_border)
-            }
-            else {
+                //Like_Delete_Request()
+            } else {
                 count++
                 Like_count.text = count.toString() //Like_count를 증가시키기
                 Like_Btn.setImageResource(R.drawable.favorite_fill)
@@ -132,14 +130,14 @@ class BoardDetail : AppCompatActivity() {
             }
         }
 
-            Book_Btn.setOnClickListener {
-                if (Book_Btn.isChecked()) {
-                    Book_Create_request()
-                } else {
-                    Book_Delete_request()
-                }
+        Book_Btn.setOnClickListener {
+            if (Book_Btn.isChecked()) {
+                Book_Create_request()
+            } else {
+                Book_Delete_request()
             }
         }
+    }
 
 
     override fun onBackPressed() {
@@ -179,19 +177,20 @@ class BoardDetail : AppCompatActivity() {
 
     fun LikeRequest() {  //좋아요 DB연동중
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
-        var num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
-        var heart =
-            findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
+        var post_num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
+//        var heart =
+//            findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
         var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
+        //var heart_count2 = findViewById<TextView>(R.id.textView_likecount).text.toString()
         val url = "http://seonho.dothome.co.kr/Heart.php"
 
-        val request = Login_Request (
+        val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Like fail")) {
                     heart_count = response.toString()
-                    num = response.toString()
+                    post_num = response.toString()
 
                     Toast.makeText(
                         baseContext,
@@ -209,24 +208,149 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "heart" to heart_count
+                "heart" to heart_count,
+                "post_num" to post_num
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
 
+    fun Like_Delete_Request() {
+        var id = intent?.getStringExtra("id").toString()
+        var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        var url = "http://seonho.dothome.co.kr/HeartDelete.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                if (!response.equals("Like fail")) {
+
+                    Toast.makeText(
+                        baseContext,
+                        String.format("좋아요 해제되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "like delete success",
+                        "$id, $post_num"
+                    )
+                    
+                } else {
+
+                    Toast.makeText(
+                        applicationContext,
+                        "좋아요 해제할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("like Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "id" to id,
+                "heart" to heart_count,
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    fun fetchLikeData() {
+        val url = "http://seonho.dothome.co.kr/Heart_list.php"
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        val jsonArray: JSONArray
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                Comment_items.clear()
+                if (response != "no Comment") {
+                    val jsonArray = JSONArray(response)
+
+                    var comment_user = HashMap<String, Int>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+                        var id = item.getString("id")
+                        if (!comment_user.containsKey(id)) comment_user[id] =
+                            comment_user.size + 1
+                    }
+
+                    for (i in 0 until jsonArray.length()) {
+
+                        val item = jsonArray.getJSONObject(i)
+
+                        val id = item.getString("id")
+                        val comment = item.getString("comment")
+                        val comment_time = item.getString("comment_time")
+                        val comment_num = comment_user[id]!!
+
+                        val commentItem = CommentItem(comment, comment_num, comment_time)
+
+                        Comment_items.add(commentItem)
+                        viewModel.setItemList(Comment_items)
+
+                        //댓글 아이템 하나 누르면
+                        var manager: InputMethodManager =
+                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
+                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
+                        val comment2_linearLayout =
+                            findViewById<LinearLayout>(R.id.comment2_linearLayout)
+
+                        Commentadapter.setOnItemClickListener(object :
+                            CommentListAdapter.OnItemClickListener {
+                            override fun onItemClick(v: View, data: CommentItem, pos: Int) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    String.format("대댓글 ? "),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Comment_editText.requestFocus()
+                                manager.showSoftInput(
+                                    Comment_editText,
+                                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                                ) //키보드 올리기
+
+                                Comment_Btn.setOnClickListener {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        String.format("우왕"),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    //comment2_linearLayout.visibility = View.VISIBLE
+                                }
+
+                            }
+                        })
+                    }
+                }
+
+            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    //////////////////////////////////////////////////like, book구분
+
     fun Book_Delete_request() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var url = "http://seonho.dothome.co.kr/BookmarkDelete.php"
 
-        val request = Login_Request (
+        val request = Login_Request(
             Request.Method.POST,
             url,
-            {
-                    response ->
-                if(!response.equals("Bookmark fail")) {
+            { response ->
+                if (!response.equals("Bookmark fail")) {
 
                     Toast.makeText(
                         baseContext,
@@ -239,7 +363,7 @@ class BoardDetail : AppCompatActivity() {
                     )
 
                     //fetchBookmarkData()
-                }  else {
+                } else {
 
                     Toast.makeText(
                         applicationContext,
@@ -263,32 +387,31 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var url = "http://seonho.dothome.co.kr/Bookmark.php"
 
-        val request = Login_Request (
+        val request = Login_Request(
             Request.Method.POST,
             url,
-            {
-                response ->
-                    if(!response.equals("Bookmark fail")) {
+            { response ->
+                if (!response.equals("Bookmark fail")) {
 
-                        Toast.makeText(
-                            baseContext,
-                            String.format("북마크가 생성되었습니다."),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d(
-                            "bookmark success",
-                            "$id, $post_num"
-                        )
+                    Toast.makeText(
+                        baseContext,
+                        String.format("북마크가 생성되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "bookmark success",
+                        "$id, $post_num"
+                    )
 
-                        //fetchBookmarkData()
-                    }  else {
+                    //fetchBookmarkData()
+                } else {
 
-                        Toast.makeText(
-                            applicationContext,
-                            "북마크를 생성할 수 없습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    Toast.makeText(
+                        applicationContext,
+                        "북마크를 생성할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
 
             hashMapOf(
@@ -303,25 +426,26 @@ class BoardDetail : AppCompatActivity() {
     fun fetchBookmarkData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
-        val jsonArray : JSONArray
+        val jsonArray: JSONArray
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 Comment_items.clear()
-                if(response != "no Comment"){
+                if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
-                    var  comment_user = HashMap<String, Int>()
+                    var comment_user = HashMap<String, Int>()
 
-                    for(i in 0 until jsonArray.length()) {
+                    for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
                         var id = item.getString("id")
-                        if(!comment_user.containsKey(id)) comment_user[id] = comment_user.size+1
+                        if (!comment_user.containsKey(id)) comment_user[id] =
+                            comment_user.size + 1
                     }
 
-                    for(i in 0 until jsonArray.length()) {
+                    for (i in 0 until jsonArray.length()) {
 
                         val item = jsonArray.getJSONObject(i)
 
@@ -336,22 +460,34 @@ class BoardDetail : AppCompatActivity() {
                         viewModel.setItemList(Comment_items)
 
                         //댓글 아이템 하나 누르면
-                        var manager : InputMethodManager =
+                        var manager: InputMethodManager =
                             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
                         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
-                        val comment2_linearLayout = findViewById<LinearLayout>(R.id.comment2_linearLayout)
+                        val comment2_linearLayout =
+                            findViewById<LinearLayout>(R.id.comment2_linearLayout)
 
-                        Commentadapter.setOnItemClickListener(object : CommentListAdapter.OnItemClickListener {
+                        Commentadapter.setOnItemClickListener(object :
+                            CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    String.format("대댓글 ? "),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 Comment_editText.requestFocus()
-                                manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
+                                manager.showSoftInput(
+                                    Comment_editText,
+                                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                                ) //키보드 올리기
 
                                 Comment_Btn.setOnClickListener {
-                                    Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        String.format("우왕"),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     //comment2_linearLayout.visibility = View.VISIBLE
-                                    Comment2Request()
                                 }
 
                             }
@@ -369,13 +505,10 @@ class BoardDetail : AppCompatActivity() {
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
-//        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString() // java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.widget.TextView.getText()' on a null object reference
-//        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
@@ -427,74 +560,35 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
-    fun Comment2Request() {
-        var id = intent?.getStringExtra("id").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
-        var comment_num = findViewById<TextView>(R.id.comment_num).text.toString()
-        var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
-        val url = "http://seonho.dothome.co.kr/Comment2.php"
-
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                if (!response.equals("Comment2 fail")) {
-                    comment2 = response.toString()
-
-                    Toast.makeText(
-                        baseContext,
-                        String.format("대댓글이 등록되었습니다."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                } else {
-
-                    Toast.makeText(
-                        applicationContext,
-                        "대댓글을 등록할 수 없습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }, { Log.d("Comment2 Failed", "error......${error(applicationContext)}") },
-
-            hashMapOf(
-                "id" to id,
-                "post_num" to post_num,
-                "comment_num" to comment_num,
-                "comment2" to comment2
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-    }
-
     @SuppressLint("SuspiciousIndentation")
     fun fetchData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
+        val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
-        val jsonArray : JSONArray
+        val jsonArray: JSONArray
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 Comment_items.clear()
-                if(response != "no Comment"){
+                if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
                     val comment_count = jsonArray.length()
-                    findViewById<TextView>(R.id.textView_commentcount2).text = comment_count.toString()
+                    findViewById<TextView>(R.id.textView_commentcount2).text =
+                        comment_count.toString()
 
-                    var  comment_user = HashMap<String, Int>()
+                    var comment_user = HashMap<String, Int>()
 
-                    for(i in 0 until jsonArray.length()) {
+                    for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
                         var id = item.getString("id")
-                        if(!comment_user.containsKey(id)) comment_user[id] = comment_user.size+1
+                        if (!comment_user.containsKey(id)) comment_user[id] =
+                            comment_user.size + 1
                     }
 
-                    for(i in 0 until jsonArray.length()) {
-
+                    for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
                         val id = item.getString("id")
@@ -505,27 +599,62 @@ class BoardDetail : AppCompatActivity() {
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
-                        viewModel.setItemList(Comment_items)
+                        //viewModel.setItemList(Comment_items)
+                        CommentRecyclerView.adapter = Commentadapter
 
-                        //댓글 아이템 하나 누르면
-                        var manager : InputMethodManager =
-                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
-                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
-                        val comment2_linearLayout = findViewById<LinearLayout>(R.id.comment2_linearLayout)
+                        var detailId: String = ""
+                        var detailComment: String = ""
+                        var detailCommentTime: String = ""
 
-                        Commentadapter.setOnItemClickListener(object : CommentListAdapter.OnItemClickListener {
+                        Commentadapter.setOnItemClickListener(object :
+                            CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(applicationContext, String.format("대댓글 ? "), Toast.LENGTH_SHORT).show()
-                                Comment_editText.requestFocus()
-                                manager.showSoftInput(Comment_editText, WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) //키보드 올리기
+                                Toast.makeText(applicationContext, "제발", Toast.LENGTH_SHORT)
+                                    .show()
 
-                                Comment_Btn.setOnClickListener {
-                                    Toast.makeText(applicationContext, String.format("우왕"), Toast.LENGTH_SHORT).show()
-                                    //comment2_linearLayout.visibility = View.VISIBLE
-                                    Comment2Request()
-                                }
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    urlDetail,
+                                    { response ->
+                                        items.clear()
+//                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val jsonObject = JSONObject(response)
 
+                                        Log.d("comment", "$jsonObject")
+
+                                        detailId = jsonObject.getString("id")
+                                        detailComment = jsonObject.getString("comment")
+                                        detailCommentTime = jsonObject.getString("comment_time")
+
+
+                                        val intent = Intent(
+                                            applicationContext,
+                                            CommentDetail::class.java
+                                        )
+                                        intent.putExtra("comment_num", data.comment_num)
+                                        intent.putExtra("id", id)
+                                        intent.putExtra("comment", detailComment)
+                                        intent.putExtra("comment_time", detailCommentTime)
+
+                                        Log.d(
+                                            "commentdetail",
+                                            "${data.comment_num}, $id, $detailComment, $detailCommentTime"
+                                        )
+                                        startActivity(intent)
+
+                                    },
+                                    {
+                                        Log.d(
+                                            "Comment failed",
+                                            "error......${error(applicationContext)}"
+                                        )
+                                    },
+                                    hashMapOf(
+                                        "comment_num" to data.comment_num.toString()
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(applicationContext)
+                                queue.add(request)
                             }
                         })
                     }
@@ -544,7 +673,7 @@ class BoardDetail : AppCompatActivity() {
     fun StringToBitmaps(image: String?): Bitmap? {
         try {
             val encodeByte = Base64.decode(image, Base64.DEFAULT)
-            val bitmap : Bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            val bitmap: Bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
             return bitmap
         } catch (e: Exception) {
             e.message
@@ -552,3 +681,4 @@ class BoardDetail : AppCompatActivity() {
         }
     }
 }
+
