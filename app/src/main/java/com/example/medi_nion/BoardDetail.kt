@@ -140,18 +140,20 @@ class BoardDetail : AppCompatActivity() {
     }
 
 
-    override fun onBackPressed() {
-        var id = intent.getStringExtra("id")
-        val board = intent.getStringExtra("board")
+//    override fun onBackPressed() {
+//        var id = intent.getStringExtra("id")
+//        val board = intent.getStringExtra("board")
+//
+//        val intent =
+//            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+//        intent.putExtra("id", id)
+//        intent.putExtra("board", board)
+//        startActivity(intent) //인텐트 이동
+//        finish() //현재 액티비티 종료
+//    }
 
-        val intent =
-            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-        intent.putExtra("id", id)
-        intent.putExtra("board", board)
-        startActivity(intent) //인텐트 이동
-        finish() //현재 액티비티 종료
-    }
+
 
 //    fun likeRequest() {
 //        val url = "http://seonho.dothome.co.kr/Heart.php"
@@ -510,6 +512,8 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
+        var comment_count = 0
+        var comment_num = 1
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
 
@@ -523,8 +527,7 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 if (!response.equals("Comment fail")) {
 //                    comment = response.toString()
-//                    comment_num = response.toString()
-                    Log.d("aaaaaaaa", response)
+//                    comment_num = response.toString(
 
                     Toast.makeText(
                         baseContext,
@@ -534,7 +537,7 @@ class BoardDetail : AppCompatActivity() {
 
                     Log.d(
                         "comment success",
-                        "$id, $post_num, $comment, $comment_time"
+                        "$id, $post_num, $comment, $comment_time, $comment_num"
                     )
 
                     fetchData()
@@ -553,6 +556,7 @@ class BoardDetail : AppCompatActivity() {
                 "id" to id,
                 "post_num" to post_num,
                 "comment" to comment,
+                "comment_num" to comment_num.toString(),
                 "comment_time" to comment_time
             )
         )
@@ -565,13 +569,15 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
-        val jsonArray: JSONArray
+
+        Comment_items.clear()
+
+        Comment_items.clear()
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
-                Comment_items.clear()
                 if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
@@ -583,13 +589,14 @@ class BoardDetail : AppCompatActivity() {
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
-                        var id = item.getString("id")
+                        val id = item.getString("id")
                         if (!comment_user.containsKey(id)) comment_user[id] =
                             comment_user.size + 1
                     }
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
+
 
                         val id = item.getString("id")
                         val comment = item.getString("comment")
@@ -599,19 +606,21 @@ class BoardDetail : AppCompatActivity() {
                         val commentItem = CommentItem(comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
+
+
+                        Log.d("commmentItem", "$post_num, $comment, $comment_num, $comment_time")
+
                         //viewModel.setItemList(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
 
                         var detailId: String = ""
                         var detailComment: String = ""
                         var detailCommentTime: String = ""
+                        var userId = intent?.getStringExtra("id").toString()
 
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(applicationContext, "제발", Toast.LENGTH_SHORT)
-                                    .show()
-
                                 val request = Login_Request(
                                     Request.Method.POST,
                                     urlDetail,
@@ -620,37 +629,28 @@ class BoardDetail : AppCompatActivity() {
 //                                    for (i in jsonArray.length()-1  downTo  0) {
                                         val jsonObject = JSONObject(response)
 
-                                        Log.d("comment", "$jsonObject")
-
                                         detailId = jsonObject.getString("id")
                                         detailComment = jsonObject.getString("comment")
                                         detailCommentTime = jsonObject.getString("comment_time")
-
 
                                         val intent = Intent(
                                             applicationContext,
                                             CommentDetail::class.java
                                         )
                                         intent.putExtra("comment_num", data.comment_num)
-                                        intent.putExtra("id", id)
+                                        intent.putExtra("id", userId)
                                         intent.putExtra("comment", detailComment)
                                         intent.putExtra("comment_time", detailCommentTime)
+                                        intent.putExtra("post_num", post_num)
 
-                                        Log.d(
-                                            "commentdetail",
-                                            "${data.comment_num}, $id, $detailComment, $detailCommentTime"
-                                        )
+                                        Log.d("888", userId)
+
                                         startActivity(intent)
-
                                     },
-                                    {
-                                        Log.d(
-                                            "Comment failed",
-                                            "error......${error(applicationContext)}"
-                                        )
-                                    },
+                                    { Log.d("Comment failed", "error......${error(applicationContext)}") },
                                     hashMapOf(
-                                        "comment_num" to data.comment_num.toString()
+                                        "comment_num" to data.comment_num.toString(),
+                                        "post_num" to post_num
                                     )
                                 )
                                 val queue = Volley.newRequestQueue(applicationContext)
@@ -659,7 +659,6 @@ class BoardDetail : AppCompatActivity() {
                         })
                     }
                 }
-
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "post_num" to post_num
