@@ -261,84 +261,63 @@ class BoardDetail : AppCompatActivity() {
     }
 
     fun fetchLikeData() {
-        val url = "http://seonho.dothome.co.kr/Heart_list.php"
-        var post_num = intent?.getIntExtra("num", 0).toString()
-        val jsonArray: JSONArray
+        var id = intent.getStringExtra("id")
+        val Heart_num = intent?.getIntExtra("Heart_num", 0).toString()
+        val post_num = intent?.getStringExtra("post_num").toString()
+        val urlDetail = "http://seonho.dothome.co.kr/Heart_list.php"
+        val jsonArray : JSONArray
 
         val request = Login_Request(
             Request.Method.POST,
-            url,
+            urlDetail,
             { response ->
-                Comment_items.clear()
-                if (response != "no Comment") {
+
+                if (response != "no Heart") {
+                    Log.d("LLLL", "::::")
+
                     val jsonArray = JSONArray(response)
 
-                    var comment_user = HashMap<String, Int>()
+                    var Heart_user = HashMap<String, Int>()
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
-                        var id = item.getString("id")
-                        if (!comment_user.containsKey(id)) comment_user[id] =
-                            comment_user.size + 1
+                        val id = item.getString("id")
+                        if (!Heart_user.containsKey(id)) Heart_user[id] =
+                            Heart_user.size + 1
                     }
 
+                    Log.d("****", "???")
+
                     for (i in 0 until jsonArray.length()) {
-
                         val item = jsonArray.getJSONObject(i)
-
-                        val id = item.getString("id")
-                        val comment = item.getString("comment")
-                        val comment_time = item.getString("comment_time")
-                        val comment_num = comment_user[id]!!
-
-                        val commentItem = CommentItem(comment, comment_num, comment_time)
-
-                        Comment_items.add(commentItem)
-                        viewModel.setItemList(Comment_items)
-
-                        //댓글 아이템 하나 누르면
-                        var manager: InputMethodManager =
-                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
-                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
-                        val comment2_linearLayout =
-                            findViewById<LinearLayout>(R.id.comment2_linearLayout)
-
-                        Commentadapter.setOnItemClickListener(object :
-                            CommentListAdapter.OnItemClickListener {
-                            override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    String.format("대댓글 ? "),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Comment_editText.requestFocus()
-                                manager.showSoftInput(
-                                    Comment_editText,
-                                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                                ) //키보드 올리기
-
-                                Comment_Btn.setOnClickListener {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        String.format("우왕"),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    //comment2_linearLayout.visibility = View.VISIBLE
-                                }
-
-                            }
-                        })
+//
+//                        val comment2 = item.getString("comment2")
+//                        val comment2_time = item.getString("comment2_time")
+//                        val comment2_num = comment_user[id]!!
+//
+//                        val commentDetailItem =
+//                            CommentDetailItem(comment2, comment2_num, comment2_time)
+//
+//                        CommentDetail_items.add(commentDetailItem)
+//
+//
+//                        Log.d(
+//                            "commmentDetailItem",
+//                            "$Heart_num, $comment2, $comment2_num, $comment2_time"
+//                        )
+//
+//                        //viewModel.setItemList(Comment_items)
+//                        CommentRecyclerView2.adapter = CommentDetailadapter
                     }
                 }
-
-            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "post_num" to post_num
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+
     }
 
     //////////////////////////////////////////////////like, book구분
