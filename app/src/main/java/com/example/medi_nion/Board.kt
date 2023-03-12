@@ -31,6 +31,12 @@ var scrollFlag = false
 var itemIndex = ArrayList<Int>()
 
 class Board : AppCompatActivity() {
+    override fun onStart() {
+        super.onStart() //프레그먼트로 생길 문제들은 추후에 생각하기,,
+
+        fetchData()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
