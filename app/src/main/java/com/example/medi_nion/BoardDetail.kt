@@ -36,6 +36,8 @@ val viewModel: CommentViewModel = CommentViewModel()
 
 class BoardDetail : AppCompatActivity() {
 
+    var isDefault = false //좋아요 빈하트, 채운하트 구분하기위함
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
@@ -43,7 +45,6 @@ class BoardDetail : AppCompatActivity() {
         setContentView(R.layout.board_detail)
 
         var count = 0
-        var isDefault = true //좋아요 빈하트, 채운하트 구분하기위함
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
         val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
@@ -57,16 +58,7 @@ class BoardDetail : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
-
-//        val dataObserver: Observer<ArrayList<CommentItem>> =
-//            Observer { livedata ->
-//                Comment_items = livedata
-//                var newAdapter = CommentListAdapter(Comment_items)
-//                CommentRecyclerView.adapter = newAdapter
-//
-//            }
-//
-//        viewModel.itemList.observe(this, dataObserver)
+        fetchLikeData()
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val board = intent.getStringExtra("board")
@@ -110,48 +102,36 @@ class BoardDetail : AppCompatActivity() {
 
 
 
-        Like_Btn.setOnClickListener {
-            //좋아요 눌렀을때,,
+            Like_Btn.setOnClickListener {
+                //좋아요 눌렀을때,,
 
-            //likeRequest()
+                //likeRequest()
 
-            isDefault = !isDefault
+                isDefault = !isDefault
 
-            if (isDefault) {
-                count--
-                Like_count.text = count.toString() //Like_count를 감소시키기
-                Like_Btn.setImageResource(R.drawable.favorite_border)
-                //Like_Delete_Request()
-            } else {
-                count++
-                Like_count.text = count.toString() //Like_count를 증가시키기
-                Like_Btn.setImageResource(R.drawable.favorite_fill)
-                LikeRequest()
+                if (isDefault) { // 좋아요. 
+                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
+                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+                    Like_Btn.setImageResource(R.drawable.favorite_fill)
+                    LikeRequest(isDefault.toString())
+
+                } else { //좋아요 취소
+                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
+                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+                    Like_Btn.setImageResource(R.drawable.favorite_border)
+                    LikeRequest(isDefault.toString())
+                }
+
+            }
+
+            Book_Btn.setOnClickListener {
+                if (Book_Btn.isChecked()) {
+                    Book_Create_request()
+                } else {
+                    Book_Delete_request()
+                }
             }
         }
-
-        Book_Btn.setOnClickListener {
-            if (Book_Btn.isChecked()) {
-                Book_Create_request()
-            } else {
-                Book_Delete_request()
-            }
-        }
-    }
-
-
-//    override fun onBackPressed() {
-//        var id = intent.getStringExtra("id")
-//        val board = intent.getStringExtra("board")
-//
-//        val intent =
-//            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-//        intent.putExtra("id", id)
-//        intent.putExtra("board", board)
-//        startActivity(intent) //인텐트 이동
-//        finish() //현재 액티비티 종료
-//    }
 
 
 
@@ -177,19 +157,19 @@ class BoardDetail : AppCompatActivity() {
 //    }
 
 
-    fun LikeRequest() {  //좋아요 DB연동중
+    fun LikeRequest(flag : String) {  //좋아요 DB연동중
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
         var post_num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
-//        var heart =
-//            findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
+        var heart =
+            findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
         var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
-        //var heart_count2 = findViewById<TextView>(R.id.textView_likecount).text.toString()
         val url = "http://seonho.dothome.co.kr/Heart.php"
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
+                Log.d("heart test", response)
                 if (!response.equals("Like fail")) {
                     heart_count = response.toString()
                     post_num = response.toString()
@@ -211,116 +191,13 @@ class BoardDetail : AppCompatActivity() {
             hashMapOf(
                 "id" to id,
                 "heart" to heart_count,
-                "post_num" to post_num
+                "post_num" to post_num,
+                "flag" to flag
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
-
-    fun Like_Delete_Request() {
-        var id = intent?.getStringExtra("id").toString()
-        var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
-        var url = "http://seonho.dothome.co.kr/HeartDelete.php"
-
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                if (!response.equals("Like fail")) {
-
-                    Toast.makeText(
-                        baseContext,
-                        String.format("좋아요 해제되었습니다."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d(
-                        "like delete success",
-                        "$id, $post_num"
-                    )
-                    
-                } else {
-
-                    Toast.makeText(
-                        applicationContext,
-                        "좋아요 해제할 수 없습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }, { Log.d("like Failed", "error......${error(applicationContext)}") },
-
-            hashMapOf(
-                "id" to id,
-                "heart" to heart_count,
-                "post_num" to post_num
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-    }
-
-    fun fetchLikeData() {
-        var id = intent.getStringExtra("id")
-        val Heart_num = intent?.getIntExtra("Heart_num", 0).toString()
-        val post_num = intent?.getStringExtra("post_num").toString()
-        val urlDetail = "http://seonho.dothome.co.kr/Heart_list.php"
-        val jsonArray : JSONArray
-
-        val request = Login_Request(
-            Request.Method.POST,
-            urlDetail,
-            { response ->
-
-                if (response != "no Heart") {
-                    Log.d("LLLL", "::::")
-
-                    val jsonArray = JSONArray(response)
-
-                    var Heart_user = HashMap<String, Int>()
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-                        val id = item.getString("id")
-                        if (!Heart_user.containsKey(id)) Heart_user[id] =
-                            Heart_user.size + 1
-                    }
-
-                    Log.d("****", "???")
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-//
-//                        val comment2 = item.getString("comment2")
-//                        val comment2_time = item.getString("comment2_time")
-//                        val comment2_num = comment_user[id]!!
-//
-//                        val commentDetailItem =
-//                            CommentDetailItem(comment2, comment2_num, comment2_time)
-//
-//                        CommentDetail_items.add(commentDetailItem)
-//
-//
-//                        Log.d(
-//                            "commmentDetailItem",
-//                            "$Heart_num, $comment2, $comment2_num, $comment2_time"
-//                        )
-//
-//                        //viewModel.setItemList(Comment_items)
-//                        CommentRecyclerView2.adapter = CommentDetailadapter
-                    }
-                }
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "post_num" to post_num
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-
-    }
-
-    //////////////////////////////////////////////////like, book구분
 
     fun Book_Delete_request() {
         var id = intent?.getStringExtra("id").toString()
@@ -637,6 +514,46 @@ class BoardDetail : AppCompatActivity() {
                             }
                         })
                     }
+                }
+            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+
+    @SuppressLint("SuspiciousIndentation")
+    fun fetchLikeData() {
+        val url = "http://seonho.dothome.co.kr/Heart_list.php"
+        var id = intent?.getStringExtra("id").toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
+
+        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                Log.d("rerere",response)
+                if (response != "no Heart") {
+                    val jsonArray = JSONArray(response)
+
+                    val like_count = jsonArray.length()
+                    findViewById<TextView>(R.id.textView_commentcount2).text =
+                        like_count.toString()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val likeId = jsonArray.getString(i)
+                        if(likeId == id){
+                            Like_Btn.setImageResource(R.drawable.favorite_fill)
+                            isDefault = true
+                            break
+                        }
+                    }
+                    findViewById<TextView>(R.id.textView_likecount2).text = like_count.toString()
                 }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
