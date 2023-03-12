@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -56,7 +57,78 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home, container, false)
+        val view = inflater.inflate(R.layout.home, container, false)
+
+        val basicBoard = view.findViewById<TextView>(R.id.home_boardList1)
+        val jobBoard = view.findViewById<TextView>(R.id.home_boardList2)
+        val secBoard = view.findViewById<TextView>(R.id.home_boardList3)
+        val hosBoard = view.findViewById<TextView>(R.id.home_boardList4)
+        val qnaBoard = view.findViewById<TextView>(R.id.home_boardList5)
+        val acadamy_info = view.findViewById<TextView>(R.id.home_boardList6)
+        val employee_info = view.findViewById<TextView>(R.id.home_boardList7)
+        val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
+
+        basicBoard.setOnClickListener {
+            Log.d("aaaa", "aabb")
+            activity?.let{
+                val intent = Intent(context, Board::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", "전체 게시판")
+                startActivity(intent)
+            }
+        }
+
+        jobBoard.setOnClickListener {
+            activity?.let{
+                val intent = Intent(context, Board::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", "직종별 게시판")
+                startActivity(intent)
+            }
+        }
+
+        secBoard.setOnClickListener {
+            activity?.let{
+                val intent = Intent(context, Board::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", "진료과별 게시판")
+                startActivity(intent)
+            }
+        }
+
+        hosBoard.setOnClickListener {
+            activity?.let{
+                val intent = Intent(context, Board::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", "우리 병원 게시판")
+                startActivity(intent)
+            }
+        }
+
+        qnaBoard.setOnClickListener {
+            activity?.let{
+                val intent = Intent(context, Board::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", "QnA 게시판")
+                startActivity(intent)
+            }
+        }
+
+        acadamy_info.setOnClickListener {
+            //학회 및 세미나 정보로 이동
+        }
+
+        employee_info.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
+            activity?.let{
+                val intent = Intent(context, HospitalProfile::class.java)
+                startActivity(intent)
+            }
+        }
+
+        medi_news.setOnClickListener {
+            //의료뉴스 이동
+        }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
