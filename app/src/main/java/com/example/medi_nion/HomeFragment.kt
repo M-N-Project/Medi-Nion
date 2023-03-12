@@ -20,11 +20,11 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             private val qna_title: TextView = itemView.findViewById(R.id.home_qna_title)
             private val qna_content: TextView = itemView.findViewById(R.id.home_qna_detail)
 
-            val all_board : TextView = itemView.findViewById(R.id.home_boardList1)
-            val job_board : TextView = itemView.findViewById(R.id.home_boardList2)
-            val medical_board : TextView = itemView.findViewById(R.id.home_boardList3)
-            val ourmedi_board : TextView = itemView.findViewById(R.id.home_boardList4)
-            val qa_board : TextView = itemView.findViewById(R.id.home_boardList5)
+//            val all_board : TextView = itemView.findViewById(R.id.home_boardList1)
+//            val job_board : TextView = itemView.findViewById(R.id.home_boardList2)
+//            val medical_board : TextView = itemView.findViewById(R.id.home_boardList3)
+//            val ourmedi_board : TextView = itemView.findViewById(R.id.home_boardList4)
+//            val qa_board : TextView = itemView.findViewById(R.id.home_boardList5)
 
             fun bind(position: Int) {
                 qna_title.text = qnaTitle[position]
