@@ -48,7 +48,6 @@ class CommentDetail  : AppCompatActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
-        fetchData()
 
         val comment_num = intent?.getIntExtra("comment_num", 0).toString()
         val comment = intent?.getStringExtra("comment")
@@ -59,6 +58,8 @@ class CommentDetail  : AppCompatActivity() {
         comment_detail_num.setText(comment_num)
         comment_detail_content.setText(comment)
         comment_detail_time.setText(comment_time)
+
+        fetchData()
 
         val CommentDetailadapter = CommentDetailListAdapter(CommentDetail_items)
         CommentRecyclerView2.adapter = CommentDetailadapter
@@ -119,7 +120,7 @@ class CommentDetail  : AppCompatActivity() {
             hashMapOf(
                 "id" to id,
                 "post_num" to post_num,
-                "comment_num" to comment_num.toString(),   //댓글의 num intent 받아오기
+                "comment_num" to comment_num.toString(),
                 "comment2" to comment2,
                 "comment2_time" to comment2_time
             )
@@ -132,6 +133,7 @@ class CommentDetail  : AppCompatActivity() {
         var id = intent.getStringExtra("id")
         val comment_num = intent?.getIntExtra("comment_num", -1).toString()
         val post_num = intent?.getStringExtra("post_num").toString()
+        val comment_content = intent?.getStringExtra("comment").toString()
         val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
         val jsonArray : JSONArray
 
@@ -169,7 +171,7 @@ class CommentDetail  : AppCompatActivity() {
 
                         Log.d(
                             "commmentDetailItem",
-                            "$comment_num, $comment2, $comment2_num, $comment2_time"
+                            "$post_num, $comment_num, $comment_content, $comment2, $comment2_num, $comment2_time"
                         )
 
                         //viewModel.setItemList(Comment_items)
@@ -179,7 +181,8 @@ class CommentDetail  : AppCompatActivity() {
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "comment_num" to comment_num,
-                "post_num" to post_num
+                "post_num" to post_num,
+                "comment" to comment_content
             )
         )
         val queue = Volley.newRequestQueue(this)

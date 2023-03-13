@@ -455,6 +455,7 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
+                    Log.d("CCCCCCCCCCC", response)
 
                     val requestCnt = Login_Request(
                         Request.Method.POST,
@@ -532,6 +533,8 @@ class BoardDetail : AppCompatActivity() {
                 if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
+                    Log.d("jjjj", "$jsonArray")
+
                     val comment_count = jsonArray.length()
                     findViewById<TextView>(R.id.textView_commentcount2).text =
                         comment_count.toString()
@@ -564,10 +567,10 @@ class BoardDetail : AppCompatActivity() {
                         //viewModel.setItemList(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
 
+                        var userId = intent?.getStringExtra("id").toString()
                         var detailId: String = ""
                         var detailComment: String = ""
                         var detailCommentTime: String = ""
-                        var userId = intent?.getStringExtra("id").toString()
 
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
@@ -584,16 +587,18 @@ class BoardDetail : AppCompatActivity() {
                                         detailComment = jsonObject.getString("comment")
                                         detailCommentTime = jsonObject.getString("comment_time")
 
+                                        //null이 찍혀요 ,, 왜일까요 ?
+                                        Log.d("??????", "$detailId, $detailComment, $detailCommentTime")
+
                                         val intent = Intent(
                                             applicationContext,
                                             CommentDetail::class.java
                                         )
-                                        intent.putExtra("comment_num", comment_num)
+                                        intent.putExtra("comment_num", data.comment_num)
                                         intent.putExtra("id", userId)
                                         intent.putExtra("comment", detailComment)
                                         intent.putExtra("comment_time", detailCommentTime)
                                         intent.putExtra("post_num", post_num)
-
 
                                         startActivity(intent)
                                     },
