@@ -138,16 +138,14 @@ class CommentDetail  : AppCompatActivity() {
         val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
         val jsonArray : JSONArray
 
-        Log.d("????", "????")
+        CommentDetail_items.clear()
+
         val request = Login_Request(
             Request.Method.POST,
             urlDetail,
             { response ->
                 CommentDetail_items.clear()
-                Log.d(";;;;", response)
                 if (response != "no Comment2") {
-
-                    Log.d("LLLL", "::::")
 
                     val jsonArray = JSONArray(response)
 
@@ -160,8 +158,6 @@ class CommentDetail  : AppCompatActivity() {
                             comment_user.size + 1
                     }
 
-                    Log.d("****", "???")
-
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
@@ -173,7 +169,6 @@ class CommentDetail  : AppCompatActivity() {
                             CommentDetailItem(comment2, comment2_num, comment2_time)
 
                         CommentDetail_items.add(commentDetailItem)
-
 
                         Log.d(
                             "commmentDetailItem",

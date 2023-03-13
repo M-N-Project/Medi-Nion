@@ -384,8 +384,9 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
-        var comment_count = 0
         var comment_num = 1
+
+        Log.d("comment_num", comment_num.toString())
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
 
@@ -398,8 +399,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
-//                    comment = response.toString()
-//                    comment_num = response.toString(
 
                     Toast.makeText(
                         baseContext,
@@ -444,8 +443,6 @@ class BoardDetail : AppCompatActivity() {
 
         Comment_items.clear()
 
-        Comment_items.clear()
-
         val request = Login_Request(
             Request.Method.POST,
             url,
@@ -458,6 +455,7 @@ class BoardDetail : AppCompatActivity() {
                         comment_count.toString()
 
                     var comment_user = HashMap<String, Int>()
+
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
