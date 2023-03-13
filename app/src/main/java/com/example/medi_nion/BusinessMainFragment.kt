@@ -19,7 +19,6 @@ import org.json.JSONObject
 
 
 class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레그먼트
-
     var items =ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
@@ -28,7 +27,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var scrollFlag = false
     var itemIndex = ArrayList<Int>()
     // RecyclerView.adapter에 지정할 Adapter
-    private lateinit var listAdapter: BusinessRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +42,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
         items.clear()
         all_items.clear()
-
-        var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
 
         fetchData()
     }

@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="clip_horizontal"
+    android:gravity="center|clip_vertical|center_horizontal"
+    android:orientation="vertical">
 
     <!-- logo -->
+
+    <!-- id input -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="210dp"
         android:layout_height="210dp"
-        app:srcCompat="@drawable/logo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
 
-    <!-- id input -->
     <EditText
         android:id="@+id/id"
         android:layout_width="wrap_content"
@@ -33,8 +36,7 @@
         android:textCursorDrawable="@color/color3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <!-- password input -->
     <EditText
@@ -50,22 +52,20 @@
         android:textCursorDrawable="@color/color3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/id" />
 
     <android.widget.Button
         android:id="@+id/loginBtn"
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
+        android:background="@drawable/login_round_button"
+        android:backgroundTint="#8BE0C4"
         android:text="로그인"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
-        android:backgroundTint="#8BE0C4"
-        android:background="@drawable/login_round_button"
-        android:textColor="@color/black"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <android.widget.Button
         android:id="@+id/signupBtn"
@@ -82,5 +82,4 @@
         />
 
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

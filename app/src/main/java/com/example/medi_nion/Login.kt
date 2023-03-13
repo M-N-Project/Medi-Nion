@@ -76,6 +76,7 @@ class Login : AppCompatActivity() {
 
                 var intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("id", id)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                 Log.d("Login id", "$id")
                 startActivity(intent)
 

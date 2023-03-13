@@ -47,11 +47,10 @@ class Board : AppCompatActivity() {
         boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
 
         var id = intent.getStringExtra("id")
-        fetchData()
 
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
-        wrtingFAB.setOnClickListener {
+        writingFAB.setOnClickListener {
             var board :String = ""
             board = intent.getStringExtra("board").toString()
             val intent = Intent(applicationContext, BoardWrite::class.java)
@@ -63,16 +62,12 @@ class Board : AppCompatActivity() {
 
         boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                fetchData()
                 if(scrollFlag==false){
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
-                       fetchData()
+                        //새로고침...
+//                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         if(all_items.size > 20){
-                            val scrollLocation = IntArray(2)
-                            boardRecyclerView.getLocationOnScreen(scrollLocation)
-                            var scroll_pos = scrollLocation[1]
-
                             scroll_count ++
                             scrollFlag = true
 
@@ -161,51 +156,51 @@ class Board : AppCompatActivity() {
                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
 
-                    var detailId : String = ""
-                    var detailTitle : String = ""
-                    var detailContent : String = ""
-                    var detailTime : String = ""
-                    var detailImg : String = ""
+                var detailId : String = ""
+                var detailTitle : String = ""
+                var detailContent : String = ""
+                var detailTime : String = ""
+                var detailImg : String = ""
 
-                    //게시판 상세
-                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                            val request = Login_Request(
-                                Request.Method.POST,
-                                urlDetail,
-                                { response ->
-                                    items.clear()
+                //게시판 상세
+                adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                    override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                        val request = Login_Request(
+                            Request.Method.POST,
+                            urlDetail,
+                            { response ->
+                                items.clear()
 //                                    for (i in jsonArray.length()-1  downTo  0) {
-                                    val jsonObject = JSONObject(response)
+                                val jsonObject = JSONObject(response)
 
-                                    detailId = jsonObject.getString("id")
-                                    detailTitle = jsonObject.getString("title")
-                                    detailContent = jsonObject.getString("content")
-                                    detailTime = jsonObject.getString("time")
-                                    detailImg = jsonObject.getString("image")
+                                detailId = jsonObject.getString("id")
+                                detailTitle = jsonObject.getString("title")
+                                detailContent = jsonObject.getString("content")
+                                detailTime = jsonObject.getString("time")
+                                detailImg = jsonObject.getString("image")
 
-                                    val intent = Intent(applicationContext, BoardDetail::class.java)
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                    intent.putExtra("board", board)
-                                    intent.putExtra("num", data.num)
-                                    intent.putExtra("id", id)
-                                    intent.putExtra("title", detailTitle)
-                                    intent.putExtra("content", detailContent)
-                                    intent.putExtra("time", detailTime)
-                                    intent.putExtra("image", detailImg)
-                                    startActivity(intent)
+                                val intent = Intent(applicationContext, BoardDetail::class.java)
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                intent.putExtra("board", board)
+                                intent.putExtra("num", data.num)
+                                intent.putExtra("id", id)
+                                intent.putExtra("title", detailTitle)
+                                intent.putExtra("content", detailContent)
+                                intent.putExtra("time", detailTime)
+                                intent.putExtra("image", detailImg)
+                                startActivity(intent)
 
 
-                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                                hashMapOf(
-                                    "post_num" to data.num.toString()
-                                )
+                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                            hashMapOf(
+                                "post_num" to data.num.toString()
                             )
-                            val queue = Volley.newRequestQueue(applicationContext)
-                            queue.add(request)
-                        }
+                        )
+                        val queue = Volley.newRequestQueue(applicationContext)
+                        queue.add(request)
+                    }
 
-                    })
+                })
 
 
 
@@ -218,6 +213,4 @@ class Board : AppCompatActivity() {
         queue.add(request)
 
     }
-
-    data class JsonObj(val result: String)
 }

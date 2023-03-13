@@ -142,7 +142,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
             { Log.d("failed", "error......${error(applicationContext)}") },
             mutableMapOf(
                 "id" to id,
-                "title" to "$postTitle",
+                "title" to postTitle,
                 "content" to postContent,
                 "image1" to image1,
                 "image2" to image2

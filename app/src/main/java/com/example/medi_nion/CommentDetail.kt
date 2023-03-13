@@ -56,9 +56,6 @@ class CommentDetail  : AppCompatActivity() {
         val post_num = intent?.getStringExtra("post_num")
         val comment_id = intent?.getStringExtra("id")
 
-        Log.d("123456", "$comment_id")
-
-
         comment_detail_num.setText(comment_num)
         comment_detail_content.setText(comment)
         comment_detail_time.setText(comment_time)
