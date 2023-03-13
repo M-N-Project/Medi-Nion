@@ -112,7 +112,7 @@ class BoardDetail : AppCompatActivity() {
 
                 isDefault = !isDefault
 
-                if (isDefault) { // 좋아요. 
+                if (isDefault) { // 좋아요.
                     val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
                     findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
                     Like_Btn.setImageResource(R.drawable.favorite_fill)
@@ -441,6 +441,8 @@ class BoardDetail : AppCompatActivity() {
         var comment_count = 0
         var comment_num = 1
 
+        Log.d("comment_num", comment_num.toString())
+
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
@@ -453,6 +455,7 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
+                    Log.d("CCCCCCCCCCC", response)
 
                     val requestCnt = Login_Request(
                         Request.Method.POST,
@@ -530,6 +533,8 @@ class BoardDetail : AppCompatActivity() {
                 if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
+                    Log.d("jjjj", "$jsonArray")
+
                     val comment_count = jsonArray.length()
                     findViewById<TextView>(R.id.textView_commentcount2).text =
                         comment_count.toString()
@@ -562,10 +567,10 @@ class BoardDetail : AppCompatActivity() {
                         //viewModel.setItemList(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
 
+                        var userId = intent?.getStringExtra("id").toString()
                         var detailId: String = ""
                         var detailComment: String = ""
                         var detailCommentTime: String = ""
-                        var userId = intent?.getStringExtra("id").toString()
 
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
@@ -582,6 +587,9 @@ class BoardDetail : AppCompatActivity() {
                                         detailComment = jsonObject.getString("comment")
                                         detailCommentTime = jsonObject.getString("comment_time")
 
+                                        //null이 찍혀요 ,, 왜일까요 ?
+                                        Log.d("??????", "$detailId, $detailComment, $detailCommentTime")
+
                                         val intent = Intent(
                                             applicationContext,
                                             CommentDetail::class.java
@@ -591,7 +599,6 @@ class BoardDetail : AppCompatActivity() {
                                         intent.putExtra("comment", detailComment)
                                         intent.putExtra("comment_time", detailCommentTime)
                                         intent.putExtra("post_num", post_num)
-
 
                                         startActivity(intent)
                                     },
