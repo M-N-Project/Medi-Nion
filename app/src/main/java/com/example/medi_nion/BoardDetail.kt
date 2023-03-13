@@ -588,7 +588,7 @@ class BoardDetail : AppCompatActivity() {
                                             applicationContext,
                                             CommentDetail::class.java
                                         )
-                                        intent.putExtra("comment_num", data.comment_num)
+                                        intent.putExtra("comment_num", comment_num)
                                         intent.putExtra("id", userId)
                                         intent.putExtra("comment", detailComment)
                                         intent.putExtra("comment_time", detailCommentTime)

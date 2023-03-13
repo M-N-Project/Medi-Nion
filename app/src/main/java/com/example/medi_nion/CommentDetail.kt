@@ -56,9 +56,6 @@ class CommentDetail  : AppCompatActivity() {
         val post_num = intent?.getStringExtra("post_num")
         val comment_id = intent?.getStringExtra("id")
 
-        Log.d("123456", "$comment_id")
-
-
         comment_detail_num.setText(comment_num)
         comment_detail_content.setText(comment)
         comment_detail_time.setText(comment_time)
@@ -82,7 +79,7 @@ class CommentDetail  : AppCompatActivity() {
     fun Comment2Request() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getStringExtra("post_num").toString()
-        var comment2_num = 1
+        var comment_num = intent?.getIntExtra("comment_num", -1).toString()
         var comment2 = findViewById<EditText>(R.id.Comment2_editText).text.toString()
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
@@ -106,7 +103,7 @@ class CommentDetail  : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "comment2 success",
-                        "$id, $post_num, $comment2_num, $comment2, $comment2_time"
+                        "$id, $post_num, $comment_num, $comment2, $comment2_time"
                     )
 
                 } else {
@@ -122,7 +119,7 @@ class CommentDetail  : AppCompatActivity() {
             hashMapOf(
                 "id" to id,
                 "post_num" to post_num,
-                "comment_num" to comment2_num.toString(),
+                "comment_num" to comment_num.toString(),   //댓글의 num intent 받아오기
                 "comment2" to comment2,
                 "comment2_time" to comment2_time
             )
@@ -133,7 +130,7 @@ class CommentDetail  : AppCompatActivity() {
 
     fun fetchData() {
         var id = intent.getStringExtra("id")
-        val comment_num = intent?.getIntExtra("comment_num", 0).toString()
+        val comment_num = intent?.getIntExtra("comment_num", -1).toString()
         val post_num = intent?.getStringExtra("post_num").toString()
         val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
         val jsonArray : JSONArray
@@ -149,13 +146,13 @@ class CommentDetail  : AppCompatActivity() {
 
                     val jsonArray = JSONArray(response)
 
-                    var comment_user = HashMap<String, Int>()
+                    var comment2_user = HashMap<String, Int>()
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
                         val id = item.getString("id")
-                        if (!comment_user.containsKey(id)) comment_user[id] =
-                            comment_user.size + 1
+                        if (!comment2_user.containsKey(id)) comment2_user[id] =
+                            comment2_user.size + 1
                     }
 
                     for (i in 0 until jsonArray.length()) {
@@ -163,7 +160,7 @@ class CommentDetail  : AppCompatActivity() {
 
                         val comment2 = item.getString("comment2")
                         val comment2_time = item.getString("comment2_time")
-                        val comment2_num = comment_user[id]!!
+                        val comment2_num = comment2_user[id]!!
 
                         val commentDetailItem =
                             CommentDetailItem(comment2, comment2_num, comment2_time)
