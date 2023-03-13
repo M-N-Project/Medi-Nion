@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
@@ -36,6 +38,8 @@ val viewModel: CommentViewModel = CommentViewModel()
 
 class BoardDetail : AppCompatActivity() {
 
+    var isDefault = false //좋아요 빈하트, 채운하트 구분하기위함
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
@@ -43,7 +47,6 @@ class BoardDetail : AppCompatActivity() {
         setContentView(R.layout.board_detail)
 
         var count = 0
-        var isDefault = true //좋아요 빈하트, 채운하트 구분하기위함
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
         val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
@@ -51,22 +54,14 @@ class BoardDetail : AppCompatActivity() {
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
 
+
         val manager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
-
-//        val dataObserver: Observer<ArrayList<CommentItem>> =
-//            Observer { livedata ->
-//                Comment_items = livedata
-//                var newAdapter = CommentListAdapter(Comment_items)
-//                CommentRecyclerView.adapter = newAdapter
-//
-//            }
-//
-//        viewModel.itemList.observe(this, dataObserver)
+        fetchLikeData()
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val board = intent.getStringExtra("board")
@@ -117,16 +112,19 @@ class BoardDetail : AppCompatActivity() {
 
                 isDefault = !isDefault
 
-                if (isDefault) {
-                    count--
-                    Like_count.text = count.toString() //Like_count를 감소시키기
-                    Like_Btn.setImageResource(R.drawable.favorite_border)
-                } else {
-                    count++
-                    Like_count.text = count.toString() //Like_count를 증가시키기
+                if (isDefault) { // 좋아요.
+                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
+                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
                     Like_Btn.setImageResource(R.drawable.favorite_fill)
-                    LikeRequest()
+                    LikeRequest(isDefault.toString())
+
+                } else { //좋아요 취소
+                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
+                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+                    Like_Btn.setImageResource(R.drawable.favorite_border)
+                    LikeRequest(isDefault.toString())
                 }
+
             }
 
             Book_Btn.setOnClickListener {
@@ -139,58 +137,55 @@ class BoardDetail : AppCompatActivity() {
         }
 
 
-//    override fun onBackPressed() {
-//        var id = intent.getStringExtra("id")
-//        val board = intent.getStringExtra("board")
-//
-//        val intent =
-//            Intent(this@BoardDetail, Board::class.java) //지금 액티비티에서 다른 액티비티로 이동하는 인텐트 설정
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-//        intent.putExtra("id", id)
-//        intent.putExtra("board", board)
-//        startActivity(intent) //인텐트 이동
-//        finish() //현재 액티비티 종료
-//    }
-
-
-
-//    fun likeRequest() {
-//        val url = "http://seonho.dothome.co.kr/Heart.php"
-//        val postParams = hashMapOf("id" to "1", "heart_count" to "10")
-//
-//        val client = OkHttpClient()
-//        val formBodyBuilder = FormBody.Builder()
-//
-//        for ((key, value) in postParams) {
-//            formBodyBuilder.add(key, value)
-//        }
-//
-//        val requestBody = formBodyBuilder.build()
-//        val request = Request.Method
-//            .url(url)
-//            .post(requestBody)
-//            .build()
-//
-//        val response = client.newCall(request).execute()
-//        val responseBody = response.body()?.string()
-//    }
-
-
-    fun LikeRequest() {  //좋아요 DB연동중
+    fun LikeRequest(flag : String) {  //좋아요 DB연동중
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
-        var num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
+        var post_num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
         var heart =
             findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
         var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
         val url = "http://seonho.dothome.co.kr/Heart.php"
+        val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Like fail")) {
-                    heart_count = response.toString()
-                    num = response.toString()
+                    var heartFlag = ""
+                    if(flag == "true"){ //좋아요 +1
+                        heartFlag = "heartUP"
+                    }
+                    else{ //좋아요 -1
+                        heartFlag = "heartDOWN"
+                    }
+
+                    val requestCnt = Login_Request(
+                        Request.Method.POST,
+                        urlUpdateCnt,
+                        { responseLike ->
+                            if (!responseLike.equals("update fail")) {
+                                heart_count = responseLike.toString()
+                                post_num = responseLike.toString()
+
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "lion heart fail",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+//                            "count" to heart_count,
+                            "post_num" to post_num,
+                            "flag" to heartFlag
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestCnt)
+
 
                     Toast.makeText(
                         baseContext,
@@ -208,7 +203,9 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
-                "heart" to heart_count
+                "heart" to heart_count,
+                "post_num" to post_num,
+                "flag" to flag
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -219,12 +216,41 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var url = "http://seonho.dothome.co.kr/BookmarkDelete.php"
+        val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Bookmark fail")) {
+
+                    var bookmarkFlag = "bookmarkDOWN"
+
+                    val requestCnt = Login_Request(
+                        Request.Method.POST,
+                        urlUpdateCnt,
+                        { responseBookmark ->
+                            if (!responseBookmark.equals("update fail")) {
+                                post_num = responseBookmark.toString()
+
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "lion heart fail",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+//                            "count" to heart_count,
+                            "post_num" to post_num,
+                            "flag" to bookmarkFlag
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestCnt)
 
                     Toast.makeText(
                         baseContext,
@@ -260,12 +286,40 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var url = "http://seonho.dothome.co.kr/Bookmark.php"
+        val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Bookmark fail")) {
+                    var bookmarkFlag = "bookmarkUP"
+
+                    val requestCnt = Login_Request(
+                        Request.Method.POST,
+                        urlUpdateCnt,
+                        { responseBookmark ->
+                            if (!responseBookmark.equals("update fail")) {
+                                post_num = responseBookmark.toString()
+
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "lion heart fail",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+//                            "count" to heart_count,
+                            "post_num" to post_num,
+                            "flag" to bookmarkFlag
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestCnt)
 
                     Toast.makeText(
                         baseContext,
@@ -384,11 +438,13 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
+        var comment_count = 0
         var comment_num = 1
 
         Log.d("comment_num", comment_num.toString())
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
+        val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -399,6 +455,32 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
+
+                    val requestCnt = Login_Request(
+                        Request.Method.POST,
+                        urlUpdateCnt,
+                        { responseComment ->
+                            if (!responseComment.equals("update fail")) {
+                                post_num = responseComment.toString()
+
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "lion heart fail",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+//                            "count" to heart_count,
+                            "post_num" to post_num,
+                            "flag" to "commentUP" // 댓글 삭제 기능 구현 후 commentUP/ commentDOWN으로 나눌 예정.
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestCnt)
 
                     Toast.makeText(
                         baseContext,
@@ -456,7 +538,6 @@ class BoardDetail : AppCompatActivity() {
 
                     var comment_user = HashMap<String, Int>()
 
-
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
                         val id = item.getString("id")
@@ -513,7 +594,6 @@ class BoardDetail : AppCompatActivity() {
                                         intent.putExtra("comment_time", detailCommentTime)
                                         intent.putExtra("post_num", post_num)
 
-                                        Log.d("888", userId)
 
                                         startActivity(intent)
                                     },
@@ -538,6 +618,43 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
+
+    @SuppressLint("SuspiciousIndentation")
+    fun fetchLikeData() {
+        val url = "http://seonho.dothome.co.kr/Heart_list.php"
+        var id = intent?.getStringExtra("id").toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
+
+        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                if (response != "no Heart") {
+                    val jsonArray = JSONArray(response)
+
+                    val like_count = jsonArray.length()
+                    findViewById<TextView>(R.id.textView_likecount2).text = like_count.toString()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val likeId = jsonArray.getString(i)
+                        if(likeId == id){
+                            Like_Btn.setImageResource(R.drawable.favorite_fill)
+                            isDefault = true
+                            break
+                        }
+                    }
+                }
+            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
     // String -> Bitmap 변환
     fun StringToBitmaps(image: String?): Bitmap? {
         try {
@@ -548,6 +665,23 @@ class BoardDetail : AppCompatActivity() {
             e.message
             return null
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        val focusView: View? = currentFocus
+        if (focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                val imm: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 }
 

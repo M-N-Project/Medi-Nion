@@ -7,6 +7,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -30,6 +31,12 @@ var scrollFlag = false
 var itemIndex = ArrayList<Int>()
 
 class Board : AppCompatActivity() {
+    override fun onStart() {
+        super.onStart() //프레그먼트로 생길 문제들은 추후에 생각하기,,
+
+        fetchData()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
@@ -40,7 +47,6 @@ class Board : AppCompatActivity() {
         boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
 
         var id = intent.getStringExtra("id")
-        items.clear()
         fetchData()
 
         //글쓰기
@@ -117,7 +123,6 @@ class Board : AppCompatActivity() {
         board = intent.getStringExtra("board").toString()
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
-        val jsonArray : JSONArray
 
         val request = Board_Request(
             Request.Method.POST,
@@ -134,7 +139,11 @@ class Board : AppCompatActivity() {
                         val content = item.getString("content")
                         val time = item.getString("time")
                         val image = item.getString("image")
-                        val boardItem = BoardItem(num, title, content, time, image)
+                        var heart = item.getInt("heart")
+                        var comment = item.getInt("comment")
+                        var bookmark = item.getInt("bookmark")
+
+                        val boardItem = BoardItem(num, title, content, time, image, heart, comment, bookmark)
 
                         if(i >= jsonArray.length() - item_count*scroll_count){
                             items.add(boardItem)

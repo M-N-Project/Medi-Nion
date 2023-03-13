@@ -10,12 +10,29 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.business_board_items.*
 import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
 import kotlinx.android.synthetic.main.business_manage_create.*
+import org.json.JSONArray
+
 
 class BusinessManageActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
     private val OPEN_GALLERY = 1
+
+    var items =ArrayList<BusinessBoardItem>()
+    var all_items = ArrayList<BusinessBoardItem>()
+    val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
+    var scroll_count = 1
+    var adapter = BusinessManageRecyclerAdapter(items)
+    var scrollFlag = false
+    var itemIndex = ArrayList<Int>()
+    // RecyclerView.adapter에 지정할 Adapter
+    private lateinit var listAdapter: BusinessManageRecyclerAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,17 +40,10 @@ class BusinessManageActivity : AppCompatActivity() {
         setContentView(R.layout.business_manage_create)
         val id:String? = this.intent.getStringExtra("id")
 
-        val businessBoard = ArrayList<BusinessBoardItem>() //일단 더미데이터, db 연동해야함
-        businessBoard.add(BusinessBoardItem(
-            id.toString(), "2023년 2월 15일 오후 1시 30분",getDrawable(R.drawable.business_profile_img)!!,
-            "이것은 내용입니다. 약사세요~ 줄바꿈도 해야한답니다", 1, 2))
+        items.clear()
+        all_items.clear()
 
-        businessBoard.add(BusinessBoardItem("1월 이벤트!!", "2023년 1월 11일 오전 10시 30분",getDrawable(R.drawable.business_profile_img)!!,
-            "반가워요 1월이 밝았네요 이벤트 어쩌구 저쩌구", 3, 2))
-
-        //이벤트 연결중,,,
-        val adapter = BusinessRecyclerAdapter(businessBoard)
-        BusinessBoardRecyclerView.adapter = adapter
+        fetchData()
 
         val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
@@ -41,8 +51,9 @@ class BusinessManageActivity : AppCompatActivity() {
         val saveBtn = findViewById<Button>(R.id.save_btn)
 
         write.setOnClickListener {
-            var newIntent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
-            startActivity(newIntent)
+            var intent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
+            intent.putExtra("id", id)
+            startActivity(intent)
         }
 
         profileImg.setOnClickListener {
@@ -60,6 +71,57 @@ class BusinessManageActivity : AppCompatActivity() {
         saveBtn.setOnClickListener {
             Toast.makeText(this, "저장을 할 예정인 버튼이에요~", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun fetchData() {
+        // url to post our data
+        var id = intent.getStringExtra("id")!!
+        val urlBoard = "http://seonho.dothome.co.kr/BusinessManage.php"
+        val jsonArray : JSONArray
+
+        val request = Board_Request(
+            Request.Method.POST,
+            urlBoard,
+            { response ->
+                val jsonArray = JSONArray(response)
+                items.clear()
+                all_items.clear()
+                for (i in jsonArray.length()-1  downTo  0) {
+                    val item = jsonArray.getJSONObject(i)
+
+                    val num = item.getInt("num")
+                    val id = item.getString("id")
+                    val title = item.getString("title")
+                    val content = item.getString("content")
+                    val time = item.getString("time")
+                    val image1 = item.getString("image1")
+                    val image2 = item.getString("image2")
+                    val image3 = item.getString("image3")
+                    val BusinessItem = BusinessBoardItem(id, title, content, time, image1, image2, image3)
+
+//                    if(i >= jsonArray.length() - item_count*scroll_count){
+//                        items.add(BusinessItem)
+//                        itemIndex.add(num) //앞에다가 추가.
+//                    }
+                    items.add(BusinessItem)
+                    all_items.add(BusinessItem)
+                }
+                var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                var new_items = ArrayList<BusinessBoardItem>()
+                new_items.addAll(items)
+                adapter = BusinessManageRecyclerAdapter(new_items)
+                BusinessBoardRecyclerView.adapter = adapter
+                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+            }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+            hashMapOf(
+                "id" to id
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+
     }
 
     private fun openGallery() {

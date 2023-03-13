@@ -41,11 +41,18 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
         private val itemContents: TextView = itemView.findViewById(R.id.boardContent)
         private val itemTime : TextView = itemView.findViewById(R.id.textView_BoardTime)
         private val itemImg : ImageView = itemView.findViewById(R.id.imageView_image)
+        private val itemHeart : TextView = itemView.findViewById(R.id.textView_likecount)
+        private val itemComment : TextView = itemView.findViewById(R.id.textView_commentcount)
+        private val itemBookmark : TextView = itemView.findViewById(R.id.textView_bookmarkcount)
+
 
         fun bind(item: BoardItem) {
             itemTitle.text = item.title
             itemContents.text = item.contents
             itemTime.text = item.time
+            itemHeart.text = item.heart.toString()
+            itemComment.text = item.comment.toString()
+            itemBookmark.text = item.bookmark.toString()
 
             if(item.image != "null"){
                 val bitmap: Bitmap? = StringToBitmaps(item.image)
