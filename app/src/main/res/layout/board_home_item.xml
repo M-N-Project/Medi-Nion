@@ -90,6 +90,24 @@
             app:layout_constraintStart_toEndOf="@+id/imageView_like"
             tools:layout_editor_absoluteY="109dp" />
 
+        <ImageView
+            android:id="@+id/imageView_comment"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="5dp"
+            app:layout_constraintStart_toEndOf="@+id/textView_bookmarkcount"
+            app:layout_constraintTop_toBottomOf="@+id/boardContent"
+            app:srcCompat="@drawable/comment_icon" />
+
+        <TextView
+            android:id="@+id/textView_commentcount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="1"
+            app:layout_constraintStart_toEndOf="@+id/imageView_comment"
+            app:layout_constraintTop_toBottomOf="@+id/boardContent" />
+
         <CheckBox
             android:id="@+id/checkbox_bookmark"
             android:layout_width="18dp"
@@ -109,23 +127,6 @@
             app:layout_constraintStart_toEndOf="@+id/checkbox_bookmark"
             app:layout_constraintTop_toBottomOf="@+id/boardContent" />
 
-        <ImageView
-            android:id="@+id/imageView_comment"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginLeft="5dp"
-            app:layout_constraintStart_toEndOf="@+id/textView_bookmarkcount"
-            app:layout_constraintTop_toBottomOf="@+id/boardContent"
-            app:srcCompat="@drawable/comment_icon" />
-
-        <TextView
-            android:id="@+id/textView_commentcount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:text="1"
-            app:layout_constraintStart_toEndOf="@+id/imageView_comment"
-            app:layout_constraintTop_toBottomOf="@+id/boardContent" />
     </LinearLayout>
 
     <TextView
