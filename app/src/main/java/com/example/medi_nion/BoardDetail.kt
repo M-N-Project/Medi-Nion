@@ -442,6 +442,7 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
+        var board = intent?.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
         var comment_count = 0
@@ -481,6 +482,7 @@ class BoardDetail : AppCompatActivity() {
 
                         hashMapOf(
 //                            "count" to heart_count,
+                            "board" to board,
                             "post_num" to post_num,
                             "flag" to "commentUP" // 댓글 삭제 기능 구현 후 commentUP/ commentDOWN으로 나눌 예정.
                         )
@@ -514,6 +516,7 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
+                "board" to board,
                 "post_num" to post_num,
                 "comment" to comment,
                 "comment_num" to comment_num.toString(),
@@ -529,6 +532,7 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
+        var board = intent?.getStringExtra("board").toString()
 
         Comment_items.clear()
 
@@ -622,7 +626,8 @@ class BoardDetail : AppCompatActivity() {
                 }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
-                "post_num" to post_num
+                "post_num" to post_num,
+                "board" to board
             )
         )
         val queue = Volley.newRequestQueue(this)
