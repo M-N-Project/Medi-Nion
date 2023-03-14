@@ -233,7 +233,7 @@ class BoardWrite : AppCompatActivity() {
         val config: Configuration = Resources.getSystem().configuration
         bitmap = if (config.smallestScreenWidthDp >= 800) Bitmap.createScaledBitmap(
             bitmap!!,
-            400,
+            4800,
             240,
             true
         ) else if (config.smallestScreenWidthDp >= 600) Bitmap.createScaledBitmap(

@@ -19,11 +19,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="13"
+            android:layout_gravity="top">
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="top"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -91,41 +94,6 @@
                     android:layout_gravity="left"
                     android:orientation="vertical">
 
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="15dp"
-                            android:text="이것은 제목입니다"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.026"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:layout_editor_absoluteY="77dp" />
-
-                        <TextView
-                            android:id="@+id/textView_content"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="15dp"
-                            android:text="이것은 내용 입니다"
-                            android:textSize="14sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.145"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
-
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -205,16 +173,51 @@
 
                     </LinearLayout>
 
-                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/post_imgView"
-                    android:layout_width="114dp"
-                    android:layout_height="122dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:visibility="gone"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                        <TextView
+                            android:id="@+id/textView_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="15dp"
+                            android:text="이것은 제목입니다"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.026"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:layout_editor_absoluteY="77dp" />
+
+                        <TextView
+                            android:id="@+id/textView_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="15dp"
+                            android:text="이것은 내용 입니다"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.145"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/post_imgView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -256,10 +259,12 @@
                 tools:listitem="@layout/board_comment_item" />
 
         </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_gravity="bottom"
             android:foregroundGravity="bottom"
             android:gravity="bottom"
@@ -286,7 +291,6 @@
 
 
         </LinearLayout>
-
         </LinearLayout>
 
 
