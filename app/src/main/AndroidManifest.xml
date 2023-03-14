@@ -47,6 +47,7 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".BusinessManageActivity" />
+        <activity android:name=".BusinessManageFirstActivity" />
         <activity android:name=".BusinessWriting"/>
         <activity android:name=".BoardWrite"/>
 
