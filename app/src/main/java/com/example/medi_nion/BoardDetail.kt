@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.state.ToggleableState
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.android.volley.Request
@@ -53,6 +54,9 @@ class BoardDetail : AppCompatActivity() {
         val Like_count = findViewById<TextView>(R.id.textView_likecount2) //좋아요 숫자 부분
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
+
+//        val scroll = findViewById<NestedScrollView>(R.id.scroll).isNestedScrollingEnabled
+
 
 
         val manager: InputMethodManager =

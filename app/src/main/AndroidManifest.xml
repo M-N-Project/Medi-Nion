@@ -44,7 +44,7 @@
         <activity android:name=".HospitalProfile" />
 
         <activity android:name=".BoardDetail"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".BusinessManageActivity" />
         <activity android:name=".BusinessWriting"/>
