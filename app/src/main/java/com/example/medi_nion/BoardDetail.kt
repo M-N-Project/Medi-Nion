@@ -60,7 +60,6 @@ class BoardDetail : AppCompatActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
 
-        window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
         fetchLikeData()
         fetchBookmarkData()
@@ -89,10 +88,15 @@ class BoardDetail : AppCompatActivity() {
         time_textView.setText(time)
 
         if (image != null) {
-            var postImg = findViewById<ImageView>(R.id.post_imgView)
-            postImg.visibility = View.VISIBLE
-            val bitmap: Bitmap? = StringToBitmaps(image)
-            postImg.setImageBitmap(bitmap)
+            if (image.isNotEmpty()) {
+                var postImg = findViewById<ImageView>(R.id.post_imgView)
+                postImg.visibility = View.VISIBLE
+                val bitmap: Bitmap? = StringToBitmaps(image)
+                postImg.setImageBitmap(bitmap)
+            } else {
+                var postImg = findViewById<ImageView>(R.id.post_imgView)
+                postImg.visibility = View.GONE
+            }
         }
 
         val Commentadapter = CommentListAdapter(Comment_items)
@@ -141,6 +145,7 @@ class BoardDetail : AppCompatActivity() {
 
     fun LikeRequest(flag : String) {  //좋아요 DB연동중
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
+        val board = intent.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
         var heart =
             findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
@@ -179,7 +184,7 @@ class BoardDetail : AppCompatActivity() {
                         }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
 
                         hashMapOf(
-//                            "count" to heart_count,
+                            "board" to board,
                             "post_num" to post_num,
                             "flag" to heartFlag
                         )
@@ -205,6 +210,7 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
+                "board" to board,
                 "heart" to heart_count,
                 "post_num" to post_num,
                 "flag" to flag
@@ -395,6 +401,7 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest() {
         var id = intent?.getStringExtra("id").toString()
+        var board = intent?.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
         var comment_count = 0
@@ -434,6 +441,7 @@ class BoardDetail : AppCompatActivity() {
 
                         hashMapOf(
 //                            "count" to heart_count,
+                            "board" to board,
                             "post_num" to post_num,
                             "flag" to "commentUP" // 댓글 삭제 기능 구현 후 commentUP/ commentDOWN으로 나눌 예정.
                         )
@@ -467,6 +475,7 @@ class BoardDetail : AppCompatActivity() {
 
             hashMapOf(
                 "id" to id,
+                "board" to board,
                 "post_num" to post_num,
                 "comment" to comment,
                 "comment_num" to comment_num.toString(),
@@ -482,6 +491,7 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
+        var board = intent?.getStringExtra("board").toString()
 
         Comment_items.clear()
 
@@ -575,7 +585,8 @@ class BoardDetail : AppCompatActivity() {
                 }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
-                "post_num" to post_num
+                "post_num" to post_num,
+                "board" to board
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -587,6 +598,8 @@ class BoardDetail : AppCompatActivity() {
     fun fetchLikeData() {
         val url = "http://seonho.dothome.co.kr/Heart_list.php"
         var id = intent?.getStringExtra("id").toString()
+        val board = intent.getStringExtra("board")!!.toString()
+        Log.d("13123123", board.javaClass.name)
         var post_num = intent?.getIntExtra("num", 0).toString()
 
         val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
@@ -595,6 +608,7 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Log.d("123123", response.javaClass.name)
                 if (response != "no Heart") {
                     val jsonArray = JSONArray(response)
 
@@ -612,6 +626,7 @@ class BoardDetail : AppCompatActivity() {
                 }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
+                "board" to board,
                 "post_num" to post_num
             )
         )

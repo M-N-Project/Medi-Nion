@@ -18,12 +18,14 @@ import kotlinx.android.synthetic.main.business_board_items.*
 import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
 import kotlinx.android.synthetic.main.business_manage_create.*
 import org.json.JSONArray
+import org.json.JSONObject
 
 
 class BusinessManageActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
     private val OPEN_GALLERY = 1
 
+    private var haveChan = false
     var items =ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
@@ -42,6 +44,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
         items.clear()
         all_items.clear()
+
 
         fetchData()
 

@@ -138,15 +138,11 @@ class BoardWrite : AppCompatActivity() {
             img2 = image.substring(image.length/2+1,image.length)
         }
 
-
-        val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val postTime = current.format(formatter)
-
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
             { response ->
+                Log.d("11??", response)
                 if (!response.equals("upload fail")) {
                     Toast.makeText(
                         baseContext,
@@ -157,7 +153,7 @@ class BoardWrite : AppCompatActivity() {
                     var intent = Intent(applicationContext, Board::class.java)
                     intent.putExtra("id", id)
                     intent.putExtra("board", board)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                     startActivity(intent)
 
                 } else {
@@ -169,12 +165,11 @@ class BoardWrite : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-                mutableMapOf<String, String>(
+                mutableMapOf(
                     "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
                     "content" to postContent,
-                    "time" to postTime,
                     "image1" to img1,
                     "image2" to img2
                 )
@@ -212,7 +207,6 @@ class BoardWrite : AppCompatActivity() {
 
                     bitmap = resize(bitmap)
 
-
 //                    image = bitmapToByteArray(bitmap)
                     image = BitMapToString(bitmap)
                     findViewById<TextView>(R.id.imageSrc).text = image
@@ -233,13 +227,12 @@ class BoardWrite : AppCompatActivity() {
     }
 
 
-
     private fun resize(bitmap: Bitmap): Bitmap? {
         var bitmap: Bitmap? = bitmap
         val config: Configuration = Resources.getSystem().configuration
         bitmap = if (config.smallestScreenWidthDp >= 800) Bitmap.createScaledBitmap(
             bitmap!!,
-            400,
+            4800,
             240,
             true
         ) else if (config.smallestScreenWidthDp >= 600) Bitmap.createScaledBitmap(

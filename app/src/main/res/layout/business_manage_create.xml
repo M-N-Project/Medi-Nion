@@ -33,10 +33,10 @@
 
     <ImageView
         android:id="@+id/backgroundImg"
-        android:scaleType="center"
         android:layout_width="413dp"
-        android:layout_height="234dp"
+        android:layout_height="200dp"
         android:layout_marginTop="8dp"
+        android:scaleType="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/businessChanTitle"
         app:srcCompat="@color/business_background" />
@@ -45,7 +45,7 @@
         android:id="@+id/profileImg"
         android:layout_width="130dp"
         android:layout_height="117dp"
-        android:layout_marginTop="228dp"
+        android:layout_marginTop="180dp"
         android:background="@drawable/business_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

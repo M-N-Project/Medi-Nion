@@ -8,29 +8,19 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp">
 
-    <ImageView
-        android:id="@+id/border_img"
-        android:layout_width="395dp"
-        android:layout_height="280dp"
-        android:layout_marginTop="3dp"
-        android:background="@drawable/business_item_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/board_header" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/business_item_border">
 
         <ImageView
             android:id="@+id/profileImg2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/business_profile_img"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,15 +40,14 @@
             app:layout_constraintStart_toEndOf="@+id/profileImg2"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <TextView
             android:id="@+id/time"
             android:layout_width="284dp"
             android:layout_height="21dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
             android:text="게시물 등록 시간"
             android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/profileImg2"
             app:layout_constraintTop_toBottomOf="@+id/titleName" />
 
@@ -72,7 +61,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time"
-            tools:ignore="SpeakableTextPresentCheck">
+            tools:ignore="SpeakableTextPresentCheck"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -133,39 +123,58 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
             android:text="내용내용내용...\n내용내용내용"
+            android:textColor="#000000"
+            android:maxLines="4"
+            android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/businessMG_Img" />
+
+        <TextView
+            android:id="@+id/viewMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:text="더보기"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content" />
 
         <android.widget.Button
             android:id="@+id/scrap_btn"
             android:layout_width="185dp"
             android:layout_height="38dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/business_round_button"
             android:drawableLeft="@drawable/bookmark"
             android:text="북마크바"
             android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintTop_toBottomOf="@+id/viewMore"
             tools:ignore="TouchTargetSizeCheck" />
 
         <android.widget.Button
             android:id="@+id/scrap_btn2"
             android:layout_width="185dp"
             android:layout_height="40dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/business_round_button"
             android:drawableLeft="@drawable/like"
             android:text="좋아요"
             android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintTop_toBottomOf="@+id/viewMore"
             tools:ignore="TouchTargetSizeCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
