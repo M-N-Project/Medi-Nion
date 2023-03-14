@@ -59,7 +59,6 @@ class BoardDetail : AppCompatActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
 
-        window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
         fetchLikeData()
 

@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="13"
@@ -266,7 +266,7 @@
                 tools:listitem="@layout/board_comment_item" />
 
         </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
