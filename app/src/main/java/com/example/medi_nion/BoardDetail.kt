@@ -29,6 +29,7 @@ import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.LinkedList
 
 var Comment_items =ArrayList<CommentItem>()
 var Commentadapter = CommentListAdapter(Comment_items)
@@ -57,6 +58,7 @@ class BoardDetail : AppCompatActivity() {
 
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
+        fetchBookmarkData()
 
 //        val dataObserver: Observer<ArrayList<CommentItem>> =
 //            Observer { livedata ->
@@ -132,8 +134,10 @@ class BoardDetail : AppCompatActivity() {
             Book_Btn.setOnClickListener {
                 if (Book_Btn.isChecked()) {
                     Book_Create_request()
+                    fetchBookmarkData()
                 } else {
                     Book_Delete_request()
+                    fetchBookmarkData()
                 }
             }
         }
@@ -306,67 +310,24 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                Comment_items.clear()
-                if (response != "no Comment") {
+                if (response != "no Bookmark") {
                     val jsonArray = JSONArray(response)
 
-                    var comment_user = HashMap<String, Int>()
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-                        var id = item.getString("id")
-                        if (!comment_user.containsKey(id)) comment_user[id] =
-                            comment_user.size + 1
-                    }
+                    val idList = LinkedList<String>()
+                    val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2)
 
                     for (i in 0 until jsonArray.length()) {
 
                         val item = jsonArray.getJSONObject(i)
 
-                        val id = item.getString("id")
-                        val comment = item.getString("comment")
-                        val comment_time = item.getString("comment_time")
-                        val comment_num = comment_user[id]!!
+                        idList.add(item.getString("id"))
+                        val bookmark_num = item.getString("count")
 
-                        val commentItem = CommentItem(comment, comment_num, comment_time)
-
-                        Comment_items.add(commentItem)
-                        viewModel.setItemList(Comment_items)
-
-                        //댓글 아이템 하나 누르면
-                        var manager: InputMethodManager =
-                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
-                        val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
-                        val comment2_linearLayout =
-                            findViewById<LinearLayout>(R.id.comment2_linearLayout)
-
-                        Commentadapter.setOnItemClickListener(object :
-                            CommentListAdapter.OnItemClickListener {
-                            override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                Toast.makeText(
-                                    applicationContext,
-                                    String.format("대댓글 ? "),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Comment_editText.requestFocus()
-                                manager.showSoftInput(
-                                    Comment_editText,
-                                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                                ) //키보드 올리기
-
-                                Comment_Btn.setOnClickListener {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        String.format("우왕"),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    //comment2_linearLayout.visibility = View.VISIBLE
-                                }
-
-                            }
-                        })
+                        Book_count.text = bookmark_num
                     }
+
+                    Log.d("bookmark fetch", idList.toString())
+
                 }
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
