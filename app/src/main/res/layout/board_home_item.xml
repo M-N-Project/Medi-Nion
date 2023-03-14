@@ -13,7 +13,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
-        android:ems="7"
         android:inputType="textPersonName"
         android:maxLines="2"
         android:text="This is title"
@@ -27,7 +26,7 @@
     <TextView
         android:id="@+id/boardContent"
         android:layout_width="257dp"
-        android:layout_height="38dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
