@@ -121,14 +121,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
-                        <ImageView
-                            android:id="@+id/post_imgView"
-                            android:layout_width="match_parent"
-                            android:layout_height="380dp"
-                            android:layout_marginTop="10dp"
-                            android:foregroundGravity="center"
-                            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
-
 
                     </LinearLayout>
 
