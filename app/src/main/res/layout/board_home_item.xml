@@ -8,13 +8,14 @@
 
     <TextView
         android:id="@+id/boardTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:inputType="textPersonName"
         android:maxLines="2"
+        android:ellipsize="end"
         android:text="This is title"
         android:textColor="#000000"
         android:textSize="22sp"
@@ -53,12 +54,12 @@
         android:id="@+id/textView_BoardTime"
         android:layout_width="143dp"
         android:layout_height="14dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginRight="16dp"
         android:text="2023년 2월 14일 오후 2시 52분"
         android:textAlignment="viewEnd"
         android:textSize="10sp"
-        app:layout_constraintStart_toEndOf="@+id/boardTitle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -87,10 +88,11 @@
         android:layout_height="18dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:button="@drawable/bookmark_checkbox"
+        android:text=""
         app:layout_constraintStart_toEndOf="@+id/textView_commentcount"
         app:layout_constraintTop_toBottomOf="@+id/boardContent"
-        android:button="@drawable/bookmark_checkbox"
-        android:text="" />
+        tools:ignore="TouchTargetSizeCheck" />
 <!--
     <ImageView
         android:id="@+id/imageView_bookmark"
