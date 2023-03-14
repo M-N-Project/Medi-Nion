@@ -77,31 +77,31 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:orientation="vertical">
 
 
                     <LinearLayout
-                        android:layout_width="252dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/textView_title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
                             android:text="이것은 제목입니다"
                             android:textSize="20sp"
+                            android:layout_marginRight="15dp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.026"
@@ -110,22 +110,30 @@
 
                         <TextView
                             android:id="@+id/textView_content"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
                             android:layout_marginTop="10dp"
                             android:text="이것은 내용 입니다"
+                            android:layout_marginRight="15dp"
                             android:textSize="14sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.145"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
+                        <ImageView
+                            android:id="@+id/post_imgView"
+                            android:layout_width="match_parent"
+                            android:layout_height="380dp"
+                            android:layout_marginTop="10dp"
+                            android:foregroundGravity="center"
+                            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
@@ -225,10 +233,20 @@
                 app:layout_constraintHorizontal_bias="0.026"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <ImageView
+                android:id="@+id/imageView_ad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                app:srcCompat="@drawable/ad1" />
+
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/CommentRecyclerView"
-                android:layout_width="385dp"
-                android:layout_height="475dp"
+                android:layout_width="375dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
