@@ -87,13 +87,15 @@ class BoardDetail : AppCompatActivity() {
         time_textView.setText(time)
 
         if (image != null) {
-            var postImg = findViewById<ImageView>(R.id.post_imgView)
-            postImg.visibility = View.VISIBLE
-            val bitmap: Bitmap? = StringToBitmaps(image)
-            postImg.setImageBitmap(bitmap)
-        } else {
-            var postImg = findViewById<ImageView>(R.id.post_imgView)
-            postImg.visibility = View.GONE
+            if (image.isNotEmpty()) {
+                var postImg = findViewById<ImageView>(R.id.post_imgView)
+                postImg.visibility = View.VISIBLE
+                val bitmap: Bitmap? = StringToBitmaps(image)
+                postImg.setImageBitmap(bitmap)
+            } else {
+                var postImg = findViewById<ImageView>(R.id.post_imgView)
+                postImg.visibility = View.GONE
+            }
         }
 
         val Commentadapter = CommentListAdapter(Comment_items)
