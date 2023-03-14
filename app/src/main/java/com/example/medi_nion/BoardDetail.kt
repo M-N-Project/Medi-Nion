@@ -55,7 +55,7 @@ class BoardDetail : AppCompatActivity() {
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
 
-//        val scroll = findViewById<NestedScrollView>(R.id.scroll).isNestedScrollingEnabled
+        //val scroll = findViewById<NestedScrollView>(R.id.scroll).isNestedScrollingEnabled
 
 
 
