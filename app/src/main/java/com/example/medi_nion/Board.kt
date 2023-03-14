@@ -170,7 +170,6 @@ class Board : AppCompatActivity() {
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                        Log.d("sfsdfdsf",data.num.toString())
 
                         val request = Login_Request(
                             Request.Method.POST,
