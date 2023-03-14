@@ -131,10 +131,8 @@
 
                     <ImageView
                         android:id="@+id/post_imgView"
-                        android:layout_width="114dp"
-                        android:layout_height="122dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_width="380dp"
+                        android:layout_height="300dp"
                         android:visibility="gone"
                         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
