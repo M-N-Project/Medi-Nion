@@ -54,7 +54,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.041"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginLeft="240dp"
+                android:layout_marginLeft="220dp"
                 app:srcCompat="@drawable/favorite_border" />
 
             <ImageView
