@@ -170,31 +170,38 @@ class Board : AppCompatActivity() {
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                        Log.d("sfsdfdsf",data.num.toString())
+
                         val request = Login_Request(
                             Request.Method.POST,
                             urlDetail,
                             { response ->
-                                items.clear()
-//                                    for (i in jsonArray.length()-1  downTo  0) {
-                                val jsonObject = JSONObject(response)
+                                if(response!="Detail Info Error"){
+                                    val jsonArray = JSONArray(response)
+                                    items.clear()
+                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val item = jsonArray.getJSONObject(i)
 
-                                detailId = jsonObject.getString("id")
-                                detailTitle = jsonObject.getString("title")
-                                detailContent = jsonObject.getString("content")
-                                detailTime = jsonObject.getString("time")
-                                detailImg = jsonObject.getString("image")
+                                        detailId = item.getString("id")
+                                        detailTitle = item.getString("title")
+                                        detailContent = item.getString("content")
+                                        detailTime = item.getString("time")
+                                        detailImg = item.getString("image")
 
-                                val intent = Intent(applicationContext, BoardDetail::class.java)
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                intent.putExtra("board", board)
-                                intent.putExtra("num", data.num)
-                                intent.putExtra("id", id)
-                                intent.putExtra("title", detailTitle)
-                                intent.putExtra("content", detailContent)
-                                intent.putExtra("time", detailTime)
-                                intent.putExtra("image", detailImg)
-                                startActivity(intent)
+                                        val intent = Intent(applicationContext, BoardDetail::class.java)
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                        intent.putExtra("board", board)
+                                        intent.putExtra("num", data.num)
+                                        intent.putExtra("id", id)
+                                        intent.putExtra("title", detailTitle)
+                                        intent.putExtra("content", detailContent)
+                                        intent.putExtra("time", detailTime)
+                                        intent.putExtra("image", detailImg)
+                                        startActivity(intent)
+                                    }
 
+
+                                }
 
                             }, { Log.d("login failed", "error......${error(applicationContext)}") },
                             hashMapOf(
