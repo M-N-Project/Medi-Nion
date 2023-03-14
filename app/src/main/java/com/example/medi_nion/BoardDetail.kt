@@ -91,6 +91,9 @@ class BoardDetail : AppCompatActivity() {
             postImg.visibility = View.VISIBLE
             val bitmap: Bitmap? = StringToBitmaps(image)
             postImg.setImageBitmap(bitmap)
+        } else {
+            var postImg = findViewById<ImageView>(R.id.post_imgView)
+            postImg.visibility = View.GONE
         }
 
         val Commentadapter = CommentListAdapter(Comment_items)
