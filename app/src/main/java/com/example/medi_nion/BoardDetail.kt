@@ -63,6 +63,7 @@ class BoardDetail : AppCompatActivity() {
         window.setSoftInputMode(SOFT_INPUT_ADJUST_NOTHING)
         fetchData()
         fetchLikeData()
+        fetchBookmarkData()
 
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val board = intent.getStringExtra("board")
@@ -129,12 +130,10 @@ class BoardDetail : AppCompatActivity() {
             }
 
             Book_Btn.setOnClickListener {
-                if (Book_Btn.isChecked()) {
+                if (Book_Btn.isChecked) {
                     Book_Create_request()
-                    fetchBookmarkData()
                 } else {
                     Book_Delete_request()
-                    fetchBookmarkData()
                 }
             }
         }
@@ -355,7 +354,7 @@ class BoardDetail : AppCompatActivity() {
     }
 
     fun fetchBookmarkData() {
-        val url = "http://seonho.dothome.co.kr/Comment_list.php"
+        val url = "http://seonho.dothome.co.kr/Bookmark_list.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
         val jsonArray: JSONArray
 
