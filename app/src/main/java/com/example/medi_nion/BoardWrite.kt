@@ -142,6 +142,7 @@ class BoardWrite : AppCompatActivity() {
             Request.Method.POST,
             postUrl,
             { response ->
+                Log.d("11??", response)
                 if (!response.equals("upload fail")) {
                     Toast.makeText(
                         baseContext,
@@ -206,7 +207,6 @@ class BoardWrite : AppCompatActivity() {
 
                     bitmap = resize(bitmap)
 
-
 //                    image = bitmapToByteArray(bitmap)
                     image = BitMapToString(bitmap)
                     findViewById<TextView>(R.id.imageSrc).text = image
@@ -225,7 +225,6 @@ class BoardWrite : AppCompatActivity() {
             }
         }
     }
-
 
 
     private fun resize(bitmap: Bitmap): Bitmap? {
