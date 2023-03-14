@@ -198,6 +198,7 @@ class Board : AppCompatActivity() {
 
                             }, { Log.d("login failed", "error......${error(applicationContext)}") },
                             hashMapOf(
+                                "board" to board,
                                 "post_num" to data.num.toString()
                             )
                         )
