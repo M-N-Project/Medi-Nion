@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.board_comment_item.*
 import kotlinx.android.synthetic.main.board_detail.*
 import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
 import kotlinx.android.synthetic.main.comment_comment_detail.*
@@ -77,7 +78,6 @@ class BoardDetail : AppCompatActivity() {
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
-        val comment_num = findViewById<TextView>(R.id.comment_num)
 
 
 //        textView_num.setText(num)
@@ -104,7 +104,6 @@ class BoardDetail : AppCompatActivity() {
             CommentRequest()
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
-//            comment_num.text = comment_count.toString()
         }
 
 
@@ -388,7 +387,7 @@ class BoardDetail : AppCompatActivity() {
                         val comment_time = item.getString("comment_time")
                         val comment_num = comment_user[id]!!
 
-                        val commentItem = CommentItem(comment, comment_num, comment_time)
+                        val commentItem = CommentItem(id, comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
                         viewModel.setItemList(Comment_items)
@@ -445,10 +444,6 @@ class BoardDetail : AppCompatActivity() {
         var board = intent?.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
-        var comment_count = 0
-        var comment_num = 1
-
-        Log.d("comment_num", comment_num.toString())
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
@@ -462,7 +457,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if (!response.equals("Comment fail")) {
-                    Log.d("CCCCCCCCCCC", response)
 
                     val requestCnt = Login_Request(
                         Request.Method.POST,
@@ -499,7 +493,7 @@ class BoardDetail : AppCompatActivity() {
 
                     Log.d(
                         "comment success",
-                        "$id, $post_num, $comment, $comment_time, $comment_num"
+                        "$id, $post_num, $comment, $comment_time"
                     )
 
                     fetchData()
@@ -519,7 +513,6 @@ class BoardDetail : AppCompatActivity() {
                 "board" to board,
                 "post_num" to post_num,
                 "comment" to comment,
-                "comment_num" to comment_num.toString(),
                 "comment_time" to comment_time
             )
         )
@@ -543,8 +536,6 @@ class BoardDetail : AppCompatActivity() {
                 if (response != "no Comment") {
                     val jsonArray = JSONArray(response)
 
-                    Log.d("jjjj", "$jsonArray")
-
                     val comment_count = jsonArray.length()
                     findViewById<TextView>(R.id.textView_commentcount2).text =
                         comment_count.toString()
@@ -567,12 +558,12 @@ class BoardDetail : AppCompatActivity() {
                         val comment_time = item.getString("comment_time")
                         val comment_num = comment_user[id]!!
 
-                        val commentItem = CommentItem(comment, comment_num, comment_time)
+                        val commentItem = CommentItem(id, comment, comment_num, comment_time)
 
                         Comment_items.add(commentItem)
 
 
-                        Log.d("commmentItem", "$post_num, $comment, $comment_num, $comment_time")
+                        Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
 
                         //viewModel.setItemList(Comment_items)
                         CommentRecyclerView.adapter = Commentadapter
@@ -581,6 +572,8 @@ class BoardDetail : AppCompatActivity() {
                         var detailId: String = ""
                         var detailComment: String = ""
                         var detailCommentTime: String = ""
+
+                        items.clear()
 
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
@@ -597,25 +590,25 @@ class BoardDetail : AppCompatActivity() {
                                         detailComment = jsonObject.getString("comment")
                                         detailCommentTime = jsonObject.getString("comment_time")
 
-                                        //null이 찍혀요 ,, 왜일까요 ?
-                                        Log.d("??????", "$detailId, $detailComment, $detailCommentTime")
-
                                         val intent = Intent(
                                             applicationContext,
                                             CommentDetail::class.java
                                         )
                                         intent.putExtra("comment_num", data.comment_num)
                                         intent.putExtra("id", userId)
-                                        intent.putExtra("comment", detailComment)
-                                        intent.putExtra("comment_time", detailCommentTime)
+                                        intent.putExtra("board", board)
+                                        intent.putExtra("comment", data.comment)
+                                        intent.putExtra("comment_time", data.comment_time)
                                         intent.putExtra("post_num", post_num)
 
+                                        Log.d("99999999", "${data.comment_num}, $userId, $board, $detailComment, $detailCommentTime, $post_num")
                                         startActivity(intent)
                                     },
                                     { Log.d("Comment failed", "error......${error(applicationContext)}") },
                                     hashMapOf(
-                                        "comment_num" to data.comment_num.toString(),
-                                        "post_num" to post_num
+                                        "post_num" to post_num,
+                                        "board" to board,
+                                        "comment" to comment
                                     )
                                 )
                                 val queue = Volley.newRequestQueue(applicationContext)

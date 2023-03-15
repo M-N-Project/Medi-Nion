@@ -54,10 +54,12 @@ class CommentDetail  : AppCompatActivity() {
         val comment_time = intent?.getStringExtra("comment_time")
         val post_num = intent?.getStringExtra("post_num")
         val comment_id = intent?.getStringExtra("id")
+        val board = intent?.getStringExtra("board")
 
         comment_detail_num.setText(comment_num)
         comment_detail_content.setText(comment)
         comment_detail_time.setText(comment_time)
+
 
         fetchData()
 
@@ -80,8 +82,12 @@ class CommentDetail  : AppCompatActivity() {
     fun Comment2Request() {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getStringExtra("post_num").toString()
+        var comment = intent?.getStringExtra("comment").toString()
         var comment_num = intent?.getIntExtra("comment_num", -1).toString()
+        var board = intent?.getStringExtra("board").toString()
         var comment2 = findViewById<EditText>(R.id.Comment2_editText).text.toString()
+
+        Log.d("ASDF", "$id, $post_num, $comment_num, $board")
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -104,8 +110,10 @@ class CommentDetail  : AppCompatActivity() {
                     ).show()
                     Log.d(
                         "comment2 success",
-                        "$id, $post_num, $comment_num, $comment2, $comment2_time"
+                        "$board, $id, $post_num, $comment_num, $comment2, $comment2_time"
                     )
+
+                    fetchData()
 
                 } else {
 
@@ -118,9 +126,11 @@ class CommentDetail  : AppCompatActivity() {
             }, { Log.d("Comment2 Failed", "error......${error(applicationContext)}") },
 
             hashMapOf(
+                "board" to board,
                 "id" to id,
                 "post_num" to post_num,
-                "comment_num" to comment_num.toString(),
+                "comment_num" to comment_num,
+                "comment" to comment,
                 "comment2" to comment2,
                 "comment2_time" to comment2_time
             )
@@ -130,12 +140,15 @@ class CommentDetail  : AppCompatActivity() {
     }
 
     fun fetchData() {
-        var id = intent.getStringExtra("id")
+        var id = intent.getStringExtra("id").toString()
+        val comment = intent?.getStringExtra("comment").toString()
         val comment_num = intent?.getIntExtra("comment_num", -1).toString()
+        val board = intent?.getStringExtra("board").toString()
         val post_num = intent?.getStringExtra("post_num").toString()
-        val comment_content = intent?.getStringExtra("comment").toString()
         val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
         val jsonArray : JSONArray
+
+        Log.d("QQQQ", "$id, $comment, $comment_num, $board, $post_num")
 
         CommentDetail_items.clear()
 
@@ -160,18 +173,19 @@ class CommentDetail  : AppCompatActivity() {
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
+                        val id = item.getString("id")
                         val comment2 = item.getString("comment2")
                         val comment2_time = item.getString("comment2_time")
                         val comment2_num = comment2_user[id]!!
 
                         val commentDetailItem =
-                            CommentDetailItem(comment2, comment2_num, comment2_time)
+                            CommentDetailItem(id, comment2, comment2_num, comment2_time)
 
                         CommentDetail_items.add(commentDetailItem)
 
                         Log.d(
                             "commmentDetailItem",
-                            "$post_num, $comment_num, $comment_content, $comment2, $comment2_num, $comment2_time"
+                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
                         )
 
                         //viewModel.setItemList(Comment_items)
@@ -180,9 +194,10 @@ class CommentDetail  : AppCompatActivity() {
                 }
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
+                "comment" to comment,
                 "comment_num" to comment_num,
                 "post_num" to post_num,
-                "comment" to comment_content
+                "board" to board
             )
         )
         val queue = Volley.newRequestQueue(this)
