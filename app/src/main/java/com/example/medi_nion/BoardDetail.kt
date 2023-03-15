@@ -97,8 +97,10 @@ class BoardDetail : AppCompatActivity() {
                 val intent = Intent(applicationContext, BoardWrite::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", board)
+                intent.putExtra("post_num", post_num)
                 intent.putExtra("title", title)
                 intent.putExtra("content", content)
+                intent.putExtra("image", image)
                 intent.putExtra("update", 1)
 
                 startActivity(intent)
@@ -191,18 +193,27 @@ class BoardDetail : AppCompatActivity() {
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
         val board = intent.getStringExtra("board").toString()
         val post_num = intent?.getIntExtra("num", 0).toString()
+
         val urlDelete = "http://seonho.dothome.co.kr/postDelete.php"
 
         val request = Login_Request(
             Request.Method.POST,
             urlDelete,
             { response ->
-                if (!response.equals("Like fail")) {
+                if (!response.equals("update fail")) {
+                    Log.d("sadsaf", response)
                     Toast.makeText(
                         baseContext,
                         String.format("게시물이 삭제되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    var intent = Intent(applicationContext, Board::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("board", board)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                    startActivity(intent)
+
                 } else {
                     Toast.makeText(
                         applicationContext,
