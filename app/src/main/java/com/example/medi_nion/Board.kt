@@ -2,16 +2,11 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -19,7 +14,10 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
-import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 var items =ArrayList<BoardItem>()
@@ -35,6 +33,7 @@ var scrollFlag = false
 var itemIndex = ArrayList<Int>()
 
 class Board : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart() //프레그먼트로 생길 문제들은 추후에 생각하기,,
 
@@ -116,6 +115,7 @@ class Board : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
@@ -143,7 +143,9 @@ class Board : AppCompatActivity() {
                         var comment = item.getInt("comment")
                         var bookmark = item.getInt("bookmark")
 
-                        val boardItem = BoardItem(num, title, content, time, image, heart, comment, bookmark)
+                        val simpleTime = timeDiff(time)
+
+                        val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
                         if(i >= jsonArray.length() - item_count*scroll_count){
                             items.add(boardItem)
@@ -224,5 +226,48 @@ class Board : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
 
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun Millis(postTime : String) : Long {
+        // YY-MM-DD HH:MM:SS
+
+        //val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd, hh:mm:ss")
+        //val date = LocalDateTime.parse(dateString, formatter)
+
+        val simpleDateFormat = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
+        val date1: Date = simpleDateFormat.parse(postTime)
+        return date1.time
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun timeDiff(postTime : String): String {
+        var SEC = 60
+        var MIN = 60
+        var HOUR = 24
+        var DAY = 30
+        var MONTH = 12
+
+        val curTime = System.currentTimeMillis()
+        val newPostTime = Millis(postTime)
+        var diffTime = (curTime - newPostTime) / 1000
+        Log.d("diffTime" , diffTime.toString())
+        var msg: String = ""
+
+        if (diffTime < SEC) {
+            msg = "방금 전";
+        } else if ((diffTime / SEC) < MIN) {
+            msg = diffTime.toString() + "분 전";
+        } else if ((diffTime / MIN) < HOUR) {
+            msg = diffTime.toString() + "시간 전";
+        } else if ((diffTime / HOUR) < DAY) {
+            msg = diffTime.toString() + "일 전";
+        } else if ((diffTime / DAY) < MONTH) {
+            msg = diffTime.toString() + "달 전";
+        } else {
+            msg = diffTime.toString() + "년 전"
+        }
+        return msg
     }
 }

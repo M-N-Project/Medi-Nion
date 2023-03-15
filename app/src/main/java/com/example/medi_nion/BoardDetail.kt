@@ -136,8 +136,10 @@ class BoardDetail : AppCompatActivity() {
             Book_Btn.setOnClickListener {
                 if (Book_Btn.isChecked) {
                     BookRequest(true)
+                    Book_count.text = (Book_count.text.toString().toInt() + 1).toString()
                 } else {
                     BookRequest(false)
+                    Book_count.text = (Book_count.text.toString().toInt() - 1).toString()
                 }
             }
         }
@@ -293,6 +295,7 @@ class BoardDetail : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                         }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
 
                         hashMapOf(
@@ -324,6 +327,8 @@ class BoardDetail : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                Log.d("bookmark Request", "${board}, ${post_num}, ${flag.toString()}")
+
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
 
             hashMapOf(
