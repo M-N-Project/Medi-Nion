@@ -68,7 +68,8 @@ class BoardDetail : AppCompatActivity() {
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         val board = intent.getStringExtra("board")
         val itemPos = intent.getIntExtra("itemIndex", -1)
-        var id = intent.getStringExtra("id")
+        var id = intent.getStringExtra("id") //접속한 유저의 아이디
+        var writerId = intent.getStringExtra("writerId")
         val post_num = intent?.getIntExtra("num", 0).toString()
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
@@ -77,10 +78,41 @@ class BoardDetail : AppCompatActivity() {
 
         val heart = intent?.getStringExtra("heart")
 
+        // 게시물 옵션 버튼.
+        val optionBtn = findViewById<Button>(R.id.moreBtn)
+        var optionRadio = findViewById<RadioGroup>(R.id.optionRadioGroup)
+        if(id==writerId){
+            optionBtn.visibility = View.VISIBLE
+
+            optionBtn.setOnClickListener{
+                if(optionRadio.visibility == View.GONE)
+                    optionRadio.visibility = View.VISIBLE
+                else optionRadio.visibility = View.GONE
+            }
+
+            val option_updatePost = findViewById<RadioButton>(R.id.postUpdate_RadioBtn)
+            option_updatePost.setOnClickListener{
+                // 글쓰기 화면으로 이동
+                val board = intent.getStringExtra("board")
+                val intent = Intent(applicationContext, BoardWrite::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", board)
+                intent.putExtra("title", title)
+                intent.putExtra("content", content)
+                intent.putExtra("update", 1)
+
+                startActivity(intent)
+            }
+            val option_deletePost = findViewById<RadioButton>(R.id.postDelete_RadioBtn)
+            option_deletePost.setOnClickListener{
+                // 지우기.
+                PostDeleteRequest()
+            }
+        }
+
         val title_textView = findViewById<TextView>(R.id.textView_title)
         val content_textView = findViewById<TextView>(R.id.textView_content)
         val time_textView = findViewById<TextView>(R.id.textView_time)
-
 
 //        textView_num.setText(num)
         title_textView.setText(title)
@@ -110,27 +142,27 @@ class BoardDetail : AppCompatActivity() {
 
 
 
-            Like_Btn.setOnClickListener {
-                //좋아요 눌렀을때,,
+        Like_Btn.setOnClickListener {
+            //좋아요 눌렀을때,,
 
-                //likeRequest()
+            //likeRequest()
 
-                isDefault = !isDefault
+            isDefault = !isDefault
 
-                if (isDefault) { // 좋아요.
-                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
-                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
-                    Like_Btn.setImageResource(R.drawable.favorite_fill)
-                    LikeRequest(isDefault.toString())
+            if (isDefault) { // 좋아요.
+                val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
+                findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+                Like_Btn.setImageResource(R.drawable.favorite_fill)
+                LikeRequest(isDefault.toString())
 
-                } else { //좋아요 취소
-                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
-                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
-                    Like_Btn.setImageResource(R.drawable.favorite_border)
-                    LikeRequest(isDefault.toString())
-                }
-
+            } else { //좋아요 취소
+                val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
+                findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+                Like_Btn.setImageResource(R.drawable.favorite_border)
+                LikeRequest(isDefault.toString())
             }
+
+        }
 
             Book_Btn.setOnClickListener {
                 if (Book_Btn.isChecked) {
@@ -142,6 +174,40 @@ class BoardDetail : AppCompatActivity() {
                 }
             }
         }
+
+    fun PostDeleteRequest(){
+        var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
+        val board = intent.getStringExtra("board").toString()
+        val post_num = intent?.getIntExtra("num", 0).toString()
+        val urlDelete = "http://seonho.dothome.co.kr/postDelete.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            urlDelete,
+            { response ->
+                if (!response.equals("Like fail")) {
+                    Toast.makeText(
+                        baseContext,
+                        String.format("게시물이 삭제되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "lion heart fail",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "board" to board,
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
 
 
     fun LikeRequest(flag : String) {  //좋아요 DB연동중
@@ -549,7 +615,6 @@ class BoardDetail : AppCompatActivity() {
                                         intent.putExtra("comment_time", data.comment_time)
                                         intent.putExtra("post_num", post_num)
 
-                                        Log.d("99999999", "${data.comment_num}, $userId, $board, $detailComment, $detailCommentTime, $post_num")
                                         startActivity(intent)
                                     },
                                     { Log.d("Comment failed", "error......${error(applicationContext)}") },

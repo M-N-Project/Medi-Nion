@@ -61,6 +61,7 @@ class Board : AppCompatActivity() {
             val intent = Intent(applicationContext, BoardWrite::class.java)
             intent.putExtra("id", id)
             intent.putExtra("board", board)
+            intent.putExtra("update", 0)
             startActivity(intent)
         }
 
@@ -190,11 +191,13 @@ class Board : AppCompatActivity() {
                                         detailTime = item.getString("time")
                                         detailImg = item.getString("image")
 
+
                                         val intent = Intent(applicationContext, BoardDetail::class.java)
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                                         intent.putExtra("board", board)
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("writerId", detailId)
                                         intent.putExtra("title", detailTitle)
                                         intent.putExtra("content", detailContent)
                                         intent.putExtra("time", detailTime)
