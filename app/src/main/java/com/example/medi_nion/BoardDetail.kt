@@ -135,6 +135,14 @@ class BoardDetail : AppCompatActivity() {
 
             }
 
+//            Like_Btn.setOnClickListener {
+////                if(Like_Btn.isChecked()) {
+////
+////                }
+////            }
+
+
+
             Book_Btn.setOnClickListener {
                 if (Book_Btn.isChecked()) {
                     Book_Create_request()
@@ -161,10 +169,11 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 if (!response.equals("Like fail")) {
                     var heartFlag = ""
+
                     if(flag == "true"){ //좋아요 +1
                         heartFlag = "heartUP"
                     }
-                    else{ //좋아요 -1
+                    else if(flag == "false"){ //좋아요 -1
                         heartFlag = "heartDOWN"
                     }
 
@@ -213,6 +222,7 @@ class BoardDetail : AppCompatActivity() {
             hashMapOf(
                 "id" to id,
                 "board" to board,
+                //"heart_count" to heart, //지우기
                 "heart" to heart_count,
                 "post_num" to post_num,
                 "flag" to flag
