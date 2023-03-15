@@ -36,13 +36,26 @@ class BoardWrite : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_writing)
 
         var id = intent.getStringExtra("id")
         var board = intent.getStringExtra("board").toString()
+        val update = intent.getIntExtra("update", 0)
+
+        //수정으로 글쓰기 화면 넘어왔을 때
+        if(update == 1){
+            val title = intent.getStringExtra("title").toString()
+            val content = intent.getStringExtra("content").toString()
+
+            var editText_title = findViewById<EditText>(R.id.editText_Title)
+            var editText_content = findViewById<EditText>(R.id.editText_Content)
+
+            editText_title.setText(title)
+            editText_content.setText(content)
+        }
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)

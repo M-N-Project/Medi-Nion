@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="option">dropDownMenuExample</string>
+    <string-array name="option">
+        <item>삭제</item>
+        <item>수정</item>
+    </string-array>
+</resources>
