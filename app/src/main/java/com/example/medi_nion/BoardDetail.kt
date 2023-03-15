@@ -135,9 +135,9 @@ class BoardDetail : AppCompatActivity() {
 
             Book_Btn.setOnClickListener {
                 if (Book_Btn.isChecked) {
-                    Book_Create_request()
+                    BookRequest(true)
                 } else {
-                    Book_Delete_request()
+                    BookRequest(false)
                 }
             }
         }
@@ -220,88 +220,64 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
-    fun Book_Delete_request() {
+    @SuppressLint("SuspiciousIndentation")
+    fun fetchLikeData() {
+        val url = "http://seonho.dothome.co.kr/Heart_list.php"
         var id = intent?.getStringExtra("id").toString()
+        val board = intent.getStringExtra("board")!!.toString()
+        //Log.d("13123123", board.javaClass.name)
         var post_num = intent?.getIntExtra("num", 0).toString()
-        var url = "http://seonho.dothome.co.kr/BookmarkDelete.php"
-        val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+
+        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
-                if (!response.equals("Bookmark fail")) {
+                Log.d("fetchLike", response.javaClass.name)
+                if (response != "no Heart") {
+                    val jsonArray = JSONArray(response)
 
-                    var bookmarkFlag = "bookmarkDOWN"
+                    val like_count = jsonArray.length()
+                    findViewById<TextView>(R.id.textView_likecount2).text = like_count.toString()
 
-                    val requestCnt = Login_Request(
-                        Request.Method.POST,
-                        urlUpdateCnt,
-                        { responseBookmark ->
-                            if (!responseBookmark.equals("update fail")) {
-                                post_num = responseBookmark.toString()
-
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "lion heart fail",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
-
-                        hashMapOf(
-//                            "count" to heart_count,
-                            "post_num" to post_num,
-                            "flag" to bookmarkFlag
-                        )
-                    )
-
-                    val queue = Volley.newRequestQueue(this)
-                    queue.add(requestCnt)
-
-                    Toast.makeText(
-                        baseContext,
-                        String.format("북마크가 해제되었습니다."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d(
-                        "bookmark delete success",
-                        "$id, $post_num"
-                    )
-
-                    //fetchBookmarkData()
-                } else {
-
-                    Toast.makeText(
-                        applicationContext,
-                        "북마크를 해제할 수 없습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    for (i in 0 until jsonArray.length()) {
+                        val likeId = jsonArray.getString(i)
+                        if(likeId == id){
+                            Like_Btn.setImageResource(R.drawable.favorite_fill)
+                            isDefault = true
+                            break
+                        }
+                    }
                 }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
-
             hashMapOf(
-                "id" to id,
-                "post_num" to post_num,
+                "board" to board,
+                "post_num" to post_num
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
 
-    fun Book_Create_request() {
+    fun BookRequest(flag : Boolean) {
         var id = intent?.getStringExtra("id").toString()
+        val board = intent.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var url = "http://seonho.dothome.co.kr/Bookmark.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+
+        var bookmarkFlag = ""
+        var book_count = findViewById<TextView>(R.id.textView_bookmarkcount2).text.toString()
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Bookmark fail")) {
-                    var bookmarkFlag = "bookmarkUP"
+
+                    if(flag == true) bookmarkFlag = "bookmarkUP"
+                    else bookmarkFlag = "bookmarkDOWN"
 
                     val requestCnt = Login_Request(
                         Request.Method.POST,
@@ -309,7 +285,7 @@ class BoardDetail : AppCompatActivity() {
                         { responseBookmark ->
                             if (!responseBookmark.equals("update fail")) {
                                 post_num = responseBookmark.toString()
-
+                                book_count = responseBookmark.toString()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -320,7 +296,7 @@ class BoardDetail : AppCompatActivity() {
                         }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
 
                         hashMapOf(
-//                            "count" to heart_count,
+                            "board" to board,
                             "post_num" to post_num,
                             "flag" to bookmarkFlag
                         )
@@ -344,15 +320,17 @@ class BoardDetail : AppCompatActivity() {
 
                     Toast.makeText(
                         applicationContext,
-                        "북마크를 생성할 수 없습니다.",
+                        "Bookmark fail",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
 
             hashMapOf(
+                "board" to board,
                 "id" to id,
                 "post_num" to post_num,
+                "flag" to flag.toString()
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -362,6 +340,11 @@ class BoardDetail : AppCompatActivity() {
     fun fetchBookmarkData() {
         val url = "http://seonho.dothome.co.kr/Bookmark_list.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
+        var id = intent?.getStringExtra("id").toString()
+
+        val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2)
+        val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2)
+
         val jsonArray: JSONArray
 
         val request = Login_Request(
@@ -371,20 +354,21 @@ class BoardDetail : AppCompatActivity() {
                 if (response != "no Bookmark") {
                     val jsonArray = JSONArray(response)
 
-                    val idList = LinkedList<String>()
-                    val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2)
-
                     for (i in 0 until jsonArray.length()) {
 
                         val item = jsonArray.getJSONObject(i)
 
-                        idList.add(item.getString("id"))
+                        val bookmarkId = item.getString("id")
                         val bookmark_num = item.getString("count")
 
                         Book_count.text = bookmark_num
+                        if(bookmarkId == id){
+                            Book_Btn.isChecked = true
+                            break
+                        }
                     }
 
-                    Log.d("bookmark fetch", idList.toString())
+                    Log.d("bookmark fetch", id.toString())
 
                 }
 
@@ -593,46 +577,6 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
-
-    @SuppressLint("SuspiciousIndentation")
-    fun fetchLikeData() {
-        val url = "http://seonho.dothome.co.kr/Heart_list.php"
-        var id = intent?.getStringExtra("id").toString()
-        val board = intent.getStringExtra("board")!!.toString()
-        Log.d("13123123", board.javaClass.name)
-        var post_num = intent?.getIntExtra("num", 0).toString()
-
-        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
-
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                Log.d("123123", response.javaClass.name)
-                if (response != "no Heart") {
-                    val jsonArray = JSONArray(response)
-
-                    val like_count = jsonArray.length()
-                    findViewById<TextView>(R.id.textView_likecount2).text = like_count.toString()
-
-                    for (i in 0 until jsonArray.length()) {
-                        val likeId = jsonArray.getString(i)
-                        if(likeId == id){
-                            Like_Btn.setImageResource(R.drawable.favorite_fill)
-                            isDefault = true
-                            break
-                        }
-                    }
-                }
-            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "board" to board,
-                "post_num" to post_num
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-    }
 
     // String -> Bitmap 변환
     fun StringToBitmaps(image: String?): Bitmap? {
