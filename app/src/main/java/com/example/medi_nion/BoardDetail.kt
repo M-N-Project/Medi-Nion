@@ -251,7 +251,7 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                if (response != "Like fail") {
+                if (response != "no Heart") {
                     val jsonArray = JSONArray(response)
 
                     for (i in 0 until jsonArray.length()) {
