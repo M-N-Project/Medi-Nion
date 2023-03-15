@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -236,7 +237,7 @@ class Board : AppCompatActivity() {
         //val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd, hh:mm:ss")
         //val date = LocalDateTime.parse(dateString, formatter)
 
-        val simpleDateFormat = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date1: Date = simpleDateFormat.parse(postTime)
         return date1.time
     }
@@ -250,24 +251,29 @@ class Board : AppCompatActivity() {
         var MONTH = 12
 
         val curTime = System.currentTimeMillis()
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("ko", "KR"))
+        val cur: String = simpleDateFormat.format(Date(curTime))
+        Log.d("current TIme", cur)
+
         val newPostTime = Millis(postTime)
-        var diffTime = (curTime - newPostTime) / 1000
-        Log.d("diffTime" , diffTime.toString())
+        var diffTime = (curTime - newPostTime)/1000
+        Log.d("Time" , "cur = ${curTime.toString()}, post = ${postTime}, new post = ${newPostTime.toString()}, diff = ${diffTime.toString()} ")
         var msg: String = ""
 
-        if (diffTime < SEC) {
+        if (diffTime  < SEC) {
             msg = "방금 전";
         } else if ((diffTime / SEC) < MIN) {
-            msg = diffTime.toString() + "분 전";
-        } else if ((diffTime / MIN) < HOUR) {
-            msg = diffTime.toString() + "시간 전";
-        } else if ((diffTime / HOUR) < DAY) {
-            msg = diffTime.toString() + "일 전";
-        } else if ((diffTime / DAY) < MONTH) {
-            msg = diffTime.toString() + "달 전";
+            msg = (diffTime / SEC).toString() + "분 전";
+        } else if (((diffTime / SEC) / MIN) < HOUR) {
+            msg = ((diffTime / SEC) / MIN).toString() + "시간 전";
+        } else if ((((diffTime / SEC) / MIN) / HOUR) < DAY) {
+            msg = (((diffTime / SEC) / MIN) / HOUR).toString() + "일 전";
+        } else if (((((diffTime / SEC) / MIN) / HOUR) / DAY) < MONTH) {
+            msg = ((((diffTime / SEC) / MIN) / HOUR) / DAY).toString() + "달 전";
         } else {
-            msg = diffTime.toString() + "년 전"
+            msg = (((((diffTime / SEC) / MIN) / HOUR) / DAY) / MONTH ).toString() + "년 전"
         }
+
         return msg
     }
 }
