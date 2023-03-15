@@ -20,13 +20,15 @@
             android:layout_weight="1">
 
             <android.widget.Button
-                android:id="@+id/menu1"
+                android:id="@+id/menu_All"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
@@ -35,7 +37,7 @@
                 android:textSize="19sp" />
 
             <android.widget.Button
-                android:id="@+id/menu2"
+                android:id="@+id/menu_basic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -43,25 +45,28 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginBottom="4dp"
                 android:background="@drawable/menu_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:backgroundTint="#388BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="직종별\n게시판"
+                android:text="자유\n게시판"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
 
             <android.widget.Button
-                android:id="@+id/menu3"
+                android:id="@+id/menu_qna"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/menu_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:backgroundTint="#388BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
-                android:text="진료과별\n게시판"
+                android:text="QnA\n게시판"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
         </TableRow>
@@ -72,26 +77,15 @@
             android:layout_weight="1">
 
             <android.widget.Button
-                android:id="@+id/menu4"
+                android:id="@+id/menu_market"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="우리 병원\n게시판"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
-
-            <android.widget.Button
-                android:id="@+id/menu5"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_margin="4dp"
-                android:background="@drawable/menu_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:backgroundTint="#388BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
@@ -100,18 +94,34 @@
                 android:textSize="19sp" />
 
             <android.widget.Button
-                android:id="@+id/menu6"
+                android:id="@+id/menu_job"
+                android:layout_width="106dp"
+                android:layout_height="150dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/menu_button"
+                android:gravity="start"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:backgroundTint="#388BE0C4"
+                android:padding="10dp"
+                android:paddingTop="10dp"
+                android:text="직종별\n게시판"
+                android:textAlignment="viewStart"
+                android:textSize="19sp"/>
+
+            <android.widget.Button
+                android:id="@+id/menu_dept"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/menu_button"
-                android:backgroundTint="#8BE0C4"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:backgroundTint="#388BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
-                android:text="QnA"
+                android:text="진료과별\n게시판"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
         </TableRow>
@@ -129,7 +139,6 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
-                android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
@@ -143,7 +152,6 @@
                 android:layout_height="150dp"
                 android:layout_margin="4dp"
                 android:background="@drawable/menu_button"
-                android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
@@ -152,18 +160,17 @@
                 android:textSize="19sp" />
 
             <android.widget.Button
-                android:id="@+id/menu9"
+                android:id="@+id/menu_news"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/menu_button"
-                android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
-                android:text="우리 병원\n홈페이지"
+                android:text="의료뉴스"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
         </TableRow>
@@ -174,32 +181,30 @@
             android:layout_weight="1">
 
             <android.widget.Button
-                android:id="@+id/menu10"
+                android:id="@+id/menu9"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="4dp"
                 android:background="@drawable/menu_button"
-                android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
-                android:text="의료뉴스"
+                android:text="스케줄"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
 
             <android.widget.Button
-                android:id="@+id/menu11"
+                android:id="@+id/menu_buss"
                 android:layout_width="106dp"
                 android:layout_height="150dp"
                 android:layout_margin="4dp"
                 android:background="@drawable/menu_button"
-                android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
                 android:paddingTop="10dp"
-                android:text="비즈니스 채널\n관리하기"
+                android:text="비즈니스 \n채널"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
         </TableRow>
