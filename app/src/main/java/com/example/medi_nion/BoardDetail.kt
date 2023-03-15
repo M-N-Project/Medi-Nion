@@ -11,15 +11,10 @@ import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
-import android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.state.ToggleableState
-import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -48,13 +43,14 @@ class BoardDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
 
-        var count = 0
+
         val Comment_editText = findViewById<EditText>(R.id.Comment_editText)
         val Comment_Btn = findViewById<Button>(R.id.Comment_Btn)
-        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
+        val Like_Btn = findViewById<CheckBox>(R.id.imageView_like2) //좋아요 하트 부분
         val Like_count = findViewById<TextView>(R.id.textView_likecount2) //좋아요 숫자 부분
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
+
 
         //val scroll = findViewById<NestedScrollView>(R.id.scroll).isNestedScrollingEnabled
 
@@ -115,33 +111,37 @@ class BoardDetail : AppCompatActivity() {
 
 
 
-            Like_Btn.setOnClickListener {
-                //좋아요 눌렀을때,,
-
-                //likeRequest()
-
-                isDefault = !isDefault
-
-                if (isDefault) { // 좋아요.
-                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
-                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
-                    Like_Btn.setImageResource(R.drawable.favorite_fill)
-                    LikeRequest(isDefault.toString())
-
-                } else { //좋아요 취소
-                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
-                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
-                    Like_Btn.setImageResource(R.drawable.favorite_border)
-                    LikeRequest(isDefault.toString())
-                }
-
-            }
-
 //            Like_Btn.setOnClickListener {
-////                if(Like_Btn.isChecked()) {
-////
-////                }
-////            }
+//                //좋아요 눌렀을때,,
+//
+//                //likeRequest()
+//
+//                isDefault = !isDefault
+//
+//                if (isDefault) { // 좋아요.
+//                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
+//                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+//                    Like_Btn.setImageResource(R.drawable.favorite_fill)
+//                    LikeRequest(isDefault.toString())
+//
+//                } else { //좋아요 취소
+//                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
+//                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
+//                    Like_Btn.setImageResource(R.drawable.favorite_border)
+//                    LikeRequest(isDefault.toString())
+//                }
+//
+//            }
+
+            Like_Btn.setOnClickListener {
+                if (Like_Btn.isChecked) {
+                    LikeRequest(true)
+                    Like_count.text = (Like_count.text.toString().toInt() + 1).toString()
+                } else {
+                    LikeRequest(false)
+                    Like_count.text = (Like_count.text.toString().toInt() - 1).toString()
+                }
+            }
 
 
 
@@ -157,38 +157,32 @@ class BoardDetail : AppCompatActivity() {
         }
 
 
-    fun LikeRequest(flag : String) {  //좋아요 DB연동중
-        var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
+    fun LikeRequest(flag: Boolean) {
+        var id = intent?.getStringExtra("id").toString()
         val board = intent.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString() //게시물 num id 받아오기, 게시물 좋아요 개수 구분하기 위함
-        var heart =
-            findViewById<ImageView>(R.id.imageView_like2).toString() //좋아요 클릭만 가져오게 하기(익명이라 누가 눌렀는진 의미 없을듯,,)
-        var heart_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
-        val url = "http://seonho.dothome.co.kr/Heart.php"
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        var url = "http://seonho.dothome.co.kr/Heart.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+
+        var heartFlag = ""
+        var like_count = findViewById<TextView>(R.id.textView_likecount2).text.toString()
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Like fail")) {
-                    var heartFlag = ""
 
-                    if(flag == "true"){ //좋아요 +1
-                        heartFlag = "heartUP"
-                    }
-                    else if(flag == "false"){ //좋아요 -1
-                        heartFlag = "heartDOWN"
-                    }
+                    if(flag == true) heartFlag = "heartUP"
+                    else heartFlag = "heartDOWN"
 
                     val requestCnt = Login_Request(
                         Request.Method.POST,
                         urlUpdateCnt,
                         { responseLike ->
                             if (!responseLike.equals("update fail")) {
-                                heart_count = responseLike.toString()
                                 post_num = responseLike.toString()
-
+                                like_count = responseLike.toString()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -196,6 +190,7 @@ class BoardDetail : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                         }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
 
                         hashMapOf(
@@ -208,67 +203,77 @@ class BoardDetail : AppCompatActivity() {
                     val queue = Volley.newRequestQueue(this)
                     queue.add(requestCnt)
 
-
                     Toast.makeText(
                         baseContext,
-                        String.format("조아요 등록되었습니다."),
+                        String.format("북마크가 생성되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+                    Log.d(
+                        "bookmark success",
+                        "$id, $post_num"
+                    )
+
                 } else {
+
                     Toast.makeText(
                         applicationContext,
-                        "lion heart fail",
+                        "like fail",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+                Log.d("bookmark Request", "${board}, ${post_num}, ${flag.toString()}")
+
+            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
 
             hashMapOf(
-                "id" to id,
                 "board" to board,
-                //"heart_count" to heart, //지우기
-                "heart" to heart_count,
+                "id" to id,
                 "post_num" to post_num,
-                "flag" to flag
+                "flag" to flag.toString()
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
 
-    @SuppressLint("SuspiciousIndentation")
+
     fun fetchLikeData() {
         val url = "http://seonho.dothome.co.kr/Heart_list.php"
-        var id = intent?.getStringExtra("id").toString()
-        val board = intent.getStringExtra("board")!!.toString()
-        //Log.d("13123123", board.javaClass.name)
         var post_num = intent?.getIntExtra("num", 0).toString()
+        var id = intent?.getStringExtra("id").toString()
 
-        val Like_Btn = findViewById<ImageView>(R.id.imageView_like2) //좋아요 하트 부분
+        val Like_Btn = findViewById<CheckBox>(R.id.imageView_like2)
+        val Like_count = findViewById<TextView>(R.id.textView_likecount2)
+
+        val jsonArray: JSONArray
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
-                Log.d("fetchLike", response.javaClass.name)
-                if (response != "no Heart") {
+                if (response != "Like fail") {
                     val jsonArray = JSONArray(response)
 
-                    val like_count = jsonArray.length()
-                    findViewById<TextView>(R.id.textView_likecount2).text = like_count.toString()
-
                     for (i in 0 until jsonArray.length()) {
-                        val likeId = jsonArray.getString(i)
-                        if(likeId == id){
-                            Like_Btn.setImageResource(R.drawable.favorite_fill)
-                            isDefault = true
+
+                        val item = jsonArray.getJSONObject(i)
+
+                        val heartId = item.getString("id")
+                        val heart_num = item.getString("count")
+
+                        Like_count.text = heart_num
+                        if(heartId == id){
+                            Like_Btn.isChecked = true
                             break
                         }
                     }
+
+                    Log.d("like fetch", id.toString())
+
                 }
-            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+
+            }, { Log.d("like Failed", "error......${error(applicationContext)}") },
             hashMapOf(
-                "board" to board,
                 "post_num" to post_num
             )
         )
