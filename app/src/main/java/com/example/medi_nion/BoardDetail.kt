@@ -56,7 +56,6 @@ class BoardDetail : AppCompatActivity() {
         //val scroll = findViewById<NestedScrollView>(R.id.scroll).isNestedScrollingEnabled
 
 
-
         val manager: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -141,30 +140,6 @@ class BoardDetail : AppCompatActivity() {
             manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
             Comment_editText.setText(null) //댓글입력창 clear
         }
-
-
-
-//            Like_Btn.setOnClickListener {
-//                //좋아요 눌렀을때,,
-//
-//                //likeRequest()
-//
-//                isDefault = !isDefault
-//
-//                if (isDefault) { // 좋아요.
-//                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() + 1
-//                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
-//                    Like_Btn.setImageResource(R.drawable.favorite_fill)
-//                    LikeRequest(isDefault.toString())
-//
-//                } else { //좋아요 취소
-//                    val likecnt = findViewById<TextView>(R.id.textView_likecount2).text.toString().toInt() - 1
-//                    findViewById<TextView>(R.id.textView_likecount2).text = likecnt.toString()
-//                    Like_Btn.setImageResource(R.drawable.favorite_border)
-//                    LikeRequest(isDefault.toString())
-//                }
-//
-//            }
 
             Like_Btn.setOnClickListener {
                 if (Like_Btn.isChecked) {

@@ -74,11 +74,10 @@ class Board : AppCompatActivity() {
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         if(all_items.size > 20){
-                            scroll_count ++
                             scrollFlag = true
 
-                            if(all_items.size - item_count*(scroll_count-1) > 20){
-                                for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo   all_items.size - item_count*scroll_count) {
+                            if((all_items.size - item_count*scroll_count) > 20){
+                                for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
                                     items.add(all_items[i])
                                     itemIndex.add(all_items[i].num) //앞에다가 추가.
                                 }
@@ -94,7 +93,7 @@ class Board : AppCompatActivity() {
                                 scrollFlag = false
                             }
                             else{
-                                for (i in all_items.size - item_count*(scroll_count - 1) -1  downTo  0) {
+                                for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
                                     items.add(all_items[i])
                                     itemIndex.add(all_items[i].num) //앞에다가 추가.
 
@@ -108,7 +107,7 @@ class Board : AppCompatActivity() {
                                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
                             }
 
-
+                            scroll_count ++
                         }
                     }
                 }
