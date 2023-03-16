@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,6 +21,8 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
     fun setOnItemClickListener(listener : CommentDetailListAdapter.OnItemClickListener) {
         this.listener = listener
     }
+
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

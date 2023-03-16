@@ -141,15 +141,15 @@ class BoardDetail : AppCompatActivity() {
             Comment_editText.setText(null) //댓글입력창 clear
         }
 
-            Like_Btn.setOnClickListener {
-                if (Like_Btn.isChecked) {
-                    LikeRequest(true)
-                    Like_count.text = (Like_count.text.toString().toInt() + 1).toString()
-                } else {
-                    LikeRequest(false)
-                    Like_count.text = (Like_count.text.toString().toInt() - 1).toString()
-                }
+        Like_Btn.setOnClickListener {
+            if (Like_Btn.isChecked) {
+                LikeRequest(true)
+                Like_count.text = (Like_count.text.toString().toInt() + 1).toString()
+            } else {
+                LikeRequest(false)
+                Like_count.text = (Like_count.text.toString().toInt() - 1).toString()
             }
+        }
 
 
 
@@ -543,6 +543,7 @@ class BoardDetail : AppCompatActivity() {
     fun fetchData() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
+        val urlCommentHeart = "http://seonho.dothome.co.kr/commentHeart.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
@@ -627,6 +628,58 @@ class BoardDetail : AppCompatActivity() {
                                         "post_num" to post_num,
                                         "board" to board,
                                         "comment" to comment
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(applicationContext)
+                                queue.add(request)
+                            }
+
+                            //댓글 좋아요 눌렀을때.
+                            override fun onItemHeart(v: View, data: CommentItem, pos: Int) {
+                                Log.d("commentHart", "sfjksd;f")
+                                val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment_like)
+                                val commentHeartCnt = v.findViewById<TextView>(R.id.comment_heart_count)
+                                var commentFlag = true
+                                if (commentHeart.isChecked) {
+                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() + 1).toString()
+                                } else {
+                                    commentFlag = false
+                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() - 1).toString()
+                                }
+
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    urlCommentHeart,
+                                    { response ->
+                                        Log.d("commentHart", response)
+//                                        items.clear()
+//                                    for (i in jsonArray.length()-1  downTo  0) {
+//                                        val jsonObject = JSONObject(response)
+
+//                                        detailId = jsonObject.getString("id")
+//                                        detailComment = jsonObject.getString("comment")
+//                                        detailCommentTime = jsonObject.getString("comment_time")
+
+//                                        val intent = Intent(
+//                                            applicationContext,
+//                                            CommentDetail::class.java
+//                                        )
+//                                        intent.putExtra("comment_num", data.comment_num)
+//                                        intent.putExtra("id", userId)
+//                                        intent.putExtra("board", board)
+//                                        intent.putExtra("comment", data.comment)
+//                                        intent.putExtra("comment_time", data.comment_time)
+//                                        intent.putExtra("post_num", post_num)
+
+//                                        startActivity(intent)
+                                    },
+                                    { Log.d("Comment failed", "error......${error(applicationContext)}") },
+                                    hashMapOf(
+                                        "id" to id,
+                                        "post_num" to post_num,
+                                        "board" to board,
+                                        "comment_num" to pos.toString(),
+                                        "flag" to commentFlag.toString()
                                     )
                                 )
                                 val queue = Volley.newRequestQueue(applicationContext)
