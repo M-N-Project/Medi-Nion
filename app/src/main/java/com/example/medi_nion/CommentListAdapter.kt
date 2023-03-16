@@ -14,6 +14,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
 
     interface OnItemClickListener{
         fun onItemClick(v:View, data: CommentItem, pos: Int)
+        fun onItemHeart(v: View, data: CommentItem, pos: Int)
     }
     private var listener : OnItemClickListener? = null
 
