@@ -335,6 +335,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/board_comment_item" />
 
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
