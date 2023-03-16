@@ -65,12 +65,35 @@ class Board : AppCompatActivity() {
             startActivity(intent)
         }
 
+//        refresh_layout.setOnRefreshListener { //어디에 배치해야 하는가,,
+//            var data = MainData("refresh", "refreshing completed")
+//            recyclerViewAdapter.add(data)
+//            recyclerViewAdapter.notifyDataSetChanged()
+//
+//            // 새로고침 완료시,
+//            // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
+//            refresh_layout.isRefreshing = false
+//        }
 
         boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if(scrollFlag==false){
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                         //새로고침...
+                        refresh_layout.setOnRefreshListener {
+                            Log.d("ditto", "hello refresh")
+
+                            var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                            //var new_items = ArrayList<BoardItem>()
+                            items.addAll(items)
+                            adapter = BoardListAdapter(items)
+                            boardRecyclerView.adapter = adapter
+                            adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                            boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+
+                            refresh_layout.isRefreshing = false
+
+                        }
 
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
@@ -90,7 +113,7 @@ class Board : AppCompatActivity() {
                                 adapter = BoardListAdapter(new_items)
                                 boardRecyclerView.adapter = adapter
                                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
 
                                 scrollFlag = false
                             }
@@ -106,7 +129,7 @@ class Board : AppCompatActivity() {
                                 adapter = BoardListAdapter(new_items)
                                 boardRecyclerView.adapter = adapter
                                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
                             }
 
                             scroll_count ++
