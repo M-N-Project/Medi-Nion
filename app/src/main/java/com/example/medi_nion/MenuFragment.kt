@@ -1,13 +1,17 @@
 package com.example.medi_nion
 
+    import android.annotation.SuppressLint
     import android.content.Intent
     import android.os.Bundle
     import android.view.View
+    import android.view.animation.Animation
+    import android.view.animation.AnimationUtils
     import android.widget.Button
     import androidx.fragment.app.Fragment
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
 
+    private lateinit var allBoard: Button
     private lateinit var basicBoard: Button
     private lateinit var jobBoard: Button
     private lateinit var secBoard: Button
@@ -21,12 +25,13 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     private lateinit var manageBusinessBtn: Button
 
 
+    @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val id = arguments?.getString("id")
-
-        basicBoard = view.findViewById(R.id.menu_basic) // 전체 게시판
+        allBoard = view.findViewById(R.id.menu_All) // 전체 게시판
+        basicBoard = view.findViewById(R.id.menu_basic) // 자유 게시판
         jobBoard = view.findViewById(R.id.menu_job) //직종별 게시판
         secBoard = view.findViewById(R.id.menu_dept) //진료과별 게시판
         dealBoard = view.findViewById(R.id.menu_market) // 장터 게시판
@@ -39,6 +44,14 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         medicalNewsBtn = view.findViewById(R.id.menu_news)
         manageBusinessBtn = view.findViewById(R.id.menu_buss)
 
+        allBoard.setOnClickListener { //전체 게시판으로 이동함
+            activity?.let{
+                var animation: Animation = AnimationUtils.loadAnimation(allBoard.context, R.animator.scale)
+                allBoard.startAnimation(animation)
+            }
+        }
+
+
         employeeInfoBtn.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
                 val intent = Intent(context, HospitalProfile::class.java)
@@ -46,7 +59,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
-        basicBoard.setOnClickListener { //게시판으로 이동함
+        basicBoard.setOnClickListener { //자유 게시판으로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
@@ -54,7 +67,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 startActivity(intent)
             }
         }
-        jobBoard.setOnClickListener { //게시판으로 이동함
+        jobBoard.setOnClickListener { //직종별 게시판으로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
@@ -62,7 +75,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 startActivity(intent)
             }
         }
-        secBoard.setOnClickListener { //게시판으로 이동함
+        secBoard.setOnClickListener { //진료과별 게시판으로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
@@ -70,7 +83,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 startActivity(intent)
             }
         }
-        dealBoard.setOnClickListener { //게시판으로 이동함
+        dealBoard.setOnClickListener { //장터 게시판으로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
