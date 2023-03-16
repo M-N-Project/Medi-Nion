@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,6 +17,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
     interface OnItemClickListener{
         fun onItemClick(v:View, data: CommentItem, pos: Int)
         fun onItemHeart(v: View, data: CommentItem, pos: Int)
+        fun onItemComment(v: View, data:CommentItem, pos:Int)
     }
     private var listener : OnItemClickListener? = null
 
@@ -38,6 +41,9 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
         private val itemComment: TextView = itemView.findViewById(R.id.comment_content)
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment_time)
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
+        private val itemCommentHeart : CheckBox = itemView.findViewById(R.id.imageView_comment_like)
+        private val itemCommentComment: ImageView = itemView.findViewById(R.id.imageView_comment_comment)
+
 
         fun bind(item: CommentItem) {
             itemComment.text = item.comment
@@ -54,6 +60,17 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                 itemComment.setOnClickListener {
                     listener?.onItemClick(itemView,item,pos)
                 }
+
+                itemCommentHeart.setOnClickListener{
+                    listener?.onItemHeart(itemView,item,pos)
+                }
+
+                itemCommentComment.setOnClickListener{
+                    listener?.onItemComment(itemView,item,pos)
+                }
+
+
+
             }
         }
     }
