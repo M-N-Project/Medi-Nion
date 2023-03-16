@@ -281,7 +281,7 @@ class BoardDetail : AppCompatActivity() {
 
                     Toast.makeText(
                         baseContext,
-                        String.format("북마크가 생성되었습니다."),
+                        String.format("좋아요가 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d(

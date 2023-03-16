@@ -46,7 +46,7 @@ class CommentDetail  : AppCompatActivity() {
 
         val manager : InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
 
         val comment_num = intent?.getIntExtra("comment_num", 0).toString()
