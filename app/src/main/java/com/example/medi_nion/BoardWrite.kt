@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -23,9 +24,8 @@ import com.android.volley.toolbox.Volley
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class BoardWrite : AppCompatActivity() {
@@ -33,6 +33,7 @@ class BoardWrite : AppCompatActivity() {
     private val GALLERY = 1
     lateinit var ImageData : Uri
     var image : String = "null"
+    var flagUpdate = "false"
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,14 +48,24 @@ class BoardWrite : AppCompatActivity() {
 
         //수정으로 글쓰기 화면 넘어왔을 때
         if(update == 1){
+            flagUpdate = "true"
             val title = intent.getStringExtra("title").toString()
             val content = intent.getStringExtra("content").toString()
+            val image = intent.getStringExtra("image").toString()
+            val post_num = intent.getStringExtra("post_num").toString()
 
             var editText_title = findViewById<EditText>(R.id.editText_Title)
             var editText_content = findViewById<EditText>(R.id.editText_Content)
+            val post_img = findViewById<ImageView>(R.id.imageButton_gallery)
 
             editText_title.setText(title)
             editText_content.setText(content)
+
+            if(image!=null){
+                val bitmap: Bitmap? = StringToBitmaps(image)
+                post_img.setImageBitmap(bitmap)
+            }
+
         }
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
@@ -134,6 +145,7 @@ class BoardWrite : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest(postUrl: String) {
+        var updateUrl = "http://seonho.dothome.co.kr/updateBoard.php"
         var id = intent?.getStringExtra("id").toString()
         var board = intent.getStringExtra("board").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
@@ -143,7 +155,11 @@ class BoardWrite : AppCompatActivity() {
         var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
         var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
-        
+
+        val currentTime = Calendar.getInstance().time
+        val format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
+        val current: String = format.format(currentTime)
+
         var img1 : String = ""
         var img2 : String = ""
         if(image != "null"){
@@ -151,34 +167,80 @@ class BoardWrite : AppCompatActivity() {
             img2 = image.substring(image.length/2+1,image.length)
         }
 
-        val request = Upload_Request(
-            Request.Method.POST,
-            postUrl,
-            { response ->
-                Log.d("11??", response)
-                if (!response.equals("upload fail")) {
-                    Toast.makeText(
-                        baseContext,
-                        String.format("게시물 업로드가 완료되었습니다."),
-                        Toast.LENGTH_SHORT
-                    ).show()
+        if(flagUpdate == "true"){
+            val post_num = intent.getStringExtra("post_num").toString()
 
-                    var intent = Intent(applicationContext, Board::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("board", board)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                    startActivity(intent)
+            val request = Upload_Request(
+                Request.Method.POST,
+                updateUrl,
+                { response ->
+                    Log.d("11??", response)
+                    if (!response.equals("upload fail")) {
+                        Toast.makeText(
+                            baseContext,
+                            String.format("게시물 업로드가 완료되었습니다."),
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "게시물 업로드가 실패했습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            },
-            { Log.d("failed", "error......${error(applicationContext)}") },
+                        var intent = Intent(applicationContext, Board::class.java)
+                        intent.putExtra("id", id)
+                        intent.putExtra("board", board)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                        startActivity(intent)
+
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "게시물 업로드가 실패했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                { Log.d("failed", "error......${error(applicationContext)}") },
                 mutableMapOf(
+                    "id" to id,
+                    "board" to board_select,
+                    "post_num" to post_num,
+                    "title" to postTitle,
+                    "content" to postContent,
+                    "time" to currentTime.toString(),
+                    "image1" to img1,
+                    "image2" to img2
+                )
+            )
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
+        }
+        else{
+            val request = Upload_Request(
+                Request.Method.POST,
+                postUrl,
+                { response ->
+                    Log.d("11??", response)
+                    if (!response.equals("upload fail")) {
+                        Toast.makeText(
+                            baseContext,
+                            String.format("게시물 업로드가 완료되었습니다."),
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        var intent = Intent(applicationContext, Board::class.java)
+                        intent.putExtra("id", id)
+                        intent.putExtra("board", board)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                        startActivity(intent)
+
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "게시물 업로드가 실패했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
+                { Log.d("failed", "error......${error(applicationContext)}") },
+                mutableMapOf(
+                    "update" to flagUpdate,
                     "id" to id,
                     "board" to board_select,
                     "title" to postTitle,
@@ -186,9 +248,11 @@ class BoardWrite : AppCompatActivity() {
                     "image1" to img1,
                     "image2" to img2
                 )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
+            )
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
+        }
+
 
         findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
         var progressBar = findViewById<ProgressBar>(R.id.progressbar)
@@ -274,5 +338,17 @@ class BoardWrite : AppCompatActivity() {
             Log.e("exception", e.toString())
         }
         return base64Image
+    }
+
+    // String -> Bitmap 변환
+    fun StringToBitmaps(image: String?): Bitmap? {
+        try {
+            val encodeByte = Base64.decode(image, Base64.DEFAULT)
+            val bitmap : Bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            return bitmap
+        } catch (e: Exception) {
+            e.message
+            return null
+        }
     }
 }
