@@ -45,10 +45,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         manageBusinessBtn = view.findViewById(R.id.menu_buss)
 
         allBoard.setOnClickListener { //전체 게시판으로 이동함
-            activity?.let{
-                var animation: Animation = AnimationUtils.loadAnimation(allBoard.context, R.animator.scale)
-                allBoard.startAnimation(animation)
-            }
+
         }
 
 

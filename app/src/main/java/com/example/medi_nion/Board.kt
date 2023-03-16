@@ -71,8 +71,10 @@ class Board : AppCompatActivity() {
                 if(scrollFlag==false){
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                         //새로고침...
+
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
+                        //로딩
                         if(all_items.size > 20){
                             scrollFlag = true
 
