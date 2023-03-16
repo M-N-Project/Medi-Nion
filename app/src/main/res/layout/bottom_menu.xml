@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" android:layout_width="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-
-        android:stretchColumns="0, 1, 2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TableRow
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="10dp"
+            android:text="게시판"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <android.widget.Button
                 android:id="@+id/menu_All"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/menu_button"
                 style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/menu_button"
                 android:backgroundTint="#8BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
@@ -38,30 +42,30 @@
 
             <android.widget.Button
                 android:id="@+id/menu_basic"
-                android:layout_width="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="4dp"
-                android:layout_marginBottom="4dp"
+                android:layout_weight="1"
                 android:background="@drawable/menu_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:backgroundTint="#388BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
+                android:paddingTop="10dp"
                 android:text="자유\n게시판"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
 
             <android.widget.Button
                 android:id="@+id/menu_qna"
-                android:layout_width="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 android:background="@drawable/menu_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:backgroundTint="#388BE0C4"
                 android:gravity="start"
                 android:padding="10dp"
@@ -69,144 +73,190 @@
                 android:text="QnA\n게시판"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
-        </TableRow>
 
-        <TableRow
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:orientation="horizontal">
 
-            <android.widget.Button
-                android:id="@+id/menu_market"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/menu_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:backgroundTint="#388BE0C4"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="장터\n게시판"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
+                <android.widget.Button
+                    android:id="@+id/menu_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/menu_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:backgroundTint="#388BE0C4"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="장터\n게시판"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
 
+                <android.widget.Button
+                    android:id="@+id/menu_job"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/menu_button"
+                    android:gravity="start"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:backgroundTint="#388BE0C4"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="직종별\n게시판"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp"/>
+
+                <android.widget.Button
+                    android:id="@+id/menu_dept"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/menu_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:backgroundTint="#388BE0C4"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="진료과별\n게시판"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
+            </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="10dp"
+            android:text="정보"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+                <android.widget.Button
+                    android:id="@+id/menu7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/menu_button"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="학회 및\n세미나 정보"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
+
+                <android.widget.Button
+                    android:id="@+id/menu8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/menu_button"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="채용 정보"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
+
+                <android.widget.Button
+                    android:id="@+id/menu_news"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/menu_button"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="의료뉴스"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="10dp"
+            android:text="기타"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+                <android.widget.Button
+                    android:id="@+id/menu9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/menu_button"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="스케줄"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
+
+                <android.widget.Button
+                    android:id="@+id/menu_buss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/menu_button"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:paddingTop="10dp"
+                    android:text="비즈니스 \n채널"
+                    android:textAlignment="viewStart"
+                    android:textSize="19sp" />
             <android.widget.Button
-                android:id="@+id/menu_job"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
+                android:id="@+id/menu_buss11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_margin="4dp"
                 android:background="@drawable/menu_button"
                 android:gravity="start"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:backgroundTint="#388BE0C4"
                 android:padding="10dp"
                 android:paddingTop="10dp"
-                android:text="직종별\n게시판"
-                android:textAlignment="viewStart"
-                android:textSize="19sp"/>
-
-            <android.widget.Button
-                android:id="@+id/menu_dept"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/menu_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:backgroundTint="#388BE0C4"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="진료과별\n게시판"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <android.widget.Button
-                android:id="@+id/menu7"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/menu_button"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="학회 및\n세미나 정보"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
-
-            <android.widget.Button
-                android:id="@+id/menu8"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_margin="4dp"
-                android:background="@drawable/menu_button"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="채용 정보"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
-
-            <android.widget.Button
-                android:id="@+id/menu_news"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/menu_button"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="의료뉴스"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <android.widget.Button
-                android:id="@+id/menu9"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/menu_button"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
-                android:text="스케줄"
-                android:textAlignment="viewStart"
-                android:textSize="19sp" />
-
-            <android.widget.Button
-                android:id="@+id/menu_buss"
-                android:layout_width="106dp"
-                android:layout_height="150dp"
-                android:layout_margin="4dp"
-                android:background="@drawable/menu_button"
-                android:gravity="start"
-                android:padding="10dp"
-                android:paddingTop="10dp"
+                android:visibility="invisible"
                 android:text="비즈니스 \n채널"
                 android:textAlignment="viewStart"
                 android:textSize="19sp" />
-        </TableRow>
-    </TableLayout>
-</LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
