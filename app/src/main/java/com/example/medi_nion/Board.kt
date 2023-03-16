@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 var items =ArrayList<BoardItem>()
@@ -65,35 +66,31 @@ class Board : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        refresh_layout.setOnRefreshListener { //어디에 배치해야 하는가,,
-//            var data = MainData("refresh", "refreshing completed")
-//            recyclerViewAdapter.add(data)
-//            recyclerViewAdapter.notifyDataSetChanged()
-//
-//            // 새로고침 완료시,
-//            // 새로고침 아이콘이 사라질 수 있게 isRefreshing = false
-//            refresh_layout.isRefreshing = false
-//        }
-
         boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if(scrollFlag==false){
+
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                         //새로고침...
                         refresh_layout.setOnRefreshListener {
                             Log.d("ditto", "hello refresh")
 
-                            var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                            //var new_items = ArrayList<BoardItem>()
-                            items.addAll(items)
-                            adapter = BoardListAdapter(items)
-                            boardRecyclerView.adapter = adapter
+                            for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
+                                items.add(all_items[i])
+                                itemIndex.add(all_items[i].num) //앞에다가 추가.
+                            }
+                            //var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                            var new_item = ArrayList<BoardItem>()
+                            new_item.addAll(items)
+                            Log.d("aaaaa", "$items")
+                            adapter = BoardListAdapter(new_item) //필수
+                            boardRecyclerView.adapter = adapter //필수
                             adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                            boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
 
-                            refresh_layout.isRefreshing = false
+                            refresh_layout.isRefreshing = false //새로고침 없애기
 
                         }
+
 
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
