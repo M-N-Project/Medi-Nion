@@ -14,15 +14,13 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
     var datas = mutableListOf<CommentItem>()
 
     interface OnItemClickListener{
-        fun onItemClick(v:View, data: CommentDetailItem, pos: Int)
+        fun onItemHeart(v:View, data: CommentDetailItem, pos: Int)
     }
     private var listener : OnItemClickListener? = null
 
     fun setOnItemClickListener(listener : CommentDetailListAdapter.OnItemClickListener) {
         this.listener = listener
     }
-
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,6 +38,7 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
         private val itemComment: TextView = itemView.findViewById(R.id.comment2_content)
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment2_time)
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment2_num)
+        private val itemCommentHeart : CheckBox =  itemView.findViewById(R.id.imageView_comment2_like)
 
         fun bind(item: CommentDetailItem) {
             itemComment.text = item.comment2
@@ -49,12 +48,10 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
             {
-                itemView.setOnClickListener {
-                    listener?.onItemClick(itemView,item,pos)
+                itemCommentHeart.setOnClickListener {
+                    listener?.onItemHeart(itemView,item,pos)
                 }
-                itemComment.setOnClickListener {
-                    listener?.onItemClick(itemView,item,pos)
-                }
+
             }
         }
     }

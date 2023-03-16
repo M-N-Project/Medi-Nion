@@ -57,7 +57,7 @@
                 app:layout_constrainedWidth="true"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/imageView_comment2_like"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -66,6 +66,14 @@
                 app:layout_constraintHorizontal_bias="0.041"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/favorite_border" />
+
+            <TextView
+                android:id="@+id/comment2_heartCnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="0" />
 
         </LinearLayout>
 

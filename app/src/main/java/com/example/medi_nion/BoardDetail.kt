@@ -1,9 +1,11 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -15,10 +17,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_comment_item.*
+import kotlinx.android.synthetic.main.board_comment_item.view.*
 import kotlinx.android.synthetic.main.board_detail.*
 import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
 import kotlinx.android.synthetic.main.comment_comment_detail.*
@@ -28,15 +33,17 @@ import org.w3c.dom.Text
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.LinkedList
-
-var Comment_items =ArrayList<CommentItem>()
-var Commentadapter = CommentListAdapter(Comment_items)
+var comment_items =ArrayList<CommentItem>()
+var commentDetail_items =ArrayList<CommentDetailItem>()
+var commentDetailadapter = CommentDetailListAdapter(commentDetail_items)
+var Commentadapter = CommentListAdapter(comment_items)
 val viewModel: CommentViewModel = CommentViewModel()
 
 class BoardDetail : AppCompatActivity() {
 
     var isDefault = false //좋아요 빈하트, 채운하트 구분하기위함
+    var comment_comment_flag = false
+    var comment_comment_pos = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
@@ -53,11 +60,11 @@ class BoardDetail : AppCompatActivity() {
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //북마크 count 부분
 
 
+
         //val scroll = findViewById<NestedScrollView>(R.id.scroll).isNestedScrollingEnabled
 
 
-        val manager: InputMethodManager =
-            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
 
 
         fetchData()
@@ -132,13 +139,29 @@ class BoardDetail : AppCompatActivity() {
             }
         }
 
-        val Commentadapter = CommentListAdapter(Comment_items)
+        val Commentadapter = CommentListAdapter(comment_items)
         CommentRecyclerView.adapter = Commentadapter
 
         Comment_Btn.setOnClickListener {
-            CommentRequest()
-            manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
-            Comment_editText.setText(null) //댓글입력창 clear
+            if(comment_comment_flag == true){ //대댓글
+                Comment2Request(comment_comment_pos + 1)
+                val manager: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
+                Comment_editText.setText(null) //댓글입력창 clear
+                comment_comment_flag = false
+                findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+            }
+            else{ //댓글
+                CommentRequest(comment_comment_pos + 1)
+                val manager: InputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
+                Comment_editText.setText(null) //댓글입력창 clear
+            }
+
+
+
         }
 
         Like_Btn.setOnClickListener {
@@ -458,7 +481,7 @@ class BoardDetail : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun CommentRequest() {
+    fun CommentRequest(comment_num : Int) {
         var id = intent?.getStringExtra("id").toString()
         var board = intent?.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
@@ -475,8 +498,8 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Log.d("123123213", response)
                 if (!response.equals("Comment fail")) {
-
                     val requestCnt = Login_Request(
                         Request.Method.POST,
                         urlUpdateCnt,
@@ -531,8 +554,63 @@ class BoardDetail : AppCompatActivity() {
                 "id" to id,
                 "board" to board,
                 "post_num" to post_num,
+                "comment_num" to comment_num.toString(),
                 "comment" to comment,
                 "comment_time" to comment_time
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun Comment2Request(comment_num : Int) {
+        var id = intent?.getStringExtra("id").toString()
+        var post_num = intent?.getIntExtra("num", 0).toString()
+        var board = intent?.getStringExtra("board").toString()
+        var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
+
+        Log.d("ASDF", "$id, $post_num, $comment_num, $board, $comment2")
+
+        val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val comment2_time = current.format(formatter)
+
+        val url = "http://seonho.dothome.co.kr/Comment2.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                if (!response.equals("Comment2 fail")) {
+
+                    Toast.makeText(
+                        baseContext,
+                        String.format("대댓글이 등록되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d(
+                        "comment2 success",
+                        "$board, $id, $post_num, $comment_num, $comment2, $comment2_time"
+                    )
+                    fetchData()
+
+                } else {
+
+                    Toast.makeText(
+                        applicationContext,
+                        "대댓글을 등록할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("Comment2 Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "board" to board,
+                "id" to id,
+                "post_num" to post_num,
+                "comment_num" to comment_num.toString(),
+                "comment2" to comment2
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -547,7 +625,7 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
-        Comment_items.clear()
+        comment_items.clear()
 
         val request = Login_Request(
             Request.Method.POST,
@@ -580,7 +658,7 @@ class BoardDetail : AppCompatActivity() {
 
                         val commentItem = CommentItem(id, comment, comment_num, comment_time)
 
-                        Comment_items.add(commentItem)
+                        comment_items.add(commentItem)
 
 
                         Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
@@ -595,48 +673,17 @@ class BoardDetail : AppCompatActivity() {
 
                         items.clear()
 
+                        //대댓글 받아오기.
+                        fetchCommentDetailData(board, post_num, comment_num.toString())
+
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                val request = Login_Request(
-                                    Request.Method.POST,
-                                    urlDetail,
-                                    { response ->
-                                        items.clear()
-//                                    for (i in jsonArray.length()-1  downTo  0) {
-                                        val jsonObject = JSONObject(response)
-
-                                        detailId = jsonObject.getString("id")
-                                        detailComment = jsonObject.getString("comment")
-                                        detailCommentTime = jsonObject.getString("comment_time")
-
-                                        val intent = Intent(
-                                            applicationContext,
-                                            CommentDetail::class.java
-                                        )
-                                        intent.putExtra("comment_num", data.comment_num)
-                                        intent.putExtra("id", userId)
-                                        intent.putExtra("board", board)
-                                        intent.putExtra("comment", data.comment)
-                                        intent.putExtra("comment_time", data.comment_time)
-                                        intent.putExtra("post_num", post_num)
-
-                                        startActivity(intent)
-                                    },
-                                    { Log.d("Comment failed", "error......${error(applicationContext)}") },
-                                    hashMapOf(
-                                        "post_num" to post_num,
-                                        "board" to board,
-                                        "comment" to comment
-                                    )
-                                )
-                                val queue = Volley.newRequestQueue(applicationContext)
-                                queue.add(request)
+                               //댓글 눌렀을때.
                             }
 
                             //댓글 좋아요 눌렀을때.
                             override fun onItemHeart(v: View, data: CommentItem, pos: Int) {
-                                Log.d("commentHart", "sfjksd;f")
                                 val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment_like)
                                 val commentHeartCnt = v.findViewById<TextView>(R.id.comment_heart_count)
                                 var commentFlag = true
@@ -652,38 +699,35 @@ class BoardDetail : AppCompatActivity() {
                                     urlCommentHeart,
                                     { response ->
                                         Log.d("commentHart", response)
-//                                        items.clear()
-//                                    for (i in jsonArray.length()-1  downTo  0) {
-//                                        val jsonObject = JSONObject(response)
 
-//                                        detailId = jsonObject.getString("id")
-//                                        detailComment = jsonObject.getString("comment")
-//                                        detailCommentTime = jsonObject.getString("comment_time")
-
-//                                        val intent = Intent(
-//                                            applicationContext,
-//                                            CommentDetail::class.java
-//                                        )
-//                                        intent.putExtra("comment_num", data.comment_num)
-//                                        intent.putExtra("id", userId)
-//                                        intent.putExtra("board", board)
-//                                        intent.putExtra("comment", data.comment)
-//                                        intent.putExtra("comment_time", data.comment_time)
-//                                        intent.putExtra("post_num", post_num)
-
-//                                        startActivity(intent)
                                     },
                                     { Log.d("Comment failed", "error......${error(applicationContext)}") },
                                     hashMapOf(
                                         "id" to id,
                                         "post_num" to post_num,
                                         "board" to board,
-                                        "comment_num" to pos.toString(),
+                                        "comment_num" to (pos+1).toString(),
                                         "flag" to commentFlag.toString()
                                     )
                                 )
                                 val queue = Volley.newRequestQueue(applicationContext)
                                 queue.add(request)
+                            }
+
+                            //대댓글 버튼 눌렀을때.
+                            @RequiresApi(Build.VERSION_CODES.O)
+                            override fun onItemComment(v: View, data: CommentItem, pos: Int) {
+                                if(comment_comment_flag == true){
+                                    comment_comment_flag = false
+                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                                    //자동 키보드 내리기
+                                }else{
+                                    comment_comment_flag = true
+                                    comment_comment_pos = pos
+                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
+                                    //자동 키보드 올리기
+                                }
+
                             }
                         })
                     }
@@ -699,6 +743,106 @@ class BoardDetail : AppCompatActivity() {
     }
 
 
+    fun fetchCommentDetailData(board : String, post_num : String, comment_num : String) {
+        val comment2RecyclerView = findViewById<RecyclerView>(R.id.CommentRecyclerView2)
+        var id = intent.getStringExtra("id").toString()
+        val comment = intent?.getStringExtra("comment").toString()
+        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
+        var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
+        val jsonArray : JSONArray
+
+        Log.d("QQQQ", "$id, $comment, $comment_num, $board, $post_num")
+
+        commentDetail_items.clear()
+
+        val request = Login_Request(
+            Request.Method.POST,
+            urlDetail,
+            { response ->
+                commentDetail_items.clear()
+                if (response != "no Comment2") {
+
+                    val jsonArray = JSONArray(response)
+
+                    var comment2_user = HashMap<String, Int>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+                        val id = item.getString("id")
+                        if (!comment2_user.containsKey(id)) comment2_user[id] =
+                            comment2_user.size + 1
+                    }
+
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+
+                        val id = item.getString("id")
+                        val comment2 = item.getString("comment2")
+                        val comment2_time = item.getString("comment2_time")
+                        val comment2_num = comment2_user[id]!!
+
+                        val commentDetailItem =
+                            CommentDetailItem(id, comment2, comment2_num, comment2_time)
+
+                        commentDetail_items.add(commentDetailItem)
+
+                        Log.d(
+                            "commmentDetailItem",
+                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
+                        )
+
+                        //viewModel.setItemList(Comment_items)
+                        CommentRecyclerView.CommentRecyclerView2.adapter = commentDetailadapter
+
+
+                        commentDetailadapter.setOnItemClickListener(object :
+                            CommentDetailListAdapter.OnItemClickListener {
+                            //대댓글 좋아요 눌렀을때.
+                            override fun onItemHeart(v: View, data: CommentDetailItem, pos: Int) {
+                                val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment2_like)
+                                val commentHeartCnt = v.findViewById<TextView>(R.id.comment2_heartCnt)
+                                var comment2HeartFlag = true
+                                if (commentHeart.isChecked) {
+                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() + 1).toString()
+                                } else {
+                                    comment2HeartFlag = false
+                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() - 1).toString()
+                                }
+
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    urlComment2Heart,
+                                    { response ->
+                                        Log.d("comment2Hart", response)
+
+                                    },
+                                    { Log.d("Comment2 failed", "error......${error(applicationContext)}") },
+                                    hashMapOf(
+                                        "id" to id,
+                                        "post_num" to post_num,
+                                        "board" to board,
+                                        "comment_num" to comment_num,
+                                        "comment2_num" to (pos+1).toString(),
+                                        "flag" to comment2HeartFlag.toString()
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(applicationContext)
+                                queue.add(request)
+                            }
+                        })
+                    }
+                }
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "comment_num" to comment_num,
+                "post_num" to post_num,
+                "board" to board
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+
+    }
     // String -> Bitmap 변환
     fun StringToBitmaps(image: String?): Bitmap? {
         try {
