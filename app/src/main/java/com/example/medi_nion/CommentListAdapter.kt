@@ -34,7 +34,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
     override fun getItemCount(): Int = itemList.size //라이브데이터 사용할때는 datas사용, 지금은 더미 데이터라서 매개변수로 넘긴 itemList로 대체
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(itemList[position])
+        holder.bind(itemList[position], position)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,12 +43,18 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
         private val itemCommentHeart : CheckBox = itemView.findViewById(R.id.imageView_comment_like)
         private val itemCommentComment: ImageView = itemView.findViewById(R.id.imageView_comment_comment)
+        private val itemCommentDetail: RecyclerView = itemView.findViewById(R.id.CommentRecyclerView2)
 
-
-        fun bind(item: CommentItem) {
+        fun bind(item: CommentItem, pos : Int) {
             itemComment.text = item.comment
             itemCommentTime.text = item.comment_time
             itemCommentNum.text = item.comment_num.toString()
+
+            Log.d("pppss", "$pos // ${item.comment_num}")
+            if(pos == item.comment_num-1){
+                itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
+            }
+
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
@@ -68,8 +74,6 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                 itemCommentComment.setOnClickListener{
                     listener?.onItemComment(itemView,item,pos)
                 }
-
-
 
             }
         }

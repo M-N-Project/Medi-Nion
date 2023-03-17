@@ -174,12 +174,13 @@ class CommentDetail  : AppCompatActivity() {
                         val item = jsonArray.getJSONObject(i)
 
                         val id = item.getString("id")
+                        val comment_num = item.getInt("comment_num")
                         val comment2 = item.getString("comment2")
                         val comment2_time = item.getString("comment2_time")
                         val comment2_num = comment2_user[id]!!
 
                         val commentDetailItem =
-                            CommentDetailItem(id, comment2, comment2_num, comment2_time)
+                            CommentDetailItem(id, comment_num, comment2, comment2_num, comment2_time)
 
                         CommentDetail_items.add(commentDetailItem)
 

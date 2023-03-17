@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.board_comment_item.*
 import kotlinx.android.synthetic.main.board_comment_item.view.*
 import kotlinx.android.synthetic.main.board_detail.*
 import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
+import kotlinx.android.synthetic.main.board_detail.view.*
 import kotlinx.android.synthetic.main.comment_comment_detail.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -39,7 +40,6 @@ var commentDetail_items =ArrayList<CommentDetailItem>()
 var commentDetailadapter = CommentDetailListAdapter(commentDetail_items)
 var Commentadapter = CommentListAdapter(comment_items)
 val viewModel: CommentViewModel = CommentViewModel()
-var selectedCommentItem : CommentItem = CommentItem("", "", -1, "")
 
 class BoardDetail : AppCompatActivity() {
 
@@ -241,6 +241,7 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Comment_list.php"
         val urlDetail = "http://seonho.dothome.co.kr/commentInfoDetail.php"
         val urlCommentHeart = "http://seonho.dothome.co.kr/commentHeart.php"
+        var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
@@ -269,21 +270,15 @@ class BoardDetail : AppCompatActivity() {
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
-
                         val id = item.getString("id")
                         val comment = item.getString("comment")
                         val comment_time = item.getString("comment_time")
                         val comment_num = comment_user[id]!!
 
-                        val commentItem = CommentItem(id, comment, comment_num, comment_time)
-
-                        comment_items.add(commentItem)
-
 
                         Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
 
                         //viewModel.setItemList(Comment_items)
-                        CommentRecyclerView.adapter = Commentadapter
 
                         var userId = intent?.getStringExtra("id").toString()
                         var detailId: String = ""
@@ -294,14 +289,9 @@ class BoardDetail : AppCompatActivity() {
 
                         // 대댓글 fetch ------------------------------------------------------------------------
                         //대댓글 받아오기.
-//                        fetchCommentDetailData(board, post_num, comment_num)
                         val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
                         var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
-                        val jsonArray : JSONArray
-
-                        Log.d("QQQQ", "$id, $comment, $comment_num, $board, $post_num")
-
-                        commentDetail_items.clear()
+                        var commentDetailAdapterMap = HashMap<Int, CommentDetailListAdapter>()
 
                         val request = Login_Request(
                             Request.Method.POST,
@@ -309,9 +299,7 @@ class BoardDetail : AppCompatActivity() {
                             { response ->
                                 commentDetail_items.clear()
                                 if (response != "no Comment2") {
-
                                     val jsonArray = JSONArray(response)
-                                    Log.d("123123", jsonArray.length().toString())
 
                                     var comment2_user = HashMap<String, Int>()
 
@@ -322,16 +310,18 @@ class BoardDetail : AppCompatActivity() {
                                             comment2_user.size + 1
                                     }
 
+
                                     for (i in 0 until jsonArray.length()) {
                                         val item = jsonArray.getJSONObject(i)
 
                                         val id = item.getString("id")
+                                        val comment_num = item.getInt("comment_num")
                                         val comment2 = item.getString("comment2")
                                         val comment2_time = item.getString("comment2_time")
                                         val comment2_num = comment2_user[id]!!
 
                                         val commentDetailItem =
-                                            CommentDetailItem(id, comment2, comment2_num, comment2_time)
+                                            CommentDetailItem(id, comment_num, comment2, comment2_num, comment2_time)
 
                                         commentDetail_items.add(commentDetailItem)
 
@@ -340,47 +330,22 @@ class BoardDetail : AppCompatActivity() {
                                             "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
                                         )
 
+                                        var commentDetailItems = fetchCommentDetailData(board, post_num, comment_num.toString())
+                                        var newCommentDetailItems = ArrayList<CommentDetailItem>()
+                                        for(num in 0 until commentDetail_items.size){
+                                            if(commentDetail_items[num].comment_num == comment_num)
+                                            newCommentDetailItems.add(commentDetail_items[num])
+                                        }
+
+                                        var commentDetailadapter = CommentDetailListAdapter(newCommentDetailItems)
+                                        commentDetailAdapterMap[comment_num-1] = commentDetailadapter
+
                                         //viewModel.setItemList(Comment_items)
-                                        CommentRecyclerView.get(comment_num-1).CommentRecyclerView2.adapter = commentDetailadapter
-
-
-                                        commentDetailadapter.setOnItemClickListener(object :
-                                            CommentDetailListAdapter.OnItemClickListener {
-                                            //대댓글 좋아요 눌렀을때.
-                                            override fun onItemHeart(v: View, data: CommentDetailItem, pos: Int) {
-                                                val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment2_like)
-                                                val commentHeartCnt = v.findViewById<TextView>(R.id.comment2_heartCnt)
-                                                var comment2HeartFlag = true
-                                                if (commentHeart.isChecked) {
-                                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() + 1).toString()
-                                                } else {
-                                                    comment2HeartFlag = false
-                                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() - 1).toString()
-                                                }
-
-                                                val request = Login_Request(
-                                                    Request.Method.POST,
-                                                    urlComment2Heart,
-                                                    { response ->
-                                                        Log.d("comment2Hart", response)
-
-                                                    },
-                                                    { Log.d("Comment2 failed", "error......${error(applicationContext)}") },
-                                                    hashMapOf(
-                                                        "id" to id,
-                                                        "post_num" to post_num,
-                                                        "board" to board,
-                                                        "comment_num" to comment_num.toString(),
-                                                        "comment2_num" to (pos+1).toString(),
-                                                        "flag" to comment2HeartFlag.toString()
-                                                    )
-                                                )
-                                                val queue = Volley.newRequestQueue(applicationContext)
-                                                queue.add(request)
-                                            }
-                                        })
                                     }
                                 }
+                                val commentItem = CommentItem(id, comment, comment_num, comment_time, commentDetailAdapterMap)
+                                comment_items.add(commentItem)
+                                CommentRecyclerView.adapter = Commentadapter
                             }, { Log.d("login failed", "error......${error(applicationContext)}") },
                             hashMapOf(
                                 "comment_num" to comment_num.toString(),
@@ -390,6 +355,53 @@ class BoardDetail : AppCompatActivity() {
                         )
                         val queue = Volley.newRequestQueue(this)
                         queue.add(request)
+
+                        commentDetailadapter.setOnItemClickListener(object :
+                            CommentDetailListAdapter.OnItemClickListener {
+                            //대댓글 좋아요 눌렀을때.
+                            override fun onItemHeart(v: View, data: CommentDetailItem, pos: Int) {
+                                val commentHeart =
+                                    v.findViewById<CheckBox>(R.id.imageView_comment2_like)
+                                val commentHeartCnt =
+                                    v.findViewById<TextView>(R.id.comment2_heartCnt)
+                                var comment2HeartFlag = true
+                                if (commentHeart.isChecked) {
+                                    commentHeartCnt.text =
+                                        (commentHeartCnt.text.toString().toInt() + 1).toString()
+                                } else {
+                                    comment2HeartFlag = false
+                                    commentHeartCnt.text =
+                                        (commentHeartCnt.text.toString().toInt() - 1).toString()
+                                }
+
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    urlComment2Heart,
+                                    { response ->
+                                        Log.d("comment2Hart", response)
+
+                                    },
+                                    {
+                                        Log.d(
+                                            "Comment2 failed",
+                                            "error......${error(applicationContext)}"
+                                        )
+                                    },
+                                    hashMapOf(
+                                        "id" to id,
+                                        "post_num" to post_num,
+                                        "board" to board,
+                                        "comment_num" to comment_num.toString(),
+                                        "comment2_num" to (pos + 1).toString(),
+                                        "flag" to comment2HeartFlag.toString()
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(applicationContext)
+                                queue.add(request)
+                            }
+                        })
+
+
                         // -------------------------------------------------------------------------------------------
 
 
@@ -469,6 +481,64 @@ class BoardDetail : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    //대댓글 fetch ----------------------------------------------------------------------------
+    fun fetchCommentDetailData(board : String, post_num : String, comment_num : String) : ArrayList<CommentDetailItem> {
+        var id = intent.getStringExtra("id") //접속한 유저의 아이디
+        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
+        var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            urlDetail,
+            { response ->
+                commentDetail_items.clear()
+                if (response != "no Comment2") {
+                    val jsonArray = JSONArray(response)
+
+                    var comment2_user = HashMap<String, Int>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+                        val id = item.getString("id")
+                        if (!comment2_user.containsKey(id)) comment2_user[id] =
+                            comment2_user.size + 1
+                    }
+
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+
+                        val id = item.getString("id")
+                        val comment_num = item.getInt("comment_num")
+                        val comment2 = item.getString("comment2")
+                        val comment2_time = item.getString("comment2_time")
+                        val comment2_num = comment2_user[id]!!
+
+                        val commentDetailItem =
+                            CommentDetailItem(id, comment_num, comment2, comment2_num, comment2_time)
+
+                        commentDetail_items.add(commentDetailItem)
+
+                        Log.d(
+                            "commmentDetailItem",
+                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
+                        )
+
+                        //viewModel.setItemList(Comment_items)
+                    }
+                }
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "comment_num" to comment_num.toString(),
+                "post_num" to post_num,
+                "board" to board
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+//
+        return commentDetail_items
     }
 
     // 북마크 fetch -----------------------------------------------------------------------------
@@ -662,7 +732,6 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                Log.d("123123213", response)
                 if (!response.equals("Comment fail")) {
                     val requestCnt = Login_Request(
                         Request.Method.POST,
