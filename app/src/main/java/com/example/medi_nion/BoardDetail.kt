@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -43,8 +44,7 @@ var selectedCommentItem : CommentItem = CommentItem("", "", -1, "")
 class BoardDetail : AppCompatActivity() {
 
     var comment_comment_flag = false // 댓글창에 입력할때, 댓글 입력하는 건지/ 대댓글 입력하는건지
-    var comment_comment_pos = 0 //대댓글 인덱스
-    var selected_comment_post = -1 //댓글 달 곳의 인덱스
+    var comment_comment_pos = -1 //대댓글 인덱스
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
@@ -157,7 +157,7 @@ class BoardDetail : AppCompatActivity() {
         Comment_Btn.setOnClickListener {
             if(comment_comment_flag == true){ //대댓글
                 Log.d("ocmme", comment_comment_pos.toString())
-                Comment2Request(comment_comment_pos + 1)
+                Comment2Request(comment_comment_pos +1 )
                 val manager: InputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
@@ -166,30 +166,13 @@ class BoardDetail : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
             }
             else{ //댓글
-                CommentRequest(comment_comment_pos + 1)
+                CommentRequest(comment_comment_pos +1 )
                 val manager: InputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
                 Comment_editText.setText(null) //댓글입력창 clear
             }
 
-//            if(comment_comment_flag == true){ //대댓글
-//                Log.d("ocmme", comment_comment_pos.toString())
-//                Comment2Request(comment_comment_pos + 1)
-//                val manager: InputMethodManager =
-//                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
-//                Comment_editText.setText(null) //댓글입력창 clear
-//                comment_comment_flag = false
-//                findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
-//            }
-//            else{ //댓글
-//                CommentRequest(comment_comment_pos + 1)
-//                val manager: InputMethodManager =
-//                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
-//                Comment_editText.setText(null) //댓글입력창 clear
-//            }
         }
 
         // 북마크 버튼 눌렀을 때 ------------------------------------------------------------------
@@ -309,13 +292,123 @@ class BoardDetail : AppCompatActivity() {
 
                         items.clear()
 
+                        // 대댓글 fetch ------------------------------------------------------------------------
                         //대댓글 받아오기.
-                        fetchCommentDetailData(board, post_num, comment_num.toString())
+//                        fetchCommentDetailData(board, post_num, comment_num)
+                        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
+                        var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
+                        val jsonArray : JSONArray
+
+                        Log.d("QQQQ", "$id, $comment, $comment_num, $board, $post_num")
+
+                        commentDetail_items.clear()
+
+                        val request = Login_Request(
+                            Request.Method.POST,
+                            urlDetail,
+                            { response ->
+                                commentDetail_items.clear()
+                                if (response != "no Comment2") {
+
+                                    val jsonArray = JSONArray(response)
+                                    Log.d("123123", jsonArray.length().toString())
+
+                                    var comment2_user = HashMap<String, Int>()
+
+                                    for (i in 0 until jsonArray.length()) {
+                                        val item = jsonArray.getJSONObject(i)
+                                        val id = item.getString("id")
+                                        if (!comment2_user.containsKey(id)) comment2_user[id] =
+                                            comment2_user.size + 1
+                                    }
+
+                                    for (i in 0 until jsonArray.length()) {
+                                        val item = jsonArray.getJSONObject(i)
+
+                                        val id = item.getString("id")
+                                        val comment2 = item.getString("comment2")
+                                        val comment2_time = item.getString("comment2_time")
+                                        val comment2_num = comment2_user[id]!!
+
+                                        val commentDetailItem =
+                                            CommentDetailItem(id, comment2, comment2_num, comment2_time)
+
+                                        commentDetail_items.add(commentDetailItem)
+
+                                        Log.d(
+                                            "commmentDetailItem",
+                                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
+                                        )
+
+                                        //viewModel.setItemList(Comment_items)
+                                        CommentRecyclerView.get(comment_num-1).CommentRecyclerView2.adapter = commentDetailadapter
+
+
+                                        commentDetailadapter.setOnItemClickListener(object :
+                                            CommentDetailListAdapter.OnItemClickListener {
+                                            //대댓글 좋아요 눌렀을때.
+                                            override fun onItemHeart(v: View, data: CommentDetailItem, pos: Int) {
+                                                val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment2_like)
+                                                val commentHeartCnt = v.findViewById<TextView>(R.id.comment2_heartCnt)
+                                                var comment2HeartFlag = true
+                                                if (commentHeart.isChecked) {
+                                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() + 1).toString()
+                                                } else {
+                                                    comment2HeartFlag = false
+                                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() - 1).toString()
+                                                }
+
+                                                val request = Login_Request(
+                                                    Request.Method.POST,
+                                                    urlComment2Heart,
+                                                    { response ->
+                                                        Log.d("comment2Hart", response)
+
+                                                    },
+                                                    { Log.d("Comment2 failed", "error......${error(applicationContext)}") },
+                                                    hashMapOf(
+                                                        "id" to id,
+                                                        "post_num" to post_num,
+                                                        "board" to board,
+                                                        "comment_num" to comment_num.toString(),
+                                                        "comment2_num" to (pos+1).toString(),
+                                                        "flag" to comment2HeartFlag.toString()
+                                                    )
+                                                )
+                                                val queue = Volley.newRequestQueue(applicationContext)
+                                                queue.add(request)
+                                            }
+                                        })
+                                    }
+                                }
+                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                            hashMapOf(
+                                "comment_num" to comment_num.toString(),
+                                "post_num" to post_num,
+                                "board" to board
+                            )
+                        )
+                        val queue = Volley.newRequestQueue(this)
+                        queue.add(request)
+                        // -------------------------------------------------------------------------------------------
+
 
                         Commentadapter.setOnItemClickListener(object :
                             CommentListAdapter.OnItemClickListener {
                             override fun onItemClick(v: View, data: CommentItem, pos: Int) {
-                                //댓글 눌렀을때.
+                                //댓글 눌렀을때. -> 대댓글
+                                if(comment_comment_flag == true){
+                                    comment_comment_flag = false
+                                    CommentRecyclerView.get(pos).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+//                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                                    //자동 키보드 내리기
+                                }else{
+                                    comment_comment_flag = true
+                                    comment_comment_pos = pos
+                                    CommentRecyclerView.get(pos).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
+//                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
+                                    //자동 키보드 올리기
+                                }
                             }
 
                             //댓글 좋아요 눌렀을때.
@@ -376,108 +469,6 @@ class BoardDetail : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
-    }
-
-    // 대댓글 fetch ------------------------------------------------------------------------
-    fun fetchCommentDetailData(board : String, post_num : String, comment_num : String) {
-        val comment2RecyclerView = findViewById<RecyclerView>(R.id.CommentRecyclerView2)
-        var id = intent.getStringExtra("id").toString()
-        val comment = intent?.getStringExtra("comment").toString()
-        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
-        var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
-        val jsonArray : JSONArray
-
-        Log.d("QQQQ", "$id, $comment, $comment_num, $board, $post_num")
-
-        commentDetail_items.clear()
-
-        val request = Login_Request(
-            Request.Method.POST,
-            urlDetail,
-            { response ->
-                commentDetail_items.clear()
-                if (response != "no Comment2") {
-
-                    val jsonArray = JSONArray(response)
-
-                    var comment2_user = HashMap<String, Int>()
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-                        val id = item.getString("id")
-                        if (!comment2_user.containsKey(id)) comment2_user[id] =
-                            comment2_user.size + 1
-                    }
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-
-                        val id = item.getString("id")
-                        val comment2 = item.getString("comment2")
-                        val comment2_time = item.getString("comment2_time")
-                        val comment2_num = comment2_user[id]!!
-
-                        val commentDetailItem =
-                            CommentDetailItem(id, comment2, comment2_num, comment2_time)
-
-                        commentDetail_items.add(commentDetailItem)
-
-                        Log.d(
-                            "commmentDetailItem",
-                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
-                        )
-
-                        //viewModel.setItemList(Comment_items)
-                        CommentRecyclerView.CommentRecyclerView2.adapter = commentDetailadapter
-
-
-                        commentDetailadapter.setOnItemClickListener(object :
-                            CommentDetailListAdapter.OnItemClickListener {
-                            //대댓글 좋아요 눌렀을때.
-                            override fun onItemHeart(v: View, data: CommentDetailItem, pos: Int) {
-                                val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment2_like)
-                                val commentHeartCnt = v.findViewById<TextView>(R.id.comment2_heartCnt)
-                                var comment2HeartFlag = true
-                                if (commentHeart.isChecked) {
-                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() + 1).toString()
-                                } else {
-                                    comment2HeartFlag = false
-                                    commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() - 1).toString()
-                                }
-
-                                val request = Login_Request(
-                                    Request.Method.POST,
-                                    urlComment2Heart,
-                                    { response ->
-                                        Log.d("comment2Hart", response)
-
-                                    },
-                                    { Log.d("Comment2 failed", "error......${error(applicationContext)}") },
-                                    hashMapOf(
-                                        "id" to id,
-                                        "post_num" to post_num,
-                                        "board" to board,
-                                        "comment_num" to comment_num,
-                                        "comment2_num" to (pos+1).toString(),
-                                        "flag" to comment2HeartFlag.toString()
-                                    )
-                                )
-                                val queue = Volley.newRequestQueue(applicationContext)
-                                queue.add(request)
-                            }
-                        })
-                    }
-                }
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "comment_num" to comment_num,
-                "post_num" to post_num,
-                "board" to board
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-
     }
 
     // 북마크 fetch -----------------------------------------------------------------------------
