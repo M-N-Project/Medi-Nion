@@ -45,7 +45,8 @@ class BoardDetail : AppCompatActivity() {
 
     var comment_num = 0
     var comment_comment_flag = false // 댓글창에 입력할때, 댓글 입력하는 건지/ 대댓글 입력하는건지
-    var comment_comment_pos = -1 //대댓글 인덱스
+    var comment_comment_posPresent = -1 //대댓글 인덱스
+    var comment_comment_posBefore = -1 //대댓글 인덱스
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
@@ -157,8 +158,7 @@ class BoardDetail : AppCompatActivity() {
         // 댓글 버튼 눌렀을때----------------------------------------------------------------------
         Comment_Btn.setOnClickListener {
             if(comment_comment_flag == true){ //대댓글
-                Log.d("ocmme", comment_comment_pos.toString())
-                Comment2Request(comment_comment_pos +1 )
+                Comment2Request(comment_comment_posPresent +1 )
                 val manager: InputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
@@ -167,7 +167,7 @@ class BoardDetail : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
             }
             else{ //댓글
-                    CommentRequest(++comment_num  )
+                    CommentRequest(++comment_num)
                 val manager: InputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
@@ -442,14 +442,26 @@ class BoardDetail : AppCompatActivity() {
                                     CommentListAdapter.OnItemClickListener {
                                     override fun onItemClick(v: View, data: CommentItem, pos: Int) {
                                         //댓글 눌렀을때. -> 대댓글
+                                        comment_comment_posPresent = pos
                                         if(comment_comment_flag == true){
-                                            comment_comment_flag = false
-                                            CommentRecyclerView.get(pos).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                                            if(comment_comment_posPresent == comment_comment_posBefore){
+                                                comment_comment_flag = false
+                                                CommentRecyclerView.get(comment_comment_posPresent).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                                            }
+                                            else{
+
+                                                CommentRecyclerView.get(comment_comment_posBefore).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                                                CommentRecyclerView.get(comment_comment_posPresent).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
+                                                comment_comment_posBefore = pos
+                                            }
+
 //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
                                             //자동 키보드 내리기
                                         }else{
                                             comment_comment_flag = true
-                                            comment_comment_pos = pos
+                                            comment_comment_posBefore = pos
+                                            comment_comment_posPresent = pos
+
                                             CommentRecyclerView.get(pos).findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
 //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
                                             //자동 키보드 올리기
@@ -498,7 +510,7 @@ class BoardDetail : AppCompatActivity() {
                                             //자동 키보드 내리기
                                         }else{
                                             comment_comment_flag = true
-                                            comment_comment_pos = pos
+                                            comment_comment_posPresent = pos
                                             findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
                                             //자동 키보드 올리기
                                         }
@@ -520,7 +532,6 @@ class BoardDetail : AppCompatActivity() {
 
                     //------------------------------------------------------------------------------------------------
 
-                    Log.d("123213", (commentDetail_items.size).toString())
 
 
                 }
@@ -623,8 +634,6 @@ class BoardDetail : AppCompatActivity() {
                         }
                     }
 
-                    Log.d("bookmark fetch", id.toString())
-
                 }
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
@@ -652,7 +661,6 @@ class BoardDetail : AppCompatActivity() {
             urlDelete,
             { response ->
                 if (!response.equals("update fail")) {
-                    Log.d("sadsaf", response)
                     Toast.makeText(
                         baseContext,
                         String.format("게시물이 삭제되었습니다."),
@@ -771,8 +779,6 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
-        Log.d("123123", comment_num.toString())
-
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
@@ -856,7 +862,6 @@ class BoardDetail : AppCompatActivity() {
         var board = intent?.getStringExtra("board").toString()
         var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
-        Log.d("ASDF", "$id, $post_num, $comment_num, $board, $comment2")
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
