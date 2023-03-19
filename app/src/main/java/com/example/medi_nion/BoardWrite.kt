@@ -45,6 +45,8 @@ class BoardWrite : AppCompatActivity() {
         var id = intent.getStringExtra("id")
         var board = intent.getStringExtra("board").toString()
         val update = intent.getIntExtra("update", 0)
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
 
         //수정으로 글쓰기 화면 넘어왔을 때
         if(update == 1){
@@ -148,6 +150,8 @@ class BoardWrite : AppCompatActivity() {
         var updateUrl = "http://seonho.dothome.co.kr/updateBoard.php"
         var id = intent?.getStringExtra("id").toString()
         var board = intent.getStringExtra("board").toString()
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
@@ -174,7 +178,7 @@ class BoardWrite : AppCompatActivity() {
                 Request.Method.POST,
                 updateUrl,
                 { response ->
-                    Log.d("11??", response)
+                    //Log.d("11??", response)
                     if (!response.equals("upload fail")) {
                         Toast.makeText(
                             baseContext,
@@ -185,6 +189,9 @@ class BoardWrite : AppCompatActivity() {
                         var intent = Intent(applicationContext, Board::class.java)
                         intent.putExtra("id", id)
                         intent.putExtra("board", board)
+                        Log.d("게시물 수정 완료", userDept)
+                        intent.putExtra("userType", userType)
+                        intent.putExtra("userDept", userDept)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                         startActivity(intent)
 
@@ -227,6 +234,8 @@ class BoardWrite : AppCompatActivity() {
                         var intent = Intent(applicationContext, Board::class.java)
                         intent.putExtra("id", id)
                         intent.putExtra("board", board)
+                        intent.putExtra("userType", userType)
+                        intent.putExtra("userDept", userDept)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                         startActivity(intent)
 
@@ -243,6 +252,8 @@ class BoardWrite : AppCompatActivity() {
                     "update" to flagUpdate,
                     "id" to id,
                     "board" to board_select,
+                    "userType" to userType,
+                    "userDept" to userDept,
                     "title" to postTitle,
                     "content" to postContent,
                     "image1" to img1,

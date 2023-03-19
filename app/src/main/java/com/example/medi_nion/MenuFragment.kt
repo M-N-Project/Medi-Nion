@@ -3,6 +3,7 @@ package com.example.medi_nion
     import android.annotation.SuppressLint
     import android.content.Intent
     import android.os.Bundle
+    import android.util.Log
     import android.view.View
     import android.view.animation.Animation
     import android.view.animation.AnimationUtils
@@ -40,7 +41,11 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
         Binding = BottomMenuBinding.inflate(layoutInflater)
 
+        // bundle 에서 id, userType, userDept 값 가져오기
         val id = arguments?.getString("id")
+        val userType = arguments?.getString("userType")
+        val userDept = arguments?.getString("userDept")
+
         allBoard = view.findViewById(R.id.menu_All) // 전체 게시판
         basicBoard = view.findViewById(R.id.menu_basic) // 자유 게시판
         jobBoard = view.findViewById(R.id.menu_job) //직종별 게시판
@@ -82,6 +87,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "직종별 게시판")
                 startActivity(intent)
             }
@@ -89,7 +96,10 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         secBoard.setOnClickListener { //진료과별 게시판으로 이동함
             activity?.let{
                 val intent = Intent(context, Board::class.java)
+                Log.d("userSearch", "$userType  $userDept")
                 intent.putExtra("id", id)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "진료과별 게시판")
                 startActivity(intent)
             }

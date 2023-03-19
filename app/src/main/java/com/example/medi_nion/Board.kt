@@ -53,6 +53,8 @@ class Board : AppCompatActivity() {
         boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
 
         var id = intent.getStringExtra("id")
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
 
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
@@ -63,6 +65,9 @@ class Board : AppCompatActivity() {
             intent.putExtra("id", id)
             intent.putExtra("board", board)
             intent.putExtra("update", 0)
+            intent.putExtra("userType", userType)
+            intent.putExtra("userDept", userDept)
+            Log.d("Floating Button Clicked", userType)
             startActivity(intent)
         }
 
@@ -144,6 +149,10 @@ class Board : AppCompatActivity() {
         var id = intent.getStringExtra("id")
         var board :String = ""
         board = intent.getStringExtra("board").toString()
+        var userType :String = ""
+        userType = intent.getStringExtra("userType").toString()
+        var userDept :String = ""
+        userDept = intent.getStringExtra("userDept").toString()
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
@@ -223,6 +232,8 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("content", detailContent)
                                         intent.putExtra("time", detailTime)
                                         intent.putExtra("image", detailImg)
+                                        intent.putExtra("userType", userType)
+                                        intent.putExtra("userDept", userDept)
                                         startActivity(intent)
                                     }
 
@@ -245,7 +256,9 @@ class Board : AppCompatActivity() {
 
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
-                "board" to board
+                "board" to board,
+                "userType" to userType,
+                "userDept" to userDept
             )
         )
         val queue = Volley.newRequestQueue(this)

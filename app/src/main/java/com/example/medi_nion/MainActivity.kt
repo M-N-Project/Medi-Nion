@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
         bottomNavigationView.itemTextColor = null
 
         val id = intent.getStringExtra("id")
+        val userType = intent.getStringExtra("userType")
+        val userDept = intent.getStringExtra("userDept")
 
         var bnv = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     val menuFragment = MenuFragment()
                     var bundle = Bundle()
                     bundle.putString("id",id)
+                    bundle.putString("userType", userType)
+                    bundle.putString("userDept", userDept)
                     menuFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
                 }
