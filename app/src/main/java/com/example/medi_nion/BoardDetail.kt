@@ -751,7 +751,7 @@ class BoardDetail : AppCompatActivity() {
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val comment_time = current.format(formatter)
+        var comment_time = current.format(formatter)
 
         val request = Login_Request(
             Request.Method.POST,

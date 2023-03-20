@@ -169,13 +169,13 @@ class Board : AppCompatActivity() {
                         val num = item.getInt("num")
                         val title = item.getString("title")
                         val content = item.getString("content")
-                        val time = item.getString("time")
+                        val board_time = item.getString("time")
                         val image = item.getString("image")
                         var heart = item.getInt("heart")
                         var comment = item.getInt("comment")
                         var bookmark = item.getInt("bookmark")
 
-                        val simpleTime = timeDiff(time)
+                        val simpleTime = timeDiff(board_time)
 
                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
