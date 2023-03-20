@@ -46,6 +46,7 @@ val viewModel: CommentViewModel = CommentViewModel()
 class BoardDetail : AppCompatActivity() {
 
     var comment_num = 0
+    var comment_comment_num = 0
     var comment_comment_flag = false // 댓글창에 입력할때, 댓글 입력하는 건지/ 대댓글 입력하는건지
     var comment_comment_posPresent = -1 //대댓글 인덱스
     var comment_comment_posBefore = -1 //대댓글 인덱스
@@ -182,7 +183,7 @@ class BoardDetail : AppCompatActivity() {
         // 댓글 버튼 눌렀을때----------------------------------------------------------------------
         Comment_Btn.setOnClickListener {
             if(comment_comment_flag == true){ //대댓글
-                Comment2Request(comment_comment_posPresent +1 )
+                Comment2Request(comment_comment_posPresent +1 , ++comment_comment_num)
                 val manager: InputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
@@ -284,6 +285,7 @@ class BoardDetail : AppCompatActivity() {
                     val jsonArray = JSONArray(response)
 
                     val comment_count = jsonArray.length()
+                    comment_num = comment_count
                     findViewById<TextView>(R.id.textView_commentcount2).text =
                         comment_count.toString()
 
@@ -327,7 +329,7 @@ class BoardDetail : AppCompatActivity() {
                                         val comment_num = item.getInt("comment_num")
                                         val comment2 = item.getString("comment2")
                                         val comment2_time = item.getString("comment2_time")
-//                                        val comment2_num = item.getInt("comment2_num")
+                                        val comment2_num = item.getInt("comment2_num")
                                         val writerUser = comment_user[id]!!
 
                                         val commentDetailItem =
@@ -336,7 +338,7 @@ class BoardDetail : AppCompatActivity() {
                                                 writerUser,
                                                 comment_num,
                                                 comment2,
-                                                0,
+                                                comment2_num,
                                                 comment2_time
                                             )
 
@@ -344,7 +346,7 @@ class BoardDetail : AppCompatActivity() {
 
                                         Log.d(
                                             "commmentDetailItem",
-                                            "$id, $post_num, 0, $comment2, $writerUser, $comment2_time"
+                                            "$id, $post_num, $comment2_num, $comment2, $writerUser, $comment2_time"
                                         )
                                     }
 
@@ -823,7 +825,7 @@ class BoardDetail : AppCompatActivity() {
 
     //대댓글 request-------------------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
-    fun Comment2Request(comment_num : Int) {
+    fun Comment2Request(comment_num : Int, comment2_num : Int) {
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
@@ -868,6 +870,7 @@ class BoardDetail : AppCompatActivity() {
                 "id" to id,
                 "post_num" to post_num,
                 "comment_num" to comment_num.toString(),
+                "comment2_num" to comment2_num.toString(),
                 "comment2" to comment2
             )
         )
