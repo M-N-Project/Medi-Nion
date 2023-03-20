@@ -48,9 +48,8 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
         fun bind(item: CommentItem, pos : Int) {
             itemComment.text = item.comment
             itemCommentTime.text = item.comment_time
-            itemCommentNum.text = item.comment_num.toString()
+            itemCommentNum.text = item.writerNum.toString()
 
-            Log.d("pppss", "$pos // ${item.comment_num}")
             if(pos == item.comment_num-1){
                 itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
             }

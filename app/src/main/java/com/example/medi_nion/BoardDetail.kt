@@ -289,30 +289,32 @@ class BoardDetail : AppCompatActivity() {
                                 if(response !="no Comment2"){
                                     val jsonArrayComment2 = JSONArray(response)
 
-                                    var comment2_user = HashMap<String, Int>()
+//                                    var comment_user = HashMap<String, Int>()
 
                                     for (i in 0 until jsonArrayComment2.length()) {
                                         val item = jsonArrayComment2.getJSONObject(i)
                                         val id = item.getString("id")
-                                        if (!comment2_user.containsKey(id)) comment2_user[id] =
-                                            comment2_user.size + 1
+                                        if (!comment_user.containsKey(id)) comment_user[id] =
+                                            comment_user.size + 1
                                     }
 
                                     for (i in 0 until jsonArrayComment2.length()) {
                                         val item = jsonArrayComment2.getJSONObject(i)
 
                                         val id = item.getString("id")
-                                        val comment_num2 = item.getInt("comment_num")
+                                        val comment_num = item.getInt("comment_num")
                                         val comment2 = item.getString("comment2")
                                         val comment2_time = item.getString("comment2_time")
-                                        val comment2_num = comment2_user[id]!!
+//                                        val comment2_num = item.getInt("comment2_num")
+                                        val writerUser = comment_user[id]!!
 
                                         val commentDetailItem =
                                             CommentDetailItem(
                                                 id,
+                                                writerUser,
                                                 comment_num,
                                                 comment2,
-                                                comment2_num,
+                                                0,
                                                 comment2_time
                                             )
 
@@ -320,7 +322,7 @@ class BoardDetail : AppCompatActivity() {
 
                                         Log.d(
                                             "commmentDetailItem",
-                                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
+                                            "$id, $post_num, 0, $comment2, $writerUser, $comment2_time"
                                         )
                                     }
 
@@ -333,6 +335,7 @@ class BoardDetail : AppCompatActivity() {
                                         val comment = item.getString("comment")
                                         val comment_time = item.getString("comment_time")
                                         val comment_num = item.getInt("comment_num")
+                                        val writerUser = comment_user[id]!!
 
 
                                         Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
@@ -342,12 +345,8 @@ class BoardDetail : AppCompatActivity() {
 //                                        items.clear()
 
                                         var newCommentDetailItems = ArrayList<CommentDetailItem>()
-                                        Log.d("nwlerwe3",( commentDetail_items.size).toString())
 
                                         for(num in 0 until commentDetail_items.size){
-                                            Log.d("nwlerwe",( commentDetail_items[num].comment_num == comment_num).toString())
-                                            Log.d("nwlerwe2",( commentDetail_items[num].comment_num ).toString())
-                                            Log.d("nwlerwe3",( comment_num).toString())
                                             if(commentDetail_items[num].comment_num == comment_num)
                                                 newCommentDetailItems.add(commentDetail_items[num])
                                         }
@@ -356,7 +355,7 @@ class BoardDetail : AppCompatActivity() {
                                         var commentDetailadapter = CommentDetailListAdapter(newCommentDetailItems)
                                         commentDetailAdapterMap[comment_num-1] = commentDetailadapter
 
-                                        val commentItem = CommentItem(id, comment, comment_num, comment_time, commentDetailAdapterMap)
+                                        val commentItem = CommentItem(id, writerUser, comment, comment_num, comment_time, commentDetailAdapterMap)
                                         comment_items.add(commentItem)
                                         Commentadapter = CommentListAdapter(comment_items)
                                         CommentRecyclerView.adapter = Commentadapter
@@ -376,14 +375,14 @@ class BoardDetail : AppCompatActivity() {
                                         val comment = item.getString("comment")
                                         val comment_time = item.getString("comment_time")
                                         val comment_num = item.getInt("comment_num")
-
+                                        val writerUser = comment_user[id]!!
 
                                         Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
 
                                         //viewModel.setItemList(Comment_items)
 
 
-                                        val commentItem = CommentItem(id, comment, comment_num, comment_time, commentDetailAdapterMap)
+                                        val commentItem = CommentItem(id, writerUser, comment, comment_num, comment_time, commentDetailAdapterMap)
                                         comment_items.add(commentItem)
                                         Commentadapter = CommentListAdapter(comment_items)
                                         CommentRecyclerView.adapter = Commentadapter
@@ -547,64 +546,6 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
-    //대댓글 fetch ----------------------------------------------------------------------------
-    fun fetchCommentDetailData(board : String, post_num : String) : ArrayList<CommentDetailItem> {
-        var id = intent.getStringExtra("id") //접속한 유저의 아이디
-        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
-        var urlComment2Heart = "http://seonho.dothome.co.kr/comment2Heart.php"
-
-        val request = Login_Request(
-            Request.Method.POST,
-            urlDetail,
-            { response ->
-                commentDetail_items.clear()
-                if (response != "no Comment2") {
-                    val jsonArray = JSONArray(response)
-
-                    comment_num = jsonArray.length()
-
-                    var comment2_user = HashMap<String, Int>()
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-                        val id = item.getString("id")
-                        if (!comment2_user.containsKey(id)) comment2_user[id] =
-                            comment2_user.size + 1
-                    }
-
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-
-                        val id = item.getString("id")
-                        val comment_num = item.getInt("comment_num")
-                        val comment2 = item.getString("comment2")
-                        val comment2_time = item.getString("comment2_time")
-                        val comment2_num = comment2_user[id]!!
-
-                        val commentDetailItem =
-                            CommentDetailItem(id, comment_num, comment2, comment2_num, comment2_time)
-
-                        commentDetail_items.add(commentDetailItem)
-
-                        Log.d(
-                            "commmentDetailItem",
-                            "$id, $post_num, $comment_num, $comment2, $comment2_num, $comment2_time"
-                        )
-
-                        //viewModel.setItemList(Comment_items)
-                    }
-                }
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "post_num" to post_num,
-                "board" to board
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-//
-        return commentDetail_items
-    }
 
     // 북마크 fetch -----------------------------------------------------------------------------
     fun fetchBookmarkData() {
