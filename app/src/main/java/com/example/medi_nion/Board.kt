@@ -14,12 +14,8 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 var items =ArrayList<BoardItem>()
@@ -82,20 +78,18 @@ class Board : AppCompatActivity() {
                         refresh_layout.setOnRefreshListener {
                             Log.d("omg", "hello refresh")
 
-                            for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
-                                items.add(all_items[i])
-                                itemIndex.add(all_items[i].num) //앞에다가 추가.
+                            try {
+                                //TODO 액티비티 화면 재갱신 시키는 코드
+                                val intent = intent
+                                finish() //현재 액티비티 종료 실시
+                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                                startActivity(intent) //현재 액티비티 재실행 실시
+                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                            } catch (e: Exception) {
+                                e.printStackTrace()
                             }
-                            //var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                            var new_item = ArrayList<BoardItem>()
-                            new_item.addAll(items)
-                            Log.d("aaaaa", "$items")
-                            adapter = BoardListAdapter(new_item) //필수
-                            boardRecyclerView.adapter = adapter //필수
-                            adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
 
                             refresh_layout.isRefreshing = false //새로고침 없애기
-
                         }
 
 
