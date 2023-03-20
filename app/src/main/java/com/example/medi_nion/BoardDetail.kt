@@ -122,6 +122,8 @@ class BoardDetail : AppCompatActivity() {
             option_updatePost.setOnClickListener{
                 // 글쓰기 화면으로 이동
                 val board = intent.getStringExtra("board")
+                var userType = intent.getStringExtra("userType")
+                var userDept = intent.getStringExtra("userDept")
                 val intent = Intent(applicationContext, BoardWrite::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("board", board)
@@ -130,6 +132,8 @@ class BoardDetail : AppCompatActivity() {
                 intent.putExtra("content", content)
                 intent.putExtra("image", image)
                 intent.putExtra("update", 1)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
 
                 startActivity(intent)
             }
