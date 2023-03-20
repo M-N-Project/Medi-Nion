@@ -43,7 +43,7 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
         fun bind(item: CommentDetailItem) {
             itemComment.text = item.comment2
             itemCommentTime.text = item.comment2_time
-            itemCommentNum.text = item.comment2_num.toString()
+            itemCommentNum.text = item.writerNum.toString()
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
