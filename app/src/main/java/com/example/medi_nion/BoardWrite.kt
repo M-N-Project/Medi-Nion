@@ -234,6 +234,7 @@ class BoardWrite : AppCompatActivity() {
                         var intent = Intent(applicationContext, Board::class.java)
                         intent.putExtra("id", id)
                         intent.putExtra("board", board)
+                        intent.putExtra("time", currentTime.toString())
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.

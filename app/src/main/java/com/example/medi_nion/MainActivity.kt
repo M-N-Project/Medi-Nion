@@ -58,4 +58,8 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
             selectedItemId = R.id.homeFragment
         }
     }
+
+    override fun onBackPressed() {
+        finishAffinity()
+    }
 }

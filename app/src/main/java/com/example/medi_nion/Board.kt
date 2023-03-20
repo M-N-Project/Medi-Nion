@@ -2,10 +2,14 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -165,13 +169,13 @@ class Board : AppCompatActivity() {
                         val num = item.getInt("num")
                         val title = item.getString("title")
                         val content = item.getString("content")
-                        val time = item.getString("time")
+                        val board_time = item.getString("time")
                         val image = item.getString("image")
                         var heart = item.getInt("heart")
                         var comment = item.getInt("comment")
                         var bookmark = item.getInt("bookmark")
 
-                        val simpleTime = timeDiff(time)
+                        val simpleTime = timeDiff(board_time)
 
                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
@@ -217,7 +221,6 @@ class Board : AppCompatActivity() {
                                         detailTime = item.getString("time")
                                         detailImg = item.getString("image")
 
-
                                         val intent = Intent(applicationContext, BoardDetail::class.java)
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                                         intent.putExtra("board", board)
@@ -261,7 +264,6 @@ class Board : AppCompatActivity() {
         queue.add(request)
 
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun Millis(postTime : String) : Long {
