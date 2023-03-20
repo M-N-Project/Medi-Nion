@@ -9,6 +9,7 @@ package com.example.medi_nion
     import android.view.animation.AnimationUtils
     import android.widget.Button
     import android.widget.LinearLayout
+    import android.widget.TextView
     import androidx.fragment.app.Fragment
     import androidx.navigation.fragment.findNavController
     import com.example.medi_nion.databinding.BottomMenuBinding
@@ -16,9 +17,6 @@ package com.example.medi_nion
     import kotlinx.android.synthetic.main.bottom_menu.*
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
-    private var Binding : BottomMenuBinding ?= null
-
-    private val binding get() = Binding!!
 
     private lateinit var allBoard: Button
     private lateinit var basicBoard: Button
@@ -35,11 +33,16 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     private lateinit var manageBusinessBtn: Button
     private lateinit var allBoardDetail: LinearLayout
 
+    private lateinit var basicBoardTextView: TextView
+    private lateinit var marketBoardTextView: TextView
+    private lateinit var QnABoardTextView: TextView
+    private lateinit var jobBoardTextView: TextView
+    private lateinit var deptBoardTextView: TextView
+
+
     @SuppressLint("ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Binding = BottomMenuBinding.inflate(layoutInflater)
 
         // bundle 에서 id, userType, userDept 값 가져오기
         val id = arguments?.getString("id")
@@ -51,6 +54,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         jobBoard = view.findViewById(R.id.menu_job) //직종별 게시판
         secBoard = view.findViewById(R.id.menu_dept) //진료과별 게시판
         dealBoard = view.findViewById(R.id.menu_market) // 장터 게시판
+        allBoardDetail = view.findViewById(R.id.Allboard_Detail)
 
 
         qnaBtn = view.findViewById(R.id.menu_qna)
@@ -61,9 +65,50 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         medicalNewsBtn = view.findViewById(R.id.menu_news)
         manageBusinessBtn = view.findViewById(R.id.menu_buss)
 
+        basicBoardTextView = view.findViewById(R.id.basicboard_TextView)
+        marketBoardTextView = view.findViewById(R.id.marketboard_TextView)
+        QnABoardTextView = view.findViewById(R.id.QnAboard_TextView)
+        jobBoardTextView = view.findViewById(R.id.jobboard_TextView)
+        deptBoardTextView = view.findViewById(R.id.deptboard_TextView)
+
         allBoard.setOnClickListener { //전체 게시판으로 이동함
             activity?.let{
-                binding.AllboardDetail.visibility = View.VISIBLE
+                allBoardDetail.visibility = View.VISIBLE
+                basicBoardTextView.setOnClickListener {
+                    var intent = Intent(context, Board::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("board", "자유 게시판")
+                    startActivity(intent)
+                }
+                marketBoardTextView.setOnClickListener {
+                    val intent = Intent(context, Board::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("board", "장터 게시판")
+                    startActivity(intent)
+                }
+                QnABoardTextView.setOnClickListener {
+                    val intent = Intent(context, Board::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("board", "QnA 게시판")
+                    startActivity(intent)
+                }
+                jobBoardTextView.setOnClickListener {
+                    val intent = Intent(context, Board::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("userType", userType)
+                    intent.putExtra("userDept", userDept)
+                    intent.putExtra("board", "직종별 게시판")
+                    startActivity(intent)
+                }
+                deptBoardTextView.setOnClickListener {
+                    val intent = Intent(context, Board::class.java)
+                    Log.d("userSearch", "$userType  $userDept")
+                    intent.putExtra("id", id)
+                    intent.putExtra("userType", userType)
+                    intent.putExtra("userDept", userDept)
+                    intent.putExtra("board", "진료과별 게시판")
+                    startActivity(intent)
+                }
             }
         }
 
@@ -79,7 +124,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("board", "전체 게시판")
+                intent.putExtra("board", "자유 게시판")
                 startActivity(intent)
             }
         }
