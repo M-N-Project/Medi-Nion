@@ -42,6 +42,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment_time)
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
         private val itemCommentHeart : CheckBox = itemView.findViewById(R.id.imageView_comment_like)
+        private val itemCommentHeartCnt : TextView = itemView.findViewById(R.id.comment_heart_count)
         private val itemCommentComment: ImageView = itemView.findViewById(R.id.imageView_comment_comment)
         private val itemCommentDetail: RecyclerView = itemView.findViewById(R.id.CommentRecyclerView2)
 
@@ -49,6 +50,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemComment.text = item.comment
             itemCommentTime.text = item.comment_time
             itemCommentNum.text = item.writerNum.toString()
+            itemCommentHeartCnt.text = item.commentHeart.toString()
 
             if(pos == item.comment_num-1){
                 itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
