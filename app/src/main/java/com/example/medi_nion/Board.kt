@@ -45,6 +45,23 @@ class Board : AppCompatActivity() {
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
+        refresh_layout.setOnRefreshListener {
+            Log.d("omg", "hello refresh")
+
+            try {
+                //TODO 액티비티 화면 재갱신 시키는 코드
+                val intent = intent
+                finish() //현재 액티비티 종료 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                startActivity(intent) //현재 액티비티 재실행 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+
+                refresh_layout.isRefreshing = false //새로고침 없애기
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         items.clear()
         all_items.clear()
 
@@ -75,22 +92,6 @@ class Board : AppCompatActivity() {
 
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                         //새로고침...
-                        refresh_layout.setOnRefreshListener {
-                            Log.d("omg", "hello refresh")
-
-                            try {
-                                //TODO 액티비티 화면 재갱신 시키는 코드
-                                val intent = intent
-                                finish() //현재 액티비티 종료 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                                startActivity(intent) //현재 액티비티 재실행 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                            refresh_layout.isRefreshing = false //새로고침 없애기
-                        }
 
 
 //                       fetchData()
