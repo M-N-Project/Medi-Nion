@@ -303,7 +303,9 @@ class BoardDetail : AppCompatActivity() {
 
                     var commentHeartMap = HashMap<String, Int>()
 
-//                    //댓글 좋아요 가져오기...
+
+
+                    //                    //댓글 좋아요 가져오기...
 //                    val requestCommentLike = Login_Request(
 //                        Request.Method.POST,
 //                        urlCommentHeartFetch,

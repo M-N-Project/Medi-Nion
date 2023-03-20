@@ -10,6 +10,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.board_scroll_paging.*
 import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.*
@@ -97,7 +99,6 @@ class Board : AppCompatActivity() {
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                         //새로고침...
 
-
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
@@ -106,7 +107,8 @@ class Board : AppCompatActivity() {
                             scrollFlag = true
 
                             Log.d("attention", "let it be")
-
+                           //var progressBar = (progressBar) findViewById(R.id.progressbar)
+                            //progressBar.visibility
 
                             if((all_items.size - item_count*scroll_count) > 20){
                                 for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
