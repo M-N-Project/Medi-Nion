@@ -53,7 +53,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemCommentHeartCnt.text = item.commentHeart.toString()
 
             if(item.isHeart == true) itemCommentHeart.isChecked = true
-            else itemCommentHeart.isChecked = true
+            else itemCommentHeart.isChecked = false
 
             if(pos == item.comment_num-1){
                 itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
