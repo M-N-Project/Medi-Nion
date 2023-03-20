@@ -80,7 +80,7 @@ class Board : AppCompatActivity() {
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
                         //새로고침...
                         refresh_layout.setOnRefreshListener {
-                            Log.d("ditto", "hello refresh")
+                            Log.d("omg", "hello refresh")
 
                             for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
                                 items.add(all_items[i])
