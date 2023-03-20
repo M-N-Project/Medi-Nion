@@ -27,7 +27,9 @@ import kotlinx.android.synthetic.main.board_comment_item.*
 import kotlinx.android.synthetic.main.board_comment_item.view.*
 import kotlinx.android.synthetic.main.board_detail.*
 import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
+import kotlinx.android.synthetic.main.board_detail.refresh_layout
 import kotlinx.android.synthetic.main.board_detail.view.*
+import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.comment_comment_detail.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -53,6 +55,24 @@ class BoardDetail : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
+
+        refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
+        refresh_layout.setOnRefreshListener {
+            Log.d("ditto", "bye refresh")
+
+            try {
+                //TODO 액티비티 화면 재갱신 시키는 코드
+                val intent = intent
+                finish() //현재 액티비티 종료 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                startActivity(intent) //현재 액티비티 재실행 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            refresh_layout.isRefreshing = false //새로고침 없애기
+        }
 
 // ================================================= 변수 ==================================================================
         //Board.kt에서 BoardDetail.kt로 데이터 intent
