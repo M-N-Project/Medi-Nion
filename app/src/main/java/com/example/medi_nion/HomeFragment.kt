@@ -73,7 +73,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("board", "전체 게시판")
+                intent.putExtra("board", "자유 게시판")
                 startActivity(intent)
             }
         }
