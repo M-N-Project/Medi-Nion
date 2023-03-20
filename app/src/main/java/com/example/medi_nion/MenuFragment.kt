@@ -73,7 +73,10 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
         allBoard.setOnClickListener { //전체 게시판으로 이동함
             activity?.let{
-                allBoardDetail.visibility = View.VISIBLE
+
+                if(allBoardDetail.visibility == View.GONE) allBoardDetail.visibility = View.VISIBLE
+                else allBoardDetail.visibility = View.GONE
+
                 basicBoardTextView.setOnClickListener {
                     var intent = Intent(context, Board::class.java)
                     intent.putExtra("id", id)

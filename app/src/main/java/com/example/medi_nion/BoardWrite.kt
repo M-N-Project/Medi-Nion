@@ -281,7 +281,7 @@ class BoardWrite : AppCompatActivity() {
             if( requestCode ==  GALLERY)
             {
                 ImageData = data?.data!!
-                imgbtn.setImageURI(ImageData)
+                //imgbtn.setImageURI(ImageData)
 //                findViewById<TextView>(R.id.imageSrc).text = ImageData.toString()
 
                 try {
