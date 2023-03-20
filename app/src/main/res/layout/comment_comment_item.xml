@@ -59,13 +59,16 @@
 
             <CheckBox
                 android:id="@+id/imageView_comment2_like"
+                android:drawableStart="@drawable/heart_checkbox"
+                android:button="@null"
+                android:text=""
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="230dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.041"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/favorite_border" />
+                tools:ignore="TouchTargetSizeCheck"/>
 
             <TextView
                 android:id="@+id/comment2_heartCnt"
