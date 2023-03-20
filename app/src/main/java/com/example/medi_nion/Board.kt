@@ -45,7 +45,7 @@ class Board : AppCompatActivity() {
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
-        refresh_layout.setOnRefreshListener {
+        refresh_layout.setOnRefreshListener { //새로고침
             Log.d("omg", "hello refresh")
 
             try {
@@ -97,8 +97,12 @@ class Board : AppCompatActivity() {
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
+
                         if(all_items.size > 20){
                             scrollFlag = true
+
+                            Log.d("attention", "let it be")
+
 
                             if((all_items.size - item_count*scroll_count) > 20){
                                 for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
