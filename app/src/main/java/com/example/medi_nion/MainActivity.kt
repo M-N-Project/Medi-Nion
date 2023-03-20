@@ -3,8 +3,11 @@ package com.example.medi_nion
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+
+private var backPressedTime: Long = 0
 
 class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레그먼트 제어를 담당
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
@@ -60,6 +63,11 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
     }
 
     override fun onBackPressed() {
-        finishAffinity()
+        if(System.currentTimeMillis() - backPressedTime >= 2000) {
+            backPressedTime = System.currentTimeMillis()
+            Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            finishAffinity()
+        }
     }
 }
