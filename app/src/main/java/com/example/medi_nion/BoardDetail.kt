@@ -250,13 +250,15 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
-        comment_items.clear()
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (response != "no Comment") {
+                    items.clear()
+                    comment_items.clear()
+
                     val jsonArray = JSONArray(response)
 
                     val comment_count = jsonArray.length()
@@ -300,7 +302,7 @@ class BoardDetail : AppCompatActivity() {
                                         val item = jsonArrayComment2.getJSONObject(i)
 
                                         val id = item.getString("id")
-                                        val comment_num = item.getInt("comment_num")
+                                        val comment_num2 = item.getInt("comment_num")
                                         val comment2 = item.getString("comment2")
                                         val comment2_time = item.getString("comment2_time")
                                         val comment2_num = comment2_user[id]!!
@@ -337,14 +339,10 @@ class BoardDetail : AppCompatActivity() {
 
                                         //viewModel.setItemList(Comment_items)
 
-                                        var userId = intent?.getStringExtra("id").toString()
-                                        var detailId: String = ""
-                                        var detailComment: String = ""
-                                        var detailCommentTime: String = ""
-
-                                        items.clear()
+//                                        items.clear()
 
                                         var newCommentDetailItems = ArrayList<CommentDetailItem>()
+                                        Log.d("nwlerwe3",( commentDetail_items.size).toString())
 
                                         for(num in 0 until commentDetail_items.size){
                                             Log.d("nwlerwe",( commentDetail_items[num].comment_num == comment_num).toString())
@@ -562,6 +560,8 @@ class BoardDetail : AppCompatActivity() {
                 commentDetail_items.clear()
                 if (response != "no Comment2") {
                     val jsonArray = JSONArray(response)
+
+                    comment_num = jsonArray.length()
 
                     var comment2_user = HashMap<String, Int>()
 
