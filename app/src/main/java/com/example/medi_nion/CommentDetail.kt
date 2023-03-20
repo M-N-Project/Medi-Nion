@@ -161,13 +161,13 @@ class CommentDetail  : AppCompatActivity() {
 
                     val jsonArray = JSONArray(response)
 
-                    var comment2_user = HashMap<String, Int>()
+                    var comment_user = HashMap<String, Int>()
 
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
                         val id = item.getString("id")
-                        if (!comment2_user.containsKey(id)) comment2_user[id] =
-                            comment2_user.size + 1
+                        if (!comment_user.containsKey(id)) comment_user[id] =
+                            comment_user.size + 1
                     }
 
                     for (i in 0 until jsonArray.length()) {
@@ -177,12 +177,20 @@ class CommentDetail  : AppCompatActivity() {
                         val comment_num = item.getInt("comment_num")
                         val comment2 = item.getString("comment2")
                         val comment2_time = item.getString("comment2_time")
-                        val comment2_num = comment2_user[id]!!
+                        val comment2_num = item.getInt("comment_num")
+                        val writerUser = comment_user[id]!!
 
                         val commentDetailItem =
-                            CommentDetailItem(id, comment_num, comment2, comment2_num, comment2_time)
+                            CommentDetailItem(
+                                id,
+                                writerUser,
+                                comment_num,
+                                comment2,
+                                comment2_num,
+                                comment2_time
+                            )
 
-                        CommentDetail_items.add(commentDetailItem)
+                        commentDetail_items.add(commentDetailItem)
 
                         Log.d(
                             "commmentDetailItem",
