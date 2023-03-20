@@ -47,6 +47,8 @@ class Board : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
 
+        refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
+
         items.clear()
         all_items.clear()
 
