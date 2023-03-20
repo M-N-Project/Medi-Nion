@@ -99,7 +99,7 @@ class BoardWrite : AppCompatActivity() {
 
             free_RadioBtn.setOnClickListener {
                 select_RadioGroup.visibility = View.GONE
-                board_select.text = "전체 게시판"
+                board_select.text = "자유 게시판"
             }
 
             job_RadioBtn.setOnClickListener {
