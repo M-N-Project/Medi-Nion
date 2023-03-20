@@ -22,7 +22,7 @@
             android:id="@+id/free_RadioBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="전체 게시판"
+            android:text="자유 게시판"
             android:layout_marginTop="2dp"
             android:textAlignment="center"
             android:layout_marginRight="2dp"
