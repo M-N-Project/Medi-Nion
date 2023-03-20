@@ -250,6 +250,8 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
+        items.clear()
+        comment_items.clear()
 
         val request = Login_Request(
             Request.Method.POST,
