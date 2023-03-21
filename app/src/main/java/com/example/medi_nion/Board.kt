@@ -101,17 +101,18 @@ class Board : AppCompatActivity() {
 
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
 
-                        //새로고침...
-
-//                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
                         if(all_items.size > 20){
                             scrollFlag = true
 
                             Log.d("attention", "let it be")
+                            var progressBar : ProgressBar = findViewById(R.id.progressBar2)
+                            progressBar.visibility = View.VISIBLE
 
-
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                progressBar.visibility = View.INVISIBLE
+                            }, 2000)
 
 
                             if((all_items.size - item_count*scroll_count) > 20){
