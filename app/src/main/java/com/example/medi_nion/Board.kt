@@ -110,15 +110,7 @@ class Board : AppCompatActivity() {
                             scrollFlag = true
 
                             Log.d("attention", "let it be")
-//                            var new_items = ArrayList<BoardItem>()
-//                            new_items.addAll(items)
-//                            adapter = BoardListAdapter(new_items)
 
-//                            progressBar.isIndeterminate = true
-//                            progressBar.progress = View.VISIBLE
-//                            Handler(Looper.myLooper()!!).postDelayed({
-//                                progressBar.progress = View.GONE
-//                            }, 1000)
 
 
 
