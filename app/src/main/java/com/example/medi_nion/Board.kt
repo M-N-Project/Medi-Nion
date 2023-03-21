@@ -6,14 +6,18 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.board_scroll_paging.*
 import org.json.JSONArray
+import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,6 +49,23 @@ class Board : AppCompatActivity() {
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
+        refresh_layout.setOnRefreshListener { //새로고침
+            Log.d("omg", "hello refresh")
+
+            try {
+                //TODO 액티비티 화면 재갱신 시키는 코드
+                val intent = intent
+                finish() //현재 액티비티 종료 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                startActivity(intent) //현재 액티비티 재실행 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+
+                refresh_layout.isRefreshing = false //새로고침 없애기
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         items.clear()
         all_items.clear()
 
@@ -74,30 +95,22 @@ class Board : AppCompatActivity() {
                 if(scrollFlag==false){
 
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
+
                         //새로고침...
-                        refresh_layout.setOnRefreshListener {
-                            Log.d("omg", "hello refresh")
-
-                            try {
-                                //TODO 액티비티 화면 재갱신 시키는 코드
-                                val intent = intent
-                                finish() //현재 액티비티 종료 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                                startActivity(intent) //현재 액티비티 재실행 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                            refresh_layout.isRefreshing = false //새로고침 없애기
-                        }
-
 
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
                         if(all_items.size > 20){
                             scrollFlag = true
+
+                            Log.d("attention", "let it be")
+//                            var progressBar : ProgressBar = findViewById(R.id.progressBar1)
+//                            progressBar.progress = View.VISIBLE
+//                            sleep(1000)
+//                            progressBar.progress = View.GONE
+
+
 
                             if((all_items.size - item_count*scroll_count) > 20){
                                 for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
@@ -165,13 +178,13 @@ class Board : AppCompatActivity() {
                         val num = item.getInt("num")
                         val title = item.getString("title")
                         val content = item.getString("content")
-                        val time = item.getString("time")
+                        val board_time = item.getString("time")
                         val image = item.getString("image")
                         var heart = item.getInt("heart")
                         var comment = item.getInt("comment")
                         var bookmark = item.getInt("bookmark")
 
-                        val simpleTime = timeDiff(time)
+                        val simpleTime = timeDiff(board_time)
 
                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
@@ -217,7 +230,6 @@ class Board : AppCompatActivity() {
                                         detailTime = item.getString("time")
                                         detailImg = item.getString("image")
 
-
                                         val intent = Intent(applicationContext, BoardDetail::class.java)
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                                         intent.putExtra("board", board)
@@ -261,7 +273,6 @@ class Board : AppCompatActivity() {
         queue.add(request)
 
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun Millis(postTime : String) : Long {
@@ -309,4 +320,5 @@ class Board : AppCompatActivity() {
 
         return msg
     }
+
 }

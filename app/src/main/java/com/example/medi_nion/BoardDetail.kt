@@ -603,7 +603,8 @@ class BoardDetail : AppCompatActivity() {
                                                     urlUpdateCommentCnt,
                                                     { responseLike ->
                                                         if (!responseLike.equals("update fail")) {
-//
+                                                            post_num = responseLike.toString()
+//                                                            like_count = responseLike.toString()
                                                         } else {
                                                             Toast.makeText(
                                                                 applicationContext,
@@ -868,7 +869,7 @@ class BoardDetail : AppCompatActivity() {
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val comment_time = current.format(formatter)
+        var comment_time = current.format(formatter)
 
         val request = Login_Request(
             Request.Method.POST,
