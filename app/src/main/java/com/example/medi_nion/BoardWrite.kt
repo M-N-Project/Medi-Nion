@@ -318,18 +318,9 @@ class BoardWrite : AppCompatActivity() {
     private fun resize(bitmap: Bitmap): Bitmap? {
         var bitmap: Bitmap? = bitmap
         val config: Configuration = Resources.getSystem().configuration
-        bitmap = if (config.smallestScreenWidthDp >= 800) Bitmap.createScaledBitmap(
-            bitmap!!,
-            4800,
-            240,
-            true
-        ) else if (config.smallestScreenWidthDp >= 600) Bitmap.createScaledBitmap(
-            bitmap!!, 300, 180, true
-        ) else if (config.smallestScreenWidthDp >= 400) Bitmap.createScaledBitmap(
-            bitmap!!, 200, 120, true
-        ) else if (config.smallestScreenWidthDp >= 360) Bitmap.createScaledBitmap(
-            bitmap!!, 180, 108, true
-        ) else Bitmap.createScaledBitmap(bitmap!!, 160, 96, true)
+        var bitmap_width : Int? = bitmap?.width
+        var bitmap_height : Int? = bitmap?.height
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, 320, 320, true)
         return bitmap
     }
 
