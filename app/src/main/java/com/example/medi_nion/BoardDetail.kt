@@ -51,6 +51,8 @@ class BoardDetail : AppCompatActivity() {
     var comment_comment_posPresent = -1 //대댓글 인덱스
     var comment_comment_posBefore = -1 //대댓글 인덱스
 
+    var commentHeartFlag = "false"
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
@@ -301,47 +303,6 @@ class BoardDetail : AppCompatActivity() {
                             comment_user.size + 1
                     }
 
-                    var commentHeartMap = HashMap<String, Int>()
-
-
-
-                    //                    //댓글 좋아요 가져오기...
-//                    val requestCommentLike = Login_Request(
-//                        Request.Method.POST,
-//                        urlCommentHeartFetch,
-//                        { response ->
-//                            if(response != "no Comment Heart"){
-//                                val jsonArrayHeart = JSONArray(response)
-//
-//                                for (i in 0 until jsonArrayHeart.length()) {
-//
-//                                    val itemHeart = jsonArrayHeart.getJSONObject(i)
-//
-//                                    val heartId = itemHeart.getString("id")
-//                                    val heart_num = itemHeart.getString("count")
-//
-//                                    for (i in 0 until jsonArray.length()) {
-//                                        val item = jsonArray.getJSONObject(i)
-//
-//                                        if(id == heartId) {
-//
-//                                        }
-//                                    }
-//                                    Log.d("like fetch", id.toString())
-//                                }
-//
-//                            }
-//
-//                        }, { Log.d("login failed", "error......${error(applicationContext)}") },
-//                        hashMapOf(
-//                            "comment_num" to
-//                            "post_num" to post_num,
-//                            "board" to board
-//                        )
-//                    )
-//                    val queue = Volley.newRequestQueue(this)
-//                    queue.add(requestCommentLike)
-
                     // 해당되는 대댓글들 가져오기
                     var commentDetailAdapterMap = HashMap<Int, CommentDetailListAdapter>()
                     //대댓글 fetch --------------------------------------------------------
@@ -352,6 +313,7 @@ class BoardDetail : AppCompatActivity() {
                         Request.Method.POST,
                         urlDetail,
                         { response ->
+                            Log.d("---", response)
                             commentDetail_items.clear()
                             if (response != "Comment2 Fetch fail") {
                                 if(response !="no Comment2"){
@@ -406,12 +368,13 @@ class BoardDetail : AppCompatActivity() {
                                         val writerUser = comment_user[id]!!
                                         val heart = item.getInt("heart")
                                         var isHeart = false
-
+                                        Log.d("11++ok", "$id // $comment // $comment_time // $comment_num // $writerUser // $heart // $isHeart")
                                         //댓글 좋아요 가져오기...
                                         val requestCommentLike = Login_Request(
                                             Request.Method.POST,
                                             urlCommentHeartFetch,
                                             { response ->
+
                                                 if(response != "no Comment Heart"){
                                                     val jsonArrayHeart = JSONArray(response)
 
@@ -423,7 +386,6 @@ class BoardDetail : AppCompatActivity() {
                                                         val heart_num = itemHeart.getString("count")
 
                                                         if(id == heartId) isHeart = true
-                                                        Log.d("like fetch", id.toString())
                                                     }
 
                                                 }
@@ -441,9 +403,6 @@ class BoardDetail : AppCompatActivity() {
 
                                         Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
 
-                                        //viewModel.setItemList(Comment_items)
-
-//                                        items.clear()
 
                                         var newCommentDetailItems = ArrayList<CommentDetailItem>()
 
@@ -456,6 +415,7 @@ class BoardDetail : AppCompatActivity() {
                                         var commentDetailadapter = CommentDetailListAdapter(newCommentDetailItems)
                                         commentDetailAdapterMap[comment_num-1] = commentDetailadapter
 
+                                        Log.d("===asfd", isHeart.toString())
                                         val commentItem = CommentItem(id, writerUser, comment, comment_num, comment_time, heart, isHeart, commentDetailAdapterMap)
                                         comment_items.add(commentItem)
                                         Commentadapter = CommentListAdapter(comment_items)
@@ -479,6 +439,7 @@ class BoardDetail : AppCompatActivity() {
                                         val writerUser = comment_user[id]!!
                                         val heart = item.getInt("heart")
                                         var isHeart = false
+
 
                                         //댓글 좋아요 가져오기...
                                         val requestCommentLike = Login_Request(
@@ -606,19 +567,19 @@ class BoardDetail : AppCompatActivity() {
                                     //댓글 좋아요 눌렀을때.
                                     override fun onItemHeart(v: View, data: CommentItem, pos: Int) {
                                         var urlUpdateCommentCnt = "http://seonho.dothome.co.kr/updateCommentCnt.php"
-                                        val urlCommentHeartFetch = "http://seonho.dothome.co.kr/commentHeart_list.php"
                                         var id = intent?.getStringExtra("id").toString()
                                         val commentHeart = v.findViewById<CheckBox>(R.id.imageView_comment_like)
                                         val commentHeartCnt = v.findViewById<TextView>(R.id.comment_heart_count)
-                                        var commentFlag = true
+
                                         if (commentHeart.isChecked) {
+                                            commentHeartFlag = "true"
                                             commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() + 1).toString()
                                         } else {
-                                            commentFlag = false
+                                            commentHeartFlag = "false"
                                             commentHeartCnt.text = (commentHeartCnt.text.toString().toInt() - 1).toString()
                                         }
 
-                                        Log.d("---", "$id // $post_num // $board // $pos // $commentFlag")
+                                        Log.d("---", "$id // $post_num // $board // $pos // $commentHeartFlag")
 
                                         val request = Login_Request(
                                             Request.Method.POST,
@@ -634,7 +595,6 @@ class BoardDetail : AppCompatActivity() {
                                                     Request.Method.POST,
                                                     urlUpdateCommentCnt,
                                                     { responseLike ->
-                                                        Log.d("ressaaa", responseLike)
                                                         if (!responseLike.equals("update fail")) {
                                                             post_num = responseLike.toString()
 //                                                            like_count = responseLike.toString()
@@ -668,7 +628,7 @@ class BoardDetail : AppCompatActivity() {
                                                 "post_num" to post_num,
                                                 "board" to board,
                                                 "comment_num" to (pos+1).toString(),
-                                                "flag" to commentFlag.toString()
+                                                "flag" to commentHeartFlag.toString()
                                             )
                                         )
                                         val queue = Volley.newRequestQueue(applicationContext)

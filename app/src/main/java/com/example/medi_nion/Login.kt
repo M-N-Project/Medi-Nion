@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,7 +10,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 
 class Login : AppCompatActivity() {
+    @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
@@ -31,6 +32,7 @@ class Login : AppCompatActivity() {
             val password = findViewById<EditText>(R.id.password)
             val loginBtn = findViewById<Button>(R.id.loginBtn)
             val signupBtn = findViewById<Button>(R.id.signupBtn)
+            val autologin = findViewById<CheckBox>(R.id.autologin)
 
             signupBtn.setOnClickListener {
                 //회원가입 화면으로 이동
@@ -39,19 +41,33 @@ class Login : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            loginBtn.setOnClickListener {
-                if (id.length() == 0 || password.length() == 0) {
-                    Toast.makeText(
-                        baseContext,
-                        String.format("아이디와 비밀번호 모두 입력해주세요."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    loginRequest(url)
-//                    var newIntent: Intent = Intent(this, MainActivity::class.java);
-//                    startActivity(newIntent);
+
+
+            //if (!id.equals("") && !password.equals("")) {
+            //    if(autologin.isChecked) {
+            //        var auto: SharedPreferences = getSharedPreferences("autologin", Activity.MODE_PRIVATE)
+            //        var autologinEdit:SharedPreferences.Editor = auto.edit()
+            //        autologinEdit.putString("userid", id.toString())
+            //        autologinEdit.putString("passwd", password.toString())
+            //        autologinEdit.apply()   //데이터들을 key값과 매칭시켜서 다 넣으면 마지막으로 apply()을 해 데이터 저장
+            //        Log.d(">>>>", "$autologinEdit")
+            //    }
+            //}
+            //else {
+                loginBtn.setOnClickListener {
+                    if (id.length() == 0 || password.length() == 0) {
+                        Toast.makeText(
+                            baseContext,
+                            String.format("아이디와 비밀번호 모두 입력해주세요."),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                            loginRequest(url)
+                    }
+//                        var newIntent: Intent = Intent(this, MainActivity::class.java);
+//                        startActivity(newIntent);
                 }
-            }
+            //}
 
         } else {
             var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
@@ -60,9 +76,11 @@ class Login : AppCompatActivity() {
     }
 
 
+    @SuppressLint("HardwareIds")
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
         var password = findViewById<EditText>(R.id.password).text.toString()
+        var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
@@ -82,6 +100,7 @@ class Login : AppCompatActivity() {
 
                             if (!responseUser.equals("userSearch fail")){
                                 val jsonArray = JSONArray(responseUser)
+
 
                                 for (i in jsonArray.length()-1  downTo  0) {
                                     val item = jsonArray.getJSONObject(i)
@@ -153,5 +172,13 @@ class Login : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onStop() {
+        var autologin = findViewById<CheckBox>(R.id.autologin)
+        super.onStop()
+        if(autologin.isChecked) {
+
+        }
     }
 }
