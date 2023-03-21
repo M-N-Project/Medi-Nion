@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
@@ -16,6 +18,7 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_scroll_paging.*
+import kotlinx.android.synthetic.main.business_writing.view.*
 import org.json.JSONArray
 import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
@@ -105,11 +108,14 @@ class Board : AppCompatActivity() {
                             scrollFlag = true
 
                             Log.d("attention", "let it be")
+//                            var new_items = ArrayList<BoardItem>()
+//                            new_items.addAll(items)
+//                            adapter = BoardListAdapter(new_items)
 //                            var progressBar : ProgressBar = findViewById(R.id.progressBar1)
 //                            progressBar.progress = View.VISIBLE
-//                            sleep(1000)
-//                            progressBar.progress = View.GONE
-
+//                            Handler(Looper.myLooper()!!).postDelayed({
+//                                progressBar.progress = View.GONE
+//                            }, 1000)
 
 
                             if((all_items.size - item_count*scroll_count) > 20){
