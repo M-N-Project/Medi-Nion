@@ -366,6 +366,23 @@ class BoardDetail : AppCompatActivity() {
                                         val comment_time = item.getString("comment_time")
                                         val comment_num = item.getInt("comment_num")
                                         val writerUser = comment_user[id]!!
+
+
+                                        Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
+
+
+                                        var newCommentDetailItems = ArrayList<CommentDetailItem>()
+
+                                        for(num in 0 until commentDetail_items.size){
+                                            if(commentDetail_items[num].comment_num == comment_num)
+                                                newCommentDetailItems.add(commentDetail_items[num])
+                                        }
+
+
+                                        var commentDetailadapter = CommentDetailListAdapter(newCommentDetailItems)
+                                        commentDetailAdapterMap[comment_num-1] = commentDetailadapter
+
+
                                         val heart = item.getInt("heart")
                                         var isHeart = false
                                         Log.d("11++ok", "$id // $comment // $comment_time // $comment_num // $writerUser // $heart // $isHeart")
@@ -386,7 +403,12 @@ class BoardDetail : AppCompatActivity() {
                                                         val heart_num = itemHeart.getString("count")
 
                                                         if(id == heartId) isHeart = true
+
+                                                        Log.d("11++ok", "$id // $comment // $comment_time // $comment_num // $writerUser // $heart // $isHeart")
                                                     }
+
+                                                }
+                                                else{
 
                                                 }
 
@@ -399,21 +421,6 @@ class BoardDetail : AppCompatActivity() {
                                         )
                                         val queue = Volley.newRequestQueue(this)
                                         queue.add(requestCommentLike)
-
-
-                                        Log.d("commmentItem", "$id, $post_num, $comment, $comment_num, $comment_time")
-
-
-                                        var newCommentDetailItems = ArrayList<CommentDetailItem>()
-
-                                        for(num in 0 until commentDetail_items.size){
-                                            if(commentDetail_items[num].comment_num == comment_num)
-                                                newCommentDetailItems.add(commentDetail_items[num])
-                                        }
-
-
-                                        var commentDetailadapter = CommentDetailListAdapter(newCommentDetailItems)
-                                        commentDetailAdapterMap[comment_num-1] = commentDetailadapter
 
                                         Log.d("===asfd", isHeart.toString())
                                         val commentItem = CommentItem(id, writerUser, comment, comment_num, comment_time, heart, isHeart, commentDetailAdapterMap)
