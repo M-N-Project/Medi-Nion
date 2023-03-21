@@ -39,11 +39,14 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment2_time)
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment2_num)
         private val itemCommentHeart : CheckBox =  itemView.findViewById(R.id.imageView_comment2_like)
+        private val itemCommentHeartCnt : TextView = itemView.findViewById(R.id.comment2_heartCnt)
+
 
         fun bind(item: CommentDetailItem) {
             itemComment.text = item.comment2
             itemCommentTime.text = item.comment2_time
             itemCommentNum.text = item.writerNum.toString()
+            itemCommentHeartCnt.text = item.heart.toString()
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
