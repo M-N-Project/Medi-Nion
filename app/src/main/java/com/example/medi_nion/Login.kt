@@ -2,6 +2,7 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Rect
@@ -10,11 +11,22 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
+import java.lang.Boolean.getBoolean
+
+const val PREFERENCES_NAME = "rebuild_preference"
+private const val DEFAULT_VALUE_STRING = ""
+private const val DEFAULT_VALUE_BOOLEAN = false
+private const val DEFAULT_VALUE_INT = -1
+private const val DEFAULT_VALUE_LONG = -1L
+private const val DEFAULT_VALUE_FLOAT = -1f
 
 class Login : AppCompatActivity() {
     @SuppressLint("CommitPrefEdits")
@@ -34,6 +46,10 @@ class Login : AppCompatActivity() {
             val signupBtn = findViewById<Button>(R.id.signupBtn)
             val autologin = findViewById<CheckBox>(R.id.autologin)
 
+            var checkID: String = ""
+            var checkPW: String = ""
+            var mContext = this
+
             signupBtn.setOnClickListener {
                 //회원가입 화면으로 이동
                 val intent = Intent(applicationContext, SignUp::class.java)
@@ -41,40 +57,49 @@ class Login : AppCompatActivity() {
                 startActivity(intent)
             }
 
+            var boo = getBoolean(mContext, "check")
+            if(boo) {
+                id.setText(getString(mContext, "id"))
+                password.setText(getString(mContext, "pw"))
+                autologin.isChecked = true
+            }
 
-
-            //if (!id.equals("") && !password.equals("")) {
-            //    if(autologin.isChecked) {
-            //        var auto: SharedPreferences = getSharedPreferences("autologin", Activity.MODE_PRIVATE)
-            //        var autologinEdit:SharedPreferences.Editor = auto.edit()
-            //        autologinEdit.putString("userid", id.toString())
-            //        autologinEdit.putString("passwd", password.toString())
-            //        autologinEdit.apply()   //데이터들을 key값과 매칭시켜서 다 넣으면 마지막으로 apply()을 해 데이터 저장
-            //        Log.d(">>>>", "$autologinEdit")
-            //    }
-            //}
-            //else {
-                loginBtn.setOnClickListener {
-                    if (id.length() == 0 || password.length() == 0) {
-                        Toast.makeText(
-                            baseContext,
-                            String.format("아이디와 비밀번호 모두 입력해주세요."),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                            loginRequest(url)
-                    }
-//                        var newIntent: Intent = Intent(this, MainActivity::class.java);
-//                        startActivity(newIntent);
+            loginBtn.setOnClickListener {
+                if (id.length() == 0 || password.length() == 0) {
+                    Toast.makeText(
+                        baseContext,
+                        String.format("아이디와 비밀번호 모두 입력해주세요."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    setString(mContext, "id", id.text.toString())
+                    setString(mContext, "pw", password.text.toString())
+                    checkID = getString(mContext, "id")
+                    checkPW = getString(mContext, "pw")
+                    Log.d("99999", "$checkID, $checkPW")
+//                    intent.putExtra("checkID", checkID)
+//                    intent.putExtra("checkPW", checkPW)
+                    loginRequest(url)
                 }
-            //}
+            }
+
+            if(autologin.isChecked) {
+                setString(mContext, "id", id.text.toString())
+                setString(mContext, "pw", password.text.toString())
+                setBoolean(mContext, "check", autologin.isChecked)
+                Log.d("mmmmmmm", "123")
+            }
+            else {
+                //setBoolean(mContext, "check", autologin.isChecked)
+                clear(mContext)
+                Log.d("fffffff", "456")
+            }
 
         } else {
             var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
             startActivity(newIntent);
         }
     }
-
 
     @SuppressLint("HardwareIds")
     private fun loginRequest(url: String) {
@@ -180,5 +205,108 @@ class Login : AppCompatActivity() {
         if(autologin.isChecked) {
 
         }
+    }
+
+    private fun getPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+    }
+
+
+    /* String 값 저장 */
+    fun setString(context: Context, key: String?, value: String?) {
+        val prefs = getPreferences(context)
+        val editor = prefs.edit()
+        editor.putString(key, value)
+        editor.commit()
+    }
+
+
+    /* boolean 값 저장 */
+    fun setBoolean(context: Context, key: String?, value: Boolean) {
+        val prefs = getPreferences(context)
+        val editor = prefs.edit()
+        editor.putBoolean(key, value)
+        editor.commit()
+    }
+
+
+    /* int 값 저장 */
+    fun setInt(context: Context, key: String?, value: Int) {
+        val prefs = getPreferences(context)
+        val editor = prefs.edit()
+        editor.putInt(key, value)
+        editor.commit()
+    }
+
+
+    /* long 값 저장 */
+    fun setLong(context: Context, key: String?, value: Long) {
+        val prefs = getPreferences(context)
+        val editor = prefs.edit()
+        editor.putLong(key, value)
+        editor.commit()
+    }
+
+
+    /* float 값 저장 */
+    fun setFloat(context: Context, key: String?, value: Float) {
+        val prefs = getPreferences(context)
+        val editor = prefs.edit()
+        editor.putFloat(key, value)
+        editor.commit()
+    }
+
+
+    /* String 값 로드 */
+    fun getString(context: Context, key: String?): String {
+        val prefs = getPreferences(context)
+        val value: String = prefs.getString(key, DEFAULT_VALUE_STRING)!!
+        return value
+    }
+
+
+    /* boolean 값 로드 */
+    fun getBoolean(context: Context, key: String?): Boolean {
+        val prefs = getPreferences(context)
+        return prefs.getBoolean(key, DEFAULT_VALUE_BOOLEAN)
+    }
+
+
+    /* int 값 로드 */
+    fun getInt(context: Context, key: String?): Int {
+        val prefs = getPreferences(context)
+        return prefs.getInt(key, DEFAULT_VALUE_INT)
+    }
+
+
+    /* long 값 로드 */
+    fun getLong(context: Context, key: String?): Long {
+        val prefs = getPreferences(context)
+        return prefs.getLong(key, DEFAULT_VALUE_LONG)
+    }
+
+
+    /* float 값 로드 */
+    fun getFloat(context: Context, key: String?): Float {
+        val prefs = getPreferences(context)
+        return prefs.getFloat(key, DEFAULT_VALUE_FLOAT)
+    }
+
+
+    /* 키 값 삭제 */
+    fun removeKey(context: Context, key: String?) {
+        val prefs = getPreferences(context)
+        val edit = prefs.edit()
+        edit.remove(key)
+        edit.commit()
+    }
+
+
+    /* 모든 저장 데이터 삭제 */
+    fun clear(context: Context) {
+        val prefs = getPreferences(context)
+        val edit = prefs.edit()
+        edit.clear()
+        edit.commit()
     }
 }
