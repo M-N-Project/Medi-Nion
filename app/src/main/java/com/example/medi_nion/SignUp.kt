@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
@@ -324,26 +325,26 @@ class SignUp : AppCompatActivity() {
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
         signUpButton.setOnClickListener {
             val validate = true
-//            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
-//                TextUtils.isEmpty(id_editText.text.toString()) ||
-//                TextUtils.isEmpty(passwd_editText.text.toString()) ||
-//                TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
-//                (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
-//            ) {
-//
-//                var notDone_warning = findViewById<TextView>(R.id.notDone_warning)
-//                notDone_warning.visibility = View.VISIBLE
-//
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    notDone_warning.visibility = View.INVISIBLE
-//                }, 2000)
+            if (TextUtils.isEmpty(nickname_editText.text.toString()) ||
+                TextUtils.isEmpty(id_editText.text.toString()) ||
+                TextUtils.isEmpty(passwd_editText.text.toString()) ||
+                TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
+                (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
+            ) {
+
+                var notDone_warning = findViewById<TextView>(R.id.notDone_warning)
+                notDone_warning.visibility = View.VISIBLE
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    notDone_warning.visibility = View.INVISIBLE
+                }, 2000)
             if (!validate) {
                 Toast.makeText(baseContext,
                     "중복된 아이디와 닉네임이 있는지 확인해주세요.",
                     Toast.LENGTH_SHORT).show()
             }
 
-//            } else {
+            } else {
                 val url_SignUP = "http://seonho.dothome.co.kr/SignUP.php"
 
 
@@ -357,7 +358,7 @@ class SignUp : AppCompatActivity() {
                     val intent = Intent(applicationContext, Login::class.java)
                     startActivity(intent)
                 }
-//            }
+            }
         }
 
         //val tempImage : File = null

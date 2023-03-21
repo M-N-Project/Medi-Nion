@@ -71,6 +71,8 @@ class BoardDetail : AppCompatActivity() {
                 overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
                 startActivity(intent) //현재 액티비티 재실행 실시
                 overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+//                commentDetailadapter = CommentDetailListAdapter(commentDetail_items)
+//                Commentadapter = CommentListAdapter(comment_items)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
