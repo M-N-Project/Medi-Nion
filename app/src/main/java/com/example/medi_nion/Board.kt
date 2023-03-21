@@ -2,17 +2,14 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -20,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_scroll_paging.*
 import org.json.JSONArray
+import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -97,18 +95,22 @@ class Board : AppCompatActivity() {
                 if(scrollFlag==false){
 
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
+
                         //새로고침...
 
 //                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
-
                         if(all_items.size > 20){
                             scrollFlag = true
 
                             Log.d("attention", "let it be")
-                           //var progressBar = (progressBar) findViewById(R.id.progressbar)
-                            //progressBar.visibility
+//                            var progressBar : ProgressBar = findViewById(R.id.progressBar1)
+//                            progressBar.progress = View.VISIBLE
+//                            sleep(1000)
+//                            progressBar.progress = View.GONE
+
+
 
                             if((all_items.size - item_count*scroll_count) > 20){
                                 for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
@@ -318,4 +320,5 @@ class Board : AppCompatActivity() {
 
         return msg
     }
+
 }
