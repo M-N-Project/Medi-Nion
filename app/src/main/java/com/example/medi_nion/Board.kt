@@ -300,11 +300,9 @@ class Board : AppCompatActivity() {
         val curTime = System.currentTimeMillis()
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("ko", "KR"))
         val cur: String = simpleDateFormat.format(Date(curTime))
-        Log.d("current TIme", cur)
 
         val newPostTime = Millis(postTime)
         var diffTime = (curTime - newPostTime)/1000
-        Log.d("Time" , "cur = ${curTime.toString()}, post = ${postTime}, new post = ${newPostTime.toString()}, diff = ${diffTime.toString()} ")
         var msg: String = ""
 
         if (diffTime  < SEC) {
