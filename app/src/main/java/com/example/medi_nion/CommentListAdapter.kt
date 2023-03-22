@@ -55,9 +55,10 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             if(item.isHeart == true) itemCommentHeart.isChecked = true
             else itemCommentHeart.isChecked = false
 
-            if(pos == item.comment_num-1){
-                itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
-            }
+//            if(pos == item.comment_num-1){
+//                itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
+//            }
+            itemCommentDetail.adapter = item.commentDetailAdapter
 
 
             val pos = absoluteAdapterPosition
