@@ -10,6 +10,25 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
+    <TextView
+        android:id="@+id/userDept_view"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="진료과"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <Spinner
+        android:id="@+id/userDept_spinner"
+        android:layout_width="326dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="40dp"
+        android:spinnerMode="dropdown"
+        android:ems="5"
+        android:entries="@array/userDept_spinner_array"
+        />
 
     <TextView
         android:id="@+id/nickname_view"
@@ -17,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="30dp"
         android:text="닉네임"
         android:textColor="#000000"
         android:textSize="16sp" />
