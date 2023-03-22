@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="userDept_spinner_array">
+        <item>내과 <small>(심장내과, 혈액내과, 호흡기내과, 소화기내과 등)</small></item>
+        <item>외과 <small>(혈관외과 등)</small></item>
+        <item>마취통증의학과</item>
+        <item>병리과</item>
+        <item>비뇨의학과</item>
+        <item>산부인과</item>
+        <item>성형외과</item>
+        <item>소아청소년과</item>
+        <item>신경과 <small>(신경외과)</small></item>
+        <item>안과</item>
+        <item>영상의학과</item>
+        <item>응급의학과</item>
+        <item>이비인후과</item>
+        <item>정신건강의학과</item>
+        <item>정형외과</item>
+        <item>치과</item>
+        <item>피부과</item>
+        <item>한의과</item>
+        <item>기타 <small>(핵의학과, 진단검사의학과, 재활의학과 등)</small></item>
+    </string-array>
+</resources>
