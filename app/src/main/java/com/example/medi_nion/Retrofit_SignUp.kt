@@ -24,8 +24,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.*
+import com.example.medi_nion.`interface`.SignUp_Request
 import com.example.medi_nion.`object`.RetrofitCilent_Request
+import com.example.medi_nion.dataclass.Data_SignUp_Request
 import com.googlecode.tesseract.android.TessBaseAPI
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.create
 import java.io.*
 import java.util.regex.Pattern
@@ -340,11 +345,11 @@ class Retrofit_SignUp : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     notDone_warning.visibility = View.INVISIBLE
                 }, 2000)
-            if (!validate) {
-                Toast.makeText(baseContext,
-                    "중복된 아이디와 닉네임이 있는지 확인해주세요.",
-                    Toast.LENGTH_SHORT).show()
-            }
+                if (!validate) {
+                    Toast.makeText(baseContext,
+                        "중복된 아이디와 닉네임이 있는지 확인해주세요.",
+                        Toast.LENGTH_SHORT).show()
+                }
 
             } else {
                 val url_SignUP = "http://seonho.dothome.co.kr/SignUP.php"
@@ -436,7 +441,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
         var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
-        
+
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
 
@@ -452,8 +457,25 @@ class Retrofit_SignUp : AppCompatActivity() {
 
 
         val retrofit = RetrofitCilent_Request.getInstance()
-        //val server = retrofit.create()
+        val server = retrofit.create(SignUp_Request::class.java)
 
+        if(basicUserBtn.isChecked) {
+            server.getUser(nickname_editText,
+                id_editText, passwd_editText, basicUserBtn.text.toString(), userDept)
+                .enqueue(object : Callback<Data_SignUp_Request> {
+                    override fun onResponse(
+                        call: Call<Data_SignUp_Request>,
+                        response: Response<Data_SignUp_Request>
+                    ) {
+                        Log.d("retrofit success", response.body().toString())
+                    }
+
+                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit fail", it) }
+                    }
+
+                })
+        }
 
 //        //POST 방식으로 db에 데이터 전송
 //        val request = SignUP_Request(
@@ -630,4 +652,3 @@ class Retrofit_SignUp : AppCompatActivity() {
     }
 
 }
-
