@@ -411,7 +411,7 @@ class BoardDetail : AppCompatActivity() {
                                                     Request.Method.POST,
                                                     urlComment2Heart,
                                                     { response ->
-                                                        Log.d("comment2Hart", response)
+                                                        Log.d("comment2Heart", response)
 
                                                         if(comment2Heart.isChecked) comment2HeartFlag = "commentHeartUP"
                                                         else comment2HeartFlag = "commentHeartDOWN"

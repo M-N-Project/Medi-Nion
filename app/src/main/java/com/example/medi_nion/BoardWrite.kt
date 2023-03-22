@@ -318,11 +318,13 @@ class BoardWrite : AppCompatActivity() {
     private fun resize(bitmap: Bitmap): Bitmap? {
         var bitmap: Bitmap? = bitmap
         val config: Configuration = Resources.getSystem().configuration
-        var bitmap_width : Int? = bitmap?.width
-        var bitmap_height : Int? = bitmap?.height
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, 320, 320, true)
+        val bitmap_width : Int? = bitmap?.width
+        val bitmap_height : Int? = bitmap?.height
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, bitmap_width!!, bitmap_height!!, true)
+
         return bitmap
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun BitMapToString(bitmap: Bitmap): String {
