@@ -179,6 +179,7 @@ class CommentDetail  : AppCompatActivity() {
                         val comment2_time = item.getString("comment2_time")
                         val comment2_num = item.getInt("comment_num")
                         val writerUser = comment_user[id]!!
+                        val heart = item.getInt("heart")
 
                         val commentDetailItem =
                             CommentDetailItem(
@@ -187,7 +188,8 @@ class CommentDetail  : AppCompatActivity() {
                                 comment_num,
                                 comment2,
                                 comment2_num,
-                                comment2_time
+                                comment2_time,
+                                heart
                             )
 
                         commentDetail_items.add(commentDetailItem)

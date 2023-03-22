@@ -2,22 +2,24 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.board_scroll_paging.*
 import org.json.JSONArray
+import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,6 +51,23 @@ class Board : AppCompatActivity() {
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
+        refresh_layout.setOnRefreshListener { //새로고침
+            Log.d("omg", "hello refresh")
+
+            try {
+                //TODO 액티비티 화면 재갱신 시키는 코드
+                val intent = intent
+                finish() //현재 액티비티 종료 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                startActivity(intent) //현재 액티비티 재실행 실시
+                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+
+                refresh_layout.isRefreshing = false //새로고침 없애기
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         items.clear()
         all_items.clear()
 
@@ -78,30 +97,20 @@ class Board : AppCompatActivity() {
                 if(scrollFlag==false){
 
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
-                        //새로고침...
-                        refresh_layout.setOnRefreshListener {
-                            Log.d("omg", "hello refresh")
 
-                            try {
-                                //TODO 액티비티 화면 재갱신 시키는 코드
-                                val intent = intent
-                                finish() //현재 액티비티 종료 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                                startActivity(intent) //현재 액티비티 재실행 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-
-                            refresh_layout.isRefreshing = false //새로고침 없애기
-                        }
-
-
-//                       fetchData()
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
                         if(all_items.size > 20){
                             scrollFlag = true
+
+                            Log.d("attention", "let it be")
+                            var progressBar : ProgressBar = findViewById(R.id.progressBar2)
+                            progressBar.visibility = View.VISIBLE
+
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                progressBar.visibility = View.INVISIBLE
+                            }, 2000)
+
 
                             if((all_items.size - item_count*scroll_count) > 20){
                                 for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
@@ -311,4 +320,5 @@ class Board : AppCompatActivity() {
 
         return msg
     }
+
 }
