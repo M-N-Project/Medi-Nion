@@ -16,5 +16,5 @@ interface SignUp_Request {
         @Field("passwd") passwd: String,
         @Field("userType") userType: String,
         @Field("userDept") userDept: String
-    ): Call<Data_SignUp_Request>
+    ): Call<Data_SignUp_Request> //data class 이름
 }
