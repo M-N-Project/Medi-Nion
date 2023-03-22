@@ -555,6 +555,7 @@ class BoardDetail : AppCompatActivity() {
 
 
                                                         isHeartMap[appUser] = appUser == heartId
+                                                        Log.d("????", "$comment_num / $isHeartMap / $heartId")
 
                                                     }
 
