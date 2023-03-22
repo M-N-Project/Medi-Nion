@@ -104,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:layout_weight="1"
-                            android:text="우리 병원 게시판"
+                            android:text="장터 게시판"
                             android:textSize="12sp" />
 
 

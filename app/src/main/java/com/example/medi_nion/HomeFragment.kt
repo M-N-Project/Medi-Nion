@@ -62,11 +62,16 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val basicBoard = view.findViewById<TextView>(R.id.home_boardList1)
         val jobBoard = view.findViewById<TextView>(R.id.home_boardList2)
         val secBoard = view.findViewById<TextView>(R.id.home_boardList3)
-        val hosBoard = view.findViewById<TextView>(R.id.home_boardList4)
+        val marketBoard = view.findViewById<TextView>(R.id.home_boardList4)
         val qnaBoard = view.findViewById<TextView>(R.id.home_boardList5)
         val acadamy_info = view.findViewById<TextView>(R.id.home_boardList6)
         val employee_info = view.findViewById<TextView>(R.id.home_boardList7)
         val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
+
+        // bundle 에서 id, userType, userDept 값 가져오기
+        val id = arguments?.getString("id")
+        val userType = arguments?.getString("userType")
+        val userDept = arguments?.getString("userDept")
 
         basicBoard.setOnClickListener {
             Log.d("aaaa", "aabb")
@@ -82,6 +87,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "직종별 게시판")
                 startActivity(intent)
             }
@@ -91,16 +98,18 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "진료과별 게시판")
                 startActivity(intent)
             }
         }
 
-        hosBoard.setOnClickListener {
+        marketBoard.setOnClickListener {
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("board", "우리 병원 게시판")
+                intent.putExtra("board", "장터 게시판")
                 startActivity(intent)
             }
         }
