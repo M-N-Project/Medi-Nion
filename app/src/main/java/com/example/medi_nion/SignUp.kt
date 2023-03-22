@@ -434,6 +434,19 @@ class SignUp : AppCompatActivity() {
         var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
         var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
+        
+        var spinner = findViewById<Spinner>(R.id.userDept_spinner)
+        var userDept = spinner.selectedItem.toString()
+
+        if(userDept.equals("내과 (심장내과, 혈액내과, 호흡기내과, 소화기내과 등)")) {
+            userDept = "내과"
+        } else if (userDept.equals("외과 (혈관외과 등)")) {
+            userDept = "외과"
+        }else if (userDept.equals("신경과 (신경외과)")) {
+            userDept = "신경과"
+        }else if (userDept.equals("기타 (핵의학과, 진단검사의학과, 재활의학과 등)")) {
+            userDept = "기타"
+        }
 
 
         //POST 방식으로 db에 데이터 전송
@@ -441,11 +454,11 @@ class SignUp : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                val success = true
 
                 //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
                 if (passwd_editText == passwdCheck_editText) {
                     if (!response.equals("SignUP fail")) {
+
                         nickname_editText = response.toString()
                         id_editText = response.toString()
                         passwd_editText = response.toString()
@@ -457,10 +470,12 @@ class SignUp : AppCompatActivity() {
                             String.format("가입을 환영합니다. 로그인 해주세요."),
                             Toast.LENGTH_SHORT
                         ).show()
+/*
                         Log.d(
                             "success",
                             "$nickname_editText, $id_editText, $passwd_editText, $basicUserBtn, $corpUserBtn"
                         )
+ */
                     }
                 } else {
                     Toast.makeText(
@@ -472,16 +487,20 @@ class SignUp : AppCompatActivity() {
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
             if(basicUserBtn.isChecked) {
-                hashMapOf("nickname" to nickname_editText,
+                hashMapOf(
+                    "nickname" to nickname_editText,
                     "id" to id_editText,
                     "passwd" to passwd_editText,
-                    "userType" to basicUserBtn.text.toString()
+                    "userType" to basicUserBtn.text.toString(),
+                    "userDept" to userDept
                 )
             } else {
-                hashMapOf("nickname" to nickname_editText,
+                hashMapOf(
+                    "nickname" to nickname_editText,
                     "id" to id_editText,
                     "passwd" to passwd_editText,
-                    "userType" to corpUserBtn.text.toString()
+                    "userType" to corpUserBtn.text.toString(),
+                    "userDept" to corpUserBtn.text.toString()
                 )
             }
         )

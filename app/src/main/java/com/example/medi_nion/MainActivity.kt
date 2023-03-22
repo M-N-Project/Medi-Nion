@@ -29,6 +29,11 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                 R.id.homeFragment -> {
                     // 다른 프래그먼트 화면으로 이동하는 기능
                     val homeFragment = HomeFragment()
+                    var bundle = Bundle()
+                    bundle.putString("id",id)
+                    bundle.putString("userType", userType)
+                    bundle.putString("userDept", userDept)
+                    homeFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, homeFragment).commit()
                 }
                 R.id.menuFragment -> {
