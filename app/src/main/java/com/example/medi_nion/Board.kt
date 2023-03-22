@@ -12,12 +12,15 @@ import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_scroll_paging.*
+import kotlinx.android.synthetic.main.business_writing.view.*
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
