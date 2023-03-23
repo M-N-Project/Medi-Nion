@@ -24,19 +24,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.*
-import com.example.medi_nion.`interface`.SignUp_Request
-import com.example.medi_nion.`object`.RetrofitCilent_Request
-import com.example.medi_nion.dataclass.Data_SignUp_Request
 import com.googlecode.tesseract.android.TessBaseAPI
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.create
 import java.io.*
 import java.util.regex.Pattern
 
 
-class Retrofit_SignUp : AppCompatActivity() {
+class SignUp : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
 
     val REQUEST_IMAGE_CAPTURE = 1
@@ -456,84 +449,63 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
 
 
-        val retrofit = RetrofitCilent_Request.getInstance()
-        val server = retrofit.create(SignUp_Request::class.java)
+        //POST 방식으로 db에 데이터 전송
+        val request = SignUP_Request(
+            Request.Method.POST,
+            url,
+            { response ->
 
-        if(basicUserBtn.isChecked) {
-            server.getUser(nickname_editText,
-                id_editText, passwd_editText, basicUserBtn.text.toString(), userDept)
-                .enqueue(object : Callback<Data_SignUp_Request> {
-                    override fun onResponse(
-                        call: Call<Data_SignUp_Request>,
-                        response: Response<Data_SignUp_Request>
-                    ) {
-                        Log.d("retrofit success", response.body().toString())
+                //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
+                if (passwd_editText == passwdCheck_editText) {
+                    if (!response.equals("SignUP fail")) {
+
+                        nickname_editText = response.toString()
+                        id_editText = response.toString()
+                        passwd_editText = response.toString()
+                        basicUserBtn.text = response.toString()
+                        corpUserBtn.text = response.toString()
+
+                        Toast.makeText(
+                            baseContext,
+                            String.format("가입을 환영합니다. 로그인 해주세요."),
+                            Toast.LENGTH_SHORT
+                        ).show()
+/*
+                        Log.d(
+                            "success",
+                            "$nickname_editText, $id_editText, $passwd_editText, $basicUserBtn, $corpUserBtn"
+                        )
+ */
                     }
-
-                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-                        t.localizedMessage?.let { Log.d("retrofit fail", it) }
-                    }
-
-                })
-        }
-
-//        //POST 방식으로 db에 데이터 전송
-//        val request = SignUP_Request(
-//            Request.Method.POST,
-//            url,
-//            { response ->
-//
-//                //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
-//                if (passwd_editText == passwdCheck_editText) {
-//                    if (!response.equals("SignUP fail")) {
-//
-//                        nickname_editText = response.toString()
-//                        id_editText = response.toString()
-//                        passwd_editText = response.toString()
-//                        basicUserBtn.text = response.toString()
-//                        corpUserBtn.text = response.toString()
-//
-//                        Toast.makeText(
-//                            baseContext,
-//                            String.format("가입을 환영합니다. 로그인 해주세요."),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-///*
-//                        Log.d(
-//                            "success",
-//                            "$nickname_editText, $id_editText, $passwd_editText, $basicUserBtn, $corpUserBtn"
-//                        )
-// */
-//                    }
-//                } else {
-//                    Toast.makeText(
-//                        applicationContext,
-//                        "비밀번호를 다시 확인해주세요.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            },
-//            { Log.d("failed", "error......${error(applicationContext)}") },
-//            if(basicUserBtn.isChecked) {
-//                hashMapOf(
-//                    "nickname" to nickname_editText,
-//                    "id" to id_editText,
-//                    "passwd" to passwd_editText,
-//                    "userType" to basicUserBtn.text.toString(),
-//                    "userDept" to userDept
-//                )
-//            } else {
-//                hashMapOf(
-//                    "nickname" to nickname_editText,
-//                    "id" to id_editText,
-//                    "passwd" to passwd_editText,
-//                    "userType" to corpUserBtn.text.toString(),
-//                    "userDept" to corpUserBtn.text.toString()
-//                )
-//            }
-//        )
-//        val queue = Volley.newRequestQueue(this)
-//        queue.add(request)
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "비밀번호를 다시 확인해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            { Log.d("failed", "error......${error(applicationContext)}") },
+            if(basicUserBtn.isChecked) {
+                hashMapOf(
+                    "nickname" to nickname_editText,
+                    "id" to id_editText,
+                    "passwd" to passwd_editText,
+                    "userType" to basicUserBtn.text.toString(),
+                    "userDept" to userDept
+                )
+            } else {
+                hashMapOf(
+                    "nickname" to nickname_editText,
+                    "id" to id_editText,
+                    "passwd" to passwd_editText,
+                    "userType" to corpUserBtn.text.toString(),
+                    "userDept" to corpUserBtn.text.toString()
+                )
+            }
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
     }
     //db 연동 끝
 
