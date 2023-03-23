@@ -410,6 +410,9 @@ class BoardDetail : AppCompatActivity() {
 
                                                                 Log.d("=2-304", heart.toString())
 
+                                                                var isHeart = false
+                                                                if(comment2HeartMap[comment_num] == comment2_num) isHeart = true
+
                                                                 val commentDetailItem =
                                                                     CommentDetailItem(
                                                                         id,
@@ -419,7 +422,7 @@ class BoardDetail : AppCompatActivity() {
                                                                         comment2_num,
                                                                         comment2_time,
                                                                         heart,
-                                                                        false
+                                                                        isHeart
                                                                     )
 
 
