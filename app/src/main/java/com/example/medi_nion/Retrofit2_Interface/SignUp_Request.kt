@@ -14,6 +14,7 @@ interface SignUp_Request {
         @Field("id") id: String,
         @Field("passwd") passwd :String,
         @Field("userType") userType :String,
-        @Field("userDept") userDept :String
+        @Field("userDept") userDept :String,
+        @Field("businessChan") businessChan: Int
     ): Call<Data_SignUp_Request>
 }
