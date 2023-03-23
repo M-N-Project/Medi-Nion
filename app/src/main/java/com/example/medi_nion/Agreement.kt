@@ -308,7 +308,7 @@ class Agreement : AppCompatActivity() { //mainactivity, 여기서는 프레그�
                     .setMessage("메디니언 사용 시 제약이 있을 수 있습니다. \n 그대로 진행하시겠습니까?")
                     .setPositiveButton("확인",
                         DialogInterface.OnClickListener { dialog, id ->
-                            var newIntent : Intent = Intent(this, SignUp::class.java);
+                            var newIntent : Intent = Intent(this, Retrofit_SignUp::class.java);
                             startActivity(newIntent);
                         })
                     .setNegativeButton("취소",
@@ -319,7 +319,7 @@ class Agreement : AppCompatActivity() { //mainactivity, 여기서는 프레그�
                 builder.show()
             }
             else{
-                var newIntent : Intent = Intent(this, SignUp::class.java);
+                var newIntent : Intent = Intent(this, Retrofit_SignUp::class.java);
                 startActivity(newIntent);
             }
         }

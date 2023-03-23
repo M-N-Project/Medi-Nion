@@ -24,10 +24,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.*
+import com.example.medi_nion.Retrofit2_Client.RetrofitClient_Request
+import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
+import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
 //import com.example.medi_nion.interface1.SignUp_Request
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
 import com.googlecode.tesseract.android.TessBaseAPI
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.*
 import java.util.regex.Pattern
 
@@ -452,26 +458,27 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
 
 
-//        val retrofit = RetrofitCilent_Request.getInstance()
-//        val server = retrofit.create(SignUp_Request::class.java)
+        val retrofit = RetrofitClient_Request.getInstance()
+        val server = retrofit.create(SignUp_Request::class.java)
 
-//        if(basicUserBtn.isChecked) {
-//            server.getUser(nickname_editText,
-//                id_editText, passwd_editText, basicUserBtn.text.toString(), userDept)
-//                .enqueue(object : Callback<Data_SignUp_Request> {
-//                    override fun onResponse(
-//                        call: Call<Data_SignUp_Request>,
-//                        response: Response<Data_SignUp_Request>
-//                    ) {
-//                        Log.d("retrofit success", response.body().toString())
-//                    }
-//
-//                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-//                        t.localizedMessage?.let { Log.d("retrofit fail", it) }
-//                    }
-//
-//                })
-//        }
+        Log.d("retrofit", "123")
+        if(basicUserBtn.isChecked) {
+            server.getUser(nickname_editText,
+                id_editText, passwd_editText, basicUserBtn.text.toString(), userDept, businessChan = 0)
+                .enqueue(object : Callback<Data_SignUp_Request> {
+                    override fun onResponse(
+                        call: Call<Data_SignUp_Request>,
+                        response: Response<Data_SignUp_Request>
+                    ) {
+                        Log.d("retrofit success", response.body().toString())
+                    }
+
+                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit fail", it) }
+                    }
+
+                })
+        }
 
 
 
