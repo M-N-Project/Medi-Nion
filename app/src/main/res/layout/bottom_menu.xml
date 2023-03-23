@@ -28,7 +28,8 @@
                 android:id="@+id/menu_All"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
@@ -82,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="9dp"
             android:visibility="gone"
@@ -267,6 +268,7 @@
                 android:layout_marginLeft="24dp">
 
                 <TextView
+                    android:id="@+id/doctor_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -275,6 +277,7 @@
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/nurse_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -283,6 +286,7 @@
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/engineer_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -291,6 +295,7 @@
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/office_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -299,6 +304,7 @@
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/student_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -315,6 +321,7 @@
                 android:layout_marginLeft="37dp">
 
                 <TextView
+                    android:id="@+id/internal_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -323,6 +330,7 @@
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/surgical_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -331,51 +339,145 @@
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/machui_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_marginBottom="5dp"
-                    android:text="· 소아과 게시판"
+                    android:text="· 마취통증의학과 게시판"
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/pathology_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_marginBottom="5dp"
-                    android:text="· 정형외과 게시판"
+                    android:text="· 병리과 게시판"
                     android:clickable="true"/>
 
                 <TextView
+                    android:id="@+id/urology_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 비뇨의학과 게시판"
+                    android:clickable="true"/>
+
+                <TextView
+                    android:id="@+id/pregnancy_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 산부인과 게시판"
+                    android:clickable="true"/>
+
+                <TextView
+                    android:id="@+id/cosmetic_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 성형외과 게시판"
+                    android:clickable="true"/>
+
+                <TextView
+                    android:id="@+id/child_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 소아청소년과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/neuro_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_marginBottom="5dp"
                     android:text="· 신경과 게시판"
                     android:clickable="true"/>
-
                 <TextView
+                    android:id="@+id/eye_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_marginBottom="5dp"
-                    android:text="· 정신과 게시판"
+                    android:text="· 안과 게시판"
                     android:clickable="true"/>
-
                 <TextView
+                    android:id="@+id/video_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_marginBottom="5dp"
-                    android:text="· 재활과 게시판"
+                    android:text="· 영상의학과 게시판"
                     android:clickable="true"/>
-
                 <TextView
+                    android:id="@+id/urgent_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_marginBottom="5dp"
-                    android:text="· 마취과 게시판"
+                    android:text="· 응급의학과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/ear_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 이비인후과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/psy_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 정신건강의학과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/bone_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 정형외과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/tooth_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 치과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/skin_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 피부과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/oriental_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 한의과 게시판"
+                    android:clickable="true"/>
+                <TextView
+                    android:id="@+id/etcDept_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="· 기타 게시판"
                     android:clickable="true"/>
             </LinearLayout>
         </LinearLayout>
