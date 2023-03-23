@@ -341,7 +341,7 @@ class BoardDetail : AppCompatActivity() {
                                             commentDetail_items.clear()
                                             Log.d("response-Comment2", responseDetail)
                                             if (responseDetail != "Comment2 Fetch fail") {
-//                                                if(responseDetail != "no Comment2") {
+                                                if(responseDetail != "no Comment2") {
                                                     val jsonArrayComment2 = JSONArray(responseDetail)
 
                                                     for (i in 0 until jsonArrayComment2.length()) {
