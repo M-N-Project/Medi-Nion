@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 
 class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
 
@@ -60,11 +62,22 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             if (item.isHeart == true) itemCommentHeart.isChecked = true
             else itemCommentHeart.isChecked = false
 
-//            if(pos == item.comment_num-1){
-//                itemCommentDetail.adapter = item.commentDetailAdapterMap[pos]
+
+            itemCommentDetail.adapter = item.commentDetailAdapter
+
+//            Log.d("itiitt", itemView.toString())
+//            itemCommentDetail.adapter = item.commentDetailAdapter[item.comment_num]
+
+//            for(i in 0 until item.commentDetailAdapter.size){
+//                Log.d("-=1-23123", item.commentDetailAdapter[i].comment2)
+//                Log.d("-=1-23123", "${item.comment_num} // $i")
 //            }
-            if (item.commentDetailAdapter != null)
-                itemCommentDetail.adapter = item.commentDetailAdapter
+
+//            itemCommentDetail.apply{
+//                adapter = CommentDetailListAdapter(item.commentDetailAdapter)
+//                layoutManager = LinearLayoutManager(itemCommentDetail.context, LinearLayoutManager.HORIZONTAL, false)
+//                setHasFixedSize(true)
+//            }
 
 
                 val pos = absoluteAdapterPosition
