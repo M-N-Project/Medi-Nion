@@ -334,7 +334,7 @@ class BoardDetail : AppCompatActivity() {
                                     val commentDetailItemsMap = HashMap<Int, ArrayList<CommentDetailItem>>()
 
                                     // 해당 댓글에서 사용자가 좋아요 누른 항목 가져오기
-                                    var comment2HeartMap = HashMap<Int, Int>()
+                                    var comment2HeartMap = HashMap<Int, ArrayList<Int>>()
 
                                     val requestComment2Heart = Login_Request(
                                         Request.Method.POST,
@@ -356,7 +356,11 @@ class BoardDetail : AppCompatActivity() {
                                                             "대댓글 좋아요 comment2_num",
                                                             item2.toString()
                                                         )
-                                                        comment2HeartMap.put(item1, item2)
+//                                                        var comment2HeartArray = comment2HeartMap[item1]
+                                                        if(!comment2HeartMap.containsKey(item1)) comment2HeartMap[item1] = ArrayList<Int>()
+                                                        comment2HeartMap[item1]!!.add(item2)
+
+                                                        Log.d("냠냠", "$comment_num -  ${comment2HeartMap[item1]} - $item1 " )
                                                     }
                                                 } else{
                                                     Toast.makeText(
@@ -408,7 +412,14 @@ class BoardDetail : AppCompatActivity() {
                                                                 var isHeart = false
                                                                 //여기서 이상함.. 대댓글 하나만 칠해지고 하나는 안칠해짐
                                                                 Log.d("대대댓", "${comment2HeartMap[comment_num]} / $comment2_num")
-                                                                if(comment2HeartMap[comment_num] == comment2_num) isHeart = true
+//                                                                if(comment2HeartMap[comment_num] == comment2_num) isHeart = true
+
+                                                                if(comment2HeartMap.contains(comment_num)){
+                                                                    if(comment2HeartMap[comment_num]!!.contains(comment2_num)) {
+                                                                        isHeart = true
+
+                                                                    }
+                                                                }
 
                                                                 val commentDetailItem =
                                                                     CommentDetailItem(
