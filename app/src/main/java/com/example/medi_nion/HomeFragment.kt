@@ -6,30 +6,46 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.home_qna.*
+import org.json.JSONArray
+
+class qnaNewItem(val num:Int, val title:String, val content:String) {
+}
+var qnaItems = java.util.ArrayList<qnaNewItem>()
 
 class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 프레그먼트(게시판 구분은 추후에)
 
-    class PagerRecyclerAdapter(private val qnaTitle: ArrayList<String>, private val qnaDetail: ArrayList<String>) : RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
+    class PagerRecyclerAdapter(private val qnaItem: java.util.ArrayList<qnaNewItem>) : RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
 
-        inner class PagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class PagerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
             private val qna_title: TextView = itemView.findViewById(R.id.home_qna_title)
             private val qna_content: TextView = itemView.findViewById(R.id.home_qna_detail)
+            private val qna_box = itemView.findViewById<Button>(R.id.detail_box)
+            fun bind(item: qnaNewItem) {
+                qna_title.text = item.title
+                qna_content.text = item.content
 
-//            val all_board : TextView = itemView.findViewById(R.id.home_boardList1)
-//            val job_board : TextView = itemView.findViewById(R.id.home_boardList2)
-//            val medical_board : TextView = itemView.findViewById(R.id.home_boardList3)
-//            val ourmedi_board : TextView = itemView.findViewById(R.id.home_boardList4)
-//            val qa_board : TextView = itemView.findViewById(R.id.home_boardList5)
-
-            fun bind(position: Int) {
-                qna_title.text = qnaTitle[position]
-                qna_content.text = qnaDetail[position]
+                val pos = absoluteAdapterPosition
+                if(pos!= RecyclerView.NO_POSITION)
+                {
+                    qna_box.setOnClickListener {
+                        listener?.onItemClick(itemView,item,pos)
+                    }
+                    qna_title.setOnClickListener {
+                        listener?.onItemClick(itemView,item,pos)
+                    }
+                    qna_content.setOnClickListener {
+                        listener?.onItemClick(itemView,item,pos)
+                    }
+                }
             }
         }
 
@@ -43,14 +59,24 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 
         override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
-            holder.bind(position)
+            val safePosition = holder.bindingAdapterPosition
+            holder.bind(qnaItem[4-safePosition])
         }
 
         override fun getItemCount(): Int = 5
+
+        interface OnItemClickListener{
+            fun onItemClick(v:View, data: qnaNewItem, pos : Int)
+        }
+        private var listener : OnItemClickListener? = null
+        fun setOnItemClickListener(listener: PagerRecyclerAdapter.OnItemClickListener) {
+            this.listener = listener
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
+        fetchNewQna()
     }
 
     override fun onCreateView(
@@ -73,6 +99,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
 
+///////////////////  즐겨찾는 게시판 클릭 이벤트 ////////////////////////////////////////////
         basicBoard.setOnClickListener {
             Log.d("aaaa", "aabb")
             activity?.let{
@@ -139,39 +166,122 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
         return view
     }
-
+/*
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // 나중에 DB에서 받아올 것
-        var qnaTitle = arrayListOf<String>(
-            "page1",
-            "page2",
-            "page3",
-            "page4",
-            "page5",
+        fetchNewQna()
+
+    }
+*/
+    ///////////////////////// viewPager에 넣을 QnA 게시판 최신글 가져오는 fetch 함수 //////////////////////////////////////
+
+    fun fetchNewQna() {
+        val urlQnaNew = "http://seonho.dothome.co.kr/QnaNew_list.php"
+        val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+
+        val id = arguments?.getString("id")
+        val userType = arguments?.getString("userType")
+        val userDept = arguments?.getString("userDept")
+
+        val request = Board_Request(
+            Request.Method.POST,
+            urlQnaNew,
+            { response ->
+                val jsonArray = JSONArray(response)
+                qnaItems.clear()
+                for (i in jsonArray.length()-1  downTo  0) {
+                    val item = jsonArray.getJSONObject(i)
+
+                    val num = item.getInt("num")
+                    val title = item.getString("title")
+                    val content = item.getString("content")
+                    val board_time = item.getString("time")
+                    val image = item.getString("image")
+                    var heart = item.getInt("heart")
+                    var comment = item.getInt("comment")
+                    var bookmark = item.getInt("bookmark")
+
+                    val newItem = qnaNewItem(num, title, content)
+                    qnaItems.add(newItem)
+                }
+
+                // RecyclerView.Adapter<ViewHolder>()
+                val adapter2 = PagerRecyclerAdapter(qnaItems)
+                viewPager.adapter = adapter2
+                // ViewPager의 Paging 방향은 Horizontal
+                viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                var detailId : String = ""
+                var detailTitle : String = ""
+                var detailContent : String = ""
+                var detailTime : String = ""
+                var detailImg : String = ""
+
+
+                //게시판 상세
+                adapter2.setOnItemClickListener(object : PagerRecyclerAdapter.OnItemClickListener {
+                    override fun onItemClick(v: View, data: qnaNewItem, pos: Int) {
+                        Log.d("onItemClick", "override fun 실행")
+                        val request = Login_Request(
+                            Request.Method.POST,
+                            urlDetail,
+                            { response ->
+                                if(response!="Detail Info Error"){
+                                    val jsonArray = JSONArray(response)
+                                    qnaItems.clear()
+                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val item = jsonArray.getJSONObject(i)
+
+                                        detailId = item.getString("id")
+                                        detailTitle = item.getString("title")
+                                        detailContent = item.getString("content")
+                                        detailTime = item.getString("time")
+                                        detailImg = item.getString("image")
+
+                                        val intent = Intent(activity?.applicationContext, BoardDetail::class.java)
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                        intent.putExtra("board", "QnA 게시판")
+                                        intent.putExtra("num", data.num)
+                                        intent.putExtra("id", id)
+                                        intent.putExtra("writerId", detailId)
+                                        intent.putExtra("title", detailTitle)
+                                        intent.putExtra("content", detailContent)
+                                        intent.putExtra("time", detailTime)
+                                        intent.putExtra("image", detailImg)
+                                        intent.putExtra("userType", userType)
+                                        intent.putExtra("userDept", userDept)
+                                        startActivity(intent)
+                                    }
+
+
+                                }
+
+                            }, { Log.d("login failed", "error......${activity?.applicationContext?.let { it1 ->
+                                error(
+                                    it1
+                                )
+                            }}") },
+                            hashMapOf(
+                                "board" to "QnA 게시판",
+                                "post_num" to data.num.toString()
+                            )
+                        )
+                        val queue = Volley.newRequestQueue(activity?.applicationContext)
+                        queue.add(request)
+                    }
+
+                })
+
+
+
+            }, { Log.d("login failed", "error......${activity?.applicationContext}") },
+            hashMapOf(
+
+            )
         )
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
+        queue.add(request)
 
-        var qnaContent = arrayListOf<String>(
-            "page1111111111111111111111111",
-            "page22222222222222222222222222222",
-            "page333333333333333333333333333333",
-            "page44444444444444444444444444",
-            "page55555555555555555555555",
-        )
-
-        // RecyclerView.Adapter<ViewHolder>()
-        viewPager.adapter = PagerRecyclerAdapter(qnaTitle, qnaContent)
-        // ViewPager의 Paging 방향은 Horizontal
-        viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
-            // Paging 완료되면 호출
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                Log.d("ViewPagerFragment", "Page ${position+1}")
-            }
-        })
     }
 }

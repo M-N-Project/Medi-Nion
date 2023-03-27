@@ -43,6 +43,7 @@ class Login_Request(
         val parsed: String = try {
             String(response.data, Charset.forName(HttpHeaderParser.parseCharset(response?.headers)))
         } catch (e: UnsupportedEncodingException) {
+
             String(response.data)
         }
 

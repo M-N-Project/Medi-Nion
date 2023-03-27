@@ -48,6 +48,9 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.heart.toString()
 
+            if(item.isHeart == true) itemCommentHeart.isChecked = true
+            else itemCommentHeart.isChecked = false
+
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
             {

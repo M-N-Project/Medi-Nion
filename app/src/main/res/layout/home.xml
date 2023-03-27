@@ -188,38 +188,16 @@
                     app:layout_constraintStart_toStartOf="@+id/detail_box"
                     app:layout_constraintTop_toTopOf="@+id/detail_box" />
 
-                <include
-                    android:id="@+id/hot_detail1"
-                    layout="@layout/home_hot_detail"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="8dp"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box"
-                    app:layout_constraintTop_toBottomOf="@+id/home_hot_title" />
 
-                <include
-                    android:id="@+id/hot_detail2"
-                    layout="@layout/home_hot_detail"
-                    android:layout_width="350dp"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginLeft="8dp"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box"
-                    app:layout_constraintTop_toBottomOf="@+id/hot_detail1" />
-
-                <include
-                    android:id="@+id/hot_detail3"
-                    layout="@layout/home_hot_detail"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginLeft="8dp"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box"
-                    app:layout_constraintTop_toBottomOf="@+id/hot_detail2" />
+                    android:layout_margin="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/home_hot_title"
+                    tools:listitem="@layout/home_hot_detail"/>
+ />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- 구독 채널 새소식 -->

@@ -478,21 +478,27 @@ class Retrofit_SignUp : AppCompatActivity() {
         val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, id_editText, nickname_editText, passwd_editText)
 
         if(basicUserBtn.isChecked) {
-            call
-                ?.enqueue(object :
-                    Callback<Data_SignUp_Request> {
-                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-                        t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
-                    }
+            if (call != null) {
+                call.clone()
+                    ?.enqueue(object :
+                        Callback<Data_SignUp_Request> {
+                        override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                            t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
+                            Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                        }
 
-                    override fun onResponse(
-                        call: Call<Data_SignUp_Request>,
-                        response: Response<Data_SignUp_Request>
-                    ) {
-                        Log.d("retrofit1 success", response.toString())
-                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                        override fun onResponse(
+                            call: Call<Data_SignUp_Request>,
+                            response: Response<Data_SignUp_Request>
+                        ) {
+                            //if (!response.equals("SignUP fail")) {
+                            Log.d("retrofit1 success", response.toString())
+                            Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                            //}
+                        }
+
+                    })
+            }
         }
         else
            {
