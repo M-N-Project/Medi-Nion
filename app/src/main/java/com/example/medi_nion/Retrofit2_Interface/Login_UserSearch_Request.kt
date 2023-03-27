@@ -8,8 +8,8 @@ import retrofit2.http.POST
 
 interface Login_UserSearch_Request {
     @FormUrlEncoded
-    @POST("/UserSearch.php")
-    fun LoginUserSearch(
+    @POST("/userSearch.php")
+    fun LoginUserSearch (
         @Field("id") id: String
     ): Call<Data_Login_UserSearch_Request>
 }

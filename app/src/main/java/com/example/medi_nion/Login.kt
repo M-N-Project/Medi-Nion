@@ -97,6 +97,9 @@ class Login : AppCompatActivity() {
 //                    intent.putExtra("checkID", checkID)
 //                    intent.putExtra("checkPW", checkPW)
                     loginRequest(url)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    intent.putExtra("id", id.text.toString())
+                    startActivity(intent)
                 }
             }
 
@@ -178,7 +181,7 @@ class Login : AppCompatActivity() {
         })
 
 
-        //        val request = Login_Request(
+//        val request = Login_Request(
 //            Request.Method.POST,
 //            url,
 //            { response ->
@@ -247,6 +250,7 @@ class Login : AppCompatActivity() {
 //        )
 //        val queue = Volley.newRequestQueue(this)
 //        queue.add(request)
+
 
     }
 

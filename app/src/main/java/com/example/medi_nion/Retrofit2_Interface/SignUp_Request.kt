@@ -1,6 +1,5 @@
 package com.example.medi_nion.Retrofit2_Interface
 
-import com.android.volley.Request
 import retrofit2.Call
 import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
 import retrofit2.http.Field
