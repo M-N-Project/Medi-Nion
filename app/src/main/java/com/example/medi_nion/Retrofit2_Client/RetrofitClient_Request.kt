@@ -10,17 +10,17 @@ import java.net.MalformedURLException
 import java.net.URLDecoder
 
 object RetrofitClient_Request {
-    private var instance: Retrofit? = null
-    private val gson = GsonBuilder().setLenient().create()
-    private val uri = "http://seonho.dothome.co.kr/"
-
-    fun getInstance(): Retrofit {
-        if(instance == null) {
-            instance = Retrofit.Builder()
-                .baseUrl(uri)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
-        }
-        return instance!!
-    }
+//    private var instance: Retrofit? = null
+//    private val gson = GsonBuilder().setLenient().create()
+//    private val uri = "http://seonho.dothome.co.kr/"
+//
+//    fun getInstance(): Retrofit {
+//        if(instance == null) {
+//            instance = Retrofit.Builder()
+//                .baseUrl(uri)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .build()
+//        }
+//        return instance!!
+//    }
 }

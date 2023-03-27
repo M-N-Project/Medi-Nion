@@ -11,11 +11,10 @@ interface SignUp_Request {
     @FormUrlEncoded
     @POST("/SignUP.php")
     fun getUser(
-//        @Field("nickname") nickname: String,
-//        @Field("id") id: String,
-//        @Field("passwd") passwd:String,
-//        @Field("userType") userType:String,
-//        @Field("userDept") userDept:String
-          @Field("request") userRequest: Data_SignUp_Request
+        @Field("userType") userType: String,
+        @Field("userDept") userDept: String,
+        @Field("nickname") nickname: String,
+        @Field("id") id: String,
+        @Field("passwd") passwd: String
         ): Call<Data_SignUp_Request>
 }
