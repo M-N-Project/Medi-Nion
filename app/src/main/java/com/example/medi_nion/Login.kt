@@ -109,76 +109,76 @@ class Login : AppCompatActivity() {
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                var userType = ""
-                var userDept = ""
-                var intent = Intent(this, MainActivity::class.java)
-                if (!response.equals("Login Failed")) {
-                    val userSearch = Login_Request(
-                        Request.Method.POST,
-                        userSearchUrl,
-                        { responseUser ->
-                            Log.d("responseUser", responseUser)
 
-                            if (!responseUser.equals("userSearch fail")){
-                                val jsonArray = JSONArray(responseUser)
-
-
-                                for (i in jsonArray.length()-1  downTo  0) {
-                                    val item = jsonArray.getJSONObject(i)
-
-                                    userType = item.getString("userType")
-                                    userDept = item.getString("userDept")
-
-                                    intent.putExtra("userType", userType)
-                                    intent.putExtra("userDept", userDept)
-                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
-
-                                    Toast.makeText(
-                                        baseContext,
-                                        String.format("로그인하였습니다."),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    intent.putExtra("id", id)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-                                    startActivity(intent)
-                                }
-                            } else {
-                                Toast.makeText(
-                                    baseContext,
-                                    String.format("userSearch fail"),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d("userSearch", "Failed")
-                            }
-                        }, { Log.d("UserSearch Failed", "error......${error(applicationContext)}") },
-                        hashMapOf(
-                            "id" to id
-                        )
-                    )
-                    val queue = Volley.newRequestQueue(this)
-                    queue.add(userSearch)
-
-                } else {
-                    Toast.makeText(
-                        baseContext,
-                        String.format("로그인할 수 없습니다. 아이디 혹은 비밀번호를 다시 확인해주세요."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "id" to id,
-                "passwd" to password
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-
+        //        val request = Login_Request(
+//            Request.Method.POST,
+//            url,
+//            { response ->
+//                var userType = ""
+//                var userDept = ""
+//                var intent = Intent(this, MainActivity::class.java)
+//                if (!response.equals("Login Failed")) {
+//                    val userSearch = Login_Request(
+//                        Request.Method.POST,
+//                        userSearchUrl,
+//                        { responseUser ->
+//                            Log.d("responseUser", responseUser)
+//
+//                            if (!responseUser.equals("userSearch fail")){
+//                                val jsonArray = JSONArray(responseUser)
+//
+//
+//                                for (i in jsonArray.length()-1  downTo  0) {
+//                                    val item = jsonArray.getJSONObject(i)
+//
+//                                    userType = item.getString("userType")
+//                                    userDept = item.getString("userDept")
+//
+//                                    intent.putExtra("userType", userType)
+//                                    intent.putExtra("userDept", userDept)
+//                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
+//
+//                                    Toast.makeText(
+//                                        baseContext,
+//                                        String.format("로그인하였습니다."),
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//
+//                                    intent.putExtra("id", id)
+//                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+//                                    startActivity(intent)
+//                                }
+//                            } else {
+//                                Toast.makeText(
+//                                    baseContext,
+//                                    String.format("userSearch fail"),
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                                Log.d("userSearch", "Failed")
+//                            }
+//                        }, { Log.d("UserSearch Failed", "error......${error(applicationContext)}") },
+//                        hashMapOf(
+//                            "id" to id
+//                        )
+//                    )
+//                    val queue = Volley.newRequestQueue(this)
+//                    queue.add(userSearch)
+//
+//                } else {
+//                    Toast.makeText(
+//                        baseContext,
+//                        String.format("로그인할 수 없습니다. 아이디 혹은 비밀번호를 다시 확인해주세요."),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+//            hashMapOf(
+//                "id" to id,
+//                "passwd" to password
+//            )
+//        )
+//        val queue = Volley.newRequestQueue(this)
+//        queue.add(request)
 
     }
 
