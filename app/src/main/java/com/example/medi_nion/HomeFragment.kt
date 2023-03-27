@@ -28,7 +28,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
             private val qna_title: TextView = itemView.findViewById(R.id.home_qna_title)
             private val qna_content: TextView = itemView.findViewById(R.id.home_qna_detail)
-            private val qna_box = itemView.findViewById<Button>(R.id.detail_box_hot)
+            private val qna_box = itemView.findViewById<Button>(R.id.detail_box)
             fun bind(item: qnaNewItem) {
                 qna_title.text = item.title
                 qna_content.text = item.content
