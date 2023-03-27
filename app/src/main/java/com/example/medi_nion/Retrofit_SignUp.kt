@@ -27,17 +27,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.*
-import com.example.medi_nion.Retrofit2_Client.RetrofitClient_Request
 import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
 import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
+import com.google.gson.GsonBuilder
 import com.googlecode.tesseract.android.TessBaseAPI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.android.synthetic.main.sign_up.*
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
+import java.lang.reflect.Type
 import java.util.regex.Pattern
 
 
@@ -461,69 +462,61 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
 
 
-        //retrofit 구현중
-        if(basicUserBtn.isChecked) { //일반회원 가입
-            Log.d("retrofit", "123") //여기까진 들어온다,,,
-            val retrofit = RetrofitClient_Request.getInstance()
-            val server = retrofit.create(SignUp_Request::class.java)
-            CoroutineScope(Dispatchers.IO).launch {
+        val gson = GsonBuilder().setLenient().create()
+        val uri = "http://seonho.dothome.co.kr/"
 
-                server.getUser(
-                    basicUserBtn.text.toString(),
-                    userDept,
-                    nickname_editText,
-                    id_editText,
-                    passwd_editText,
-                    //businessChan = 0
-                ).clone()
-                    .enqueue(object : Callback<Data_SignUp_Request> {
-                        //들어와서 failure로 들어감 왜,,
-                        override fun onResponse(
-                            call: Call<Data_SignUp_Request>,
-                            response: Response<Data_SignUp_Request>
-                        ) {
-                            if (!response.isSuccessful) {
-                                Log.d("error", "aaaa")
+        val retrofit = createOkHttpClient()?.let {
+            Retrofit.Builder()
+                .baseUrl(uri)
+                .addConverterFactory(nullOnEmptyConverterFactory)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(it)
+                .build()
+        }
 
-                            } else Log.d("retrofit success", response.body().toString())
-                        }
+        val server = retrofit?.create(SignUp_Request::class.java)
 
-                        override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-                            t.localizedMessage?.let { Log.d("retrofit fail", it) }
-                        }
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, id_editText, nickname_editText, passwd_editText)
 
-                    })//enqueue끝
-            } //Retrofit2 끝
-        } //coroutine 끝
+        if(basicUserBtn.isChecked) {
+            call
+                ?.enqueue(object :
+                    Callback<Data_SignUp_Request> {
+                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
+                        Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                    }
 
-//        else if(!basicUserBtn.isChecked) { //기업회원 가입
-//            server.getUser(
-//                nickname_editText,
-//                id_editText,
-//                passwd_editText,
-//                corpUserBtn.text.toString(),
-//                userDept,
-//                businessChan = 0
-//            )
-//                .enqueue(object : Callback<Data_SignUp_Request> {
-//                    override fun onResponse(
-//                        call: Call<Data_SignUp_Request>,
-//                        response: Response<Data_SignUp_Request>
-//                    ) {
-//                        if(!response.isSuccessful) {
-//                            Log.d("retrofit test", "aaaaaaa")
-//                        } else{
-//                            Log.d("retrofit success", response.body().toString())
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-//                        t.localizedMessage?.let { Log.d("retrofit fail", it) }
-//                    }
-//
-//                })
-//        }
+                    override fun onResponse(
+                        call: Call<Data_SignUp_Request>,
+                        response: Response<Data_SignUp_Request>
+                    ) {
+                        //if (!response.equals("SignUP fail")) {
+                            Log.d("retrofit1 success", response.body().toString())
+                            Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                        //}
+                    }
 
+                })
+        }
+        else
+           {
+            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
+                id_editText, passwd_editText)
+                ?.enqueue(object:
+                    Callback<Data_SignUp_Request> {
+                    override fun onResponse(
+                        call: Call<Data_SignUp_Request>,
+                        response: Response<Data_SignUp_Request>
+                    ) {
+                        Log.d("retrofit2 success", response.body().toString())
+                    }
+
+                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+                    }
+                })
+        }
 
 
 
@@ -586,6 +579,27 @@ class Retrofit_SignUp : AppCompatActivity() {
 //        queue.add(request)
     }
     //db 연동 끝
+
+    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+        override fun responseBodyConverter(
+            type: Type,
+            annotations: Array<Annotation>,
+            retrofit: Retrofit
+        ): Converter<ResponseBody, *> {
+            val delegate: Converter<ResponseBody, *> =
+                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+        }
+    }
+
+
+    private fun createOkHttpClient(): OkHttpClient? {
+        val builder = OkHttpClient.Builder()
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+        builder.addInterceptor(interceptor)
+        return builder.build()
+    }
 
     private fun copyFile(lang: String) {
         try {
