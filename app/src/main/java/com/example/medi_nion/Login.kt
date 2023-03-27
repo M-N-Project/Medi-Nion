@@ -16,10 +16,15 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
-import com.android.volley.toolbox.Volley
-import org.json.JSONArray
-import java.lang.Boolean.getBoolean
+import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
+import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
 
 const val PREFERENCES_NAME = "rebuild_preference"
 private const val DEFAULT_VALUE_STRING = ""
@@ -109,77 +114,128 @@ class Login : AppCompatActivity() {
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                var userType = ""
-                var userDept = ""
-                var intent = Intent(this, MainActivity::class.java)
-                if (!response.equals("Login Failed")) {
-                    val userSearch = Login_Request(
-                        Request.Method.POST,
-                        userSearchUrl,
-                        { responseUser ->
-                            Log.d("responseUser", responseUser)
+        val gson = GsonBuilder().setLenient().create()
+        val uri = "http://seonho.dothome.co.kr/"
 
-                            if (!responseUser.equals("userSearch fail")){
-                                val jsonArray = JSONArray(responseUser)
+        val retrofit = createOkHttpClient()?.let {
+            Retrofit.Builder()
+                .baseUrl(uri)
+                .addConverterFactory(nullOnEmptyConverterFactory)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(it)
+                .build()
+        }
+
+        val server = retrofit?.create(SignUp_Request::class.java)
+
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, id_editText, nickname_editText, passwd_editText)
+
+            call?.enqueue(object :
+                    Callback<Data_SignUp_Request> {
+                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
+                    }
+
+                    override fun onResponse(
+                        call: Call<Data_SignUp_Request>,
+                        response: Response<Data_SignUp_Request>
+                    ) {
+                        Log.d("retrofit1 success", response.toString())
+                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                })
+
+//        val request = Login_Request(
+//            Request.Method.POST,
+//            url,
+//            { response ->
+//                var userType = ""
+//                var userDept = ""
+//                var intent = Intent(this, MainActivity::class.java)
+//                if (!response.equals("Login Failed")) {
+//                    val userSearch = Login_Request(
+//                        Request.Method.POST,
+//                        userSearchUrl,
+//                        { responseUser ->
+//                            Log.d("responseUser", responseUser)
+//
+//                            if (!responseUser.equals("userSearch fail")){
+//                                val jsonArray = JSONArray(responseUser)
+//
+//
+//                                for (i in jsonArray.length()-1  downTo  0) {
+//                                    val item = jsonArray.getJSONObject(i)
+//
+//                                    userType = item.getString("userType")
+//                                    userDept = item.getString("userDept")
+//
+//                                    intent.putExtra("userType", userType)
+//                                    intent.putExtra("userDept", userDept)
+//                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
+//
+//                                    Toast.makeText(
+//                                        baseContext,
+//                                        String.format("로그인하였습니다."),
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//
+//                                    intent.putExtra("id", id)
+//                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+//                                    startActivity(intent)
+//                                }
+//                            } else {
+//                                Toast.makeText(
+//                                    baseContext,
+//                                    String.format("userSearch fail"),
+//                                    Toast.LENGTH_SHORT
+//                                ).show()
+//                                Log.d("userSearch", "Failed")
+//                            }
+//                        }, { Log.d("UserSearch Failed", "error......${error(applicationContext)}") },
+//                        hashMapOf(
+//                            "id" to id
+//                        )
+//                    )
+//                    val queue = Volley.newRequestQueue(this)
+//                    queue.add(userSearch)
+//
+//                } else {
+//                    Toast.makeText(
+//                        baseContext,
+//                        String.format("로그인할 수 없습니다. 아이디 혹은 비밀번호를 다시 확인해주세요."),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+//            hashMapOf(
+//                "id" to id,
+//                "passwd" to password
+//            )
+//        )
+//        val queue = Volley.newRequestQueue(this)
+//        queue.add(request)
 
 
-                                for (i in jsonArray.length()-1  downTo  0) {
-                                    val item = jsonArray.getJSONObject(i)
+    }
 
-                                    userType = item.getString("userType")
-                                    userDept = item.getString("userDept")
+    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+        override fun responseBodyConverter(
+            type: Type,
+            annotations: Array<Annotation>,
+            retrofit: Retrofit
+        ): Converter<ResponseBody, *> {
+            val delegate: Converter<ResponseBody, *> =
+                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+        }
+    }
 
-                                    intent.putExtra("userType", userType)
-                                    intent.putExtra("userDept", userDept)
-                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
-
-                                    Toast.makeText(
-                                        baseContext,
-                                        String.format("로그인하였습니다."),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                    intent.putExtra("id", id)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-                                    startActivity(intent)
-                                }
-                            } else {
-                                Toast.makeText(
-                                    baseContext,
-                                    String.format("userSearch fail"),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d("userSearch", "Failed")
-                            }
-                        }, { Log.d("UserSearch Failed", "error......${error(applicationContext)}") },
-                        hashMapOf(
-                            "id" to id
-                        )
-                    )
-                    val queue = Volley.newRequestQueue(this)
-                    queue.add(userSearch)
-
-                } else {
-                    Toast.makeText(
-                        baseContext,
-                        String.format("로그인할 수 없습니다. 아이디 혹은 비밀번호를 다시 확인해주세요."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "id" to id,
-                "passwd" to password
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-
-
+    private fun createOkHttpClient(): OkHttpClient? {
+        val builder = OkHttpClient.Builder()
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+        builder.addInterceptor(interceptor)
+        return builder.build()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
