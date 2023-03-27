@@ -16,7 +16,11 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_Request
+import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_UserSearch_Request
 import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
+import com.example.medi_nion.Retrofit2_Interface.Login_Retrofit_Request
+import com.example.medi_nion.Retrofit2_Interface.Login_UserSearch_Request
 import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -85,6 +89,9 @@ class Login : AppCompatActivity() {
 //                    intent.putExtra("checkID", checkID)
 //                    intent.putExtra("checkPW", checkPW)
                     loginRequest(url)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    intent.putExtra("id", id.text.toString())
+                    startActivity(intent)
                 }
             }
 
@@ -109,7 +116,7 @@ class Login : AppCompatActivity() {
     @SuppressLint("HardwareIds")
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
-        var password = findViewById<EditText>(R.id.password).text.toString()
+        var passwd = findViewById<EditText>(R.id.password).text.toString()
         var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
@@ -126,24 +133,44 @@ class Login : AppCompatActivity() {
                 .build()
         }
 
-        val server = retrofit?.create(SignUp_Request::class.java)
+        val server = retrofit?.create(Login_Retrofit_Request::class.java)
 
-        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, id_editText, nickname_editText, passwd_editText)
+        val call : Call<Data_Login_Request>? = server?.Login(id, passwd)
 
             call?.enqueue(object :
-                    Callback<Data_SignUp_Request> {
-                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                    Callback<Data_Login_Request> {
+                    override fun onFailure(call: Call<Data_Login_Request>, t: Throwable) {
                         t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
+                        Toast.makeText(applicationContext, "retrofit1 fail", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onResponse(
-                        call: Call<Data_SignUp_Request>,
-                        response: Response<Data_SignUp_Request>
+                        call: Call<Data_Login_Request>,
+                        response: Response<Data_Login_Request>
                     ) {
                         Log.d("retrofit1 success", response.toString())
-                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+
+                        val server = retrofit?.create(Login_UserSearch_Request::class.java)
+
+                        val call : Call<Data_Login_UserSearch_Request>? = server?.LoginUserSearch(id)
+
+                        call?.enqueue(object :
+                            Callback<Data_Login_UserSearch_Request> {
+                            override fun onFailure(call: Call<Data_Login_UserSearch_Request>, t: Throwable) {
+                                t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+                                Toast.makeText(applicationContext, "아이디나 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onResponse(
+                                call: Call<Data_Login_UserSearch_Request>,
+                                response: Response<Data_Login_UserSearch_Request>
+                            ) {
+                                Log.d("retrofit2 success", response.toString())
+                                Toast.makeText(applicationContext, "로그인하였습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        })
                     }
-                })
+            })
 
 //        val request = Login_Request(
 //            Request.Method.POST,
