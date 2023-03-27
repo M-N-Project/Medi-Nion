@@ -31,7 +31,6 @@ import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
 import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
 import com.google.gson.GsonBuilder
 import com.googlecode.tesseract.android.TessBaseAPI
-import kotlinx.android.synthetic.main.sign_up.*
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -511,7 +510,8 @@ class Retrofit_SignUp : AppCompatActivity() {
                         call: Call<Data_SignUp_Request>,
                         response: Response<Data_SignUp_Request>
                     ) {
-                        Log.d("retrofit2 success", response.body().toString())
+                        Log.d("retrofit2 success", response.toString())
+                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
@@ -593,7 +593,6 @@ class Retrofit_SignUp : AppCompatActivity() {
             return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
         }
     }
-
 
     private fun createOkHttpClient(): OkHttpClient? {
         val builder = OkHttpClient.Builder()

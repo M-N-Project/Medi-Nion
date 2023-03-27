@@ -16,10 +16,19 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
-import com.android.volley.toolbox.Volley
-import org.json.JSONArray
-import java.lang.Boolean.getBoolean
+import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_Request
+import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_UserSearch_Request
+import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
+import com.example.medi_nion.Retrofit2_Interface.Login_Retrofit_Request
+import com.example.medi_nion.Retrofit2_Interface.Login_UserSearch_Request
+import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
 
 const val PREFERENCES_NAME = "rebuild_preference"
 private const val DEFAULT_VALUE_STRING = ""
@@ -80,6 +89,9 @@ class Login : AppCompatActivity() {
 //                    intent.putExtra("checkID", checkID)
 //                    intent.putExtra("checkPW", checkPW)
                     loginRequest(url)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    intent.putExtra("id", id.text.toString())
+                    startActivity(intent)
                 }
             }
 
@@ -104,13 +116,63 @@ class Login : AppCompatActivity() {
     @SuppressLint("HardwareIds")
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
-        var password = findViewById<EditText>(R.id.password).text.toString()
+        var passwd = findViewById<EditText>(R.id.password).text.toString()
         var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
+        val gson = GsonBuilder().setLenient().create()
+        val uri = "http://seonho.dothome.co.kr/"
 
-        //        val request = Login_Request(
+        val retrofit = createOkHttpClient()?.let {
+            Retrofit.Builder()
+                .baseUrl(uri)
+                .addConverterFactory(nullOnEmptyConverterFactory)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(it)
+                .build()
+        }
+
+        val server = retrofit?.create(Login_Retrofit_Request::class.java)
+
+        val call : Call<Data_Login_Request>? = server?.Login(id, passwd)
+
+            call?.enqueue(object :
+                    Callback<Data_Login_Request> {
+                    override fun onFailure(call: Call<Data_Login_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
+                        Toast.makeText(applicationContext, "retrofit1 fail", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onResponse(
+                        call: Call<Data_Login_Request>,
+                        response: Response<Data_Login_Request>
+                    ) {
+                        Log.d("retrofit1 success", response.toString())
+
+                        val server = retrofit?.create(Login_UserSearch_Request::class.java)
+
+                        val call : Call<Data_Login_UserSearch_Request>? = server?.LoginUserSearch(id)
+
+                        call?.enqueue(object :
+                            Callback<Data_Login_UserSearch_Request> {
+                            override fun onFailure(call: Call<Data_Login_UserSearch_Request>, t: Throwable) {
+                                t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+                                Toast.makeText(applicationContext, "아이디나 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onResponse(
+                                call: Call<Data_Login_UserSearch_Request>,
+                                response: Response<Data_Login_UserSearch_Request>
+                            ) {
+                                Log.d("retrofit2 success", response.toString())
+                                Toast.makeText(applicationContext, "로그인하였습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    }
+            })
+
+//        val request = Login_Request(
 //            Request.Method.POST,
 //            url,
 //            { response ->
@@ -180,6 +242,27 @@ class Login : AppCompatActivity() {
 //        val queue = Volley.newRequestQueue(this)
 //        queue.add(request)
 
+
+    }
+
+    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+        override fun responseBodyConverter(
+            type: Type,
+            annotations: Array<Annotation>,
+            retrofit: Retrofit
+        ): Converter<ResponseBody, *> {
+            val delegate: Converter<ResponseBody, *> =
+                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+        }
+    }
+
+    private fun createOkHttpClient(): OkHttpClient? {
+        val builder = OkHttpClient.Builder()
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+        builder.addInterceptor(interceptor)
+        return builder.build()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
