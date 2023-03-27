@@ -6,16 +6,17 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import java.util.*
 
 interface SignUp_Request {
     @FormUrlEncoded
-    @POST("/php/SignUP.php")
+    @POST("SignUP.php")
     fun getUser(
+        @Field("userType") userType: String,
+        @Field("userDept") userDept: String,
         @Field("nickname") nickname: String,
         @Field("id") id: String,
-        @Field("passwd") passwd :String,
-        @Field("userType") userType :String,
-        @Field("userDept") userDept :String,
-        @Field("businessChan") businessChan :Int
+        @Field("passwd") passwd: String,
+//        @Field("businessChan") businessChan :Int
     ): Call<Data_SignUp_Request>
 }
