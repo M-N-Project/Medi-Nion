@@ -6,5 +6,6 @@ data class Data_SignUp_Request(
     val passwd: String,
     val userType: String,
     val userDept: String,
-    val businessChan: Int
+    val status: String,
+    val message: String
 )
