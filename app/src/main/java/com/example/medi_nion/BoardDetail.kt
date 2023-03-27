@@ -31,10 +31,9 @@ import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-var comment_items =ArrayList<CommentItem>()
-var commentDetail_items =ArrayList<CommentDetailItem>()
-var Commentadapter = CommentListAdapter(comment_items)
-val viewModel: CommentViewModel = CommentViewModel()
+private var comment_items =ArrayList<CommentItem>()
+private var commentDetail_items =ArrayList<CommentDetailItem>()
+private var Commentadapter = CommentListAdapter(comment_items)
 
 class BoardDetail : AppCompatActivity() {
 
@@ -270,7 +269,6 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
-        items.clear()
         comment_items.clear()
 
         val request = Login_Request(
@@ -278,7 +276,6 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if(response != "no Comment"){
-                    items.clear()
                     comment_items.clear()
 
                     val jsonArray = JSONArray(response)

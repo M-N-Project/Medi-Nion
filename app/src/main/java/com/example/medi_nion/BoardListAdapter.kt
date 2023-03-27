@@ -23,6 +23,7 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
         this.listener = listener
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context).inflate(R.layout.board_home_item, parent, false)
         return ViewHolder(inflatedView);
@@ -58,7 +59,6 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
                 val bitmap: Bitmap? = StringToBitmaps(item.image)
                 itemImg.setImageBitmap(bitmap)
             }
-
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION)
