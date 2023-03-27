@@ -7,7 +7,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-interface Login_Request {
+interface Login_Retrofit_Request {
     @FormUrlEncoded
     @POST("/Login.php")
     fun Login(
