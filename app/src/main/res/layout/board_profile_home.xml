@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/history_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/select_RadioGroup_profile"
+            android:layout_width="140dp"
+            android:layout_height="298dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selector_radio_button_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/board_select_profile"
+            android:visibility="gone">
+
+
+            <RadioButton
+                android:id="@+id/free_RadioBtn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/selector_radio_button_top"
+                android:button="@null"
+                android:text="자유 게시판"
+                android:textAlignment="center" />
+
+            <RadioButton
+                android:id="@+id/job_RadioBtn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/selector_radio_button_middle"
+                android:button="@null"
+                android:text="직종별 게시판"
+                android:textAlignment="center" />
+
+
+            <RadioButton
+                android:id="@+id/department_RadioBtn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/selector_radio_button_middle"
+                android:button="@null"
+                android:text="진료과별 게시판"
+                android:textAlignment="center" />
+
+
+            <RadioButton
+                android:id="@+id/my_hospital_RadioBtn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/selector_radio_button_middle"
+                android:button="@null"
+                android:text=" 우리 병원 게시판 "
+                android:textAlignment="center" />
+
+
+            <RadioButton
+                android:id="@+id/market_RadioBtn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/selector_radio_button_middle"
+                android:button="@null"
+                android:text="장터 게시판"
+                android:textAlignment="center" />
+
+
+            <RadioButton
+                android:id="@+id/QnA_RadioBtn_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/selector_radio_button_bottom"
+                android:button="@null"
+                android:text="QnA 게시판"
+                android:textAlignment="center" />
+
+        </RadioGroup>
+
+        <android.widget.Button
+            android:id="@+id/profile_basicBtn1"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/profile_triangle_button"
+            android:rotation="-270"
+            app:layout_constraintEnd_toStartOf="@+id/board_select_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/board_select_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="19dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="게시판 종류 선택"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+
+        <ImageView
+            android:id="@+id/board_ad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/board_select_profile"
+            app:srcCompat="@drawable/ad1" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/boardRecyclerView_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/board_ad"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="2dp"
+            android:layout_marginRight="-1dp"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="@id/board_ad"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/board_ad"
+            app:layout_constraintTop_toBottomOf="@+id/board_ad"
+            tools:listitem="@layout/board_home_item" />
+
+        <TextView
+            android:id="@+id/no_myitem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내가 쓴 게시물이 없습니다."
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/board_ad" />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
