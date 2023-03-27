@@ -121,7 +121,7 @@ class Login : AppCompatActivity() {
     @SuppressLint("HardwareIds")
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
-        var password = findViewById<EditText>(R.id.password).text.toString()
+        var passwd = findViewById<EditText>(R.id.password).text.toString()
         var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
@@ -139,7 +139,7 @@ class Login : AppCompatActivity() {
         }
 
         val server = retrofit?.create(Login_Retrofit_Request::class.java)
-        val call : Call<Data_Login_Request>? = server?.Login(id, password)
+        val call : Call<Data_Login_Request>? = server?.Login(id, passwd)
 
         call?.enqueue(object :
             Callback<Data_Login_Request> {
