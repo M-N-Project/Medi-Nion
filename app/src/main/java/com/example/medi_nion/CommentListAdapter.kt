@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -52,12 +53,18 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemView.findViewById(R.id.imageView_comment_comment)
         private val itemCommentDetail: RecyclerView =
             itemView.findViewById(R.id.CommentRecyclerView2)
+        private val itemCommentMore : Button = itemView.findViewById(R.id.commentMoreBtn)
 
         fun bind(item: CommentItem, pos: Int) {
             itemComment.text = item.comment
             itemCommentTime.text = item.comment_time
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.commentHeart.toString()
+
+            if(item.id == item.writerId) {
+                itemCommentMore.visibility = View.VISIBLE
+
+            }
 
             if (item.isHeart == true) itemCommentHeart.isChecked = true
             else itemCommentHeart.isChecked = false
