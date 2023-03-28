@@ -203,14 +203,12 @@ class BoardWrite : AppCompatActivity() {
             val server = retrofit?.create(UpdateBoard_Request::class.java)
 
             val call : Call<Data_UpdateBoard>? = server?.updateBoard(id, board_select, post_num, postTitle, postContent, currentTime.toString(), img1, img2)
-
-
             if (call != null) {
                 call.clone()
                     ?.enqueue(object :
                         Callback<Data_UpdateBoard> {
                         override fun onFailure(call: Call<Data_UpdateBoard>, t: Throwable) {
-                            t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+                            t.localizedMessage?.let { Log.d("retrofit3 fail", it) }
                             Toast.makeText(applicationContext, "수정 실패", Toast.LENGTH_SHORT).show()
                         }
 
@@ -219,8 +217,17 @@ class BoardWrite : AppCompatActivity() {
                             response: Response<Data_UpdateBoard>
                         ) {
                             //if (!response.equals("SignUP fail")) {
-                            Log.d("retrofit2 success", response.toString())
+                            Log.d("retrofit3 success", response.toString())
                             Toast.makeText(applicationContext, "수정 성공", Toast.LENGTH_SHORT).show()
+
+                            var intent = Intent(applicationContext, Board::class.java)
+                            intent.putExtra("id", id)
+                            intent.putExtra("board", board)
+                            Log.d("게시물 수정 완료", userDept)
+                            intent.putExtra("userType", userType)
+                            intent.putExtra("userDept", userDept)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                            startActivity(intent)
                             //}
                         }
 

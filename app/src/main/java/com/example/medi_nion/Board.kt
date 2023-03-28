@@ -218,12 +218,12 @@ class Board : AppCompatActivity() {
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-
                         val request = Login_Request(
                             Request.Method.POST,
                             urlDetail,
                             { response ->
                                 if(response!="Detail Info Error"){
+                                    Log.d("++>>", response)
                                     val jsonArray = JSONArray(response)
                                     items.clear()
                                     for (i in jsonArray.length()-1  downTo  0) {
@@ -249,6 +249,8 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("userType", userType)
                                         intent.putExtra("userDept", userDept)
                                         intent.putExtra("commentCnt", detailCommentCnt)
+
+                                        Log.d("boardDetail확인", intent.getStringExtra("commentCnt").toString())
                                         startActivity(intent)
                                     }
 
