@@ -285,8 +285,6 @@ class BoardWrite : AppCompatActivity() {
             if( requestCode ==  GALLERY)
             {
                 ImageData = data?.data!!
-                //imgbtn.setImageURI(ImageData)
-//                findViewById<TextView>(R.id.imageSrc).text = ImageData.toString()
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)

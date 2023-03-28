@@ -27,16 +27,16 @@ class ProfileFragment : Fragment(R.layout.profile) {
         val userDept = arguments?.getString("userDept")
 
         //나의 활동 
-        binding.profileBasicBtn1.setOnClickListener{
-            val item1ListLayout = binding.item1ListLayout
-            if(item1ListLayout.visibility == View.GONE) item1ListLayout.visibility = View.VISIBLE
-            else item1ListLayout.visibility = View.GONE
-        }
         binding.item1.setOnClickListener{
             val item1ListLayout = binding.item1ListLayout
             if(item1ListLayout.visibility == View.GONE) item1ListLayout.visibility = View.VISIBLE
             else item1ListLayout.visibility = View.GONE
         }
+//        binding.item1.setOnClickListener{
+//            val item1ListLayout = binding.item1ListLayout
+//            if(item1ListLayout.visibility == View.GONE) item1ListLayout.visibility = View.VISIBLE
+//            else item1ListLayout.visibility = View.GONE
+//        }
 
 
         //내 게시물 -> board에 내 게시물 검색해서 만들기
@@ -61,26 +61,42 @@ class ProfileFragment : Fragment(R.layout.profile) {
             startActivity(intent)
         }
 
-        binding.profileBasicBtn2.setOnClickListener {
-            val item2ListLayout = binding.item2ListLayout
-            if(item2ListLayout.visibility == View.GONE) item2ListLayout.visibility = View.VISIBLE
-            else item2ListLayout.visibility = View.GONE
-        }
-        binding.item2.setOnClickListener{
+        //어플 설정 -> 리스트업
+        binding.item2.setOnClickListener {
             val item2ListLayout = binding.item2ListLayout
             if(item2ListLayout.visibility == View.GONE) item2ListLayout.visibility = View.VISIBLE
             else item2ListLayout.visibility = View.GONE
         }
 
-        binding.profileBasicBtn3.setOnClickListener {
+        //계정 설정 -> 리스트업
+        binding.item3.setOnClickListener {
             val item3ListLayout = binding.item3ListLayout
             if(item3ListLayout.visibility == View.GONE) item3ListLayout.visibility = View.VISIBLE
             else item3ListLayout.visibility = View.GONE
         }
-        binding.item3.setOnClickListener{
-            val item3ListLayout = binding.item3ListLayout
-            if(item3ListLayout.visibility == View.GONE) item3ListLayout.visibility = View.VISIBLE
-            else item3ListLayout.visibility = View.GONE
+
+
+        //비즈니스 채널 관리
+        binding.item4.setOnClickListener{
+            //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
+            val intent = Intent(context, BusinessManageFirstActivity::class.java)
+            intent.putExtra("id", id)
+            intent.putExtra("userType", userType)
+            intent.putExtra("userDept", userDept)
+            startActivity(intent)
+            
+            //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
+        }
+
+        binding.profileItem4.setOnClickListener{
+            //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
+            val intent = Intent(context, BusinessManageFirstActivity::class.java)
+            intent.putExtra("id", id)
+            intent.putExtra("userType", userType)
+            intent.putExtra("userDept", userDept)
+            startActivity(intent)
+
+            //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
         }
 
         return binding.root

@@ -17,164 +17,191 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/business_item_border">
 
-        <ImageView
-            android:id="@+id/profileImg2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/business_profile_img"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.045"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/titleName"
-            android:layout_width="283dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="채널 이름"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            app:layout_constraintStart_toEndOf="@+id/profileImg2"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="284dp"
-            android:layout_height="21dp"
-            android:layout_marginStart="16dp"
-            android:text="게시물 등록 시간"
-            android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/profileImg2"
-            app:layout_constraintTop_toBottomOf="@+id/titleName" />
-
-        <HorizontalScrollView
-            android:id="@+id/businessMG_Img"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="20dp"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:visibility="gone">
+            app:layout_constraintTop_toTopOf="parent">>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/linearLayout8"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/businessMG_postImg1"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
+                    android:id="@+id/profileImg2"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/business_profile_img"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.045"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/businessMG_postImg2"
-                    android:layout_width="100dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
+                    android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/businessMG_postImg3"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/titleName"
+                        android:layout_width="283dp"
+                        android:layout_height="33dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="채널 이름"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toEndOf="@+id/profileImg2"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/businessMG_postImg4"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
 
-                <ImageView
-                    android:id="@+id/businessMG_postImg5"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
-
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="284dp"
+                        android:layout_height="21dp"
+                        android:layout_marginStart="16dp"
+                        android:text="게시물 등록 시간"
+                        android:textSize="10sp"
+                        app:layout_constraintStart_toEndOf="@+id/profileImg2"
+                        app:layout_constraintTop_toBottomOf="@+id/titleName" />
+                </LinearLayout>
             </LinearLayout>
 
-        </HorizontalScrollView>
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="내용내용내용...\n내용내용내용"
+                android:textColor="#000000" />
 
-        <TextView
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:text="내용내용내용...\n내용내용내용"
-            android:textColor="#000000"
-            android:maxLines="4"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/businessMG_Img" />
+            <TextView
+                android:id="@+id/viewMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:text="더보기"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/viewMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:visibility="gone"
-            android:layout_marginTop="8dp"
-            android:text="더보기"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content" />
+            <HorizontalScrollView
+                android:id="@+id/businessMG_Img"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone"
+                tools:ignore="SpeakableTextPresentCheck">
 
-        <android.widget.Button
-            android:id="@+id/scrap_btn"
-            android:layout_width="185dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/business_round_button"
-            android:drawableLeft="@drawable/bookmark"
-            android:text="북마크바"
-            android:textColor="#000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewMore"
-            tools:ignore="TouchTargetSizeCheck" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-        <android.widget.Button
-            android:id="@+id/scrap_btn2"
-            android:layout_width="185dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/business_round_button"
-            android:drawableLeft="@drawable/like"
-            android:text="좋아요"
-            android:textColor="#000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewMore"
-            tools:ignore="TouchTargetSizeCheck" />
+                    <ImageView
+                        android:id="@+id/businessMG_postImg1"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/businessMG_postImg2"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/businessMG_postImg3"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/businessMG_postImg4"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/businessMG_postImg5"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.widget.Button
+                    android:id="@+id/scrap_btn"
+                    android:layout_width="185dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/business_round_button"
+                    android:drawableLeft="@drawable/bookmark"
+                    android:text="북마크바"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/viewMore"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <android.widget.Button
+                    android:id="@+id/scrap_btn2"
+                    android:layout_width="185dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/business_round_button"
+                    android:drawableLeft="@drawable/like"
+                    android:text="좋아요"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/viewMore"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
