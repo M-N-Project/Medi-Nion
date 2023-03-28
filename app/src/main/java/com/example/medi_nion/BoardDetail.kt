@@ -304,16 +304,6 @@ class BoardDetail : AppCompatActivity() {
                         if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                             comment_user.size + 1
 
-//                        if(writerId == appUser) {
-//                            val moreBtn = findViewById<Button>(R.id.commentMoreBtn)
-//                            moreBtn.visibility = View.VISIBLE
-//                            moreBtn.setOnClickListener{
-//
-//                            }
-//                        }
-
-                        Log.d("1-09312", comment_num.toString())
-
                         //댓글 좋아요 가져오기...
                         val requestCommentLike = Login_Request(
                             Request.Method.POST,
@@ -589,6 +579,7 @@ class BoardDetail : AppCompatActivity() {
                                                                 if (isHeartMap.containsKey(appUser)) (isHeartMap[appUser]) else false
 
                                                             val commentItem = CommentItem(
+                                                                id,
                                                                 writerId,
                                                                 comment_user[writerId]!!,
                                                                 comment,
