@@ -262,6 +262,7 @@ class BoardWrite : AppCompatActivity() {
                     Toast.makeText(applicationContext, "createBoard fail", Toast.LENGTH_SHORT).show()
                 }
 
+                @SuppressLint("SuspiciousIndentation")
                 override fun onResponse(
                     call: Call<Data_CreateBoard_Request>,
                     response: Response<Data_CreateBoard_Request>
