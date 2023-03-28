@@ -16,3 +16,16 @@ data class Data_Login_Request (
 data class Data_Login_UserSearch_Request (
     val id: String
 )
+
+data class Data_UpdateBoard (
+    val id: Any,
+    val board: Any,
+    val post_num: Any,
+    val title: Any,
+    val content: Any,
+    val time: Any,
+    val image1: Any,
+    val image2: Any
+    )
+
+

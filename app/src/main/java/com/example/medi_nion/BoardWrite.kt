@@ -21,9 +21,19 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.example.medi_nion.Retrofit2_Dataclass.Data_UpdateBoard
+import com.example.medi_nion.Retrofit2_Interface.UpdateBoard_Request
+import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.business_board_item.*
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -178,50 +188,89 @@ class BoardWrite : AppCompatActivity() {
         if(flagUpdate == "true"){
             val post_num = intent.getStringExtra("post_num").toString()
 
-            val request = Upload_Request(
-                Request.Method.POST,
-                updateUrl,
-                { response ->
-                    //Log.d("11??", response)
-                    if (!response.equals("upload fail")) {
-                        Toast.makeText(
-                            baseContext,
-                            String.format("게시물 업로드가 완료되었습니다."),
-                            Toast.LENGTH_SHORT
-                        ).show()
 
-                        var intent = Intent(applicationContext, Board::class.java)
-                        intent.putExtra("id", id)
-                        intent.putExtra("board", board)
-                        Log.d("게시물 수정 완료", userDept)
-                        intent.putExtra("userType", userType)
-                        intent.putExtra("userDept", userDept)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                        startActivity(intent)
+            val gson = GsonBuilder().setLenient().create()
+            val uri = "http://seonho.dothome.co.kr/"
 
-                    } else {
-                        Toast.makeText(
-                            applicationContext,
-                            "게시물 업로드가 실패했습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                },
-                { Log.d("failed", "error......${error(applicationContext)}") },
-                mutableMapOf(
-                    "id" to id,
-                    "board" to board_select,
-                    "post_num" to post_num,
-                    "title" to postTitle,
-                    "content" to postContent,
-                    "time" to currentTime.toString(),
-                    "image1" to img1,
-                    "image2" to img2
-                )
-            )
-            val queue = Volley.newRequestQueue(this)
-            queue.add(request)
-        }
+            val retrofit = createOkHttpClient()?.let {
+                Retrofit.Builder()
+                    .baseUrl(uri)
+                    .addConverterFactory(nullOnEmptyConverterFactory)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(it)
+                    .build()
+            }
+            val server = retrofit?.create(UpdateBoard_Request::class.java)
+
+            val call : Call<Data_UpdateBoard>? = server?.updateBoard(id, board_select, post_num, postTitle, postContent, currentTime.toString(), img1, img2)
+
+
+            if (call != null) {
+                call.clone()
+                    ?.enqueue(object :
+                        Callback<Data_UpdateBoard> {
+                        override fun onFailure(call: Call<Data_UpdateBoard>, t: Throwable) {
+                            t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+                            Toast.makeText(applicationContext, "수정 실패", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onResponse(
+                            call: Call<Data_UpdateBoard>,
+                            response: Response<Data_UpdateBoard>
+                        ) {
+                            //if (!response.equals("SignUP fail")) {
+                            Log.d("retrofit2 success", response.toString())
+                            Toast.makeText(applicationContext, "수정 성공", Toast.LENGTH_SHORT).show()
+                            //}
+                        }
+
+                    })
+            }
+
+//            val request = Upload_Request(
+//                Request.Method.POST,
+//                updateUrl,
+//                { response ->
+//                    //Log.d("11??", response)
+//                    if (!response.equals("upload fail")) {
+//                        Toast.makeText(
+//                            baseContext,
+//                            String.format("게시물 업로드가 완료되었습니다."),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//
+//                        var intent = Intent(applicationContext, Board::class.java)
+//                        intent.putExtra("id", id)
+//                        intent.putExtra("board", board)
+//                        Log.d("게시물 수정 완료", userDept)
+//                        intent.putExtra("userType", userType)
+//                        intent.putExtra("userDept", userDept)
+//                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+//                        startActivity(intent)
+//
+//                    } else {
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "게시물 업로드가 실패했습니다.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                },
+//                { Log.d("failed", "error......${error(applicationContext)}") },
+//                mutableMapOf(
+//                    "id" to id,
+//                    "board" to board_select,
+//                    "post_num" to post_num,
+//                    "title" to postTitle,
+//                    "content" to postContent,
+//                    "time" to currentTime.toString(),
+//                    "image1" to img1,
+//                    "image2" to img2
+//                )
+//            )
+//            val queue = Volley.newRequestQueue(this)
+//            queue.add(request)
+        } //if문끝
         else{
             val request = Upload_Request(
                 Request.Method.POST,
@@ -264,8 +313,8 @@ class BoardWrite : AppCompatActivity() {
                     "image2" to img2
                 )
             )
-            val queue = Volley.newRequestQueue(this)
-            queue.add(request)
+//            val queue = Volley.newRequestQueue(this)
+//            queue.add(request)
         }
 
 
@@ -273,6 +322,26 @@ class BoardWrite : AppCompatActivity() {
         var progressBar = findViewById<ProgressBar>(R.id.progressbar)
         progressBar.visibility = View.VISIBLE
 
+    }
+
+    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+        override fun responseBodyConverter(
+            type: Type,
+            annotations: Array<Annotation>,
+            retrofit: Retrofit
+        ): Converter<ResponseBody, *> {
+            val delegate: Converter<ResponseBody, *> =
+                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+        }
+    }
+
+    private fun createOkHttpClient(): OkHttpClient? {
+        val builder = OkHttpClient.Builder()
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+        builder.addInterceptor(interceptor)
+        return builder.build()
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
