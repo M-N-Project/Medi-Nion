@@ -113,7 +113,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("HardwareIds")
+    @SuppressLint("HardwareIds", "SuspiciousIndentation")
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
         var passwd = findViewById<EditText>(R.id.password).text.toString()

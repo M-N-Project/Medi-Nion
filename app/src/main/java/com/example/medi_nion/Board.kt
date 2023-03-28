@@ -217,48 +217,53 @@ class Board : AppCompatActivity() {
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
 
-                        val request = Login_Request(
-                            Request.Method.POST,
-                            urlDetail,
-                            { response ->
-                                if(response!="Detail Info Error"){
-                                    val jsonArray = JSONArray(response)
-                                    items.clear()
-                                    for (i in jsonArray.length()-1  downTo  0) {
-                                        val item = jsonArray.getJSONObject(i)
-
-                                        detailId = item.getString("id")
-                                        detailTitle = item.getString("title")
-                                        detailContent = item.getString("content")
-                                        detailTime = item.getString("time")
-                                        detailImg = item.getString("image")
-
-                                        val intent = Intent(applicationContext, BoardDetail::class.java)
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                        intent.putExtra("board", board)
-                                        intent.putExtra("num", data.num)
-                                        intent.putExtra("id", id)
-                                        intent.putExtra("writerId", detailId)
-                                        intent.putExtra("title", detailTitle)
-                                        intent.putExtra("content", detailContent)
-                                        intent.putExtra("time", detailTime)
-                                        intent.putExtra("image", detailImg)
-                                        intent.putExtra("userType", userType)
-                                        intent.putExtra("userDept", userDept)
-                                        startActivity(intent)
-                                    }
 
 
-                                }
 
-                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                            hashMapOf(
-                                "board" to board,
-                                "post_num" to data.num.toString()
-                            )
-                        )
-                        val queue = Volley.newRequestQueue(applicationContext)
-                        queue.add(request)
+
+
+//                        val request = Login_Request(
+//                            Request.Method.POST,
+//                            urlDetail,
+//                            { response ->
+//                                if(response!="Detail Info Error"){
+//                                    val jsonArray = JSONArray(response)
+//                                    items.clear()
+//                                    for (i in jsonArray.length()-1  downTo  0) {
+//                                        val item = jsonArray.getJSONObject(i)
+//
+//                                        detailId = item.getString("id")
+//                                        detailTitle = item.getString("title")
+//                                        detailContent = item.getString("content")
+//                                        detailTime = item.getString("time")
+//                                        detailImg = item.getString("image")
+//
+//                                        val intent = Intent(applicationContext, BoardDetail::class.java)
+//                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+//                                        intent.putExtra("board", board)
+//                                        intent.putExtra("num", data.num)
+//                                        intent.putExtra("id", id)
+//                                        intent.putExtra("writerId", detailId)
+//                                        intent.putExtra("title", detailTitle)
+//                                        intent.putExtra("content", detailContent)
+//                                        intent.putExtra("time", detailTime)
+//                                        intent.putExtra("image", detailImg)
+//                                        intent.putExtra("userType", userType)
+//                                        intent.putExtra("userDept", userDept)
+//                                        startActivity(intent)
+//                                    }
+//
+//
+//                                }
+//
+//                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+//                            hashMapOf(
+//                                "board" to board,
+//                                "post_num" to data.num.toString()
+//                            )
+//                        )
+//                        val queue = Volley.newRequestQueue(applicationContext)
+//                        queue.add(request)
                     }
 
                 })
