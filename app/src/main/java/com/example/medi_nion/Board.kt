@@ -18,6 +18,8 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.board_home.refresh_layout
+import kotlinx.android.synthetic.main.board_profile_home.*
 import kotlinx.android.synthetic.main.board_scroll_paging.*
 import kotlinx.android.synthetic.main.business_writing.view.*
 import kotlinx.coroutines.launch
@@ -27,22 +29,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-var items =ArrayList<BoardItem>()
-var all_items = ArrayList<BoardItem>()
-val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
-var scroll_count = 1
+private var items =ArrayList<BoardItem>()
+private var all_items = ArrayList<BoardItem>()
+private val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
+private var scroll_count = 1
 //val viewModel = BoardViewModel()
 //lateinit var adapter : BoardListAdapter
-var adapter = BoardListAdapter(items)
-lateinit var mJsonString: String
-var errorString: String? = null
-var scrollFlag = false
-var itemIndex = ArrayList<Int>()
+private var adapter = BoardListAdapter(items)
+private var scrollFlag = false
+private var itemIndex = ArrayList<Int>()
 
 class Board : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart() //프레그먼트로 생길 문제들은 추후에 생각하기,,
+
 
         fetchData()
     }
@@ -212,13 +213,14 @@ class Board : AppCompatActivity() {
                 var detailContent : String = ""
                 var detailTime : String = ""
                 var detailImg : String = ""
+                var detailCommentCnt : String = ""
 
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
 
 
-
+                                    }
 
 
 

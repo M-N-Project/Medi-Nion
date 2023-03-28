@@ -31,10 +31,9 @@ import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-var comment_items =ArrayList<CommentItem>()
-var commentDetail_items =ArrayList<CommentDetailItem>()
-var Commentadapter = CommentListAdapter(comment_items)
-val viewModel: CommentViewModel = CommentViewModel()
+private var comment_items =ArrayList<CommentItem>()
+private var commentDetail_items =ArrayList<CommentDetailItem>()
+private var Commentadapter = CommentListAdapter(comment_items)
 
 class BoardDetail : AppCompatActivity() {
 
@@ -82,6 +81,7 @@ class BoardDetail : AppCompatActivity() {
         val content = intent.getStringExtra("content") // 게시물 내용
         val time = intent.getStringExtra("time") // 게시물 등록 시간
         val image = intent.getStringExtra("image") // 게시물 사진
+        val commentCnt = intent.getStringExtra("commentCnt")
 
         val title_textView = findViewById<TextView>(R.id.textView_title) // 게시물 상세 - 제목
         val content_textView = findViewById<TextView>(R.id.textView_content) // 게시물 상세 - 내용
@@ -93,6 +93,7 @@ class BoardDetail : AppCompatActivity() {
         val Like_count = findViewById<TextView>(R.id.textView_likecount2) //게시물 상세 좋아요 숫자 부분
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2) //게시물 상세 북마크 imageview 부분
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2) //게시물 상세 북마크 count 부분
+        val comment_count = findViewById<TextView>(R.id.textView_commentcount2)
 
         val optionBtn = findViewById<Button>(R.id.moreBtn) // 게시물 옵션 버튼(수정/삭제)
         var optionRadio = findViewById<RadioGroup>(R.id.optionRadioGroup) //게시물 옵션 버튼 눌렀을 때 보이는 수정/삭제 라디오 그룹
@@ -106,6 +107,7 @@ class BoardDetail : AppCompatActivity() {
         title_textView.setText(title) // 제목
         content_textView.setText(content) // 내용
         time_textView.setText(time) //시간
+        comment_count.setText(commentCnt)
 
         //이미지 fetch
         if (image != null) {
@@ -189,6 +191,7 @@ class BoardDetail : AppCompatActivity() {
                 Comment_editText.setText(null) //댓글입력창 clear
                 comment_comment_flag = false
                 findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() + 1).toString()
             }
             else{ //댓글
                 CommentRequest(++comment_num)
@@ -196,6 +199,7 @@ class BoardDetail : AppCompatActivity() {
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
                 Comment_editText.setText(null) //댓글입력창 clear
+                findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() + 1).toString()
             }
 
         }
@@ -271,7 +275,6 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getIntExtra("num", 0).toString()
         var board = intent?.getStringExtra("board").toString()
 
-        items.clear()
         comment_items.clear()
 
         val request = Login_Request(
@@ -279,15 +282,12 @@ class BoardDetail : AppCompatActivity() {
             url,
             { response ->
                 if(response != "no Comment"){
-                    items.clear()
                     comment_items.clear()
 
                     val jsonArray = JSONArray(response)
 
                     val comment_count = jsonArray.length()
                     comment_num = comment_count
-                    findViewById<TextView>(R.id.textView_commentcount2).text =
-                        comment_count.toString()
 
                     var comment_user = HashMap<String, Int>()
 
@@ -303,8 +303,6 @@ class BoardDetail : AppCompatActivity() {
 
                         if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                             comment_user.size + 1
-
-                        Log.d("1-09312", comment_num.toString())
 
                         //댓글 좋아요 가져오기...
                         val requestCommentLike = Login_Request(
@@ -363,12 +361,6 @@ class BoardDetail : AppCompatActivity() {
 
                                                         Log.d("냠냠", "$comment_num -  ${comment2HeartMap[item1]} - $item1 " )
                                                     }
-                                                } else{
-                                                    Toast.makeText(
-                                                        baseContext,
-                                                        String.format("대댓글 좋아요 없어욧"),
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
                                                 }
 
                                                 val requestComment2List = Login_Request(
@@ -587,6 +579,7 @@ class BoardDetail : AppCompatActivity() {
                                                                 if (isHeartMap.containsKey(appUser)) (isHeartMap[appUser]) else false
 
                                                             val commentItem = CommentItem(
+                                                                id,
                                                                 writerId,
                                                                 comment_user[writerId]!!,
                                                                 comment,
@@ -844,252 +837,6 @@ class BoardDetail : AppCompatActivity() {
                                                                 })
 
                                                         }
-////                                                        comment_items.sortBy { it.comment_num }
-//                                                        Commentadapter =
-//                                                            CommentListAdapter(comment_items)
-//                                                        CommentRecyclerView.adapter =
-//                                                            Commentadapter
-//
-//                                                        //댓글 클릭 리스너 ++++++++++++++++++++++++++++++++++++++++++++++++
-//                                                        Commentadapter.setOnItemClickListener(
-//                                                            object :
-//                                                                CommentListAdapter.OnItemClickListener {
-//                                                                override fun onItemClick(
-//                                                                    v: View,
-//                                                                    data: CommentItem,
-//                                                                    pos: Int
-//                                                                ) {
-//                                                                    //댓글 눌렀을때. -> 대댓글
-//                                                                    comment_comment_posPresent =
-//                                                                        pos
-//                                                                    if (comment_comment_flag == true) {
-//                                                                        if (comment_comment_posPresent == comment_comment_posBefore) {
-//                                                                            comment_comment_flag =
-//                                                                                false
-//                                                                            CommentRecyclerView.get(
-//                                                                                comment_comment_posPresent
-//                                                                            )
-//                                                                                .findViewById<LinearLayout>(
-//                                                                                    R.id.comment_linearLayout
-//                                                                                )
-//                                                                                .setBackgroundColor(
-//                                                                                    Color.parseColor(
-//                                                                                        "#ffffff"
-//                                                                                    )
-//                                                                                )
-//                                                                        } else {
-//
-//                                                                            CommentRecyclerView.get(
-//                                                                                comment_comment_posBefore
-//                                                                            )
-//                                                                                .findViewById<LinearLayout>(
-//                                                                                    R.id.comment_linearLayout
-//                                                                                )
-//                                                                                .setBackgroundColor(
-//                                                                                    Color.parseColor(
-//                                                                                        "#ffffff"
-//                                                                                    )
-//                                                                                )
-//                                                                            CommentRecyclerView.get(
-//                                                                                comment_comment_posPresent
-//                                                                            )
-//                                                                                .findViewById<LinearLayout>(
-//                                                                                    R.id.comment_linearLayout
-//                                                                                )
-//                                                                                .setBackgroundColor(
-//                                                                                    Color.parseColor(
-//                                                                                        "#5085D6A4"
-//                                                                                    )
-//                                                                                )
-//                                                                            comment_comment_posBefore =
-//                                                                                pos
-//                                                                        }
-//
-//                                                                        //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
-//                                                                        //자동 키보드 내리기
-//                                                                    } else {
-//                                                                        comment_comment_flag =
-//                                                                            true
-//                                                                        comment_comment_posBefore =
-//                                                                            pos
-//                                                                        comment_comment_posPresent =
-//                                                                            pos
-//
-//                                                                        CommentRecyclerView.get(
-//                                                                            pos
-//                                                                        )
-//                                                                            .findViewById<LinearLayout>(
-//                                                                                R.id.comment_linearLayout
-//                                                                            )
-//                                                                            .setBackgroundColor(
-//                                                                                Color.parseColor(
-//                                                                                    "#5085D6A4"
-//                                                                                )
-//                                                                            )
-//                                                                        //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
-//                                                                        //자동 키보드 올리기
-//                                                                    }
-//                                                                }
-//
-//                                                                //댓글 좋아요 눌렀을때.
-//                                                                override fun onItemHeart(
-//                                                                    v: View,
-//                                                                    data: CommentItem,
-//                                                                    pos: Int
-//                                                                ) {
-//                                                                    var urlUpdateCommentCnt =
-//                                                                        "http://seonho.dothome.co.kr/updateCommentCnt.php"
-//                                                                    var id =
-//                                                                        intent?.getStringExtra("id")
-//                                                                            .toString()
-//                                                                    val commentHeart =
-//                                                                        v.findViewById<CheckBox>(
-//                                                                            R.id.imageView_comment_like
-//                                                                        )
-//                                                                    val commentHeartCnt =
-//                                                                        v.findViewById<TextView>(
-//                                                                            R.id.comment_heart_count
-//                                                                        )
-//
-//                                                                    if (commentHeart.isChecked) {
-//                                                                        commentHeartFlag =
-//                                                                            "true"
-//                                                                        commentHeartCnt.text =
-//                                                                            (commentHeartCnt.text.toString()
-//                                                                                .toInt() + 1).toString()
-//                                                                    } else {
-//                                                                        commentHeartFlag =
-//                                                                            "false"
-//                                                                        commentHeartCnt.text =
-//                                                                            (commentHeartCnt.text.toString()
-//                                                                                .toInt() - 1).toString()
-//                                                                    }
-//
-//                                                                    Log.d(
-//                                                                        "---",
-//                                                                        "$id // $post_num // $board // $pos // $commentHeartFlag"
-//                                                                    )
-//
-//                                                                    val request = Login_Request(
-//                                                                        Request.Method.POST,
-//                                                                        urlCommentHeart,
-//                                                                        { response ->
-//                                                                            Log.d(
-//                                                                                "commentHart",
-//                                                                                response
-//                                                                            )
-//
-//                                                                            var commentHeartFlag =
-//                                                                                ""
-//                                                                            if (commentHeart.isChecked) commentHeartFlag =
-//                                                                                "commentHeartUP"
-//                                                                            else commentHeartFlag =
-//                                                                                "commentHeartDOWN"
-//
-//                                                                            val requestCnt =
-//                                                                                Login_Request(
-//                                                                                    Request.Method.POST,
-//                                                                                    urlUpdateCommentCnt,
-//                                                                                    { responseLike ->
-//                                                                                        if (!responseLike.equals(
-//                                                                                                "update fail"
-//                                                                                            )
-//                                                                                        ) {
-//                                                                                            // comment의 heart 개수 업데이트 성공
-//                                                                                        } else {
-//                                                                                            Toast.makeText(
-//                                                                                                applicationContext,
-//                                                                                                "lion heart fail",
-//                                                                                                Toast.LENGTH_SHORT
-//                                                                                            )
-//                                                                                                .show()
-//                                                                                        }
-//
-//                                                                                    },
-//                                                                                    {
-//                                                                                        Log.d(
-//                                                                                            "lion heart Failed",
-//                                                                                            "error......${
-//                                                                                                error(
-//                                                                                                    applicationContext
-//                                                                                                )
-//                                                                                            }"
-//                                                                                        )
-//                                                                                    },
-//
-//                                                                                    hashMapOf(
-//                                                                                        "board" to board,
-//                                                                                        "post_num" to post_num,
-//                                                                                        "comment_num" to (pos + 1).toString(),
-//                                                                                        "flag" to commentHeartFlag
-//                                                                                    )
-//                                                                                )
-//
-//                                                                            val queue =
-//                                                                                Volley.newRequestQueue(
-//                                                                                    applicationContext
-//                                                                                )
-//                                                                            queue.add(requestCnt)
-//
-//                                                                            //좋아요 개수 fetch
-//
-//                                                                        },
-//                                                                        {
-//                                                                            Log.d(
-//                                                                                "Comment failed",
-//                                                                                "error......${
-//                                                                                    error(
-//                                                                                        applicationContext
-//                                                                                    )
-//                                                                                }"
-//                                                                            )
-//                                                                        },
-//                                                                        hashMapOf(
-//                                                                            "id" to id,
-//                                                                            "post_num" to post_num,
-//                                                                            "board" to board,
-//                                                                            "comment_num" to (pos + 1).toString(),
-//                                                                            "flag" to commentHeartFlag.toString()
-//                                                                        )
-//                                                                    )
-//                                                                    val queue =
-//                                                                        Volley.newRequestQueue(
-//                                                                            applicationContext
-//                                                                        )
-//                                                                    queue.add(request)
-//                                                                }
-//
-//                                                                //대댓글 버튼 눌렀을때.
-//                                                                @RequiresApi(Build.VERSION_CODES.O)
-//                                                                override fun onItemComment(
-//                                                                    v: View,
-//                                                                    data: CommentItem,
-//                                                                    pos: Int
-//                                                                ) {
-//                                                                    if (comment_comment_flag == true) {
-//                                                                        comment_comment_flag =
-//                                                                            false
-//                                                                        findViewById<LinearLayout>(
-//                                                                            R.id.comment_linearLayout
-//                                                                        ).setBackgroundColor(
-//                                                                            Color.parseColor("#ffffff")
-//                                                                        )
-//                                                                        //자동 키보드 내리기
-//                                                                    } else {
-//                                                                        comment_comment_flag =
-//                                                                            true
-//                                                                        comment_comment_posPresent =
-//                                                                            pos
-//                                                                        findViewById<LinearLayout>(
-//                                                                            R.id.comment_linearLayout
-//                                                                        ).setBackgroundColor(
-//                                                                            Color.parseColor("#5085D6A4")
-//                                                                        )
-//                                                                        //자동 키보드 올리기
-//                                                                    }
-//
-//                                                                }
-//                                                            })
                                                     },
                                                     {
                                                         Log.d(
@@ -1417,13 +1164,39 @@ class BoardDetail : AppCompatActivity() {
         val comment2_time = current.format(formatter)
 
         val url = "http://seonho.dothome.co.kr/Comment2.php"
+        val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
                 if (!response.equals("Comment2 fail")) {
+                    val requestCnt = Login_Request(
+                        Request.Method.POST,
+                        urlUpdateCnt,
+                        { responseComment ->
+                            if (!responseComment.equals("update fail")) {
+                                post_num = responseComment.toString()
 
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "lion heart fail",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+//                            "count" to heart_count,
+                            "board" to board,
+                            "post_num" to post_num,
+                            "flag" to "commentUP" // 댓글 삭제 기능 구현 후 commentUP/ commentDOWN으로 나눌 예정.
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestCnt)
                     Toast.makeText(
                         baseContext,
                         String.format("대댓글이 등록되었습니다."),
@@ -1540,8 +1313,6 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
-
-
 
 
     // 이미지 : String -> Bitmap 변환 =====================================================================================================

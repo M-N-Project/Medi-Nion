@@ -107,8 +107,12 @@ class BoardWrite : AppCompatActivity() {
         board_select.text = board
 
         board_select.setOnClickListener {
-            select_RadioGroup.visibility = View.VISIBLE
-            select_RadioGroup.bringToFront()
+            if(select_RadioGroup.visibility == View.GONE){
+                select_RadioGroup.visibility = View.VISIBLE
+                select_RadioGroup.bringToFront()
+            }
+            else select_RadioGroup.visibility = View.GONE
+
 
             free_RadioBtn.setOnClickListener {
                 select_RadioGroup.visibility = View.GONE
