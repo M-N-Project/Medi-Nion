@@ -28,4 +28,24 @@ data class Data_UpdateBoard (
     val image2: Any
     )
 
+data class Data_CreateBoard_Request (
+    val update: String,
+    val id: String,
+    val board: String,
+    val title: String,
+    val content: String,
+    val image1: String,
+    val image2: String
+        )
+
+data class Data_Board_Request (
+    val board: String,
+    val userType: String,
+    val userDept: String
+        )
+
+data class Data_BoardDetail_Request (
+    val board: String,
+    val post_num: Int
+        )
 
