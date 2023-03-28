@@ -213,6 +213,7 @@ class Board : AppCompatActivity() {
                 var detailContent : String = ""
                 var detailTime : String = ""
                 var detailImg : String = ""
+                var detailCommentCnt : String = ""
 
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
@@ -233,6 +234,7 @@ class Board : AppCompatActivity() {
                                         detailContent = item.getString("content")
                                         detailTime = item.getString("time")
                                         detailImg = item.getString("image")
+                                        detailCommentCnt = item.getString("comment")
 
                                         val intent = Intent(applicationContext, BoardDetail::class.java)
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
@@ -246,6 +248,7 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("image", detailImg)
                                         intent.putExtra("userType", userType)
                                         intent.putExtra("userDept", userDept)
+                                        intent.putExtra("commentCnt", detailCommentCnt)
                                         startActivity(intent)
                                     }
 

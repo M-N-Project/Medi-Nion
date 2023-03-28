@@ -187,25 +187,27 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
                     app:layout_constraintTop_toTopOf="@+id/detail_box_hot" />
-ㅋ
+
                 <include
                     android:id="@+id/hot_detail1"
                     layout="@layout/home_hot_detail"
-                    android:layout_width="350dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="24dp"
                     app:layout_constraintEnd_toEndOf="@+id/detail_box_hot"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_hot_title" />
 
                 <include
                     android:id="@+id/hot_detail2"
                     layout="@layout/home_hot_detail"
-                    android:layout_width="350dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="24dp"
                     app:layout_constraintEnd_toEndOf="@+id/detail_box_hot"
                     app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
                     app:layout_constraintTop_toBottomOf="@+id/hot_detail1" />
@@ -213,10 +215,11 @@
                 <include
                     android:id="@+id/hot_detail3"
                     layout="@layout/home_hot_detail"
-                    android:layout_width="350dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="24dp"
                     app:layout_constraintEnd_toEndOf="@+id/detail_box_hot"
                     app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
                     app:layout_constraintTop_toBottomOf="@+id/hot_detail2" />
@@ -279,9 +282,11 @@
 
                 <TextView
                     android:id="@+id/home_business_detail"
-                    android:layout_width="230dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="4"
                     android:text="종근당, ‘첨단 기술 기반 신성장 동력 발굴’ 다짐.. 2023년도 시무식 거행…디지털 경영 통해 지속가능한 성장기반 마련 이장한 회장은 신년사를 통해 올해 경영 목표를 ‘첨단 기술 기반의 신성장 동력 발굴’로 제시"
