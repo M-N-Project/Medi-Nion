@@ -168,7 +168,6 @@ class Board : AppCompatActivity() {
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
-        Log.d("0-009234", "$board,, $userType ,, $userDept")
         val request = Board_Request(
             Request.Method.POST,
             urlBoard,
@@ -176,29 +175,31 @@ class Board : AppCompatActivity() {
                 val jsonArray = JSONArray(response)
                 items.clear()
                 all_items.clear()
-                    for (i in jsonArray.length()-1  downTo  0) {
-                        val item = jsonArray.getJSONObject(i)
 
-                        val num = item.getInt("num")
-                        val title = item.getString("title")
-                        val content = item.getString("content")
-                        val board_time = item.getString("time")
-                        val image = item.getString("image")
-                        var heart = item.getInt("heart")
-                        var comment = item.getInt("comment")
-                        var bookmark = item.getInt("bookmark")
+                for (i in jsonArray.length()-1  downTo  0) {
 
-                        val simpleTime = timeDiff(board_time)
+                    val item = jsonArray.getJSONObject(i)
 
-                        val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
+                    val num = item.getInt("num")
+                    val title = item.getString("title")
+                    val content = item.getString("content")
+                    val board_time = item.getString("time")
+                    val image = item.getString("image")
+                    var heart = item.getInt("heart")
+                    var comment = item.getInt("comment")
+                    var bookmark = item.getInt("bookmark")
 
-                        if(i >= jsonArray.length() - item_count*scroll_count){
-                            items.add(boardItem)
-                            itemIndex.add(num) //앞에다가 추가.
-                        }
+                    val simpleTime = timeDiff(board_time)
 
-                        all_items.add(boardItem)
+                    val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
+
+                    if(i >= jsonArray.length() - item_count*scroll_count){
+                        items.add(boardItem)
+                        itemIndex.add(num) //앞에다가 추가.
                     }
+
+                    all_items.add(boardItem)
+                }
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
                 var new_items = ArrayList<BoardItem>()
                 new_items.addAll(items)
@@ -222,9 +223,9 @@ class Board : AppCompatActivity() {
                         val request = Login_Request(
                             Request.Method.POST,
                             urlDetail,
-                            { response ->
-                                if(response!="Detail Info Error"){
-                                    val jsonArray = JSONArray(response)
+                            { responseDetail ->
+                                if(responseDetail!="Detail Info Error"){
+                                    val jsonArray = JSONArray(responseDetail)
                                     items.clear()
                                     for (i in jsonArray.length()-1  downTo  0) {
                                         val item = jsonArray.getJSONObject(i)

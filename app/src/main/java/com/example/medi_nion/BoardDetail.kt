@@ -199,7 +199,8 @@ class BoardDetail : AppCompatActivity() {
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
                 Comment_editText.setText(null) //댓글입력창 clear
-                findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() + 1).toString()
+                if( findViewById<TextView>(R.id.textView_commentcount2).text.toString() == "")  findViewById<TextView>(R.id.textView_commentcount2).text = "1"
+                else findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() + 1).toString()
             }
 
         }
@@ -866,7 +867,17 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 String.format("댓글이 삭제되었습니다."),
                                                                                                                 Toast.LENGTH_SHORT
                                                                                                             ).show()
-                                                                                                            fetchCommentData()
+
+                                                                                                            Log.d("092834", "$comment_num // $pos")
+                                                                                                            for(i in 0 until comment_items.size){
+                                                                                                                if(comment_items.get(i).comment_num == data.comment_num)
+                                                                                                                    comment_items.removeAt(i)
+                                                                                                            }
+                                                                                                            findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() - 1).toString()
+                                                                                                            Commentadapter =
+                                                                                                                CommentListAdapter(comment_items)
+                                                                                                            CommentRecyclerView.adapter =
+                                                                                                                Commentadapter
                                                                                                         }
 
                                                                                                     }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
@@ -901,6 +912,8 @@ class BoardDetail : AppCompatActivity() {
                                                                         )
                                                                         val queue = Volley.newRequestQueue(applicationContext)
                                                                         queue.add(requestDelete2)
+
+
                                                                         // board에서 comment count 줄이기
                                                                     }
                                                                 })

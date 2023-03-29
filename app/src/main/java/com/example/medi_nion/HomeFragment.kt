@@ -542,7 +542,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                 "userDept" to userDept
                             )
                         )
-                        val queue = Volley.newRequestQueue(activity?.applicationContext)
+                        val queue = Volley.newRequestQueue(context)
                         queue.add(deptrequest)
 
                     }, { Log.d("hot fetch failed", "error......${activity?.applicationContext}") },
@@ -552,7 +552,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         "userDept" to userDept
                     )
                 )
-                val queue = Volley.newRequestQueue(activity?.applicationContext)
+                val queue = Volley.newRequestQueue(context)
                 queue.add(jobrequest)
 
             }, { Log.d("hot fetch failed", "error......${activity?.applicationContext}") },
@@ -562,7 +562,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 "userDept" to userDept
             )
         )
-        val queue = Volley.newRequestQueue(activity?.applicationContext)
+        val queue = Volley.newRequestQueue(context)
         queue.add(basicrequest)
 
     }

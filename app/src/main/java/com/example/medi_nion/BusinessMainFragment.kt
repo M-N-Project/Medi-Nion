@@ -67,46 +67,51 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
             Request.Method.POST,
             urlBoard,
             { response ->
-                val jsonArray = JSONArray(response)
-                items.clear()
-                all_items.clear()
-                for (i in jsonArray.length()-1  downTo  0) {
-                    val item = jsonArray.getJSONObject(i)
+                if(response != "business board list fail"){
+                    if(response != "business board no Item"){
+                        val jsonArray = JSONArray(response)
+                        items.clear()
+                        all_items.clear()
+                        for (i in jsonArray.length()-1  downTo  0) {
+                            val item = jsonArray.getJSONObject(i)
 
-                    num = item.getInt("num")
-                    writerId = item.getString("id")
-                    channel_name = item.getString("channel_name")
-                    title = item.getString("title")
-                    content = item.getString("content")
-                    time = item.getString("time")
-                    image1 = item.getString("image1")
-                    image2 = item.getString("image2")
-                    image3 = item.getString("image3")
-                    val BusinessItem = BusinessBoardItem(writerId, channel_name, title, content, time, image1, image2, image3)
+                            num = item.getInt("num")
+                            writerId = item.getString("id")
+                            channel_name = item.getString("channel_name")
+                            title = item.getString("title")
+                            content = item.getString("content")
+                            time = item.getString("time")
+                            image1 = item.getString("image1")
+                            image2 = item.getString("image2")
+                            image3 = item.getString("image3")
+                            val BusinessItem = BusinessBoardItem(writerId, channel_name, title, content, time, image1, image2, image3)
 
 //                    if(i >= jsonArray.length() - item_count*scroll_count){
 //                        items.add(BusinessItem)
 //                        itemIndex.add(num) //앞에다가 추가.
 //                    }
-                    items.add(BusinessItem)
-                    all_items.add(BusinessItem)
-                }
-                var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<BusinessBoardItem>()
-                new_items.addAll(items)
-                adapter = BusinessRecyclerAdapter(new_items)
-                BusinessBoardRecyclerView.adapter = adapter
-                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                            items.add(BusinessItem)
+                            all_items.add(BusinessItem)
+                        }
+                        var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                        var new_items = ArrayList<BusinessBoardItem>()
+                        new_items.addAll(items)
+                        adapter = BusinessRecyclerAdapter(new_items)
+                        BusinessBoardRecyclerView.adapter = adapter
+                        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                        BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
-                adapter.setOnItemClickListener(object : BusinessRecyclerAdapter.OnItemClickListener {
-                    override fun onProfileClick(v: View, data: BusinessBoardItem, pos: Int) {
-                        val intent = Intent(context, BusinessProfileActivity::class.java)
-                        intent.putExtra("id", id)
-                        intent.putExtra("channel_name", data.channel_name)
-                        startActivity(intent)
+                        adapter.setOnItemClickListener(object : BusinessRecyclerAdapter.OnItemClickListener {
+                            override fun onProfileClick(v: View, data: BusinessBoardItem, pos: Int) {
+                                val intent = Intent(context, BusinessProfileActivity::class.java)
+                                intent.putExtra("id", id)
+                                intent.putExtra("channel_name", data.channel_name)
+                                startActivity(intent)
+                            }
+                        })
                     }
-                })
+                }
+
 
             }, { Log.d("login failed", "error......${context?.let { it1 -> error(it1) }}") },
             hashMapOf(

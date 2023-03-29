@@ -110,7 +110,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
     @RequiresApi(Build.VERSION_CODES.P)
     private fun createBoardRequest(postUrl: String) {
         var id = intent?.getStringExtra("id").toString()
-        var chanName : String
+        var chanName : String = ""
 
         var postTitle = findViewById<EditText>(R.id.business_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.business_Content).text.toString()

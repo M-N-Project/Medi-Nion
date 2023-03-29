@@ -72,7 +72,6 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                     val comment_more = itemView.findViewById<RadioGroup>(R.id.optionRadioGroup)
                     comment_more.visibility = View.VISIBLE
 
-                    Log.d("90123", (itemCommentMore.visibility).toString())
                     val comment_delete = itemView.findViewById<RadioButton>(R.id.commDelete_RadioBtn)
                     val comment_report = itemView.findViewById<RadioButton>(R.id.commReport)
 
@@ -85,6 +84,10 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                     comment_report.setOnClickListener{
                     }
                 }
+
+            }
+            else{
+                itemCommentMore.visibility = View.GONE
 
             }
 

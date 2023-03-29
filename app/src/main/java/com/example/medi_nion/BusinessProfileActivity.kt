@@ -102,6 +102,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
         val chanName = findViewById<TextView>(R.id.profileName)
         val chanDesc = findViewById<TextView>(R.id.profileDesc)
+        val businessPageTitle = findViewById<TextView>(R.id.businessChanTitle)
 
         val request = Board_Request(
             Request.Method.POST,
@@ -118,9 +119,8 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                         Log.d("0-09234", "$channel_name / $channel_desc")
                         chanName.setText(channel_name)
-
                         chanDesc.setText(channel_desc)
-
+                        businessPageTitle.setText("${channel_name}님의 비즈니스 채널")
                     }
                 }
 

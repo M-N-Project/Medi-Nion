@@ -281,7 +281,6 @@ class BoardWrite : AppCompatActivity() {
 //            queue.add(request)
         } //if문끝
         else {
-
             val gson = GsonBuilder().setLenient().create()
             val uri = "http://seonho.dothome.co.kr/"
 

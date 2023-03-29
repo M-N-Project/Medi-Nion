@@ -136,7 +136,7 @@
                 android:layout_width="130dp"
                 android:layout_height="117dp"
                 android:layout_marginTop="-50dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/business_profile"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/profileName"
