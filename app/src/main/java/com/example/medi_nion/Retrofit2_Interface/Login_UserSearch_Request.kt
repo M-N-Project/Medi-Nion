@@ -11,5 +11,7 @@ interface Login_UserSearch_Request {
     @POST("/userSearch.php")
     fun LoginUserSearch (
         @Field("id") id: String
+//        @Field("userType") userType: String,
+//        @Field("userDept") userDept: String,
     ): Call<Data_Login_UserSearch_Request>
 }

@@ -15,6 +15,8 @@ data class Data_Login_Request (
 
 data class Data_Login_UserSearch_Request (
     val id: String
+//    val userType: String,
+//    val userDept: String
 )
 
 data class Data_UpdateBoard (
