@@ -59,13 +59,13 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
     fun fetchData() {
         // url to post our data
-        var id = arguments?.getString("id")
-        val urlBusiness = "http://seonho.dothome.co.kr/Business.php"
+        var id = arguments?.getString("id").toString()
+        val urlBoard = "http://seonho.dothome.co.kr/BusinessBoardSub_list.php"
         val jsonArray : JSONArray
 
         val request = Board_Request(
             Request.Method.POST,
-            urlBusiness,
+            urlBoard,
             { response ->
                 val jsonArray = JSONArray(response)
                 items.clear()
@@ -110,6 +110,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
             }, { Log.d("login failed", "error......${context?.let { it1 -> error(it1) }}") },
             hashMapOf(
+                "id" to id
             )
         )
         val queue = Volley.newRequestQueue(context)

@@ -188,41 +188,175 @@
                     app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
                     app:layout_constraintTop_toTopOf="@+id/detail_box_hot" />
 
-                <include
-                    android:id="@+id/hot_detail1"
-                    layout="@layout/home_hot_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box_hot"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8sp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/home_hot_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/home_hot_title">
 
-                <include
-                    android:id="@+id/hot_detail2"
-                    layout="@layout/home_hot_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box_hot"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
-                    app:layout_constraintTop_toBottomOf="@+id/hot_detail1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                <include
-                    android:id="@+id/hot_detail3"
-                    layout="@layout/home_hot_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="24dp"
-                    app:layout_constraintEnd_toEndOf="@+id/detail_box_hot"
-                    app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
-                    app:layout_constraintTop_toBottomOf="@+id/hot_detail2" />
+                        <TextView
+                            android:id="@+id/hot_basic_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="10"
+                            android:text="자유 게시판"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/btn_hot_basic_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="더보기"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/hot_detail_basic1"
+                        layout="@layout/home_hot_detail"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5sp" />
+
+                    <LinearLayout
+                        android:id="@+id/hot_detail_basic_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <include
+                            android:id="@+id/hot_detail_basic2"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp" />
+
+                        <include
+                            android:id="@+id/hot_detail_basic3"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8sp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/hot_job_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="10"
+                            android:text="직종별 게시판"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/btn_hot_job_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="더보기"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/hot_detail_job1"
+                        layout="@layout/home_hot_detail"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5sp" />
+
+                    <LinearLayout
+                        android:id="@+id/hot_detail_job_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <include
+                            android:id="@+id/hot_detail_job2"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp" />
+
+                        <include
+                            android:id="@+id/hot_detail_job3"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8sp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/hot_dept_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="10"
+                            android:text="진료과별 게시판"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/btn_hot_dept_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="더보기"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/hot_detail_dept1"
+                        layout="@layout/home_hot_detail"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5sp" />
+
+                    <LinearLayout
+                        android:id="@+id/hot_detail_dept_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <include
+                            android:id="@+id/hot_detail_dept2"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp" />
+
+                        <include
+                            android:id="@+id/hot_detail_dept3"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- 구독 채널 새소식 -->

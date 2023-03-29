@@ -199,11 +199,50 @@ class Retrofit_SignUp : AppCompatActivity() {
                     nickname_warning.visibility = View.VISIBLE
                 }
 
+                @SuppressLint("SuspiciousIndentation")
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     var nickname_editText =
                         findViewById<EditText>(R.id.nickname_editText).text.toString()
                     var url_nicknamevalidate = "http://seonho.dothome.co.kr/nicknameValidate.php"
+
+//                    val gson = GsonBuilder().setLenient().create()
+//                    val uri = "http://seonho.dothome.co.kr/"
+//
+//                    val retrofit = createOkHttpClient()?.let {
+//                        Retrofit.Builder()
+//                            .baseUrl(uri)
+//                            .addConverterFactory(nullOnEmptyConverterFactory)
+//                            .addConverterFactory(GsonConverterFactory.create(gson))
+//                            .client(it)
+//                            .build()
+//                    }
+//
+//                    val server = retrofit?.create(Nickname_Validation_Request::class.java)
+//
+//                    val call : Call<Nickname_Validation_Request>? = server?.Nicknamevalidate(nickname_editText)
+//                        if (call != null) {
+//                            call.clone()
+//                                ?.enqueue(object :
+//                                    Callback<Nickname_Validation_Request> {
+//                                    override fun onFailure(call: Call<Nickname_Validation_Request>, t: Throwable) {
+//                                        t.localizedMessage?.let { Log.d("retrofit11 fail", it) }
+//                                        Toast.makeText(applicationContext, "닉네임 실패", Toast.LENGTH_SHORT).show()
+//                                    }
+//
+//                                    override fun onResponse(
+//                                        call: Call<Nickname_Validation_Request>,
+//                                        response: Response<Nickname_Validation_Request>
+//                                    ) {
+//                                        //if (!response.equals("SignUP fail")) {
+//                                        Log.d("retrofit11 success", response.toString())
+//                                        Toast.makeText(applicationContext, "닉네임 성공", Toast.LENGTH_SHORT).show()
+//                                        //}
+//                                    }
+//                                })
+//                        }
+
                     var request = SignUP_Request(
+
                         Request.Method.POST,
                         url_nicknamevalidate,
                         { response ->

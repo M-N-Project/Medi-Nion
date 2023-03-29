@@ -47,7 +47,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Board"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Retrofit_SignUp" />
+        <activity android:name=".Retrofit_SignUp"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Board_profile"
             android:screenOrientation="portrait"/>
         <activity android:name=".HospitalProfile"
