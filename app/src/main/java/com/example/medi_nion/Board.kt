@@ -174,19 +174,19 @@ class Board : AppCompatActivity() {
                 for (i in jsonArray.length() - 1 downTo 0) {
                     val item = jsonArray.getJSONObject(i)
 
-                    val num = item.getString("num")
+                    val num = item.getInt("num")
                     val title = item.getString("title")
                     val content = item.getString("content")
                     val board_time = item.getString("time")
                     val image = item.getString("image")
-                    var heart = item.getString("heart")
-                    var comment = item.getString("comment")
-                    var bookmark = item.getString("bookmark")
+                    var heart = item.getInt("heart")
+                    var comment = item.getInt("comment")
+                    var bookmark = item.getInt("bookmark")
 
                     val simpleTime = timeDiff(board_time)
 
                     val boardItem =
-                        BoardItem(num.toInt(), title, content, simpleTime, image, heart.toInt(), comment.toInt(), bookmark.toInt())
+                        BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
                     if (i >= jsonArray.length() - item_count * scroll_count) {
                         items.add(boardItem)
