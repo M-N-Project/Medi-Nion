@@ -13,21 +13,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.medi_nion.Retrofit2_Dataclass.Data_BoardDetail_Request
-import com.example.medi_nion.Retrofit2_Dataclass.Data_Board_Request
-import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_UserSearch_Request
-import com.example.medi_nion.Retrofit2_Interface.BoardDetail_Request
-import com.example.medi_nion.Retrofit2_Interface.board_Request
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_home.refresh_layout
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
@@ -164,66 +155,42 @@ class Board : AppCompatActivity() {
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
-        var board :String = ""
+        var board: String = ""
         board = intent.getStringExtra("board").toString()
-        var userType :String = ""
+        var userType: String = ""
         userType = intent.getStringExtra("userType").toString()
-        var userDept :String = ""
+        var userDept: String = ""
         userDept = intent.getStringExtra("userDept").toString()
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
-        val gson = GsonBuilder().setLenient().create()
-        val uri = "http://seonho.dothome.co.kr/"
-
-        val retrofit = createOkHttpClient()?.let {
-            Retrofit.Builder()
-                .baseUrl(uri)
-                .addConverterFactory(nullOnEmptyConverterFactory)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(it)
-                .build()
-        }
-
-        val server = retrofit?.create(board_Request::class.java)
-
-        val call : Call<Data_Board_Request>? = server?.Board_Retrofit(board, userType, userDept)
-
-        call?.enqueue(object :
-            Callback<Data_Board_Request> {
-            override fun onFailure(call: Call<Data_Board_Request>, t: Throwable) {
-                t.localizedMessage?.let { Log.d("board fail", it) }
-                Toast.makeText(applicationContext, "board fail", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(
-                call: Call<Data_Board_Request>,
-                response: Response<Data_Board_Request>
-            ) {
-                Log.d("board success", response.toString())
+        val request = Board_Request(
+            Request.Method.POST,
+            urlBoard,
+            { response ->
+                val jsonArray = JSONArray(response)
                 items.clear()
                 all_items.clear()
-                val jsonArray = JSONArray(response)
                 for (i in jsonArray.length() - 1 downTo 0) {
                     val item = jsonArray.getJSONObject(i)
 
-                    val num = item.getInt("num")
+                    val num = item.getString("num")
                     val title = item.getString("title")
                     val content = item.getString("content")
                     val board_time = item.getString("time")
                     val image = item.getString("image")
-                    var heart = item.getInt("heart")
-                    var comment = item.getInt("comment")
-                    var bookmark = item.getInt("bookmark")
+                    var heart = item.getString("heart")
+                    var comment = item.getString("comment")
+                    var bookmark = item.getString("bookmark")
 
                     val simpleTime = timeDiff(board_time)
 
                     val boardItem =
-                        BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
+                        BoardItem(num.toInt(), title, content, simpleTime, image, heart.toInt(), comment.toInt(), bookmark.toInt())
 
                     if (i >= jsonArray.length() - item_count * scroll_count) {
                         items.add(boardItem)
-                        itemIndex.add(num) //앞에다가 추가.
+                        itemIndex.add(num.toInt()) //앞에다가 추가.
                     }
 
                     all_items.add(boardItem)
@@ -248,177 +215,87 @@ class Board : AppCompatActivity() {
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
 
-                        val server = retrofit?.create(BoardDetail_Request::class.java)
+                        val request = Login_Request(
+                            Request.Method.POST,
+                            urlDetail,
+                            { response ->
+                                if (response != "Detail Info Error") {
+                                    val jsonArray = JSONArray(response)
+                                    items.clear()
+                                    for (i in jsonArray.length() - 1 downTo 0) {
+                                        val item = jsonArray.getJSONObject(i)
 
-                        val call: Call<Data_BoardDetail_Request>? =
-                            server?.BoardDetail(board, data.num.toString())
+                                        detailId = item.getString("id")
+                                        detailTitle = item.getString("title")
+                                        detailContent = item.getString("content")
+                                        detailTime = item.getString("time")
+                                        detailImg = item.getString("image")
+                                        detailCommentCnt = item.getString("comment")
 
-                        call?.enqueue(object :
-                            Callback<Data_BoardDetail_Request> {
-                            override fun onFailure(
-                                call: Call<Data_BoardDetail_Request>,
-                                t: Throwable
-                            ) {
-                                t.localizedMessage?.let { Log.d("detail fail", it) }
-                                Toast.makeText(
-                                    applicationContext,
-                                    "detail fail",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                                        val intent =
+                                            Intent(applicationContext, BoardDetail::class.java)
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                        intent.putExtra("board", board)
+                                        intent.putExtra("num", data.num)
+                                        intent.putExtra("id", id)
+                                        intent.putExtra("writerId", detailId)
+                                        intent.putExtra("title", detailTitle)
+                                        intent.putExtra("content", detailContent)
+                                        intent.putExtra("time", detailTime)
+                                        intent.putExtra("image", detailImg)
+                                        intent.putExtra("userType", userType)
+                                        intent.putExtra("userDept", userDept)
+                                        intent.putExtra("commentCnt", detailCommentCnt)
+                                        startActivity(intent)
+                                    }
 
-                            override fun onResponse(
-                                call: Call<Data_BoardDetail_Request>,
-                                response: Response<Data_BoardDetail_Request>
-                            ) {
-                                Log.d("detail success", response.toString())
-                                Toast.makeText(
-                                    applicationContext,
-                                    "detail success",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                            }
-                        })
+
+                                }
+
+                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                            hashMapOf(
+                                "board" to board,
+                                "post_num" to data.num.toString()
+                            )
+                        )
+                        val queue = Volley.newRequestQueue(applicationContext)
+                        queue.add(request)
                     }
+
                 })
 
-//        val request = Board_Request(
-//            Request.Method.POST,
-//            urlBoard,
-//            { response ->
-//                val jsonArray = JSONArray(response)
-//                items.clear()
-//                all_items.clear()
-//                    for (i in jsonArray.length()-1  downTo  0) {
-//                        val item = jsonArray.getJSONObject(i)
-//
-//                        val num = item.getInt("num")
-//                        val title = item.getString("title")
-//                        val content = item.getString("content")
-//                        val board_time = item.getString("time")
-//                        val image = item.getString("image")
-//                        var heart = item.getInt("heart")
-//                        var comment = item.getInt("comment")
-//                        var bookmark = item.getInt("bookmark")
-//
-//                        val simpleTime = timeDiff(board_time)
-//
-//                        val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
-//
-//                        if(i >= jsonArray.length() - item_count*scroll_count){
-//                            items.add(boardItem)
-//                            itemIndex.add(num) //앞에다가 추가.
-//                        }
-//
-//                        all_items.add(boardItem)
-//                    }
-//                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-//                var new_items = ArrayList<BoardItem>()
-//                new_items.addAll(items)
-//                adapter = BoardListAdapter(new_items)
-//                boardRecyclerView.adapter = adapter
-//                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-//                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-//
-//
-//                var detailId : String = ""
-//                var detailTitle : String = ""
-//                var detailContent : String = ""
-//                var detailTime : String = ""
-//                var detailImg : String = ""
-//                var detailCommentCnt : String = ""
-//
-//                //게시판 상세
-//                adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-//                    override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-//
-//
-//
-//
-//
-//                        val request = Login_Request(
-//                            Request.Method.POST,
-//                            urlDetail,
-//                            { response ->
-//                                if(response!="Detail Info Error"){
-//                                    val jsonArray = JSONArray(response)
-//                                    items.clear()
-//                                    for (i in jsonArray.length()-1  downTo  0) {
-//                                        val item = jsonArray.getJSONObject(i)
-//
-//                                        detailId = item.getString("id")
-//                                        detailTitle = item.getString("title")
-//                                        detailContent = item.getString("content")
-//                                        detailTime = item.getString("time")
-//                                        detailImg = item.getString("image")
-//                                        detailCommentCnt = item.getString("comment")
-//
-//                                        val intent = Intent(applicationContext, BoardDetail::class.java)
-//                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-//                                        intent.putExtra("board", board)
-//                                        intent.putExtra("num", data.num)
-//                                        intent.putExtra("id", id)
-//                                        intent.putExtra("writerId", detailId)
-//                                        intent.putExtra("title", detailTitle)
-//                                        intent.putExtra("content", detailContent)
-//                                        intent.putExtra("time", detailTime)
-//                                        intent.putExtra("image", detailImg)
-//                                        intent.putExtra("userType", userType)
-//                                        intent.putExtra("userDept", userDept)
-//                                        intent.putExtra("commentCnt", detailCommentCnt)
-//                                        startActivity(intent)
-//                                    }
-//
-//
-//                                }
-//
-//                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-//                            hashMapOf(
-//                                "board" to board,
-//                                "post_num" to data.num.toString()
-//                            )
-//                        )
-//                        val queue = Volley.newRequestQueue(applicationContext)
-//                        queue.add(request)
-//                    }
-//
-//                })
-//
-//
-//
-//            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-//            hashMapOf(
-//                "board" to board,
-//                "userType" to userType,
-//                "userDept" to userDept
-//            )
-//        )
-//        val queue = Volley.newRequestQueue(this)
-//        queue.add(request)
 
-            }
-        })
-    }
-    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
-        override fun responseBodyConverter(
-            type: Type,
-            annotations: Array<Annotation>,
-            retrofit: Retrofit
-        ): Converter<ResponseBody, *> {
-            val delegate: Converter<ResponseBody, *> =
-                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
-            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
-        }
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "board" to board,
+                "userType" to userType,
+                "userDept" to userDept
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
     }
 
-    private fun createOkHttpClient(): OkHttpClient? {
-        val builder = OkHttpClient.Builder()
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
-        builder.addInterceptor(interceptor)
-        return builder.build()
-    }
+
+//    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+//        override fun responseBodyConverter(
+//            type: Type,
+//            annotations: Array<Annotation>,
+//            retrofit: Retrofit
+//        ): Converter<ResponseBody, *> {
+//            val delegate: Converter<ResponseBody, *> =
+//                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+//            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+//        }
+//    }
+//
+//    private fun createOkHttpClient(): OkHttpClient? {
+//        val builder = OkHttpClient.Builder()
+//        val interceptor = HttpLoggingInterceptor()
+//        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+//        builder.addInterceptor(interceptor)
+//        return builder.build()
+//    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -465,8 +342,7 @@ class Board : AppCompatActivity() {
 
         return msg
     }
-
-
-
 }
+
+
 
