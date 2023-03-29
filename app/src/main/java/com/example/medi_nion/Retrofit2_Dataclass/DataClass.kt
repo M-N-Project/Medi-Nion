@@ -15,10 +15,8 @@ data class Data_Login_Request (
     val passwd: String,
 )
 
-data class Data_Login_UserSearch_Request(
-    val id: String,
-//    val userType: String,
-//    val userDept: String
+data class Data_Login_UserSearch_Request (
+    val id: String
 )
 
 data class Data_UpdateBoard ( //수정될지 검증 안해봄

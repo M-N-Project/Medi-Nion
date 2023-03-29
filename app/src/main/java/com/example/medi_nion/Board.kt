@@ -9,22 +9,17 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_home.refresh_layout
-import kotlinx.android.synthetic.main.board_profile_home.*
-import kotlinx.android.synthetic.main.board_scroll_paging.*
-import kotlinx.android.synthetic.main.business_writing.view.*
-import kotlinx.coroutines.launch
 import org.json.JSONArray
-import java.lang.Thread.sleep
+import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -155,20 +150,20 @@ class Board : AppCompatActivity() {
         })
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
-        var board :String = ""
+        var board: String = ""
         board = intent.getStringExtra("board").toString()
-        var userType :String = ""
+        var userType: String = ""
         userType = intent.getStringExtra("userType").toString()
-        var userDept :String = ""
+        var userDept: String = ""
         userDept = intent.getStringExtra("userDept").toString()
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
-        Log.d("0-009234", "$board,, $userType ,, $userDept")
         val request = Board_Request(
             Request.Method.POST,
             urlBoard,
@@ -176,7 +171,7 @@ class Board : AppCompatActivity() {
                 val jsonArray = JSONArray(response)
                 items.clear()
                 all_items.clear()
-                for (i in jsonArray.length()-1  downTo  0) {
+                for (i in jsonArray.length() - 1 downTo 0) {
                     val item = jsonArray.getJSONObject(i)
 
                     val num = item.getString("num")
@@ -190,9 +185,10 @@ class Board : AppCompatActivity() {
 
                     val simpleTime = timeDiff(board_time)
 
-                    val boardItem = BoardItem(num.toInt(), title, content, simpleTime, image, heart.toInt(), comment.toInt(), bookmark.toInt())
+                    val boardItem =
+                        BoardItem(num.toInt(), title, content, simpleTime, image, heart.toInt(), comment.toInt(), bookmark.toInt())
 
-                    if(i >= jsonArray.length() - item_count*scroll_count){
+                    if (i >= jsonArray.length() - item_count * scroll_count) {
                         items.add(boardItem)
                         itemIndex.add(num.toInt()) //앞에다가 추가.
                     }
@@ -208,12 +204,12 @@ class Board : AppCompatActivity() {
                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
 
-                var detailId : String = ""
-                var detailTitle : String = ""
-                var detailContent : String = ""
-                var detailTime : String = ""
-                var detailImg : String = ""
-                var detailCommentCnt : String = ""
+                var detailId: String = ""
+                var detailTitle: String = ""
+                var detailContent: String = ""
+                var detailTime: String = ""
+                var detailImg: String = ""
+                var detailCommentCnt: String = ""
 
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
@@ -223,10 +219,10 @@ class Board : AppCompatActivity() {
                             Request.Method.POST,
                             urlDetail,
                             { response ->
-                                if(response!="Detail Info Error"){
+                                if (response != "Detail Info Error") {
                                     val jsonArray = JSONArray(response)
                                     items.clear()
-                                    for (i in jsonArray.length()-1  downTo  0) {
+                                    for (i in jsonArray.length() - 1 downTo 0) {
                                         val item = jsonArray.getJSONObject(i)
 
                                         detailId = item.getString("id")
@@ -236,7 +232,8 @@ class Board : AppCompatActivity() {
                                         detailImg = item.getString("image")
                                         detailCommentCnt = item.getString("comment")
 
-                                        val intent = Intent(applicationContext, BoardDetail::class.java)
+                                        val intent =
+                                            Intent(applicationContext, BoardDetail::class.java)
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                                         intent.putExtra("board", board)
                                         intent.putExtra("num", data.num)
@@ -268,7 +265,6 @@ class Board : AppCompatActivity() {
                 })
 
 
-
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "board" to board,
@@ -278,8 +274,29 @@ class Board : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
-
     }
+
+
+//    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+//        override fun responseBodyConverter(
+//            type: Type,
+//            annotations: Array<Annotation>,
+//            retrofit: Retrofit
+//        ): Converter<ResponseBody, *> {
+//            val delegate: Converter<ResponseBody, *> =
+//                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+//            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+//        }
+//    }
+//
+//    private fun createOkHttpClient(): OkHttpClient? {
+//        val builder = OkHttpClient.Builder()
+//        val interceptor = HttpLoggingInterceptor()
+//        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+//        builder.addInterceptor(interceptor)
+//        return builder.build()
+//    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun Millis(postTime : String) : Long {
@@ -325,5 +342,7 @@ class Board : AppCompatActivity() {
 
         return msg
     }
-
 }
+
+
+

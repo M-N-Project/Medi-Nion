@@ -28,6 +28,7 @@ import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.sign_up.*
+import kotlinx.android.synthetic.main.signup_detail.*
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -163,11 +164,11 @@ class Login : AppCompatActivity() {
 //                Log.d("retrofit1 success", response.toString())
 //
 //
-//                val server = retrofit?.create(Login_UserSearch_Request::class.java)
-//                val call: Call<Data_Login_UserSearch_Request>? = server?.LoginUserSearch(id)
+//                val server = retrofit.create(Login_UserSearch_Request::class.java)
+//                val call: Call<Data_Login_UserSearch_Request> = server.LoginUserSearch(id)
 //
 //
-//                call?.enqueue(object :
+//                call.enqueue(object :
 //                    Callback<Data_Login_UserSearch_Request> {
 //                    override fun onFailure(
 //                        call: Call<Data_Login_UserSearch_Request>,
@@ -181,35 +182,34 @@ class Login : AppCompatActivity() {
 //                        call: Call<Data_Login_UserSearch_Request>,
 //                        response: Response<Data_Login_UserSearch_Request>
 //                    ) {
-//                        Log.d("*************", response.body().toString()) //여기까지 찍힘 헤헿
+//                        if(response.isSuccessful) {
+//                            Log.d("*************", response.toString())
 //
-//                        var userType = ""
-//                        var userDept = ""
+//                            var userType = ""
+//                            var userDept = ""
 //
-//
-////                        val jsonObject = JSONObject(response.body().toString())
+//                            val data = response
 //
 ////                        jsonObject.put("id", id)
 ////                        jsonObject.put("userType", userType)
 ////                        jsonObject.put("userDept", userDept)
 ////                        Log.d("*********", "[$jsonObject]")
 //
-//                        val jsonResponse = JSONObject()
-//                        val jsonArray = jsonResponse.getJSONArray("query")
+//
+//                            if (jsonArray != null) {
+//                                for (i in jsonArray.length() - 1 downTo 0) {
+//                                    val item: JSONObject = jsonArray.getJSONObject(i)
+//
+//                                    id = item.getString("id")
+//                                    userType = item.getString("userType")
+//                                    userDept = item.getString("userDept")
 //
 //
-//                        if (jsonArray != null) {
-//                            for (i in jsonArray.length() - 1 downTo 0) {
-//                                val item: JSONObject = jsonArray.optJSONObject(i)
 //
-//
-//                                userType = item.optString("userType")
-//                                userDept = item.optString("userDept")
-//
-//                                Log.d("retrofit2 success", response.body().toString())
-//                                intent.putExtra("userType", userType)
-//                                intent.putExtra("userDept", userDept)
-//                                //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
+//                                    Log.d("retrofit2 success", response.body().toString())
+//                                    intent.putExtra("userType", userType)
+//                                    intent.putExtra("userDept", userDept)
+//                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
 //
 //                                Toast.makeText(
 //                                    baseContext,
@@ -217,13 +217,13 @@ class Login : AppCompatActivity() {
 //                                    Toast.LENGTH_SHORT
 //                                ).show()
 //
-//                                intent.putExtra("id", id)
-//                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-//                                startActivity(intent)
+//                                    intent.putExtra("id", id)
+//                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
+//                                    startActivity(intent)
+//                                }
+//                            } else {
+//                                Log.d("???", "null??")
 //                            }
-//                        }
-//                        else {
-//                            Log.d("hahahaha", "hehehehe") //마지막으로 요기로 와버림,
 //                        }
 //                    }
 //                })
@@ -257,7 +257,7 @@ class Login : AppCompatActivity() {
 
                                     intent.putExtra("userType", userType)
                                     intent.putExtra("userDept", userDept)
-                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
+                                    Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
 
                                     Toast.makeText(
                                         baseContext,
