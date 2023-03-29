@@ -5,8 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
         fun onItemClick(v: View, data: CommentItem, pos: Int)
         fun onItemHeart(v: View, data: CommentItem, pos: Int)
         fun onItemComment(v: View, data: CommentItem, pos: Int)
+        fun onItemDelete(v: View, data:CommentItem, pos:Int)
     }
 
     private var listener: OnItemClickListener? = null
@@ -52,6 +56,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemView.findViewById(R.id.imageView_comment_comment)
         private val itemCommentDetail: RecyclerView =
             itemView.findViewById(R.id.CommentRecyclerView2)
+        private val itemCommentMore : Button = itemView.findViewById(R.id.commentMoreBtn)
 
         fun bind(item: CommentItem, pos: Int) {
             itemComment.text = item.comment
@@ -59,26 +64,34 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.commentHeart.toString()
 
+
+            if(item.id == item.writerId) {
+                itemCommentMore.visibility = View.VISIBLE
+
+                itemCommentMore.setOnClickListener{
+                    val comment_more = itemView.findViewById<RadioGroup>(R.id.optionRadioGroup)
+                    comment_more.visibility = View.VISIBLE
+
+                    Log.d("90123", (itemCommentMore.visibility).toString())
+                    val comment_delete = itemView.findViewById<RadioButton>(R.id.commDelete_RadioBtn)
+                    val comment_report = itemView.findViewById<RadioButton>(R.id.commReport)
+
+                    //댓글 삭제 이벤트
+                    comment_delete.setOnClickListener{
+                        listener?.onItemDelete(itemView, item, pos)
+                    }
+
+                    //댓글 신고 이벤트
+                    comment_report.setOnClickListener{
+                    }
+                }
+
+            }
+
             if (item.isHeart == true) itemCommentHeart.isChecked = true
             else itemCommentHeart.isChecked = false
 
-
             itemCommentDetail.adapter = item.commentDetailAdapter
-
-//            Log.d("itiitt", itemView.toString())
-//            itemCommentDetail.adapter = item.commentDetailAdapter[item.comment_num]
-
-//            for(i in 0 until item.commentDetailAdapter.size){
-//                Log.d("-=1-23123", item.commentDetailAdapter[i].comment2)
-//                Log.d("-=1-23123", "${item.comment_num} // $i")
-//            }
-
-//            itemCommentDetail.apply{
-//                adapter = CommentDetailListAdapter(item.commentDetailAdapter)
-//                layoutManager = LinearLayoutManager(itemCommentDetail.context, LinearLayoutManager.HORIZONTAL, false)
-//                setHasFixedSize(true)
-//            }
-
 
                 val pos = absoluteAdapterPosition
                 if (pos != RecyclerView.NO_POSITION) {

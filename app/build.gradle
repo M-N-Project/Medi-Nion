@@ -57,6 +57,7 @@ dependencies {
     implementation 'androidx.core:core:1.9.0'
 
     //OKHttp
+    //하하
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 

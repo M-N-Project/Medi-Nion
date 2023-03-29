@@ -58,7 +58,6 @@ class Board_profile : AppCompatActivity() {
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
-
         var board_select = findViewById<TextView>(R.id.board_select_profile) //게시판 종류 선택
         var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup_profile) // 게시판 종류 라디오 그룹
         var free_RadioBtn = findViewById<RadioButton>(R.id.free_RadioBtn_profile)
@@ -75,10 +74,24 @@ class Board_profile : AppCompatActivity() {
             fetchScrap(board_select.text.toString())
 
         board_select.text = "자유 게시판"
+        var boardInit = intent.getStringExtra("board")
+        if(boardInit != null) board_select.text = boardInit
+
+        if(board_select.text == "자유 게시판") free_RadioBtn.isChecked = true
+        if(board_select.text == "직종별 게시판") job_RadioBtn.isChecked = true
+        if(board_select.text == "진료과별 게시판") department_RadioBtn.isChecked = true
+        if(board_select.text == "우리 병원 게시판") my_hospital_RadioBtn.isChecked = true
+        if(board_select.text == "장터 게시판") market_RadioBtn.isChecked = true
+        if(board_select.text == "QnA 게시판") QnA_RadioBtn.isChecked = true
 
         board_select.setOnClickListener {
-            select_RadioGroup.visibility = View.VISIBLE
-            select_RadioGroup.bringToFront()
+            if(select_RadioGroup.visibility == View.GONE){
+                select_RadioGroup.visibility = View.VISIBLE
+                select_RadioGroup.bringToFront()
+            }
+            else{
+                select_RadioGroup.visibility = View.GONE
+            }
 
             free_RadioBtn.setOnClickListener {
                 select_RadioGroup.visibility = View.GONE
@@ -142,6 +155,7 @@ class Board_profile : AppCompatActivity() {
             try {
                 //TODO 액티비티 화면 재갱신 시키는 코드
                 val intent = intent
+                intent.putExtra("board", board_select.text.toString())
                 finish() //현재 액티비티 종료 실시
                 overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
                 startActivity(intent) //현재 액티비티 재실행 실시

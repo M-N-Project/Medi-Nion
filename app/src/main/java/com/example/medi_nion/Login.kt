@@ -16,6 +16,8 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_Request
 import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_UserSearch_Request
 import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
@@ -26,8 +28,14 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.*
+import org.json.JSONArray
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Converter
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Boolean.getBoolean
 import java.lang.reflect.Type
 
 const val PREFERENCES_NAME = "rebuild_preference"
@@ -113,7 +121,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("HardwareIds")
+    @SuppressLint("HardwareIds", "SuspiciousIndentation")
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
         var passwd = findViewById<EditText>(R.id.password).text.toString()
@@ -134,43 +142,44 @@ class Login : AppCompatActivity() {
         }
 
         val server = retrofit?.create(Login_Retrofit_Request::class.java)
-
         val call : Call<Data_Login_Request>? = server?.Login(id, passwd)
 
-            call?.enqueue(object :
-                    Callback<Data_Login_Request> {
-                    override fun onFailure(call: Call<Data_Login_Request>, t: Throwable) {
-                        t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
-                        Toast.makeText(applicationContext, "retrofit1 fail", Toast.LENGTH_SHORT).show()
+        call?.enqueue(object :
+            Callback<Data_Login_Request> {
+            override fun onFailure(call: Call<Data_Login_Request>, t: Throwable) {
+                Toast.makeText(applicationContext , "로그인 실패", Toast.LENGTH_SHORT)
+                t.localizedMessage?.let { Log.d("retrofit fail", it) }
+            }
+
+            override fun onResponse(
+                call: Call<Data_Login_Request>,
+                response: Response<Data_Login_Request>
+            ) {
+                Log.d("retrofit1 success", response.toString())
+
+                val server = retrofit?.create(Login_UserSearch_Request::class.java)
+                val call : Call<Data_Login_UserSearch_Request>? = server?.LoginUserSearch(id)
+
+                call?.enqueue(object :
+                    Callback<Data_Login_UserSearch_Request> {
+                    override fun onFailure(call: Call<Data_Login_UserSearch_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit fail2", it) }
+                        Toast.makeText(applicationContext , "로그인 실패1", Toast.LENGTH_SHORT)
                     }
 
                     override fun onResponse(
-                        call: Call<Data_Login_Request>,
-                        response: Response<Data_Login_Request>
+                        call: Call<Data_Login_UserSearch_Request>,
+                        response: Response<Data_Login_UserSearch_Request>
                     ) {
-                        Log.d("retrofit1 success", response.toString())
+                        Log.d("retrofit2 success", response.toString())
 
-                        val server = retrofit?.create(Login_UserSearch_Request::class.java)
-
-                        val call : Call<Data_Login_UserSearch_Request>? = server?.LoginUserSearch(id)
-
-                        call?.enqueue(object :
-                            Callback<Data_Login_UserSearch_Request> {
-                            override fun onFailure(call: Call<Data_Login_UserSearch_Request>, t: Throwable) {
-                                t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
-                                Toast.makeText(applicationContext, "아이디나 비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show()
-                            }
-
-                            override fun onResponse(
-                                call: Call<Data_Login_UserSearch_Request>,
-                                response: Response<Data_Login_UserSearch_Request>
-                            ) {
-                                Log.d("retrofit2 success", response.toString())
-                                Toast.makeText(applicationContext, "로그인하였습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                        })
+                        Toast.makeText(applicationContext, "로그인하였습니다.", Toast.LENGTH_SHORT).show()
                     }
-            })
+                })
+            }
+
+        })
+
 
 //        val request = Login_Request(
 //            Request.Method.POST,
