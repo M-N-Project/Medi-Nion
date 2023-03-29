@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_writing.*
+import org.json.JSONArray
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -111,46 +112,75 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
     @RequiresApi(Build.VERSION_CODES.P)
     private fun createBoardRequest(postUrl: String) {
         var id = intent?.getStringExtra("id").toString()
+        var chanName : String
 
         var postTitle = findViewById<EditText>(R.id.business_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.business_Content).text.toString()
 
-        val request = Upload_Request(
+        val chanNamerequest = Login_Request(
             Request.Method.POST,
-            postUrl,
+            "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
-                if (!response.equals("upload fail")) {
-                    Toast.makeText(
-                        baseContext,
-                        String.format("채널 포스트 업로드가 완료되었습니다."),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if(!response.equals("search fail")) {
+                    val jsonArray = JSONArray(response)
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
 
-                    var intent = Intent(applicationContext, BusinessManageActivity::class.java)
-                    intent.putExtra("id", id)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                    startActivity(intent)
+                        chanName = item.getString("chanName")
+                    }
+                    val request = Upload_Request(
+                        Request.Method.POST,
+                        postUrl,
+                        { response ->
+                            if (!response.equals("upload fail")) {
+                                Toast.makeText(
+                                    baseContext,
+                                    String.format("채널 포스트 업로드가 완료되었습니다."),
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
+                                var intent = Intent(applicationContext, BusinessManageActivity::class.java)
+                                intent.putExtra("id", id)
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                                startActivity(intent)
+
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "게시물 업로드가 실패했습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        },
+                        { Log.d("failed", "error......${error(applicationContext)}") },
+                        mutableMapOf(
+                            "id" to id,
+                            "chanName" to chanName,
+                            "title" to postTitle,
+                            "content" to postContent,
+                            "image1" to image1,
+                            "image2" to image2
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(request)
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "게시물 업로드가 실패했습니다.",
+                        "비즈니스채널명이 없습니다.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            mutableMapOf(
-                "id" to id,
-                "title" to postTitle,
-                "content" to postContent,
-                "image1" to image1,
-                "image2" to image2
+            hashMapOf(
+                "id" to id
             )
         )
 
         val queue = Volley.newRequestQueue(this)
-        queue.add(request)
+        queue.add(chanNamerequest)
 
         findViewById<TextView>(R.id.loading_textView_business).visibility = View.VISIBLE
         var progressBar = findViewById<ProgressBar>(R.id.progressbar_business)
