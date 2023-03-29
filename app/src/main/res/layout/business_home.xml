@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/business_board_items">
+            tools:listitem="@layout/business_board_item">
 
         </androidx.recyclerview.widget.RecyclerView>
     </ScrollView>

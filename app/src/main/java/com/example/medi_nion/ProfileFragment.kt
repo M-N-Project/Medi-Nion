@@ -75,20 +75,24 @@ class ProfileFragment : Fragment(R.layout.profile) {
             else item3ListLayout.visibility = View.GONE
         }
 
-
-        //비즈니스 채널 관리
         binding.item4.setOnClickListener{
-            //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
-            val intent = Intent(context, BusinessManageFirstActivity::class.java)
-            intent.putExtra("id", id)
-            intent.putExtra("userType", userType)
-            intent.putExtra("userDept", userDept)
-            startActivity(intent)
-            
-            //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
+            val item4ListLayout = binding.item4ListLayout
+            if(item4ListLayout.visibility == View.GONE) item4ListLayout.visibility = View.VISIBLE
+            else item4ListLayout.visibility = View.GONE
         }
 
         binding.profileItem4.setOnClickListener{
+            val item4ListLayout = binding.item4ListLayout
+            if(item4ListLayout.visibility == View.GONE) item4ListLayout.visibility = View.VISIBLE
+            else item4ListLayout.visibility = View.GONE
+        }
+
+        //내가 구독한 비즈니스 채널
+        binding.item4List1Text.setOnClickListener{
+
+        }
+
+        binding.item4List2Text.setOnClickListener{
             //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
             val intent = Intent(context, BusinessManageFirstActivity::class.java)
             intent.putExtra("id", id)

@@ -44,8 +44,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_writing)
 
-        var id = intent.getStringExtra("id").toString()
-
         val url_Business = "http://seonho.dothome.co.kr/BusinessWriting.php"
 
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_business)
@@ -111,6 +109,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
     @RequiresApi(Build.VERSION_CODES.P)
     private fun createBoardRequest(postUrl: String) {
         var id = intent?.getStringExtra("id").toString()
+        var chanName = intent.getStringExtra("chanName").toString()
 
         var postTitle = findViewById<EditText>(R.id.business_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.business_Content).text.toString()
@@ -142,6 +141,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
             { Log.d("failed", "error......${error(applicationContext)}") },
             mutableMapOf(
                 "id" to id,
+                "chanName" to chanName,
                 "title" to postTitle,
                 "content" to postContent,
                 "image1" to image1,

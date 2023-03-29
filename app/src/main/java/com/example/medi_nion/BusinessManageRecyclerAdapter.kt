@@ -44,7 +44,7 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
             setViewMore(view.content, view.viewMore)
 
-            view.titleName.text = item.id
+            view.titleName.text = item.channel_name
             view.time.text = item.time
 //            view.profileImg2.setImageDrawable(item.profileImg)
             view.content.text = item.content

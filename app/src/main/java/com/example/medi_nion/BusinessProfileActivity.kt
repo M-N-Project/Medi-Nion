@@ -29,10 +29,11 @@ import kotlinx.android.synthetic.main.business_manage_create.*
 import kotlinx.android.synthetic.main.business_writing.*
 import org.json.JSONArray
 import org.json.JSONObject
+import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 
 
-class BusinessManageActivity : AppCompatActivity() {
+class BusinessProfileActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
      private val GALLERY = 1
     var image_background : String = "null"
@@ -53,8 +54,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.business_manage_create)
-        val id:String? = this.intent.getStringExtra("id")
+        setContentView(R.layout.business_profile_home)
 
         items.clear()
         all_items.clear()
@@ -62,70 +62,37 @@ class BusinessManageActivity : AppCompatActivity() {
         fetchProfile()
         fetchBusinessPost()
 
-        val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
         val backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
-        val saveBtn = findViewById<Button>(R.id.save_btn)
-
-        val editBackgroundBtn = findViewById<Button>(R.id.backgroundEditBtn)
-        val editProfileBtn = findViewById<Button>(R.id.profileImgEditBtn)
-        val editNameBtn = findViewById<Button>(R.id.nameEditBtn)
-        val editIntroBtn = findViewById<Button>(R.id.introEditBtn)
-
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editIntro = findViewById<EditText>(R.id.profileDesc)
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        //채널명이 없으면 글쓰기 못하게끔
+        val url = "http://seonho.dothome.co.kr/businessSubcribeInsert.php"
+        var id = intent.getStringExtra("id")!!
+        var channel_name = intent.getStringExtra("channel_name")!!
+        val channelPlusBtn = findViewById<CheckBox>(R.id.channelPlusBtn)
+        channelPlusBtn.setOnClickListener{
+            //구독 php
+            val request = Board_Request(
+                Request.Method.POST,
+                url,
+                { response ->
+                    if(response != "business profile fail"){
 
-        write.setOnClickListener {
-            val editName = findViewById<EditText>(R.id.profileName)
-            val editIntro = findViewById<EditText>(R.id.profileDesc)
-            if(editName.text.toString() == "" || editIntro.text.toString() == ""){
-                Toast.makeText(this, "비즈니스 채널 설정 완료 후에 게시글 업로드가 가능합니다.", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                var intent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
-                intent.putExtra("id", id)
-                intent.putExtra("chanName", editName.text.toString())
-                startActivity(intent)
-            }
+                    }
+
+                }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+                hashMapOf(
+                    "id" to id,
+                    "channel_name" to channel_name,
+                    "flag" to (channelPlusBtn.isChecked).toString()
+                )
+            )
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
 
         }
 
-
-        saveBtn.setOnClickListener {
-            requestBusinessProfile()
-            Toast.makeText(this, "비즈니스 채널 프로필 업데이트 완료", Toast.LENGTH_SHORT).show()
-        }
-
-        //배경사진 수정 버튼
-        editBackgroundBtn.setOnClickListener{
-            openGallery()
-            editWhichOne = 0
-        }
-
-        editProfileBtn.setOnClickListener{
-            openGallery()
-            editWhichOne = 1
-        }
-
-        editName.setOnClickListener{
-            editName.setHint("")
-        }
-        editNameBtn.setOnClickListener{
-            inputMethodManager.showSoftInput(editName, 0)
-            editName.setHint("")
-        }
-
-        editIntro.setOnClickListener{
-            editIntro.setHint("")
-        }
-        editIntroBtn.setOnClickListener{
-            inputMethodManager.showSoftInput(editIntro, 0)
-            editIntro.setHint("")
-        }
     }
 
     fun fetchProfile(){
@@ -133,14 +100,13 @@ class BusinessManageActivity : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editIntro = findViewById<EditText>(R.id.profileDesc)
+        val chanName = findViewById<TextView>(R.id.profileName)
+        val chanDesc = findViewById<TextView>(R.id.profileDesc)
 
         val request = Board_Request(
             Request.Method.POST,
             url,
             { response ->
-                Log.d("0i234",response)
                 if(response != "business profile fail"){
                     val jsonArray = JSONArray(response)
 
@@ -150,13 +116,10 @@ class BusinessManageActivity : AppCompatActivity() {
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
 
-                        if(channel_name == null)
-                            editName.setHint("채널명")
-                        else editName.setText(channel_name)
+                        Log.d("0-09234", "$channel_name / $channel_desc")
+                        chanName.setText(channel_name)
 
-                        if(channel_desc == null)
-                            editIntro.setHint("채널에 대한 간단한 소개를 작성해주세요.")
-                        else editIntro.setText(channel_desc)
+                        chanDesc.setText(channel_desc)
 
                     }
                 }

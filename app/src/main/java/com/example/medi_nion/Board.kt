@@ -155,7 +155,6 @@ class Board : AppCompatActivity() {
         })
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchData() {
         // url to post our data
@@ -169,6 +168,7 @@ class Board : AppCompatActivity() {
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
+        Log.d("0-009234", "$board,, $userType ,, $userDept")
         val request = Board_Request(
             Request.Method.POST,
             urlBoard,

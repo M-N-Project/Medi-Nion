@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 
 class BusinessBoardItem(
     val id : String,
+    val channel_name : String,
     val title: String,
     val content : String,
     val time: String,

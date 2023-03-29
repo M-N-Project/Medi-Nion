@@ -36,6 +36,17 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         return inflater.inflate(R.layout.business_home, container, false)
     }
 
+    var appUser = ""
+
+    var num = 0 //비즈니스 채널 번호
+    var writerId = ""
+    var channel_name = ""
+    var title = "" //비즈니스 채널명
+    var content = "" //비즈니스 채널 내용
+    var time = "" //비즈니스 채널 게시글 업로드 시간
+    var image1 = "" //비즈니스 채널 사진 1
+    var image2 = "" //비즈니스 채널 사진 2
+    var image3 = "" //비즈니스 채널 사진 3
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,12 +60,12 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     fun fetchData() {
         // url to post our data
         var id = arguments?.getString("id")
-        val urlBoard = "http://seonho.dothome.co.kr/Business.php"
+        val urlBusiness = "http://seonho.dothome.co.kr/Business.php"
         val jsonArray : JSONArray
 
         val request = Board_Request(
             Request.Method.POST,
-            urlBoard,
+            urlBusiness,
             { response ->
                 val jsonArray = JSONArray(response)
                 items.clear()
@@ -62,15 +73,16 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
 
-                    val num = item.getInt("num")
-                    val id = item.getString("id")
-                    val title = item.getString("title")
-                    val content = item.getString("content")
-                    val time = item.getString("time")
-                    val image1 = item.getString("image1")
-                    val image2 = item.getString("image2")
-                    val image3 = item.getString("image3")
-                    val BusinessItem = BusinessBoardItem(id, title, content, time, image1, image2, image3)
+                    num = item.getInt("num")
+                    writerId = item.getString("id")
+                    channel_name = item.getString("channel_name")
+                    title = item.getString("title")
+                    content = item.getString("content")
+                    time = item.getString("time")
+                    image1 = item.getString("image1")
+                    image2 = item.getString("image2")
+                    image3 = item.getString("image3")
+                    val BusinessItem = BusinessBoardItem(writerId, channel_name, title, content, time, image1, image2, image3)
 
 //                    if(i >= jsonArray.length() - item_count*scroll_count){
 //                        items.add(BusinessItem)
@@ -86,6 +98,15 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                 BusinessBoardRecyclerView.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+                adapter.setOnItemClickListener(object : BusinessRecyclerAdapter.OnItemClickListener {
+                    override fun onProfileClick(v: View, data: BusinessBoardItem, pos: Int) {
+                        val intent = Intent(context, BusinessProfileActivity::class.java)
+                        intent.putExtra("id", id)
+                        intent.putExtra("channel_name", data.channel_name)
+                        startActivity(intent)
+                    }
+                })
 
             }, { Log.d("login failed", "error......${context?.let { it1 -> error(it1) }}") },
             hashMapOf(

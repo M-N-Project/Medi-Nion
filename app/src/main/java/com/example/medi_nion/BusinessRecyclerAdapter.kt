@@ -2,10 +2,12 @@ package com.example.medi_nion
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.Image
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -15,17 +17,29 @@ import kotlinx.android.synthetic.main.business_board_item.view.*
 class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessRecyclerAdapter.ViewHolder>() {
 
+    interface OnItemClickListener{
+        fun onProfileClick(v:View, data: BusinessBoardItem, pos : Int)
+    }
+    private var listener : OnItemClickListener? = null
+
+
+    fun setOnItemClickListener(listener: BusinessRecyclerAdapter.OnItemClickListener) {
+        this.listener = listener
+    }
+
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: BusinessRecyclerAdapter.ViewHolder, position: Int) {
-        val item = items[position]
-        val listener = View.OnClickListener { it ->
-            Toast.makeText(it.context, "Clicked: ${item.title}", Toast.LENGTH_SHORT).show()
-        }
-        holder.apply {
-            bind(listener, item)
-            itemView.tag = item
-        }
+//        val item = items[position]
+//        val listener = View.OnClickListener { it ->
+//            Toast.makeText(it.context, "Clicked: ${item.title}", Toast.LENGTH_SHORT).show()
+//        }
+//        holder.apply {
+//            bind(listener, item)
+//            itemView.tag = item
+//        }
+        val safePosition = holder.absoluteAdapterPosition
+        holder.bind(items[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
@@ -35,16 +49,17 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
         return ViewHolder(inflatedView)
     }
 
-    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private var view: View = v
+        private var profileImg = v.findViewById<ImageView>(R.id.profileImg2)
 
 
-        fun bind(listener: View.OnClickListener, item: BusinessBoardItem) {
+        fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
             setViewMore(view.content, view.viewMore)
 
-            view.titleName.text = item.id
+            view.titleName.text = item.channel_name
             view.time.text = item.time
 //            view.profileImg2.setImageDrawable(item.profileImg)
             view.content.text = item.content
@@ -67,6 +82,13 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 view.businessMG_postImg3.visibility = View.VISIBLE
                 view.businessMG_postImg3.setImageBitmap(bitmap)
             }
+
+            val pos = absoluteAdapterPosition
+            profileImg.setOnClickListener {
+                listener?.onProfileClick(itemView,item,pos)
+            }
+
+
 
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()
