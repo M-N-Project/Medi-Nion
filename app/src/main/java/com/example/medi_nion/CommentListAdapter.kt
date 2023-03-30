@@ -87,7 +87,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
 
             }
             else{
-                itemCommentMore.visibility = View.GONE
+                itemCommentMore.visibility = View.INVISIBLE
 
             }
 

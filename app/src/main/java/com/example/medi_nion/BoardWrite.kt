@@ -171,8 +171,6 @@ class BoardWrite : AppCompatActivity() {
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
-//        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
-        var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
         var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
 
