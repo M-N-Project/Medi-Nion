@@ -82,7 +82,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/page_file_icon" />
 
                         <TextView
                             android:id="@+id/item1_list1_text"
@@ -93,9 +93,9 @@
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
                             android:layout_weight="1"
-                            android:text="내 게시물"
+                            android:text="내가 쓴 글"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -112,7 +112,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/bookmark_icon1" />
 
                         <TextView
                             android:id="@+id/item1_list2_text"
@@ -123,9 +123,9 @@
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
                             android:layout_weight="1"
-                            android:text="내 스크랩"
+                            android:text="내가 스크랩한 글"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -200,7 +200,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_channel1" />
 
                         <TextView
                             android:id="@+id/item4_list1_text"
@@ -213,7 +213,7 @@
                             android:layout_weight="1"
                             android:text="내가 구독한 비즈니스 채널"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -230,7 +230,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_home" />
 
                         <TextView
                             android:id="@+id/item4_list2_text"
@@ -241,9 +241,9 @@
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
                             android:layout_weight="1"
-                            android:text="내 비즈니스 채널 관리하기"
+                            android:text="비즈니스 프로필 관리"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -319,7 +319,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_notification2" />
 
                         <TextView
                             android:id="@+id/item2_list1_text"
@@ -332,7 +332,7 @@
                             android:layout_weight="1"
                             android:text="알림 설정"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -349,7 +349,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_darkmode1" />
 
                         <TextView
                             android:id="@+id/item2_list2_text"
@@ -362,7 +362,7 @@
                             android:layout_weight="1"
                             android:text="다크모드 설정"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -438,7 +438,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_passwd" />
 
                         <TextView
                             android:id="@+id/item3_list1_text"
@@ -449,9 +449,9 @@
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
                             android:layout_weight="1"
-                            android:text="비밀번호 설정"
+                            android:text="비밀번호 변경"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -468,7 +468,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_logout" />
 
                         <TextView
                             android:id="@+id/item3_list2_text"
@@ -481,7 +481,7 @@
                             android:layout_weight="1"
                             android:text="로그아웃"
                             android:textColor="#595959"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -498,7 +498,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginRight="3dp"
                             android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_item_list" />
+                            app:srcCompat="@drawable/profile_servicewidraw" />
 
                         <TextView
                             android:id="@+id/item3_list3_text"
@@ -511,7 +511,7 @@
                             android:layout_weight="1"
                             android:text="서비스 탈퇴"
                             android:textColor="#FF6A6A"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
                     </LinearLayout>
 
                 </LinearLayout>

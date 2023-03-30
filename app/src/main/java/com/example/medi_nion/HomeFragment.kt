@@ -430,7 +430,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val id = arguments?.getString("id").toString()
         val userType = arguments?.getString("userType").toString()
         val userDept = arguments?.getString("userDept").toString()
-        Log.d("user", "$userType $userDept")
+        //Log.d("user", "$userType $userDept")
 
         // include 했던 항목들
         val includeBasic = ArrayList<View>()
@@ -537,7 +537,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                 )
                             },
                             hashMapOf(
-                                "board" to "직종별 게시판",
+                                "board" to "진료과별 게시판",
                                 "userType" to userType,
                                 "userDept" to userDept
                             )
