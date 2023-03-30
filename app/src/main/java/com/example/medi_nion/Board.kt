@@ -56,22 +56,7 @@ class Board : AppCompatActivity() {
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
-        refresh_layout.setOnRefreshListener { //새로고침
-            Log.d("omg", "hello refresh")
 
-            try {
-                //TODO 액티비티 화면 재갱신 시키는 코드
-                val intent = intent
-                finish() //현재 액티비티 종료 실시
-                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                startActivity(intent) //현재 액티비티 재실행 실시
-                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-
-                refresh_layout.isRefreshing = false //새로고침 없애기
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
 
         items.clear()
         all_items.clear()
@@ -100,8 +85,24 @@ class Board : AppCompatActivity() {
         boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if(scrollFlag==false){
-
                     if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
+
+                        refresh_layout.setOnRefreshListener { //새로고침
+                            Log.d("omg", "hello refresh")
+
+                            try {
+                                //TODO 액티비티 화면 재갱신 시키는 코드
+                                val intent = intent
+                                finish() //현재 액티비티 종료 실시
+                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                                startActivity(intent) //현재 액티비티 재실행 실시
+                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+
+                                refresh_layout.isRefreshing = false //새로고침 없애기
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
 
                     } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
                         //로딩
@@ -114,7 +115,7 @@ class Board : AppCompatActivity() {
 
                             Handler(Looper.getMainLooper()).postDelayed({
                                 progressBar.visibility = View.INVISIBLE
-                            }, 2000)
+                            }, 2500)
 
 
                             if((all_items.size - item_count*scroll_count) > 20){
