@@ -94,7 +94,6 @@ class BoardWrite : AppCompatActivity() {
         var my_hospital_RadioBtn = findViewById<RadioButton>(R.id.my_hospital_RadioBtn)
         var market_RadioBtn = findViewById<RadioButton>(R.id.market_RadioBtn)
         var QnA_RadioBtn = findViewById<RadioButton>(R.id.QnA_RadioBtn)
-
         val url_Post = "http://seonho.dothome.co.kr/createBoard.php"
 
         imgbtn.setOnClickListener { //imageButton_gallery 클릭시 갤러리로 이동
@@ -187,6 +186,10 @@ class BoardWrite : AppCompatActivity() {
         }
 
         if(flagUpdate == "true"){
+            findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
+            var progressBar = findViewById<ProgressBar>(R.id.progressbar)
+            progressBar.visibility = View.VISIBLE
+
             val post_num = intent.getStringExtra("post_num").toString()
 
 
@@ -243,7 +246,7 @@ class BoardWrite : AppCompatActivity() {
                     if (!response.equals("upload fail")) {
                         Toast.makeText(
                             baseContext,
-                            String.format("게시물 업로드가 완료되었습니다."),
+                            String.format("게시물 수정이 완료되었습니다."),
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -259,7 +262,7 @@ class BoardWrite : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             applicationContext,
-                            "게시물 업로드가 실패했습니다.",
+                            "게시물 수정이 실패했습니다.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -280,6 +283,9 @@ class BoardWrite : AppCompatActivity() {
             queue.add(request)
         } //if문끝
         else {
+            findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
+            var progressBar = findViewById<ProgressBar>(R.id.progressbar)
+            progressBar.visibility = View.VISIBLE
 
 //            val gson = GsonBuilder().setLenient().create()
 //            val uri = "http://seonho.dothome.co.kr/"
@@ -330,6 +336,7 @@ class BoardWrite : AppCompatActivity() {
                 { response ->
                     Log.d("11??", response)
                     if (!response.equals("upload fail")) {
+                        Log.d("post", "???")
                         Toast.makeText(
                             baseContext,
                             String.format("게시물 업로드가 완료되었습니다."),
@@ -368,10 +375,6 @@ class BoardWrite : AppCompatActivity() {
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
         }
-
-        findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
-        var progressBar = findViewById<ProgressBar>(R.id.progressbar)
-        progressBar.visibility = View.VISIBLE
 
     }
 
@@ -419,6 +422,7 @@ class BoardWrite : AppCompatActivity() {
 
 //                    image = bitmapToByteArray(bitmap)
                     image = BitMapToString(bitmap)
+                    Log.d("image bit", image)
 
 
                 } catch (e: FileNotFoundException) {

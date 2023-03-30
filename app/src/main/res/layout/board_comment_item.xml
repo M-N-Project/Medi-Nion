@@ -122,7 +122,7 @@
 
                         <TextView
                             android:id="@+id/comment_comment_count"
-                            android:layout_width="15dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
                             android:layout_marginRight="5dp"
@@ -134,7 +134,7 @@
                             android:layout_width="20dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="0dp"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginRight="0dp"
                             android:background="@drawable/board_detail_more_btn"
                             android:textColor="@color/black"
                             android:visibility="visible"
@@ -149,7 +149,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="40dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/selector_radio_button_group_opt"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -162,22 +162,8 @@
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="2dp"
-                        android:background="@drawable/selector_radio_button_top_opt"
                         android:button="@null"
                         android:text="댓글 삭제"
-                        android:textAlignment="center"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                    <RadioButton
-                        android:id="@+id/commReport"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/selector_radio_button_bottom_opt"
-                        android:button="@null"
-                        android:text="댓글 신고"
                         android:textAlignment="center"
                         tools:ignore="TouchTargetSizeCheck" />
 

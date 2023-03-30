@@ -179,9 +179,7 @@ class Board : AppCompatActivity() {
                 all_items.clear()
 
                 for (i in jsonArray.length()-1  downTo  0) {
-
                     val item = jsonArray.getJSONObject(i)
-
                     val num = item.getInt("num")
                     val title = item.getString("title")
                     val content = item.getString("content")

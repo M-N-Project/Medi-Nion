@@ -64,24 +64,20 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.commentHeart.toString()
 
-
+            Log.d("-=1342", "${item.id} .. ${item.writerId}")
             if(item.id == item.writerId) {
                 itemCommentMore.visibility = View.VISIBLE
 
                 itemCommentMore.setOnClickListener{
                     val comment_more = itemView.findViewById<RadioGroup>(R.id.optionRadioGroup)
-                    comment_more.visibility = View.VISIBLE
+                    if(comment_more.visibility == 8) comment_more.visibility = View.VISIBLE
+                    else comment_more.visibility = View.GONE
 
                     val comment_delete = itemView.findViewById<RadioButton>(R.id.commDelete_RadioBtn)
-                    val comment_report = itemView.findViewById<RadioButton>(R.id.commReport)
 
                     //댓글 삭제 이벤트
                     comment_delete.setOnClickListener{
                         listener?.onItemDelete(itemView, item, pos)
-                    }
-
-                    //댓글 신고 이벤트
-                    comment_report.setOnClickListener{
                     }
                 }
 
