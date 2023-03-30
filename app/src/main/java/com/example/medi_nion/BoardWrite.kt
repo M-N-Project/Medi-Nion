@@ -172,7 +172,6 @@ class BoardWrite : AppCompatActivity() {
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
-        var imageSrc = findViewById<TextView>(R.id.imageSrc).text.toString()
 
         var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
 
@@ -420,7 +419,6 @@ class BoardWrite : AppCompatActivity() {
 
 //                    image = bitmapToByteArray(bitmap)
                     image = BitMapToString(bitmap)
-                    findViewById<TextView>(R.id.imageSrc).text = image
 
 
                 } catch (e: FileNotFoundException) {
@@ -444,7 +442,7 @@ class BoardWrite : AppCompatActivity() {
         var bitmap_width : Int? = bitmap?.width
         var bitmap_height : Int? = bitmap?.height
 
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, bitmap_width!!, bitmap_height!!, true)
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, 480, 720, true)
         Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap
     }
