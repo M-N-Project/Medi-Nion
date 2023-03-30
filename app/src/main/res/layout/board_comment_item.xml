@@ -29,8 +29,9 @@
 
                 <LinearLayout
                     android:id="@+id/commentTitle_linearLayout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -38,9 +39,9 @@
 
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="15"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -74,21 +75,21 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="4"></LinearLayout>
+                        android:layout_weight="8"></LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="0dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/imageView_comment_like"
                             android:layout_width="30dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="0dp"
                             android:layout_marginRight="5dp"
                             android:button="@null"
@@ -148,7 +149,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="40dp"
                     android:background="@drawable/selector_radio_button_group_opt"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
