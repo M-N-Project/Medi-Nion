@@ -318,10 +318,10 @@ class BoardDetail : AppCompatActivity() {
 
                                             val itemHeart = jsonArrayHeart.getJSONObject(i)
 
-
                                             val heartId = itemHeart.getString("id")
                                             val heart_num = itemHeart.getString("count")
 
+                                            Log.d("098123", "$appUser // $heartId")
                                             isHeartMap[appUser] = appUser == heartId
                                         }
                                     }
@@ -868,16 +868,18 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 Toast.LENGTH_SHORT
                                                                                                             ).show()
 
-                                                                                                            Log.d("092834", "$comment_num // $pos")
-                                                                                                            for(i in 0 until comment_items.size){
-                                                                                                                if(comment_items.get(i).comment_num == data.comment_num)
-                                                                                                                    comment_items.removeAt(i)
-                                                                                                            }
-                                                                                                            findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() - 1).toString()
-                                                                                                            Commentadapter =
-                                                                                                                CommentListAdapter(comment_items)
-                                                                                                            CommentRecyclerView.adapter =
-                                                                                                                Commentadapter
+//                                                                                                            Log.d("092834", "$comment_num // $pos")
+//                                                                                                            for(i in 0 until comment_items.size){
+//                                                                                                                if(comment_items.get(i).comment_num == data.comment_num)
+//                                                                                                                    comment_items.removeAt(i)
+//                                                                                                            }
+//                                                                                                            findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() - 1).toString()
+//                                                                                                            Commentadapter =
+//                                                                                                                CommentListAdapter(comment_items)
+//                                                                                                            CommentRecyclerView.adapter =
+//                                                                                                                Commentadapter
+
+                                                                                                            fetchCommentData()
                                                                                                         }
 
                                                                                                     }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
