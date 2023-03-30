@@ -313,6 +313,7 @@ class BoardDetail : AppCompatActivity() {
                             { response ->
                                 if(response != "Comment Heart Fetch fail") {
                                     if (response != "no Comment Heart") {
+                                        val heartUserList = ArrayList<String>()
                                         val jsonArrayHeart = JSONArray(response)
 
                                         for (i in 0 until jsonArrayHeart.length()) {
@@ -322,9 +323,11 @@ class BoardDetail : AppCompatActivity() {
                                             val heartId = itemHeart.getString("id")
                                             val heart_num = itemHeart.getString("count")
 
-                                            Log.d("098123", "$appUser // $heartId")
-                                            isHeartMap[appUser] = appUser == heartId
+                                            heartUserList.add(heartId)
                                         }
+
+                                        if(heartUserList.contains(appUser))
+                                            isHeartMap[appUser] = true
                                     }
 
                                     // 해당되는 대댓글들 가져오기
