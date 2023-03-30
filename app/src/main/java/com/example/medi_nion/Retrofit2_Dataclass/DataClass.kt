@@ -1,5 +1,7 @@
 package com.example.medi_nion.Retrofit2_Dataclass
 
+import java.util.Objects
+
 data class Data_SignUp_Request(
     val userType: String,
     val userDept: String,
@@ -17,7 +19,7 @@ data class Data_Login_UserSearch_Request (
     val id: String
 )
 
-data class Data_UpdateBoard (
+data class Data_UpdateBoard ( //수정될지 검증 안해봄
     val id: Any,
     val board: Any,
     val post_num: Any,
@@ -39,9 +41,7 @@ data class Data_CreateBoard_Request (
         )
 
 data class Data_Board_Request (
-    val board: String,
-    val userType: String,
-    val userDept: String
+    val board: String
         )
 
 data class Data_BoardDetail_Request (

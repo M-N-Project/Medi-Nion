@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.business_writing.view.*
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.lang.Thread.sleep
+import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -211,7 +211,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 gotoBoardDetail(
                     hotDetailBasic1.findViewById<TextView>(R.id.home_hot_num).text.toString(),
-                    "전체 게시판"
+                    "자유 게시판"
                 )
             }
         }
@@ -220,7 +220,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 gotoBoardDetail(
                     hotDetailBasic2.findViewById<TextView>(R.id.home_hot_num).text.toString(),
-                    "전체 게시판"
+                    "자유 게시판"
                 )
             }
         }
@@ -229,7 +229,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 gotoBoardDetail(
                     hotDetailBasic3.findViewById<TextView>(R.id.home_hot_num).text.toString(),
-                    "전체 게시판"
+                    "자유 게시판"
                 )
             }
         }

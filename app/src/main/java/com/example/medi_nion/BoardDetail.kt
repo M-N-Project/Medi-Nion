@@ -195,6 +195,7 @@ class BoardDetail : AppCompatActivity() {
             }
             else{ //댓글
                 CommentRequest(++comment_num)
+                ///헤헤헤
                 val manager: InputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(getCurrentFocus()?.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS) //Comment버튼 누르면 키보드 내리기
