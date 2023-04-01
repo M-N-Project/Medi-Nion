@@ -19,23 +19,15 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.scale
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.example.medi_nion.Retrofit2_Dataclass.Data_CreateBoard_Request
-import com.example.medi_nion.Retrofit2_Interface.Create_Board_Request
-import com.google.gson.GsonBuilder
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
-import com.example.medi_nion.Retrofit2_Dataclass.Data_UpdateBoard
-import com.example.medi_nion.Retrofit2_Interface.UpdateBoard_Request
 import kotlinx.android.synthetic.main.business_board_item.*
+import retrofit2.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,10 +67,8 @@ class BoardWrite : AppCompatActivity() {
             editText_title.setText(title)
             editText_content.setText(content)
 
-            if(image!=null){
-                val bitmap: Bitmap? = StringToBitmaps(image)
-                post_img.setImageBitmap(bitmap)
-            }
+            val bitmap: Bitmap? = StringToBitmaps(image)
+            post_img.setImageBitmap(bitmap)
 
         }
 
@@ -95,7 +85,6 @@ class BoardWrite : AppCompatActivity() {
         var market_RadioBtn = findViewById<RadioButton>(R.id.market_RadioBtn)
         var QnA_RadioBtn = findViewById<RadioButton>(R.id.QnA_RadioBtn)
 
-        val url_Post = "http://seonho.dothome.co.kr/createBoard.php"
 
         imgbtn.setOnClickListener { //imageButton_gallery 클릭시 갤러리로 이동
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -154,7 +143,7 @@ class BoardWrite : AppCompatActivity() {
                     }
                 builder.show()
             } else {
-                createBoardRequest(url_Post)
+                createBoardRequest()
             }
 
         }
@@ -162,7 +151,7 @@ class BoardWrite : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createBoardRequest(postUrl: String) {
+    private fun createBoardRequest() {
         var updateUrl = "http://seonho.dothome.co.kr/updateBoard.php"
         var id = intent?.getStringExtra("id").toString()
         var board = intent.getStringExtra("board").toString()
@@ -187,63 +176,18 @@ class BoardWrite : AppCompatActivity() {
         }
 
         if(flagUpdate == "true"){
+            Log.d("456", "456")
             val post_num = intent.getStringExtra("post_num").toString()
-
-
-//            val gson = GsonBuilder().setLenient().create()
-//            val uri = "http://seonho.dothome.co.kr/"
-//
-//            val retrofit = createOkHttpClient()?.let {
-//                Retrofit.Builder()
-//                    .baseUrl(uri)
-//                    .addConverterFactory(nullOnEmptyConverterFactory)
-//                    .addConverterFactory(GsonConverterFactory.create(gson))
-//                    .client(it)
-//                    .build()
-//            }
-//            val server = retrofit?.create(UpdateBoard_Request::class.java)
-//
-//            val call : Call<Data_UpdateBoard>? = server?.updateBoard(id, board_select, post_num, postTitle, postContent, currentTime.toString(), img1, img2)
-//            if (call != null) {
-//                call.clone()
-//                    ?.enqueue(object :
-//                        Callback<Data_UpdateBoard> {
-//                        override fun onFailure(call: Call<Data_UpdateBoard>, t: Throwable) {
-//                            t.localizedMessage?.let { Log.d("retrofit3 fail", it) }
-//                            Toast.makeText(applicationContext, "수정 실패", Toast.LENGTH_SHORT).show()
-//                        }
-//
-//                        override fun onResponse(
-//                            call: Call<Data_UpdateBoard>,
-//                            response: Response<Data_UpdateBoard>
-//                        ) {
-//                            //if (!response.equals("SignUP fail")) {
-//                            Log.d("retrofit3 success", response.toString())
-//                            Toast.makeText(applicationContext, "수정 성공", Toast.LENGTH_SHORT).show()
-//
-//                            var intent = Intent(applicationContext, Board::class.java)
-//                            intent.putExtra("id", id)
-//                            intent.putExtra("board", board)
-//                            Log.d("게시물 수정 완료", userDept)
-//                            intent.putExtra("userType", userType)
-//                            intent.putExtra("userDept", userDept)
-//                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-//                            startActivity(intent)
-//                            //}
-//                        }
-//
-//                    })
-//            }
 
             val request = Upload_Request(
                 Request.Method.POST,
                 updateUrl,
                 { response ->
-                    //Log.d("11??", response)
-                    if (!response.equals("upload fail")) {
+                    Log.d("dpd??", response)
+                    if (!response.equals("update fail")) {
                         Toast.makeText(
                             baseContext,
-                            String.format("게시물 업로드가 완료되었습니다."),
+                            String.format("게시물 수정이 완료되었습니다."),
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -259,7 +203,7 @@ class BoardWrite : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             applicationContext,
-                            "게시물 업로드가 실패했습니다.",
+                            "게시물 수정이 실패했습니다.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -280,50 +224,8 @@ class BoardWrite : AppCompatActivity() {
             queue.add(request)
         } //if문끝
         else {
-
-//            val gson = GsonBuilder().setLenient().create()
-//            val uri = "http://seonho.dothome.co.kr/"
-//
-//            val retrofit = createOkHttpClient()?.let {
-//                Retrofit.Builder()
-//                    .baseUrl(uri)
-//                    .addConverterFactory(nullOnEmptyConverterFactory)
-//                    .addConverterFactory(GsonConverterFactory.create(gson))
-//                    .client(it)
-//                    .build()
-//            }
-//
-//            val server = retrofit?.create(Create_Board_Request::class.java)
-//
-//            val call : Call<Data_CreateBoard_Request>? = server?.Create_Board(flagUpdate, id, board_select, postTitle, postContent, img1, img2)
-////                    "userType" to userType,
-////                    "userDept" to userDept
-//
-//            call?.enqueue(object :
-//                Callback<Data_CreateBoard_Request> {
-//                override fun onFailure(call: Call<Data_CreateBoard_Request>, t: Throwable) {
-//                    t.localizedMessage?.let { Log.d("createBoard fail", it) }
-//                    Toast.makeText(applicationContext, "createBoard fail", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                @SuppressLint("SuspiciousIndentation")
-//                override fun onResponse(
-//                    call: Call<Data_CreateBoard_Request>,
-//                    response: Response<Data_CreateBoard_Request>
-//                ) {
-//                    Log.d("createBoard success", response.toString())
-//                    Toast.makeText(applicationContext, "createBoard success", Toast.LENGTH_SHORT).show()
-//
-//                    var intent = Intent(applicationContext, Board::class.java)
-//                        intent.putExtra("id", id)
-//                        intent.putExtra("board", board)
-//                        intent.putExtra("userType", userType)
-//                        intent.putExtra("userDept", userDept)
-//                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-//                        startActivity(intent)
-//                }
-//            })
-
+            val postUrl = "http://seonho.dothome.co.kr/createBoard.php"
+            Log.d("123", "123")
             val request = Upload_Request(
                 Request.Method.POST,
                 postUrl,
@@ -368,32 +270,10 @@ class BoardWrite : AppCompatActivity() {
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
         }
-
         findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
         var progressBar = findViewById<ProgressBar>(R.id.progressbar)
         progressBar.visibility = View.VISIBLE
-
     }
-
-//    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
-//        override fun responseBodyConverter(
-//            type: Type,
-//            annotations: Array<Annotation>,
-//            retrofit: Retrofit
-//        ): Converter<ResponseBody, *> {
-//            val delegate: Converter<ResponseBody, *> =
-//                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
-//            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
-//        }
-//    }
-//
-//    private fun createOkHttpClient(): OkHttpClient? {
-//        val builder = OkHttpClient.Builder()
-//        val interceptor = HttpLoggingInterceptor()
-//        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
-//        builder.addInterceptor(interceptor)
-//        return builder.build()
-//    }
 
     @RequiresApi(Build.VERSION_CODES.P)
     @Override
@@ -408,7 +288,6 @@ class BoardWrite : AppCompatActivity() {
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
-                    imgbtn.setImageBitmap(bitmap)
 
                     var source: ImageDecoder.Source? =
                         ImageData?.let { ImageDecoder.createSource(contentResolver, it) }
@@ -416,6 +295,8 @@ class BoardWrite : AppCompatActivity() {
 
 
                     bitmap = resize(bitmap)
+
+                    imgbtn.setImageBitmap(bitmap)
 
 //                    image = bitmapToByteArray(bitmap)
                     image = BitMapToString(bitmap)
@@ -442,7 +323,7 @@ class BoardWrite : AppCompatActivity() {
         var bitmap_width : Int? = bitmap?.width
         var bitmap_height : Int? = bitmap?.height
 
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, 480, 720, true)
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
         Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap
     }

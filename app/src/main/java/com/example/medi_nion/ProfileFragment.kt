@@ -1,13 +1,20 @@
 package com.example.medi_nion
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
+import org.json.JSONArray
 
 class ProfileFragment : Fragment(R.layout.profile) {
     private var mBinding: ProfileBinding? = null
@@ -75,6 +82,29 @@ class ProfileFragment : Fragment(R.layout.profile) {
             else item3ListLayout.visibility = View.GONE
         }
 
+        binding.item3List2Text.setOnClickListener {
+            val intent: Intent = Intent(context, Login::class.java)
+            startActivity(intent)
+            Toast.makeText(context, "로그아웃했습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.item3List3Text.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("탈퇴하시겠습니까?")
+                .setMessage("탈퇴하시려면 \"확인\"을 눌러주세요.")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialogInterface, i ->
+                        UserDeleteRequest()
+                        val intent: Intent = Intent(context, Login::class.java)
+                        startActivity(intent)
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                    })
+            builder.show()
+        }
+
         binding.item4.setOnClickListener{
             val item4ListLayout = binding.item4ListLayout
             if(item4ListLayout.visibility == View.GONE) item4ListLayout.visibility = View.VISIBLE
@@ -109,6 +139,36 @@ class ProfileFragment : Fragment(R.layout.profile) {
     override fun onDestroyView() {
         super.onDestroyView()
         mBinding = null
+    }
+
+    private fun UserDeleteRequest() {
+        val id = arguments?.getString("id")
+        var userDeleteUrl = "http://seonho.dothome.co.kr/UserDelete.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            userDeleteUrl,
+            { response ->
+                if (!response.equals("Delete Fail")) {
+                    Toast.makeText(
+                        context,
+                        String.format("탈퇴했습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        String.format("탈퇴 실패했습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("login failed", "error......${context?.let { it1 -> error(it1) }}") },
+            hashMapOf(
+                "id" to id.toString()
+            )
+        )
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
     }
 }
 

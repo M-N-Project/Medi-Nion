@@ -47,6 +47,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Board"
             android:screenOrientation="portrait"/>
+        <activity android:name=".BoardWrite"
+            android:screenOrientation="portrait" />
         <activity android:name=".Retrofit_SignUp"
             android:screenOrientation="portrait"/>
         <activity android:name=".Board_profile"
@@ -64,8 +66,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".BusinessWriting"
             android:screenOrientation="portrait"/>
-        <activity android:name=".BoardWrite"
-            android:screenOrientation="portrait" />
         <activity android:name=".BusinessProfileActivity"
             android:screenOrientation="portrait" />
 
