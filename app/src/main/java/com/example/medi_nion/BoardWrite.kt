@@ -67,8 +67,10 @@ class BoardWrite : AppCompatActivity() {
             editText_title.setText(title)
             editText_content.setText(content)
 
-            val bitmap: Bitmap? = StringToBitmaps(image)
-            post_img.setImageBitmap(bitmap)
+            if(image!=null){
+                val bitmap: Bitmap? = StringToBitmaps(image)
+                post_img.setImageBitmap(bitmap)
+            }
 
         }
 
@@ -85,6 +87,7 @@ class BoardWrite : AppCompatActivity() {
         var market_RadioBtn = findViewById<RadioButton>(R.id.market_RadioBtn)
         var QnA_RadioBtn = findViewById<RadioButton>(R.id.QnA_RadioBtn)
 
+        val url_Post = "http://seonho.dothome.co.kr/createBoard.php"
 
         imgbtn.setOnClickListener { //imageButton_gallery 클릭시 갤러리로 이동
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -226,12 +229,57 @@ class BoardWrite : AppCompatActivity() {
         else {
             val postUrl = "http://seonho.dothome.co.kr/createBoard.php"
             Log.d("123", "123")
+
+//            val gson = GsonBuilder().setLenient().create()
+//            val uri = "http://seonho.dothome.co.kr/"
+//
+//            val retrofit = createOkHttpClient()?.let {
+//                Retrofit.Builder()
+//                    .baseUrl(uri)
+//                    .addConverterFactory(nullOnEmptyConverterFactory)
+//                    .addConverterFactory(GsonConverterFactory.create(gson))
+//                    .client(it)
+//                    .build()
+//            }
+//
+//            val server = retrofit?.create(Create_Board_Request::class.java)
+//
+//            val call : Call<Data_CreateBoard_Request>? = server?.Create_Board(flagUpdate, id, board_select, postTitle, postContent, img1, img2)
+////                    "userType" to userType,
+////                    "userDept" to userDept
+//
+//            call?.enqueue(object :
+//                Callback<Data_CreateBoard_Request> {
+//                override fun onFailure(call: Call<Data_CreateBoard_Request>, t: Throwable) {
+//                    t.localizedMessage?.let { Log.d("createBoard fail", it) }
+//                    Toast.makeText(applicationContext, "createBoard fail", Toast.LENGTH_SHORT).show()
+//                }
+//
+//                @SuppressLint("SuspiciousIndentation")
+//                override fun onResponse(
+//                    call: Call<Data_CreateBoard_Request>,
+//                    response: Response<Data_CreateBoard_Request>
+//                ) {
+//                    Log.d("createBoard success", response.toString())
+//                    Toast.makeText(applicationContext, "createBoard success", Toast.LENGTH_SHORT).show()
+//
+//                    var intent = Intent(applicationContext, Board::class.java)
+//                        intent.putExtra("id", id)
+//                        intent.putExtra("board", board)
+//                        intent.putExtra("userType", userType)
+//                        intent.putExtra("userDept", userDept)
+//                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+//                        startActivity(intent)
+//                }
+//            })
+
             val request = Upload_Request(
                 Request.Method.POST,
                 postUrl,
                 { response ->
                     Log.d("11??", response)
                     if (!response.equals("upload fail")) {
+                        Log.d("post", "???")
                         Toast.makeText(
                             baseContext,
                             String.format("게시물 업로드가 완료되었습니다."),
@@ -288,6 +336,7 @@ class BoardWrite : AppCompatActivity() {
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
+                    imgbtn.setImageBitmap(bitmap)
 
                     var source: ImageDecoder.Source? =
                         ImageData?.let { ImageDecoder.createSource(contentResolver, it) }

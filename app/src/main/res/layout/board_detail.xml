@@ -307,13 +307,14 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/CommentRecyclerView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="0dp"
                     android:layout_marginEnd="10dp"
+                    android:foregroundTint="#FFFFFF"
                     android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
                     android:overScrollMode="never"
@@ -354,8 +355,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:background="#86C9C6"
+                android:backgroundTint="#86C9C6"
                 android:text="등록"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:strokeColor="#FFFFFF" />
 
         </LinearLayout>
         </LinearLayout>

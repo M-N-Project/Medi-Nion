@@ -29,8 +29,9 @@
 
                 <LinearLayout
                     android:id="@+id/commentTitle_linearLayout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -38,9 +39,9 @@
 
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="15"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -74,21 +75,21 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="4"></LinearLayout>
+                        android:layout_weight="8"></LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="0dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/imageView_comment_like"
                             android:layout_width="30dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="0dp"
                             android:layout_marginRight="5dp"
                             android:button="@null"
@@ -121,7 +122,7 @@
 
                         <TextView
                             android:id="@+id/comment_comment_count"
-                            android:layout_width="15dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
                             android:layout_marginRight="5dp"
@@ -133,7 +134,7 @@
                             android:layout_width="20dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="0dp"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginRight="0dp"
                             android:background="@drawable/board_detail_more_btn"
                             android:textColor="@color/black"
                             android:visibility="visible"
@@ -148,7 +149,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/selector_radio_button_group_opt"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -161,22 +162,8 @@
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="2dp"
-                        android:background="@drawable/selector_radio_button_top_opt"
                         android:button="@null"
                         android:text="댓글 삭제"
-                        android:textAlignment="center"
-                        tools:ignore="TouchTargetSizeCheck" />
-
-                    <RadioButton
-                        android:id="@+id/commReport"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/selector_radio_button_bottom_opt"
-                        android:button="@null"
-                        android:text="댓글 신고"
                         android:textAlignment="center"
                         tools:ignore="TouchTargetSizeCheck" />
 

@@ -10,14 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
 import org.json.JSONArray
+import org.json.JSONObject
 
 class ProfileFragment : Fragment(R.layout.profile) {
     private var mBinding: ProfileBinding? = null
+    private var isChan: Boolean = false
 
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
     private val binding get() = mBinding!!
@@ -122,15 +125,26 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         }
 
+        // 채널 있는지 검사
+        fetchifChan(id.toString())
+
         binding.item4List2Text.setOnClickListener{
             //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
-            val intent = Intent(context, BusinessManageFirstActivity::class.java)
-            intent.putExtra("id", id)
-            intent.putExtra("userType", userType)
-            intent.putExtra("userDept", userDept)
-            startActivity(intent)
+            Log.d("isChan 333333333", isChan.toString())
+            if(!isChan) {
+                val intent = Intent(context, BusinessManageFirstActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
+                startActivity(intent)
+            } else { //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
+                val intent = Intent(context, BusinessManageActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("isFirst", true)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                startActivity(intent)
+            }
 
-            //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
         }
 
         return binding.root
@@ -169,6 +183,27 @@ class ProfileFragment : Fragment(R.layout.profile) {
         )
         val queue = Volley.newRequestQueue(context)
         queue.add(request)
+    }
+
+    fun fetchifChan(id:String) {
+        val chanNamerequest = Login_Request(
+            Request.Method.POST,
+            "http://seonho.dothome.co.kr/BusinessChanName.php",
+            { response ->
+                val jsonObject = JSONObject(response)
+                val success = jsonObject.getBoolean("success");
+                if (success) {
+                    isChan = true
+                }
+            },
+            { Log.d("failed", "error......${activity?.applicationContext?.let { it1 -> error(it1) }}") },
+            hashMapOf(
+                "id" to id
+            )
+        )
+
+        val queue = Volley.newRequestQueue(context)
+        queue.add(chanNamerequest)
     }
 }
 

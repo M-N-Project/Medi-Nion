@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,9 +10,14 @@
         android:id="@+id/comment2_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/comment2Title_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -21,7 +26,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="100"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -65,14 +70,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="6"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -92,9 +92,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:text="0" />
+
             </LinearLayout>
+
+            <android.widget.Button
+                android:id="@+id/commentMoreBtn2"
+                android:layout_width="30dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/board_detail_more_btn"
+                android:textColor="@color/black"
+                android:visibility="visible"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
         </LinearLayout>
 
@@ -145,4 +159,29 @@
             tools:layout_editor_absoluteX="16dp" />
 
     </LinearLayout>
-</androidx.appcompat.widget.LinearLayoutCompat>
+
+    <RadioGroup
+        android:id="@+id/optionRadioGroup2"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/selector_radio_button_group_opt"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/comment2_linearLayout">
+
+        <RadioButton
+            android:id="@+id/commDelete_RadioBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:button="@null"
+            android:text="대댓글 삭제"
+            android:textAlignment="center"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>

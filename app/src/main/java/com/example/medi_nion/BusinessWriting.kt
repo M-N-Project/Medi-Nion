@@ -22,6 +22,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_writing.*
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -119,12 +120,19 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
-                if(!response.equals("search fail")) {
-                    val jsonArray = JSONArray(response)
-                    for (i in jsonArray.length() - 1 downTo 0) {
-                        val item = jsonArray.getJSONObject(i)
-
-                        chanName = item.getString("chanName")
+                    val jsonObject = JSONObject(response)
+                    val success = jsonObject.getBoolean("success");
+                    if(success) {
+                        for (i in jsonObject.length() - 1 downTo 0) {
+                            chanName = jsonObject.getString("chanName")
+                            Log.d("business chanName", chanName)
+                        }
+                    } else{
+                        Toast.makeText(
+                            applicationContext,
+                            "chanName 검색 실패",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     val request = Upload_Request(
                         Request.Method.POST,
@@ -163,13 +171,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
 
                     val queue = Volley.newRequestQueue(this)
                     queue.add(request)
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "비즈니스채널명이 없습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
             hashMapOf(
