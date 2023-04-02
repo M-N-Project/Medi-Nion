@@ -514,7 +514,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val server = retrofit?.create(SignUp_Request::class.java)
 
-        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, id_editText, nickname_editText, passwd_editText)
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText)
 
         if(basicUserBtn.isChecked) {
             if (call != null) {
