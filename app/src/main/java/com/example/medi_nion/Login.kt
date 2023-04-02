@@ -135,102 +135,6 @@ class Login : AppCompatActivity() {
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
-//        val gson = GsonBuilder().setLenient().create()
-//        val uri = "http://seonho.dothome.co.kr/"
-//
-//        val retrofit = createOkHttpClient()?.let {
-//            Retrofit.Builder()
-//                .baseUrl(uri)
-//                .addConverterFactory(nullOnEmptyConverterFactory)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .client(it)
-//                .build()
-//        }
-//
-//        val server = retrofit?.create(Login_Retrofit_Request::class.java)
-//        val call : Call<Data_Login_Request>? = server?.Login(id, passwd)
-//
-//        call?.enqueue(object :
-//            Callback<Data_Login_Request> {
-//            override fun onFailure(call: Call<Data_Login_Request>, t: Throwable) {
-//                Toast.makeText(applicationContext, "로그인 실패", Toast.LENGTH_SHORT).show()
-//                t.localizedMessage?.let { Log.d("retrofit fail", it) }
-//            }
-//
-//            override fun onResponse(
-//                call: Call<Data_Login_Request>,
-//                response: Response<Data_Login_Request>
-//            ) {
-//                Log.d("retrofit1 success", response.toString())
-//
-//
-//                val server = retrofit.create(Login_UserSearch_Request::class.java)
-//                val call: Call<Data_Login_UserSearch_Request> = server.LoginUserSearch(id)
-//
-//
-//                call.enqueue(object :
-//                    Callback<Data_Login_UserSearch_Request> {
-//                    override fun onFailure(
-//                        call: Call<Data_Login_UserSearch_Request>,
-//                        t: Throwable
-//                    ) {
-//                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
-//                        Toast.makeText(applicationContext, "로그인 실패1", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onResponse(
-//                        call: Call<Data_Login_UserSearch_Request>,
-//                        response: Response<Data_Login_UserSearch_Request>
-//                    ) {
-//                        if(response.isSuccessful) {
-//                            Log.d("*************", response.toString())
-//
-//                            var userType = ""
-//                            var userDept = ""
-//
-//                            val data = response
-//
-////                        jsonObject.put("id", id)
-////                        jsonObject.put("userType", userType)
-////                        jsonObject.put("userDept", userDept)
-////                        Log.d("*********", "[$jsonObject]")
-//
-//
-//                            if (jsonArray != null) {
-//                                for (i in jsonArray.length() - 1 downTo 0) {
-//                                    val item: JSONObject = jsonArray.getJSONObject(i)
-//
-//                                    id = item.getString("id")
-//                                    userType = item.getString("userType")
-//                                    userDept = item.getString("userDept")
-//
-//
-//
-//                                    Log.d("retrofit2 success", response.body().toString())
-//                                    intent.putExtra("userType", userType)
-//                                    intent.putExtra("userDept", userDept)
-//                                    //Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
-//
-//                                Toast.makeText(
-//                                    baseContext,
-//                                    String.format("로그인하였습니다."),
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//
-//                                    intent.putExtra("id", id)
-//                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
-//                                    startActivity(intent)
-//                                }
-//                            } else {
-//                                Log.d("???", "null??")
-//                            }
-//                        }
-//                    }
-//                })
-//            }
-//        })
-//    }
-
         val request = Login_Request(
             Request.Method.POST,
             url,
@@ -266,6 +170,7 @@ class Login : AppCompatActivity() {
                                     ).show()
 
                                     intent.putExtra("id", id)
+                                    intent.putExtra("passwd", passwd)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                     startActivity(intent)
                                 }
@@ -303,26 +208,6 @@ class Login : AppCompatActivity() {
         queue.add(request)
     }
 
-
-    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
-        override fun responseBodyConverter(
-            type: Type,
-            annotations: Array<Annotation>,
-            retrofit: Retrofit
-        ): Converter<ResponseBody, *> {
-            val delegate: Converter<ResponseBody, *> =
-                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
-            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
-        }
-    }
-
-    private fun createOkHttpClient(): OkHttpClient? {
-        val builder = OkHttpClient.Builder()
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
-        builder.addInterceptor(interceptor)
-        return builder.build()
-    }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val focusView: View? = currentFocus

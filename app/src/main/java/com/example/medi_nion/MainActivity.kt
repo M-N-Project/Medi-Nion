@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
         val id = intent.getStringExtra("id")
         val userType = intent.getStringExtra("userType")
         val userDept = intent.getStringExtra("userDept")
+        val passwd = intent.getStringExtra("passwd")
 
         var bnv = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     bundle.putString("id",id)
                     bundle.putString("userType", userType)
                     bundle.putString("userDept", userDept)
+                    bundle.putString("passwd", passwd)
                     profileFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, profileFragment).commit()
                 }

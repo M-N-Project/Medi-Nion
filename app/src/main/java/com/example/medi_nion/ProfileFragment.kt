@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,14 +10,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
+import kotlinx.android.synthetic.main.profile_password_reset.*
 import org.json.JSONArray
 import org.json.JSONObject
+import org.w3c.dom.Text
 
 class ProfileFragment : Fragment(R.layout.profile) {
     private var mBinding: ProfileBinding? = null
@@ -29,12 +33,14 @@ class ProfileFragment : Fragment(R.layout.profile) {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mBinding = ProfileBinding.inflate(inflater, container, false)
 
         val id = arguments?.getString("id")
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
+        val passwd = arguments?.getString("passwd")
 
         //나의 활동 
         binding.item1.setOnClickListener{
@@ -85,21 +91,145 @@ class ProfileFragment : Fragment(R.layout.profile) {
             else item3ListLayout.visibility = View.GONE
         }
 
-        binding.item3List2Text.setOnClickListener {
-            val intent: Intent = Intent(context, Login::class.java)
-            startActivity(intent)
-            Toast.makeText(context, "로그아웃했습니다.", Toast.LENGTH_SHORT).show()
+        //비밀번호 설정
+        binding.item3List1Text.setOnClickListener {
+            var passwordResetUrl = "http://seonho.dothome.co.kr/UserPasswdSelect.php"
+            var userUpdateUrl = "http://seonho.dothome.co.kr/UserPasswdUpdate.php"
+            val builder = AlertDialog.Builder(context)
+            val dialogView = layoutInflater.inflate(R.layout.profile_password_reset, null)
+            var dialogText_pwd_now = dialogView.findViewById<EditText>(R.id.password_now_editText).text.toString()
+            var dialogText_pwd_new = dialogView.findViewById<EditText>(R.id.password_new_editText).text.toString()
+            var dialogText_pwd_newcheck = dialogView.findViewById<EditText>(R.id.password_check_editText).text.toString()
+
+            builder.setTitle("비밀번호 재설정")
+                .setView(dialogView)
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialogInterface, i ->
+                            dialogText_pwd_now = dialogView.findViewById<EditText>(R.id.password_now_editText).text.toString()
+                            dialogText_pwd_new = dialogView.findViewById<EditText>(R.id.password_new_editText).text.toString()
+                            dialogText_pwd_newcheck = dialogView.findViewById<EditText>(R.id.password_check_editText).text.toString()
+
+                            Log.d("456456", "$dialogText_pwd_now, $dialogText_pwd_new")
+                            if (passwd == dialogText_pwd_now) {
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    passwordResetUrl,
+                                    { response ->
+                                        if (!response.equals("no User")) {
+                                            val userSearch = Login_Request(
+                                                Request.Method.POST,
+                                                userUpdateUrl,
+                                                { responseUser ->
+                                                    Log.d("dfdfd", responseUser)
+                                                    if (dialogText_pwd_new == dialogText_pwd_newcheck) {
+                                                        if (!responseUser.equals("updateUser fail")) {
+                                                            Log.d(
+                                                                "AAAAAA",
+                                                                "$id, $dialogText_pwd_new, $dialogText_pwd_now"
+                                                            )
+                                                            Toast.makeText(
+                                                                context,
+                                                                String.format("비밀번호를 변경했습니다."),
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+
+                                                        } else {
+                                                            Toast.makeText(
+                                                                context,
+                                                                String.format("userUpdatefail"),
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            Log.d("userUpdate", "Failed")
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(
+                                                            context,
+                                                            String.format("변경할 비밀번호가 일치하지 않습니다."),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                },
+                                                {
+                                                    Log.d(
+                                                        "UserUpdate Failed",
+                                                        "error......${
+                                                            context?.let { it1 ->
+                                                                error(
+                                                                    it1
+                                                                )
+                                                            }
+                                                        }"
+                                                    )
+                                                },
+                                                hashMapOf(
+                                                    "id" to id.toString(),
+                                                    "passwd" to dialogText_pwd_now,
+                                                    "passwd_new" to dialogText_pwd_new
+                                                )
+                                            )
+                                            val queue = Volley.newRequestQueue(context)
+                                            queue.add(userSearch)
+
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                String.format("기존 비밀번호가 틀립니다. 다시 확인해주세요."),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    },
+                                    {
+                                        Log.d(
+                                            "update failed",
+                                            "error......${context?.let { it1 -> error(it1) }}"
+                                        )
+                                    },
+                                    hashMapOf(
+                                        "id" to id.toString()
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(context)
+                                queue.add(request)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    String.format("기존 비밀번호가 틀립니다. 다시 확인해주세요."),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                    })
+            builder.show()
         }
 
+        //로그아웃
+        binding.item3List2Text.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("경고")
+                .setMessage("로그아웃하시려면 \"확인\"을 눌러주세요.")
+                .setPositiveButton("확인",
+                    DialogInterface.OnClickListener { dialogInterface, i ->
+                        val intent: Intent = Intent(context, Login::class.java)
+                        startActivity(intent)
+                    })
+                .setNegativeButton("취소",
+                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                    })
+            builder.show()
+        }
+
+        //서비스 탈퇴
         binding.item3List3Text.setOnClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("탈퇴하시겠습니까?")
+            builder.setTitle("경고")
                 .setMessage("탈퇴하시려면 \"확인\"을 눌러주세요.")
                 .setPositiveButton("확인",
                     DialogInterface.OnClickListener { dialogInterface, i ->
                         UserDeleteRequest()
-                        val intent: Intent = Intent(context, Login::class.java)
-                        startActivity(intent)
                     })
                 .setNegativeButton("취소",
                     DialogInterface.OnClickListener { dialogInterface, i ->
@@ -158,17 +288,20 @@ class ProfileFragment : Fragment(R.layout.profile) {
     private fun UserDeleteRequest() {
         val id = arguments?.getString("id")
         var userDeleteUrl = "http://seonho.dothome.co.kr/UserDelete.php"
+        val intent: Intent = Intent(context, Login::class.java)
 
         val request = Login_Request(
             Request.Method.POST,
             userDeleteUrl,
             { response ->
+                Log.d("456", id.toString())
                 if (!response.equals("Delete Fail")) {
                     Toast.makeText(
                         context,
                         String.format("탈퇴했습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+                    startActivity(intent)
                 } else {
                     Toast.makeText(
                         context,
