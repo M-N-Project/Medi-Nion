@@ -14,37 +14,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_Request
-import com.example.medi_nion.Retrofit2_Dataclass.Data_Login_UserSearch_Request
-import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
-import com.example.medi_nion.Retrofit2_Interface.Login_Retrofit_Request
-import com.example.medi_nion.Retrofit2_Interface.Login_UserSearch_Request
-import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import kotlinx.android.synthetic.main.sign_up.*
-import kotlinx.android.synthetic.main.signup_detail.*
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Converter
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Boolean.getBoolean
-import java.lang.reflect.Type
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import kotlinx.android.synthetic.main.login.*
 
 const val PREFERENCES_NAME = "rebuild_preference"
 private const val DEFAULT_VALUE_STRING = ""
@@ -60,69 +34,200 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.login)
 
         //최초 실행 여부 판단하는 구문
-        val pref: SharedPreferences = getSharedPreferences("isFirst", Activity.MODE_PRIVATE)
-        val first: Boolean = pref.getBoolean("isFirst", false)
-        if (first == false) {
-            val url = "http://seonho.dothome.co.kr/Login.php"
+        
+//        val pref = getSharedPreferences("isFirst", MODE_PRIVATE)
+//        val first = pref.getBoolean("isFirst", false)
+//        if (first == false) {
+//            val firstIntent = intent.getStringExtra("first")
+//            Log.d("0-1023", firstIntent.toString())
+//            if(firstIntent == "false") {
+//                Log.d("Is first Time?", "first")
+//                val editor = pref.edit()
+//                editor.putBoolean("isFirst", true)
+//                editor.commit()
+//
+//                val url = "http://seonho.dothome.co.kr/Login.php"
+//
+//                val id = findViewById<EditText>(R.id.id)
+//                val password = findViewById<EditText>(R.id.password)
+//                val loginBtn = findViewById<Button>(R.id.loginBtn)
+//                val signupBtn = findViewById<Button>(R.id.signupBtn)
+//                val autologin = findViewById<CheckBox>(R.id.autologin)
+//
+//                var checkID: String = ""
+//                var checkPW: String = ""
+//                var mContext = this
+//
+//                signupBtn.setOnClickListener {
+//                    //회원가입 화면으로 이동
+//                    val intent = Intent(applicationContext, Retrofit_SignUp::class.java)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+//                    startActivity(intent)
+//                }
+//
+//                var boo = getBoolean(mContext, "check")
+//                if(boo) {
+//                    id.setText(getString(mContext, "id"))
+//                    password.setText(getString(mContext, "pw"))
+//                    autologin.isChecked = true
+//                }
+//
+//                loginBtn.setOnClickListener {
+//                    if (id.length() == 0 || password.length() == 0) {
+//                        Toast.makeText(
+//                            baseContext,
+//                            String.format("아이디와 비밀번호 모두 입력해주세요."),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else {
+//                        setString(mContext, "id", id.text.toString())
+//                        setString(mContext, "pw", password.text.toString())
+//                        checkID = getString(mContext, "id")
+//                        checkPW = getString(mContext, "pw")
+//                        Log.d("99999", "$checkID, $checkPW")
+////                    intent.putExtra("checkID", checkID)
+////                    intent.putExtra("checkPW", checkPW)
+//                        loginRequest(url)
+//                    }
+//                }
+//
+//                if(autologin.isChecked) {
+//                    setString(mContext, "id", id.text.toString())
+//                    setString(mContext, "pw", password.text.toString())
+//                    setBoolean(mContext, "check", autologin.isChecked)
+//                    Log.d("mmmmmmm", "123")
+//                }
+//                else {
+//                    //setBoolean(mContext, "check", autologin.isChecked)
+//                    clear(mContext)
+//                    Log.d("fffffff", "456")
+//                }
+//            }
+//            else{
+//                var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
+//                startActivity(newIntent);
+//            }
+//
+//        } else {
+//            Log.d("Is first Time?", "first")
+//            val editor = pref.edit()
+//            editor.putBoolean("isFirst", true)
+//            editor.commit()
+//
+//            val url = "http://seonho.dothome.co.kr/Login.php"
+//
+//            val id = findViewById<EditText>(R.id.id)
+//            val password = findViewById<EditText>(R.id.password)
+//            val loginBtn = findViewById<Button>(R.id.loginBtn)
+//            val signupBtn = findViewById<Button>(R.id.signupBtn)
+//            val autologin = findViewById<CheckBox>(R.id.autologin)
+//
+//            var checkID: String = ""
+//            var checkPW: String = ""
+//            var mContext = this
+//
+//            signupBtn.setOnClickListener {
+//                //회원가입 화면으로 이동
+//                val intent = Intent(applicationContext, Retrofit_SignUp::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+//                startActivity(intent)
+//            }
+//
+//            var boo = getBoolean(mContext, "check")
+//            if(boo) {
+//                id.setText(getString(mContext, "id"))
+//                password.setText(getString(mContext, "pw"))
+//                autologin.isChecked = true
+//            }
+//
+//            loginBtn.setOnClickListener {
+//                if (id.length() == 0 || password.length() == 0) {
+//                    Toast.makeText(
+//                        baseContext,
+//                        String.format("아이디와 비밀번호 모두 입력해주세요."),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                } else {
+//                    setString(mContext, "id", id.text.toString())
+//                    setString(mContext, "pw", password.text.toString())
+//                    checkID = getString(mContext, "id")
+//                    checkPW = getString(mContext, "pw")
+//                    Log.d("99999", "$checkID, $checkPW")
+////                    intent.putExtra("checkID", checkID)
+////                    intent.putExtra("checkPW", checkPW)
+//                    loginRequest(url)
+//                }
+//            }
+//
+//            if(autologin.isChecked) {
+//                setString(mContext, "id", id.text.toString())
+//                setString(mContext, "pw", password.text.toString())
+//                setBoolean(mContext, "check", autologin.isChecked)
+//                Log.d("mmmmmmm", "123")
+//            }
+//            else {
+//                //setBoolean(mContext, "check", autologin.isChecked)
+//                clear(mContext)
+//                Log.d("fffffff", "456")
+//            }
+//        }
 
-            val id = findViewById<EditText>(R.id.id)
-            val password = findViewById<EditText>(R.id.password)
-            val loginBtn = findViewById<Button>(R.id.loginBtn)
-            val signupBtn = findViewById<Button>(R.id.signupBtn)
-            val autologin = findViewById<CheckBox>(R.id.autologin)
 
-            var checkID: String = ""
-            var checkPW: String = ""
-            var mContext = this
+        val url = "http://seonho.dothome.co.kr/Login.php"
 
-            signupBtn.setOnClickListener {
-                //회원가입 화면으로 이동
-                val intent = Intent(applicationContext, Retrofit_SignUp::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                startActivity(intent)
-            }
+        val id = findViewById<EditText>(R.id.id)
+        val password = findViewById<EditText>(R.id.password)
+        val loginBtn = findViewById<Button>(R.id.loginBtn)
+        val signupBtn = findViewById<Button>(R.id.signupBtn)
+        val autologin = findViewById<CheckBox>(R.id.autologin)
 
-            var boo = getBoolean(mContext, "check")
-            if(boo) {
-                id.setText(getString(mContext, "id"))
-                password.setText(getString(mContext, "pw"))
-                autologin.isChecked = true
-            }
+        var checkID: String = ""
+        var checkPW: String = ""
+        var mContext = this
 
-            loginBtn.setOnClickListener {
-                if (id.length() == 0 || password.length() == 0) {
-                    Toast.makeText(
-                        baseContext,
-                        String.format("아이디와 비밀번호 모두 입력해주세요."),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    setString(mContext, "id", id.text.toString())
-                    setString(mContext, "pw", password.text.toString())
-                    checkID = getString(mContext, "id")
-                    checkPW = getString(mContext, "pw")
-                    Log.d("99999", "$checkID, $checkPW")
-//                    intent.putExtra("checkID", checkID)
-//                    intent.putExtra("checkPW", checkPW)
-                    loginRequest(url)
-                }
-            }
+        signupBtn.setOnClickListener {
+            //회원가입 화면으로 이동
+            val intent = Intent(applicationContext, Retrofit_SignUp::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+            startActivity(intent)
+        }
 
-            if(autologin.isChecked) {
+        var boo = getBoolean(mContext, "check")
+        if(boo) {
+            id.setText(getString(mContext, "id"))
+            password.setText(getString(mContext, "pw"))
+            autologin.isChecked = true
+        }
+
+        loginBtn.setOnClickListener {
+            if (id.length() == 0 || password.length() == 0) {
+                Toast.makeText(
+                    baseContext,
+                    String.format("아이디와 비밀번호 모두 입력해주세요."),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
                 setString(mContext, "id", id.text.toString())
                 setString(mContext, "pw", password.text.toString())
-                setBoolean(mContext, "check", autologin.isChecked)
-                Log.d("mmmmmmm", "123")
+                checkID = getString(mContext, "id")
+                checkPW = getString(mContext, "pw")
+                Log.d("99999", "$checkID, $checkPW")
+//                    intent.putExtra("checkID", checkID)
+//                    intent.putExtra("checkPW", checkPW)
+                loginRequest(url)
             }
-            else {
-                //setBoolean(mContext, "check", autologin.isChecked)
-                clear(mContext)
-                Log.d("fffffff", "456")
-            }
+        }
 
-        } else {
-            var newIntent: Intent = Intent(this, FirstTimeActivity::class.java);
-            startActivity(newIntent);
+        if(autologin.isChecked) {
+            setString(mContext, "id", id.text.toString())
+            setString(mContext, "pw", password.text.toString())
+            setBoolean(mContext, "check", autologin.isChecked)
+            Log.d("mmmmmmm", "123")
+        }
+        else {
+            //setBoolean(mContext, "check", autologin.isChecked)
+            clear(mContext)
+            Log.d("fffffff", "456")
         }
     }
 
