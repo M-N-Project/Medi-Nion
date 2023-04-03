@@ -2,25 +2,26 @@ package com.example.medi_nion
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.toolbox.Volley
-import org.json.JSONArray
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
+import com.example.medi_nion.databinding.BusinessCreateHomeBinding
 
 
 class BusinessManageFirstActivity : AppCompatActivity() {
 
+    private lateinit var binding: BusinessCreateHomeBinding
     private var haveChan = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_create_home)
+
+
+
+
         val id: String? = this.intent.getStringExtra("id")
 
         findViewById<Button>(R.id.createBusinessChan_btn).setOnClickListener{

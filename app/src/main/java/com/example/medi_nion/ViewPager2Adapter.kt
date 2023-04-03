@@ -26,5 +26,4 @@ class ViewPager2Adapter(fragmentActivity: FragmentActivity) : FragmentStateAdapt
         notifyItemRemoved(fragments.size)
         //TODO: notifyItemRemoved!!
     }
-
 }
