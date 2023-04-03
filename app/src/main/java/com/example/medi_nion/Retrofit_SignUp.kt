@@ -3,16 +3,20 @@ package com.example.medi_nion
 //import com.example.medi_nion.interface1.SignUp_Request
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.Rect
+import android.graphics.drawable.Drawable.ConstantState
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.provider.SyncStateContract.Constants
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -24,6 +28,8 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.*
@@ -37,6 +43,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
+import java.lang.invoke.ConstantCallSite
 import java.lang.reflect.Type
 import java.util.regex.Pattern
 
@@ -45,6 +52,7 @@ class Retrofit_SignUp : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
 
     val REQUEST_IMAGE_CAPTURE = 1
+    val TAKE_PICTURE = 2
 
     lateinit var cameraPermission: ActivityResultLauncher<String>
     lateinit var storagePermission: ActivityResultLauncher<String>
@@ -74,6 +82,75 @@ class Retrofit_SignUp : AppCompatActivity() {
             imm.hideSoftInputFromWindow(focusView.windowToken, 0)
             focusView.clearFocus()
         }
+
+        val camera_permission_btn = findViewById<Button>(R.id.id_verify_btn)
+        camera_permission_btn.setOnClickListener {
+            val cameraPermissionCheck = ContextCompat.checkSelfPermission(
+                this@Retrofit_SignUp,
+                android.Manifest.permission.CAMERA
+            )
+            if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.CAMERA),
+                    1000
+                )
+            } else { //권한이 있는 경우
+                val REQUEST_IMAGE_CAPTURE = 1
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                    takePictureIntent.resolveActivity(packageManager)?.also {
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    }
+                }
+
+                //cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+                openCamera()
+                  idImgView = findViewById(R.id.idImgView)
+                  idImgView.setImageResource(0)
+                  idImgView.visibility = View.VISIBLE
+                  //if (it) {
+
+                      idImgView.setImageURI(photoUri)
+
+                      dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
+
+                      checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+                      checkFile(File(dataPath + "tessdata/"), "eng")
+
+                      val lang: String = "kor+eng"
+                      tess = TessBaseAPI() //api준비
+                      tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
+
+
+                      // OCR 동작 버튼
+                      lateinit var bitmap: Bitmap
+
+                      try {
+                          idImgView.setImageBitmap(bitmap)
+                          bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                              ImageDecoder.decodeBitmap(
+                                  ImageDecoder.createSource(
+                                      contentResolver,
+                                      photoUri!!
+                                  )
+                              )
+                          } else {
+                              MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
+                          }
+                      } catch (e: IOException) {
+                          e.printStackTrace()
+                      }
+                      idImgView.setImageBitmap(bitmap)
+                      processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
+//              processImage(BitmapFactory.decodeResource(resources,R.drawable.sample_kor)) //이미지 가공후 텍스트뷰에 띄우기
+                  //}
+                //}
+
+                storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+            }
+        }
+
 
 
         //프래그먼트일때는
@@ -204,42 +281,6 @@ class Retrofit_SignUp : AppCompatActivity() {
                     var nickname_editText =
                         findViewById<EditText>(R.id.nickname_editText).text.toString()
                     var url_nicknamevalidate = "http://seonho.dothome.co.kr/nicknameValidate.php"
-
-//                    val gson = GsonBuilder().setLenient().create()
-//                    val uri = "http://seonho.dothome.co.kr/"
-//
-//                    val retrofit = createOkHttpClient()?.let {
-//                        Retrofit.Builder()
-//                            .baseUrl(uri)
-//                            .addConverterFactory(nullOnEmptyConverterFactory)
-//                            .addConverterFactory(GsonConverterFactory.create(gson))
-//                            .client(it)
-//                            .build()
-//                    }
-//
-//                    val server = retrofit?.create(Nickname_Validation_Request::class.java)
-//
-//                    val call : Call<Nickname_Validation_Request>? = server?.Nicknamevalidate(nickname_editText)
-//                        if (call != null) {
-//                            call.clone()
-//                                ?.enqueue(object :
-//                                    Callback<Nickname_Validation_Request> {
-//                                    override fun onFailure(call: Call<Nickname_Validation_Request>, t: Throwable) {
-//                                        t.localizedMessage?.let { Log.d("retrofit11 fail", it) }
-//                                        Toast.makeText(applicationContext, "닉네임 실패", Toast.LENGTH_SHORT).show()
-//                                    }
-//
-//                                    override fun onResponse(
-//                                        call: Call<Nickname_Validation_Request>,
-//                                        response: Response<Nickname_Validation_Request>
-//                                    ) {
-//                                        //if (!response.equals("SignUP fail")) {
-//                                        Log.d("retrofit11 success", response.toString())
-//                                        Toast.makeText(applicationContext, "닉네임 성공", Toast.LENGTH_SHORT).show()
-//                                        //}
-//                                    }
-//                                })
-//                        }
 
                     var request = SignUP_Request(
 
@@ -398,7 +439,6 @@ class Retrofit_SignUp : AppCompatActivity() {
             } else {
                 val url_SignUP = "http://seonho.dothome.co.kr/SignUP.php"
 
-
                 signUPRequest(url_SignUP)
 
                 setContentView(R.layout.signup_done)
@@ -418,8 +458,8 @@ class Retrofit_SignUp : AppCompatActivity() {
             if (it) {
                 setViews()
             } else {
-                Toast.makeText(baseContext, "권한을 승인해야 앱을 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
-                finish()
+//                Toast.makeText(baseContext, "권한을 승인해야 앱을 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
+//                finish()
             }
         }
 
@@ -730,6 +770,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             ".jpg",
             getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         )
+
 
         photoUri = FileProvider.getUriForFile(
             this, "${packageName}.provider", photoFile

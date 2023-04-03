@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -277,6 +278,7 @@ class Board : AppCompatActivity() {
                 "userDept" to userDept
             )
         )
+
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
 
