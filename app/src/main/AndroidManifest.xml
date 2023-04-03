@@ -55,6 +55,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".HospitalProfile"
             android:screenOrientation="portrait"/>
+        <activity android:name=".BusinessSubList"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".BoardDetail"
             android:screenOrientation="portrait"

@@ -68,7 +68,7 @@ class BusinessProfileActivity : AppCompatActivity() {
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         val url = "http://seonho.dothome.co.kr/businessSubcribeInsert.php"
-        var id = intent.getStringExtra("id")!!
+        var appUser = intent.getStringExtra("appUser")!!
         var channel_name = intent.getStringExtra("channel_name")!!
         val channelPlusBtn = findViewById<CheckBox>(R.id.channelPlusBtn)
         channelPlusBtn.setOnClickListener{
@@ -80,28 +80,28 @@ class BusinessProfileActivity : AppCompatActivity() {
                     if(response != "business profile fail"){
 
                     }
-
                 }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                 hashMapOf(
-                    "id" to id,
+                    "id" to appUser,
                     "channel_name" to channel_name,
                     "flag" to (channelPlusBtn.isChecked).toString()
                 )
             )
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
-
         }
-
     }
 
     fun fetchProfile(){
-        var id = intent.getStringExtra("id")!!
-        val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
+        var channel_name = intent.getStringExtra("channel_name")!!
+        var appUser = intent.getStringExtra("appUser")!!
+        val url = "http://seonho.dothome.co.kr/BusinessProfileInfo.php"
+        val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
         val chanName = findViewById<TextView>(R.id.profileName)
         val chanDesc = findViewById<TextView>(R.id.profileDesc)
+        val chanIsSub = findViewById<CheckBox>(R.id.channelPlusBtn)
         val businessPageTitle = findViewById<TextView>(R.id.businessChanTitle)
 
         val request = Board_Request(
@@ -117,25 +117,52 @@ class BusinessProfileActivity : AppCompatActivity() {
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
 
-                        Log.d("0-09234", "$channel_name / $channel_desc")
                         chanName.setText(channel_name)
                         chanDesc.setText(channel_desc)
                         businessPageTitle.setText("${channel_name}님의 비즈니스 채널")
+
+                        val requestSub = Board_Request(
+                            Request.Method.POST,
+                            urlIsSub,
+                            { responseIsSub ->
+                                if(responseIsSub != "business subscribers list fail"){
+                                    val jsonArray = JSONArray(responseIsSub)
+
+                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val item = jsonArray.getJSONObject(i)
+
+                                        if(item.getString("id") == appUser) {
+                                            chanIsSub.isChecked = true
+                                            break
+                                        }
+                                    }
+                                }
+
+                            }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+                            hashMapOf(
+                                "channel_name" to channel_name
+                            )
+                        )
+                        val queue = Volley.newRequestQueue(this)
+                        queue.add(requestSub)
                     }
                 }
 
             }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
             hashMapOf(
-                "id" to id
+                "channel_name" to channel_name
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
+
     fun fetchBusinessPost() {
         // url to post our data
-        var id = intent.getStringExtra("id")!!
-        val urlBoard = "http://seonho.dothome.co.kr/BusinessManage.php"
+        var channel_name = intent.getStringExtra("channel_name")!!
+        val appUser = intent.getStringExtra("appUser")
+        val urlBoard = "http://seonho.dothome.co.kr/BusinessProfilePost.php"
+        val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
         val request = Board_Request(
@@ -159,22 +186,25 @@ class BusinessProfileActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
+
                     val BusinessItem = BusinessBoardItem(id, channel_name, title, content, time, image1, image2, image3)
 
                     items.add(BusinessItem)
                     all_items.add(BusinessItem)
+
+                    var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                    var new_items = ArrayList<BusinessBoardItem>()
+                    new_items.addAll(items)
+                    adapter = BusinessManageRecyclerAdapter(new_items)
+                    BusinessBoardRecyclerView.adapter = adapter
+                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                    BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
                 }
-                var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<BusinessBoardItem>()
-                new_items.addAll(items)
-                adapter = BusinessManageRecyclerAdapter(new_items)
-                BusinessBoardRecyclerView.adapter = adapter
-                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
             }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
             hashMapOf(
-                "id" to id
+                "channel_name" to channel_name
             )
         )
         val queue = Volley.newRequestQueue(this)

@@ -252,7 +252,10 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         //내가 구독한 비즈니스 채널
         binding.item4List1Text.setOnClickListener{
-
+            val id = arguments?.getString("id")
+            val intent = Intent(context, BusinessSubList::class.java)
+            intent.putExtra("id", id)
+            startActivity(intent)
         }
 
         // 채널 있는지 검사

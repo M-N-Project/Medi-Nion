@@ -171,8 +171,9 @@ class BusinessManageActivity : AppCompatActivity() {
     }
     fun fetchBusinessPost() {
         // url to post our data
-        var id = intent.getStringExtra("id")!!
+        var appUser = intent.getStringExtra("id")!!
         val urlBoard = "http://seonho.dothome.co.kr/BusinessManage.php"
+        val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
         val request = Board_Request(
@@ -196,6 +197,31 @@ class BusinessManageActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
+                    var isSub = false
+
+                    val requestSub = Board_Request(
+                        Request.Method.POST,
+                        urlIsSub,
+                        { responseIsSub ->
+                            if(responseIsSub != "business subscribers list fail"){
+                                val jsonArray = JSONArray(responseIsSub)
+
+                                for (i in jsonArray.length()-1  downTo  0) {
+                                    if(jsonArray[i].toString() == appUser) {
+                                        isSub = true
+                                        break
+                                    }
+                                }
+                            }
+
+                        }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+                        hashMapOf(
+                            "channel_name" to channel_name
+                        )
+                    )
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestSub)
+
                     val BusinessItem = BusinessBoardItem(id, channel_name, title, content, time, image1, image2, image3)
 
                     items.add(BusinessItem)
@@ -211,7 +237,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
             }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
             hashMapOf(
-                "id" to id
+                "id" to appUser
             )
         )
         val queue = Volley.newRequestQueue(this)

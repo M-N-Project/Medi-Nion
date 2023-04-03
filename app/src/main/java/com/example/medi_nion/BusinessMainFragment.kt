@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,6 +48,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var image1 = "" //비즈니스 채널 사진 1
     var image2 = "" //비즈니스 채널 사진 2
     var image3 = "" //비즈니스 채널 사진 3
+    var isSub = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,8 +61,10 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
     fun fetchData() {
         // url to post our data
-        var id = arguments?.getString("id").toString()
+        var appUser = arguments?.getString("id").toString()
         val urlBoard = "http://seonho.dothome.co.kr/BusinessBoardSub_list.php"
+        val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
+//        val urlBoard = "http://seonho.dothome.co.kr/Business.php"
         val jsonArray : JSONArray
 
         val request = Board_Request(
@@ -84,38 +88,40 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                             image1 = item.getString("image1")
                             image2 = item.getString("image2")
                             image3 = item.getString("image3")
+
                             val BusinessItem = BusinessBoardItem(writerId, channel_name, title, content, time, image1, image2, image3)
 
-//                    if(i >= jsonArray.length() - item_count*scroll_count){
-//                        items.add(BusinessItem)
-//                        itemIndex.add(num) //앞에다가 추가.
-//                    }
                             items.add(BusinessItem)
                             all_items.add(BusinessItem)
-                        }
-                        var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                        var new_items = ArrayList<BusinessBoardItem>()
-                        new_items.addAll(items)
-                        adapter = BusinessRecyclerAdapter(new_items)
-                        BusinessBoardRecyclerView.adapter = adapter
-                        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                        BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
-                        adapter.setOnItemClickListener(object : BusinessRecyclerAdapter.OnItemClickListener {
-                            override fun onProfileClick(v: View, data: BusinessBoardItem, pos: Int) {
-                                val intent = Intent(context, BusinessProfileActivity::class.java)
-                                intent.putExtra("id", id)
-                                intent.putExtra("channel_name", data.channel_name)
-                                startActivity(intent)
-                            }
-                        })
+                            var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                            var new_items = ArrayList<BusinessBoardItem>()
+                            new_items.addAll(items)
+                            adapter = BusinessRecyclerAdapter(new_items)
+                            BusinessBoardRecyclerView.adapter = adapter
+                            adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                            BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+                            adapter.setOnItemClickListener(object : BusinessRecyclerAdapter.OnItemClickListener {
+                                override fun onProfileClick(v: View, data: BusinessBoardItem, pos: Int) {
+                                    val intent = Intent(context, BusinessProfileActivity::class.java)
+                                    intent.putExtra("appUser", appUser)
+                                    intent.putExtra("channel_name", data.channel_name)
+                                    startActivity(intent)
+                                }
+                            })
+
+
+                        }
+
                     }
+
                 }
 
 
             }, { Log.d("login failed", "error......${context?.let { it1 -> error(it1) }}") },
             hashMapOf(
-                "id" to id
+                "id" to appUser
             )
         )
         val queue = Volley.newRequestQueue(context)

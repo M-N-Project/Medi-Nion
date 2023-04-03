@@ -4,14 +4,18 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.Image
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
 class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
@@ -54,7 +58,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
         private var view: View = v
         private var profileImg = v.findViewById<ImageView>(R.id.profileImg2)
 
-
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
             setViewMore(view.content, view.viewMore)
@@ -63,6 +66,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
             view.time.text = item.time
 //            view.profileImg2.setImageDrawable(item.profileImg)
             view.content.text = item.content
+
 
             if(item.image1 != "null"){
                 val bitmap: Bitmap? = StringToBitmaps(item.image1)
@@ -83,12 +87,11 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 view.businessMG_postImg3.setImageBitmap(bitmap)
             }
 
+
             val pos = absoluteAdapterPosition
             profileImg.setOnClickListener {
                 listener?.onProfileClick(itemView,item,pos)
             }
-
-
 
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()
