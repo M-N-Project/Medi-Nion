@@ -338,9 +338,9 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
                 // RecyclerView.Adapter<ViewHolder>()
                 val adapter2 = PagerRecyclerAdapter(qnaItems)
-                viewPager.adapter = adapter2
+                createBusinessChan_btn1.adapter = adapter2
                 // ViewPager의 Paging 방향은 Horizontal
-                viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                createBusinessChan_btn1.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
                 var detailId: String = ""
                 var detailTitle: String = ""

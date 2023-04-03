@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="8dp">
+
+        <!-- Custom implementation of the indicator, using child views to represent the indicators -->
+        <!-- Add the appropriate number of child views to represent the pages in the ViewPager2 -->
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ci_drawable="@drawable/mint_radius"
+            app:ci_height="7dp"
+            app:ci_margin="4dp"
+            app:ci_width="7dp"
+            />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/createBusinessChan_btn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="채널 생성하기"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
+
+
+
+
+
