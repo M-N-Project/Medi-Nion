@@ -43,7 +43,7 @@ class BusinessManageFirstFragment1 : Fragment() {
     }
 
     companion object {
-        fun newInstance(image: Int, text1: String, test2: String, text3: String) =
+        fun newInstance(image: Int, text1: String, text2: String, text3: String) =
             BusinessManageFirstFragment1().apply {
                     arguments = Bundle().apply {
                         putInt("image", image)

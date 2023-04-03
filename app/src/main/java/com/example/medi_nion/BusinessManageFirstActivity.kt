@@ -61,7 +61,7 @@ class BusinessManageFirstActivity : AppCompatActivity() {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> BusinessManageFirstFragment1.newInstance(R.drawable.ad2, "나의 비즈니스 프로필", "내 비즈니스와 이웃을 연결하는 방법,", "지금 무료로 시작해보세요!")
+                0 -> BusinessManageFirstFragment1.newInstance(R.drawable.bf_first1, "나의 비즈니스 프로필", "내 비즈니스와 이웃을 연결하는 방법,", "지금 무료로 시작해보세요!")
                 1 -> BusinessManageFirstFragment1.newInstance(R.drawable.ad2, "관심있는 정보를 한눈에", "사용자들의 관심을 끌 수 있도록", "프로필을 채워보세요!")
                 else -> BusinessManageFirstFragment1.newInstance(R.drawable.ad2, "단골을 모으고 소식 알리기", "글을 작성하면 구독을 한 사용자의", "홈 피드에 노출이 된답니다~")
             }
