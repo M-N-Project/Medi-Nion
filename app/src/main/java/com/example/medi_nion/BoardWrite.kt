@@ -19,12 +19,9 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.scale
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_board_item.*
-import retrofit2.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -315,6 +312,12 @@ class BoardWrite : AppCompatActivity() {
                     "image2" to img2
                 )
             )
+            request.retryPolicy = DefaultRetryPolicy(
+                0,
+                -1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
         }
