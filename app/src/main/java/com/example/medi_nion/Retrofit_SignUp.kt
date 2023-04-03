@@ -3,16 +3,20 @@ package com.example.medi_nion
 //import com.example.medi_nion.interface1.SignUp_Request
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.Rect
+import android.graphics.drawable.Drawable.ConstantState
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.provider.SyncStateContract.Constants
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -24,6 +28,7 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.android.volley.Request
 import com.android.volley.toolbox.*
@@ -37,6 +42,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
+import java.lang.invoke.ConstantCallSite
 import java.lang.reflect.Type
 import java.util.regex.Pattern
 
@@ -205,42 +211,6 @@ class Retrofit_SignUp : AppCompatActivity() {
                         findViewById<EditText>(R.id.nickname_editText).text.toString()
                     var url_nicknamevalidate = "http://seonho.dothome.co.kr/nicknameValidate.php"
 
-//                    val gson = GsonBuilder().setLenient().create()
-//                    val uri = "http://seonho.dothome.co.kr/"
-//
-//                    val retrofit = createOkHttpClient()?.let {
-//                        Retrofit.Builder()
-//                            .baseUrl(uri)
-//                            .addConverterFactory(nullOnEmptyConverterFactory)
-//                            .addConverterFactory(GsonConverterFactory.create(gson))
-//                            .client(it)
-//                            .build()
-//                    }
-//
-//                    val server = retrofit?.create(Nickname_Validation_Request::class.java)
-//
-//                    val call : Call<Nickname_Validation_Request>? = server?.Nicknamevalidate(nickname_editText)
-//                        if (call != null) {
-//                            call.clone()
-//                                ?.enqueue(object :
-//                                    Callback<Nickname_Validation_Request> {
-//                                    override fun onFailure(call: Call<Nickname_Validation_Request>, t: Throwable) {
-//                                        t.localizedMessage?.let { Log.d("retrofit11 fail", it) }
-//                                        Toast.makeText(applicationContext, "닉네임 실패", Toast.LENGTH_SHORT).show()
-//                                    }
-//
-//                                    override fun onResponse(
-//                                        call: Call<Nickname_Validation_Request>,
-//                                        response: Response<Nickname_Validation_Request>
-//                                    ) {
-//                                        //if (!response.equals("SignUP fail")) {
-//                                        Log.d("retrofit11 success", response.toString())
-//                                        Toast.makeText(applicationContext, "닉네임 성공", Toast.LENGTH_SHORT).show()
-//                                        //}
-//                                    }
-//                                })
-//                        }
-
                     var request = SignUP_Request(
 
                         Request.Method.POST,
@@ -398,7 +368,6 @@ class Retrofit_SignUp : AppCompatActivity() {
             } else {
                 val url_SignUP = "http://seonho.dothome.co.kr/SignUP.php"
 
-
                 signUPRequest(url_SignUP)
 
                 setContentView(R.layout.signup_done)
@@ -514,7 +483,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val server = retrofit?.create(SignUp_Request::class.java)
 
-        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, id_editText, nickname_editText, passwd_editText)
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText)
 
         if(basicUserBtn.isChecked) {
             if (call != null) {
