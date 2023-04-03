@@ -132,6 +132,7 @@ class Login : AppCompatActivity() {
         var passwd = findViewById<EditText>(R.id.password).text.toString()
         var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
         var intent = Intent(this, MainActivity::class.java)
+        var userGrade = ""
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
@@ -161,6 +162,7 @@ class Login : AppCompatActivity() {
 
                                     intent.putExtra("userType", userType)
                                     intent.putExtra("userDept", userDept)
+
                                     Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
 
                                     Toast.makeText(
@@ -171,6 +173,7 @@ class Login : AppCompatActivity() {
 
                                     intent.putExtra("id", id)
                                     intent.putExtra("passwd", passwd)
+                                    intent.putExtra("userGrade", userGrade)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                     startActivity(intent)
                                 }

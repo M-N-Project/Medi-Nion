@@ -2,12 +2,14 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +58,14 @@ class Board : AppCompatActivity() {
         setContentView(R.layout.board_home)
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
+
+        val board_ad = findViewById<ImageView>(R.id.board_ad)
+
+        board_ad.setOnClickListener {
+            val address = "https://www.tripstore.kr/travels/b1653a2c-57ad-4f45-998b-7d79296dd444"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
+            startActivity(intent)
+        }
 
 
 

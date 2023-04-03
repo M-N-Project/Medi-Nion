@@ -1,12 +1,14 @@
 package com.example.medi_nion
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -27,6 +29,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     private lateinit var id: String
     private lateinit var userType: String
     private lateinit var userDept: String
+    private lateinit var userGrade: String
 
     class PagerRecyclerAdapter(private val qnaItem: java.util.ArrayList<qnaNewItem>) :
         RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
@@ -36,6 +39,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             private val qna_title: TextView = itemView.findViewById(R.id.home_qna_title)
             private val qna_content: TextView = itemView.findViewById(R.id.home_qna_detail)
             private val qna_box = itemView.findViewById<Button>(R.id.detail_box)
+
             fun bind(item: qnaNewItem) {
                 qna_title.text = item.title
                 qna_content.text = item.content
@@ -102,10 +106,27 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val employee_info = view.findViewById<TextView>(R.id.home_boardList7)
         val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
 
+        val imageView_ad = view.findViewById<ImageView>(R.id.imageView_ad)
+        val imageView_ad2 = view.findViewById<ImageView>(R.id.imageView_ad2)
+
         // bundle 에서 id, userType, userDept 값 가져오기
         id = arguments?.getString("id").toString()
         userType = arguments?.getString("userType").toString()
         userDept = arguments?.getString("userDept").toString()
+        userGrade = arguments?.getString("userGrade").toString()
+
+
+        imageView_ad.setOnClickListener {
+            val address = "https://www.tripstore.kr/travels/b1653a2c-57ad-4f45-998b-7d79296dd444"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
+            startActivity(intent)
+        }
+
+        imageView_ad2.setOnClickListener {
+            val address = "https://www.tripstore.kr/travels/720f181c-42db-46b9-a94d-060ca6691fcd?regionSub=%EB%8C%80%EB%A7%8C&path=detail"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
+            startActivity(intent)
+        }
 
 ///////////////////  즐겨찾는 게시판 클릭 이벤트 ////////////////////////////////////////////
         basicBoard.setOnClickListener {
@@ -113,6 +134,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("userGrade", userGrade)
                 intent.putExtra("board", "자유 게시판")
                 startActivity(intent)
             }
@@ -124,6 +146,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 intent.putExtra("id", id)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
+                intent.putExtra("userGrade", userGrade)
                 intent.putExtra("board", "직종별 게시판")
                 startActivity(intent)
             }
@@ -135,6 +158,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 intent.putExtra("id", id)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
+                intent.putExtra("userGrade", userGrade)
                 intent.putExtra("board", "진료과별 게시판")
                 startActivity(intent)
             }
@@ -144,6 +168,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("userGrade", userGrade)
                 intent.putExtra("board", "장터 게시판")
                 startActivity(intent)
             }
@@ -153,6 +178,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("userGrade", userGrade)
                 intent.putExtra("board", "QnA 게시판")
                 startActivity(intent)
             }

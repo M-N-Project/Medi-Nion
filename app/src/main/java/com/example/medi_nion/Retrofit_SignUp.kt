@@ -105,43 +105,43 @@ class Retrofit_SignUp : AppCompatActivity() {
 
                 //cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
                 openCamera()
-                  idImgView = findViewById(R.id.idImgView)
-                  idImgView.setImageResource(0)
-                  idImgView.visibility = View.VISIBLE
-                  //if (it) {
+                idImgView = findViewById(R.id.idImgView)
+                idImgView.setImageResource(0)
+                idImgView.visibility = View.VISIBLE
+                //if (it) {
 
-                      idImgView.setImageURI(photoUri)
+                    idImgView.setImageURI(photoUri)
 
-                      dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
+                    dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
 
-                      checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-                      checkFile(File(dataPath + "tessdata/"), "eng")
+                    checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+                    checkFile(File(dataPath + "tessdata/"), "eng")
 
-                      val lang: String = "kor+eng"
-                      tess = TessBaseAPI() //api준비
-                      tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
+                    val lang: String = "kor+eng"
+                    tess = TessBaseAPI() //api준비
+                    tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
 
 
-                      // OCR 동작 버튼
-                      lateinit var bitmap: Bitmap
+                    // OCR 동작 버튼
+                    lateinit var bitmap: Bitmap
 
-                      try {
-                          idImgView.setImageBitmap(bitmap)
-                          bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                              ImageDecoder.decodeBitmap(
-                                  ImageDecoder.createSource(
-                                      contentResolver,
-                                      photoUri!!
-                                  )
-                              )
-                          } else {
-                              MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
-                          }
-                      } catch (e: IOException) {
-                          e.printStackTrace()
-                      }
-                      idImgView.setImageBitmap(bitmap)
-                      processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
+                    try {
+                        idImgView.setImageBitmap(bitmap)
+                        bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            ImageDecoder.decodeBitmap(
+                                ImageDecoder.createSource(
+                                    contentResolver,
+                                    photoUri!!
+                                )
+                            )
+                        } else {
+                            MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                    idImgView.setImageBitmap(bitmap)
+                    processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
 //              processImage(BitmapFactory.decodeResource(resources,R.drawable.sample_kor)) //이미지 가공후 텍스트뷰에 띄우기
                   //}
                 //}
@@ -525,6 +525,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
         var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
+        var userGrade = "bronze"
 
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
@@ -554,7 +555,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val server = retrofit?.create(SignUp_Request::class.java)
 
-        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText)
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText, userGrade)
 
         if(basicUserBtn.isChecked) {
             if (call != null) {
@@ -582,7 +583,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         else
            {
             server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
-                id_editText, passwd_editText)
+                id_editText, passwd_editText, userGrade)
                 ?.enqueue(object:
                     Callback<Data_SignUp_Request> {
                     override fun onResponse(
