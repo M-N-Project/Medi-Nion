@@ -65,12 +65,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
-        val backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
         val saveBtn = findViewById<Button>(R.id.save_btn)
-
-        val editBackgroundBtn = findViewById<Button>(R.id.backgroundEditBtn)
-        val editProfileBtn = findViewById<Button>(R.id.profileImgEditBtn)
-        val editNameBtn = findViewById<Button>(R.id.nameEditBtn)
         val editIntroBtn = findViewById<Button>(R.id.introEditBtn)
 
         val editName = findViewById<EditText>(R.id.profileName)
@@ -102,17 +97,17 @@ class BusinessManageActivity : AppCompatActivity() {
         }
 
 
-        editProfileBtn.setOnClickListener{
-            openGallery()
-        }
+//        editProfileBtn.setOnClickListener{
+//            openGallery()
+//        }
 
         editName.setOnClickListener{
             editName.setHint("")
         }
-        editNameBtn.setOnClickListener{
-            inputMethodManager.showSoftInput(editName, 0)
-            editName.setHint("")
-        }
+//        editNameBtn.setOnClickListener{
+//            inputMethodManager.showSoftInput(editName, 0)
+//            editName.setHint("")
+//        }
 
         editIntro.setOnClickListener{
             editIntro.setHint("")
@@ -153,10 +148,9 @@ class BusinessManageActivity : AppCompatActivity() {
 
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
-                        val image_background = item.getString("Channel_Back_Img")
                         val image_profile = item.getString("Channel_Profile_Img")
 
-                        Log.d("4444", "$channel_name, $channel_desc, $image_background, $image_profile")
+                        Log.d("4444", "$channel_name, $channel_desc, $image_profile")
 
                         if(channel_name == null)
                             editName.setHint("채널명")
@@ -169,10 +163,6 @@ class BusinessManageActivity : AppCompatActivity() {
                         if(image_profile!=null){
                             val bitmap: Bitmap? = StringToBitmaps(image_profile)
                             editProfile.setImageBitmap(bitmap)
-                        }
-                        if(image_background!=null) {
-                            val bitmap: Bitmap? = StringToBitmaps(image_background)
-                            editBackImg.setImageBitmap(bitmap)
                         }
 
 
@@ -363,7 +353,6 @@ class BusinessManageActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
 
-        var backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
         var profileImg = findViewById<ImageView>(R.id.profileImg)
         if (resultCode == Activity.RESULT_OK) {
             if(requestCode == GALLERY) {

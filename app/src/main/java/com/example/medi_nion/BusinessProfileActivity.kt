@@ -38,7 +38,6 @@ class BusinessProfileActivity : AppCompatActivity() {
      private val GALLERY = 1
     var image_background : String = "null"
     var image_profile : String = "null"
-    var editWhichOne = 0 //0은 background, 1은 profile
 
     private var haveChan = false
     var items =ArrayList<BusinessBoardItem>()
@@ -74,7 +73,6 @@ class BusinessProfileActivity : AppCompatActivity() {
 
 
         val profileImg = findViewById<ImageView>(R.id.profileImg)
-        val backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -252,7 +250,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                     "id" to id,
                     "channel_name" to editName.text.toString(),
                     "channel_desc" to editIntro.text.toString(),
-                    "image_background" to image_background,
                     "image_profile" to image_profile
                 )
             )
@@ -277,7 +274,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                     "id" to id,
                     "channel_name" to editName.text.toString(),
                     "channel_desc" to editIntro.text.toString(),
-                    "image_background" to image_background,
                     "image_profile" to image_profile
                 )
             )
@@ -304,43 +300,21 @@ class BusinessProfileActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if(requestCode == GALLERY) {
                 val currentImgUri : Uri? = data?.data
+                try {
+                    var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+                    profileImg.setImageBitmap(bitmap)
+                    roundAll(profileImg, 70.0f)
 
-                if(editWhichOne==0) {
-                    try {
-                        var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
-                        backgroundImg.setImageBitmap(bitmap)
-
-                        var source: ImageDecoder.Source? =
-                            currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
-                        bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-
-
-                        bitmap = resize(bitmap)
-
-                        image_background = BitMapToString(bitmap)
-
-                    } catch (e:Exception) {
-                        e.printStackTrace()
-                    }
-                }
-
-                else if(editWhichOne==1) {
-                    try {
-                        var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
-                        profileImg.setImageBitmap(bitmap)
-                        roundAll(profileImg, 70.0f)
-
-                        var source: ImageDecoder.Source? =
-                            currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
-                        bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
+                    var source: ImageDecoder.Source? =
+                        currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
+                    bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
 
-                        bitmap = resize(bitmap)
+                    bitmap = resize(bitmap)
 
-                        image_profile = BitMapToString(bitmap)
-                    } catch (e:Exception) {
-                        e.printStackTrace()
-                    }
+                    image_profile = BitMapToString(bitmap)
+                } catch (e:Exception) {
+                    e.printStackTrace()
                 }
 
             } else {

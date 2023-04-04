@@ -59,7 +59,7 @@
             android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="0.5"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:layout_weight="5"
                 android:text="나의 비즈니스 채널 관리"
                 android:textColor="#000000"
@@ -96,135 +96,114 @@
                 tools:ignore="TouchTargetSizeCheck" />
         </LinearLayout>
 
-        <!--    <ImageView-->
-        <!--        android:id="@+id/backgroundImg"-->
-        <!--        android:layout_width="413dp"-->
-        <!--        android:layout_height="200dp"-->
-        <!--        android:layout_marginTop="8dp"-->
-        <!--        android:scaleType="center"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toBottomOf="@+id/businessChanTitle"-->
-        <!--        app:srcCompat="@color/business_background" />-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="12dp"
+            android:background="#50B8B8B8" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+
+
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/backgroundImg"
+            <LinearLayout
+                android:id="@+id/linearLayout9"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_weight="6"
-                android:background="@drawable/business_manage_background"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@color/business_background" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/backgroundEditBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/camera"
-                android:backgroundTint="#70000000"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/cardview_member"-->
-<!--                android:layout_width="80dp"-->
-<!--                android:layout_height="80dp"-->
-<!--                android:elevation="6dp"-->
-<!--                app:cardCornerRadius="100dp"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/backgroundImg"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.498"-->
-<!--                app:layout_constraintStart_toStartOf="parent">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/profileImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:srcCompat="@drawable/logo" />-->
-
-<!--            </androidx.cardview.widget.CardView>-->
-            <ImageView
-                android:id="@+id/profileImg"
-                android:layout_width="130dp"
-                android:layout_height="117dp"
-                android:layout_marginTop="-80dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/business_profile"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/profileName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/backgroundImg"
-                app:srcCompat="@drawable/logo" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/profileImgEditBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="-30dp"
-                android:background="@drawable/camera"
-                android:backgroundTint="#70000000"
-                app:layout_constraintBottom_toBottomOf="@+id/profileImg"
-                app:layout_constraintStart_toEndOf="@+id/profileImg"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-            <EditText
-                android:id="@+id/profileName"
-                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="#C5EFE1"
-                android:hint="채널명"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/profileDesc"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="TextContrastCheck" />
+                android:orientation="horizontal"
+                tools:ignore="MissingConstraints">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/nameEditBtn"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="-20dp"
-                android:background="@drawable/pencil"
-                android:backgroundTint="#90000000"
-                app:layout_constraintBottom_toBottomOf="@+id/profileName"
-                app:layout_constraintStart_toEndOf="@+id/profileName"
-                app:layout_constraintTop_toTopOf="@+id/profileName"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1">
+
+
+                    <ImageView
+                        android:id="@+id/profileImg"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/business_profile"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toTopOf="@+id/profileName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.498"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:srcCompat="@drawable/logo" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/profileName"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="6dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="#50C5EFE1"
+                        android:hint="채널명"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toTopOf="@+id/profileDesc"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:ignore="TextContrastCheck" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="구독자수"
+                        android:textSize="12sp"></EditText>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="35dp"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="20dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/business_setting" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/profileDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:background="#FFFFFF"
                 android:hint="채널에 대한 간단한 소개글을 작성해주세요."
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
                 tools:ignore="TextContrastCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -245,7 +224,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -266,13 +245,15 @@
 
             <Button
                 android:id="@+id/write_btn"
-                android:layout_width="100dp"
+                android:layout_width="55dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginEnd="15dp"
+                android:layout_weight="1"
                 android:backgroundTint="#8BCEE0"
                 android:text="글쓰기"
                 android:textColor="#000000"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
@@ -282,14 +263,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#B8B8B8" />
+            android:background="#50B8B8B8" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/myBusinessPostScrollView"
             android:layout_width="match_parent"
             android:layout_height="312dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="5"
+            android:layout_weight="9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileDesc">
 
