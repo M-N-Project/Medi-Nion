@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:scaleType="fitCenter"
+        android:drawable="@drawable/business_like_btn_checked" android:state_checked="true"></item>
+    <item
+        android:scaleType="fitCenter"
+        android:drawable="@drawable/business_like_btn" android:state_checked="false"></item>
+</selector>
