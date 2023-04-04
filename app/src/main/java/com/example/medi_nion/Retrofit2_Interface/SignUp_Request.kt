@@ -14,6 +14,7 @@ interface SignUp_Request {
         @Field("userDept") userDept: String,
         @Field("nickname") nickname: String,
         @Field("id") id: String,
-        @Field("passwd") passwd: String
+        @Field("passwd") passwd: String,
+        @Field("userGrade") userGrade: String
         ): Call<Data_SignUp_Request>
 }

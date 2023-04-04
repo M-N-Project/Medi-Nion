@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
         val userType = intent.getStringExtra("userType")
         val userDept = intent.getStringExtra("userDept")
         val passwd = intent.getStringExtra("passwd")
+        val userGrade = intent.getStringExtra("userGrade")
 
         var bnv = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     bundle.putString("id",id)
                     bundle.putString("userType", userType)
                     bundle.putString("userDept", userDept)
+                    bundle.putString("userGrade", userGrade)
                     homeFragment.arguments = bundle
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, homeFragment).commit()
                 }
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     bundle.putString("id",id)
                     bundle.putString("userType", userType)
                     bundle.putString("userDept", userDept)
+                    bundle.putString("userGrade", userGrade)
                     menuFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
                 }
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     val businessFragment = BusinessMainFragment()
                     var bundle = Bundle()
                     bundle.putString("id",id)
+                    bundle.putString("userGrade", userGrade)
                     businessFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, businessFragment).commit()
                 }
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity() { //mainactivity, 여기서는 프레�
                     bundle.putString("userType", userType)
                     bundle.putString("userDept", userDept)
                     bundle.putString("passwd", passwd)
+                    bundle.putString("userGrade", userGrade)
                     profileFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
                     supportFragmentManager.beginTransaction().replace(R.id.linearLayout, profileFragment).commit()
                 }

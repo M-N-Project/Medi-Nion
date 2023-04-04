@@ -17,7 +17,4 @@
         name="external-files"
         path="." /> <!--Context.getExternalFilesDir() 외부 저장소-->
 
-    <files-path
-        name="file_path"
-        path="." />
 </paths>
