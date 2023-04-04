@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -52,6 +53,7 @@ class BusinessManageActivity : AppCompatActivity() {
     private lateinit var listAdapter: BusinessManageRecyclerAdapter
 
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
@@ -66,12 +68,16 @@ class BusinessManageActivity : AppCompatActivity() {
         val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
         val saveBtn = findViewById<Button>(R.id.save_btn)
-        val editIntroBtn = findViewById<Button>(R.id.introEditBtn)
+        val subscribe_count = findViewById<EditText>(R.id.subscribe_count)
 
         val editName = findViewById<EditText>(R.id.profileName)
         val editIntro = findViewById<EditText>(R.id.profileDesc)
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        subscribe_count.setOnClickListener {
+            Toast.makeText(applicationContext, "구독자 수는 설정할 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
 
         //채널명이 없으면 글쓰기 못하게끔
 
@@ -112,10 +118,6 @@ class BusinessManageActivity : AppCompatActivity() {
         editIntro.setOnClickListener{
             editIntro.setHint("")
         }
-        editIntroBtn.setOnClickListener{
-            inputMethodManager.showSoftInput(editIntro, 0)
-            editIntro.setHint("")
-        }
 
         if(image_profile!=null){
             val bitmap: Bitmap? = StringToBitmaps(image_profile)
@@ -123,6 +125,7 @@ class BusinessManageActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     fun fetchProfile(){
         var id = intent.getStringExtra("id")!!
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
@@ -131,6 +134,7 @@ class BusinessManageActivity : AppCompatActivity() {
         val editName = findViewById<EditText>(R.id.profileName)
         val editIntro = findViewById<EditText>(R.id.profileDesc)
         val editProfile = findViewById<ImageView>(R.id.profileImg)
+        val subscribe_text = findViewById<EditText>(R.id.subscribe_count)
 
         Toast.makeText(this, "로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
 
@@ -148,6 +152,7 @@ class BusinessManageActivity : AppCompatActivity() {
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
                         val image_profile = item.getString("Channel_Profile_Img")
+                        val subscribe_count = item.getInt("subscribe_count")
 
                         Log.d("4444", "$channel_name, $channel_desc, $image_profile")
 
@@ -164,6 +169,7 @@ class BusinessManageActivity : AppCompatActivity() {
                             editProfile.setImageBitmap(bitmap)
                         }
 
+                        subscribe_text.setText("구독자 수: " + subscribe_count.toString() + "명")
 
 
                     }
