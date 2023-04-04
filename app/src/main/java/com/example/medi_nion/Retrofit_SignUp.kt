@@ -3,20 +3,15 @@ package com.example.medi_nion
 //import com.example.medi_nion.interface1.SignUp_Request
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
-import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.graphics.Rect
-import android.graphics.drawable.Drawable.ConstantState
+import android.graphics.*
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.provider.SyncStateContract.Constants
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -40,12 +35,22 @@ import com.googlecode.tesseract.android.TessBaseAPI
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.opencv.android.BaseLoaderCallback
+import org.opencv.android.LoaderCallbackInterface
+import org.opencv.android.OpenCVLoader
+import org.opencv.android.Utils
+import org.opencv.core.MatOfPoint
+import org.opencv.core.MatOfPoint2f
+import org.opencv.core.Size
+import org.opencv.imgproc.Imgproc
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
 import java.lang.invoke.ConstantCallSite
 import java.lang.reflect.Type
 import java.util.regex.Pattern
+import kotlin.math.max
+import kotlin.math.sqrt
 
 
 class Retrofit_SignUp : AppCompatActivity() {
@@ -58,21 +63,27 @@ class Retrofit_SignUp : AppCompatActivity() {
     lateinit var storagePermission: ActivityResultLauncher<String>
     lateinit var cameraLauncher: ActivityResultLauncher<Uri>
 
-    lateinit var bitmap: Bitmap
     lateinit var idImgView: ImageView
     var photoUri: Uri? = null
+    lateinit var bitmap: Bitmap
 
     lateinit var tess: TessBaseAPI //Tesseract API 객체 생성
     var dataPath: String = "" //데이터 경로 변수 선언
     private var mCurrentPhotoPath: String? = null
     var photoFile: File? = null
-    val tempImage: String = "" //이미지 이름.
+    val tempImage: String = "" //이미지  OpenCVLoader.initDebug()이름.
+
+    init{
+        OpenCVLoader.initDebug()
+    }
 
     @SuppressLint("WrongThread", "MissingInflatedId", "LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
         //test
+
+        OpenCVLoader.initDebug()
 
         //키보드 숨기기
         val focusView: View? = currentFocus
@@ -85,6 +96,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val camera_permission_btn = findViewById<Button>(R.id.id_verify_btn)
         camera_permission_btn.setOnClickListener {
+            Log.d("0-09123","permission1")
             val cameraPermissionCheck = ContextCompat.checkSelfPermission(
                 this@Retrofit_SignUp,
                 android.Manifest.permission.CAMERA
@@ -96,61 +108,10 @@ class Retrofit_SignUp : AppCompatActivity() {
                     1000
                 )
             } else { //권한이 있는 경우
-                val REQUEST_IMAGE_CAPTURE = 1
-                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                    takePictureIntent.resolveActivity(packageManager)?.also {
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                    }
-                }
-
-                //cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+                Log.d("0-09123","permission2")
                 openCamera()
-                idImgView = findViewById(R.id.idImgView)
-                idImgView.setImageResource(0)
-                idImgView.visibility = View.VISIBLE
-                //if (it) {
-
-                    idImgView.setImageURI(photoUri)
-
-                    dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
-
-                    checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-                    checkFile(File(dataPath + "tessdata/"), "eng")
-
-                    val lang: String = "kor+eng"
-                    tess = TessBaseAPI() //api준비
-                    tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
-
-
-                    // OCR 동작 버튼
-                    lateinit var bitmap: Bitmap
-
-                    try {
-                        idImgView.setImageBitmap(bitmap)
-                        bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            ImageDecoder.decodeBitmap(
-                                ImageDecoder.createSource(
-                                    contentResolver,
-                                    photoUri!!
-                                )
-                            )
-                        } else {
-                            MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                    idImgView.setImageBitmap(bitmap)
-                    processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
-//              processImage(BitmapFactory.decodeResource(resources,R.drawable.sample_kor)) //이미지 가공후 텍스트뷰에 띄우기
-                  //}
-                //}
-
-                storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
             }
         }
-
 
 
         //프래그먼트일때는
@@ -287,7 +248,7 @@ class Retrofit_SignUp : AppCompatActivity() {
                         Request.Method.POST,
                         url_nicknamevalidate,
                         { response ->
-                            if(nickname_editText.isEmpty()) {
+                            if (nickname_editText.isEmpty()) {
                                 nickname_warning.setTextColor(Color.RED)
                                 nickname_warning.text = "닉네임을 입력해주세요."
                             }
@@ -343,7 +304,7 @@ class Retrofit_SignUp : AppCompatActivity() {
                         Request.Method.POST,
                         url_idvalidate,
                         { response ->
-                            if(id_editText.isEmpty()) {
+                            if (id_editText.isEmpty()) {
                                 id_warning.text = "아이디를 입력해주세요."
                                 id_warning.setTextColor(Color.RED)
                             }
@@ -431,9 +392,11 @@ class Retrofit_SignUp : AppCompatActivity() {
                     notDone_warning.visibility = View.INVISIBLE
                 }, 2000)
                 if (!validate) {
-                    Toast.makeText(baseContext,
+                    Toast.makeText(
+                        baseContext,
                         "중복된 아이디와 닉네임이 있는지 확인해주세요.",
-                        Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
             } else {
@@ -465,6 +428,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         cameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
+                Log.d("0-09123", "oepn Cmaera")
                 openCamera()
             } else {
                 Toast.makeText(baseContext, "권한을 승인해야 카메라를 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
@@ -478,40 +442,223 @@ class Retrofit_SignUp : AppCompatActivity() {
 
                 idImgView.setImageURI(photoUri)
 
-                dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
+                doOCR()
+//                if (!OpenCVLoader.initDebug()) {
+//                    Log.d(
+//                        "OpenCV",
+//                        "Internal OpenCV library not found. Using OpenCV Manager for initialization"
+//                    )
+//                    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback)
+//                } else {
+//                    Log.d("OpenCV", "OpenCV library found inside package. Using it!")
+//                    mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
+//                }
 
-                checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-                checkFile(File(dataPath + "tessdata/"), "eng")
 
-                val lang: String = "kor+eng"
-                tess = TessBaseAPI() //api준비
-                tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
-
-
-                // OCR 동작 버튼
-                lateinit var bitmap: Bitmap
-                try {
-                    bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        ImageDecoder.decodeBitmap(
-                            ImageDecoder.createSource(
-                                contentResolver,
-                                photoUri!!
-                            )
-                        )
-                    } else {
-                        MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                idImgView.setImageBitmap(bitmap)
-                processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
+//                idImgView.setImageBitmap(bitmap)
+//                processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
 //                processImage(BitmapFactory.decodeResource(resources,R.drawable.sample_kor)) //이미지 가공후 텍스트뷰에 띄우기
+
+
+
+
             }
         }
 
         storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+    }
+
+    private fun doOCR(){
+        try {
+            bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(
+                    ImageDecoder.createSource(
+                        contentResolver,
+                        photoUri!!
+                    )
+                )
+            } else {
+                MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        val mat = org.opencv.core.Mat()
+        Utils.bitmapToMat(bitmap, mat)
+
+        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY)
+        val graySrc = mat
+
+        //2.이진화
+        Log.d("tess-two", "이진화")
+        val binarySrc = org.opencv.core.Mat()
+        Imgproc.threshold(graySrc, binarySrc, 0.0, 255.0, Imgproc.THRESH_OTSU)
+
+        //3. 윤곽선 검출
+        // 윤곽선 찾기
+        Log.d("tess-two", "윤곽선")
+        val contours = ArrayList<MatOfPoint>()
+        val hierarchy = org.opencv.core.Mat()
+        Imgproc.findContours(
+            binarySrc,
+            contours,
+            hierarchy,
+            Imgproc.RETR_EXTERNAL,
+            Imgproc.CHAIN_APPROX_NONE
+        )
+
+        //3-1 가장 면적이 큰 윤곽선 검충 (검출하고자 하는 문서가 가장 큰 피사체)
+        // 가장 면적이 큰 윤곽선 찾기
+        var biggestContour: MatOfPoint? = null
+        var biggestContourArea: Double = 0.0
+        for (contour in contours) {
+            val area = Imgproc.contourArea(contour)
+            if (area > biggestContourArea) {
+                biggestContour = contour
+                biggestContourArea = area
+            }
+        }
+
+        if (biggestContour == null) {
+            throw IllegalArgumentException("No Contour")
+        }
+// 너무 작아도 안됨
+        if (biggestContourArea < 400) {
+            throw IllegalArgumentException("too small")
+        }
+
+        //3-2 근사화하기 (도형의 꼭짓점을 더 명확하게 찾기)
+        val candidate2f = MatOfPoint2f(*biggestContour.toArray())
+        val approxCandidate = MatOfPoint2f()
+        Imgproc.approxPolyDP(
+            candidate2f,
+            approxCandidate,
+            Imgproc.arcLength(candidate2f, true) * 0.02,
+            true
+        )
+
+        //3-3 사각형인지 판별 -> 신분증은 사각형이므로..
+        // 사각형 판별
+        if (approxCandidate.rows() != 4) {
+            throw java.lang.IllegalArgumentException("It's not rectangle")
+        }
+        // 컨벡스(볼록한 도형)인지 판별
+        if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
+            throw java.lang.IllegalArgumentException("It's not convex")
+        }
+
+        //4. 투시변환
+        // 좌상단부터 시계 반대 방향으로 정점을 정렬한다.
+        Log.d("tess-two", "투시")
+        val points = arrayListOf(
+            org.opencv.core.Point(approxCandidate.get(0, 0)[0],
+                approxCandidate.get(0, 0)[1]
+            ),
+            org.opencv.core.Point(approxCandidate.get(1, 0)[0],
+                approxCandidate.get(1, 0)[1]
+            ),
+            org.opencv.core.Point(approxCandidate.get(2, 0)[0],
+                approxCandidate.get(2, 0)[1]
+            ),
+            org.opencv.core.Point(approxCandidate.get(3, 0)[0],
+                approxCandidate.get(3, 0)[1]
+            ),
+        )
+        points.sortBy { it.x } // x좌표 기준으로 먼저 정렬
+
+        if (points[0].y > points[1].y) {
+            val temp = points[0]
+            points[0] = points[1]
+            points[1] = temp
+        }
+
+        if (points[2].y < points[3].y) {
+            val temp = points[2]
+            points[2] = points[3]
+            points[3] = temp
+        }
+        // 원본 영상 내 정점들
+        val srcQuad = MatOfPoint2f().apply { fromList(points) }
+
+        val maxSize = calculateMaxWidthHeight(
+            tl = points[0],
+            bl = points[1],
+            br = points[2],
+            tr = points[3]
+        )
+        val dw = maxSize.width
+        val dh = dw * maxSize.height/maxSize.width
+        val dstQuad = MatOfPoint2f(
+            org.opencv.core.Point(0.0, 0.0),
+            org.opencv.core.Point(0.0, dh),
+            org.opencv.core.Point(dw, dh),
+            org.opencv.core.Point(dw, 0.0)
+        )
+        // 투시변환 매트릭스 구하기
+        val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
+
+        // 투시변환 된 결과 영상 얻기
+        val dst = org.opencv.core.Mat()
+        Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
+
+        dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
+
+        checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+        checkFile(File(dataPath + "tessdata/"), "eng")
+
+        val lang: String = "kor+eng"
+        tess = TessBaseAPI() //api준비
+        tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
+
+
+        Log.d("tess-two", "ocr")
+        printOCRResult(applicationContext, mat)
+    }
+
+    private fun makeGray(bitmap : Bitmap) : org.opencv.core.Mat{
+        val mat = org.opencv.core.Mat()
+        Utils.bitmapToMat(bitmap, mat)
+
+        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY)
+
+        return mat
+
+//        val grayBitmap = bitmap.copy(bitmap.config, true)
+//        Utils.matToBitmap(mat, grayBitmap)
+//
+//        return grayBitmap
+    }
+
+    // 사각형 꼭짓점 정보로 사각형 최대 사이즈 구하기
+// 평면상 두 점 사이의 거리는 직각삼각형의 빗변길이 구하기와 동일
+    private fun calculateMaxWidthHeight(
+        tl:org.opencv.core.Point,
+        tr:org.opencv.core.Point,
+        br:org.opencv.core.Point,
+        bl:org.opencv.core.Point,
+    ): Size {
+        // Calculate width
+        val widthA = sqrt(((tl.x - tr.x) * (tl.x - tr.x) + (tl.y - tr.y) * (tl.y - tr.y)))
+        val widthB = sqrt(((bl.x - br.x) * (bl.x - br.x) + (bl.y - br.y) * (bl.y - br.y)))
+        val maxWidth = max(widthA, widthB)
+        // Calculate height
+        val heightA = sqrt(((tl.x - bl.x) * (tl.x - bl.x) + (tl.y - bl.y) * (tl.y - bl.y)))
+        val heightB = sqrt(((tr.x - br.x) * (tr.x - br.x) + (tr.y - br.y) * (tr.y - br.y)))
+        val maxHeight = max(heightA, heightB)
+        return Size(maxWidth, maxHeight)
+    }
+
+    fun printOCRResult(context: Context, src:org.opencv.core.Mat){
+        with(TessBaseAPI()){
+            val dst = org.opencv.core.Mat()
+            Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
+            val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
+            Utils.matToBitmap(dst, bitmap)
+            setImage(bitmap)
+            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
+        }
     }
 
 
@@ -530,13 +677,13 @@ class Retrofit_SignUp : AppCompatActivity() {
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
 
-        if(userDept.equals("내과 (심장내과, 혈액내과, 호흡기내과, 소화기내과 등)")) {
+        if (userDept.equals("내과 (심장내과, 혈액내과, 호흡기내과, 소화기내과 등)")) {
             userDept = "내과"
         } else if (userDept.equals("외과 (혈관외과 등)")) {
             userDept = "외과"
-        }else if (userDept.equals("신경과 (신경외과)")) {
+        } else if (userDept.equals("신경과 (신경외과)")) {
             userDept = "신경과"
-        }else if (userDept.equals("기타 (핵의학과, 진단검사의학과, 재활의학과 등)")) {
+        } else if (userDept.equals("기타 (핵의학과, 진단검사의학과, 재활의학과 등)")) {
             userDept = "기타"
         }
 
@@ -557,7 +704,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText, userGrade)
 
-        if(basicUserBtn.isChecked) {
+        if (basicUserBtn.isChecked) {
             if (call != null) {
                 call.clone()
                     ?.enqueue(object :
@@ -591,7 +738,8 @@ class Retrofit_SignUp : AppCompatActivity() {
                         response: Response<Data_SignUp_Request>
                     ) {
                         Log.d("retrofit2 success", response.toString())
-                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT)
+                            .show()
                     }
 
                     override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {

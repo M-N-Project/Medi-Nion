@@ -21,6 +21,7 @@ class FirstTimeActivity: AppCompatActivity() { //mainactivity, 여기서는 프�
 
         signBtn.setOnClickListener{
             var newIntent : Intent = Intent(this, Login::class.java);
+            newIntent.putExtra("first", "false")
             startActivity(newIntent);
         }
 

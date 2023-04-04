@@ -17,4 +17,8 @@
         name="external-files"
         path="." /> <!--Context.getExternalFilesDir() 외부 저장소-->
 
+    <external-path
+        name="my_images"
+        path="Android/data/com.example.medi_nion/files/Pictures" />
+
 </paths>

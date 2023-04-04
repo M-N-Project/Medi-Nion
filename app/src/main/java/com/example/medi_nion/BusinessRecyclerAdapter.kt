@@ -95,6 +95,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 view.businessMG_postImg3.setImageBitmap(bitmap)
             }
 
+
             val pos = absoluteAdapterPosition
             profileImg.setOnClickListener {
                 listener?.onProfileClick(itemView,item,pos)

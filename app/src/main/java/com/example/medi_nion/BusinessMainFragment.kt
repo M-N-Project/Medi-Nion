@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.CheckBox
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -46,6 +48,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var image3 = "" //비즈니스 채널 사진 3
     var isHeart = false // 좋아요 정보
     var isBookmark = false // 북마크 정보
+    var isSub = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,11 +61,13 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
     fun fetchData() {
         // url to post our data
-        var id = arguments?.getString("id").toString()
+        var appUser = arguments?.getString("id").toString()
         val urlBoard = "http://seonho.dothome.co.kr/BusinessBoardSub_list.php"
         val urlBookmark = "http://seonho.dothome.co.kr/BusinessBookmark_list.php"
         val urlLike = "http://seonho.dothome.co.kr/BusinessLike_list.php"
         val jsonArray: JSONArray
+        val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
+//        val urlBoard = "http://seonho.dothome.co.kr/Business.php"
 
         val request = Board_Request(
             Request.Method.POST,
@@ -85,6 +90,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                             image1 = item.getString("image1")
                             image2 = item.getString("image2")
                             image3 = item.getString("image3")
+
+                            val BusinessItem = BusinessBoardItem(num, writerId, channel_name, title, content, time, image1, image2, image3, isHeart, isBookmark)
 
                             val bookfetchrequest = Login_Request(
                                 Request.Method.POST,
@@ -195,7 +202,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                             )
                                                         },
                                                         hashMapOf(
-                                                            "id" to id,
+                                                            "id" to appUser,
                                                             "post_num" to data.post_num.toString(),
                                                             "flag" to (!data.isHeart).toString()
                                                         )
@@ -239,7 +246,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                             )
                                                         },
                                                         hashMapOf(
-                                                            "id" to id,
+                                                            "id" to appUser,
                                                             "post_num" to data.post_num.toString(),
                                                             "flag" to (!data.isBookm).toString()
                                                         )
@@ -258,7 +265,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                             )
                                         },
                                         hashMapOf(
-                                            "id" to id,
+                                            "id" to appUser,
                                             "post_num" to num.toString()
                                         )
                                     )
@@ -272,7 +279,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                     )
                                 },
                                 hashMapOf(
-                                    "id" to id,
+                                    "id" to appUser,
                                     "post_num" to num.toString()
                                 )
                             )
@@ -296,7 +303,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                 )
             },
             hashMapOf(
-                "id" to id
+                "id" to appUser
             )
         )
         val queue = Volley.newRequestQueue(context)
