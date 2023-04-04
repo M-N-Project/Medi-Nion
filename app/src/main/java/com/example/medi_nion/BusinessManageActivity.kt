@@ -279,6 +279,8 @@ class BusinessManageActivity : AppCompatActivity() {
         val urlBusinessProfileInsert = "http://seonho.dothome.co.kr/BusinessProfileInsert.php"
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdate.php"
 
+        val intent: Intent = Intent(applicationContext, ProfileFragment::class.java)
+
         Log.d("FIRst??", isFirst.toString())
 
         //처음 생성하는 것 -> BusinessProfile에 삽입
@@ -291,14 +293,21 @@ class BusinessManageActivity : AppCompatActivity() {
                 { response ->
                     Log.d("bussinesssssss", response.toString())
                     if(!response.equals("business profile insert fail")) {
-
                         Toast.makeText(this, "비즈니스 채널 프로필 생성 완료", Toast.LENGTH_SHORT).show()
+
+                        intent.putExtra("id", id)
+                        intent.putExtra("channel_name", channel_name)
+
+                        startActivity(intent)
+
+
                     } else {
                         Toast.makeText(this, "비즈니스 채널 프로필 생성 실패", Toast.LENGTH_SHORT).show()
                     }
 
                     loadingText.visibility = View.GONE
                     progressBar.visibility = View.GONE
+
 
                 }, { Log.d("business profile failed", "error......${error(this)}") },
                 hashMapOf(
