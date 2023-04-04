@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_home.*
@@ -91,6 +92,7 @@ class BusinessManageActivity : AppCompatActivity() {
                 var intent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
                 intent.putExtra("id", id)
                 intent.putExtra("chanName", editName.text.toString())
+                intent.putExtra("chanIntro", editIntro.text.toString())
                 startActivity(intent)
             }
 
@@ -99,7 +101,6 @@ class BusinessManageActivity : AppCompatActivity() {
 
         saveBtn.setOnClickListener {
             requestBusinessProfile()
-            Toast.makeText(this, "비즈니스 채널 프로필 업데이트 완료", Toast.LENGTH_SHORT).show()
         }
 
         //배경사진 수정 버튼
@@ -146,13 +147,17 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val editName = findViewById<EditText>(R.id.profileName)
         val editIntro = findViewById<EditText>(R.id.profileDesc)
+        val editProfile = findViewById<ImageView>(R.id.profileImg)
+        val editBackImg = findViewById<ImageView>(R.id.backgroundImg)
+
+        Toast.makeText(this, "로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
 
         val request = Board_Request(
             Request.Method.POST,
             url,
             { response ->
                 Log.d("0i234",response)
-                if(response != "business profile fail"){
+                if(!response.equals("business profile fail")){
                     val jsonArray = JSONArray(response)
 
                     for (i in jsonArray.length()-1  downTo  0) {
@@ -160,6 +165,10 @@ class BusinessManageActivity : AppCompatActivity() {
 
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
+                        val image_background = item.getString("Channel_Back_Img")
+                        val image_profile = item.getString("Channel_Profile_Img")
+
+                        Log.d("4444", "$channel_name, $channel_desc, $image_background, $image_profile")
 
                         if(channel_name == null)
                             editName.setHint("채널명")
@@ -169,6 +178,17 @@ class BusinessManageActivity : AppCompatActivity() {
                             editIntro.setHint("채널에 대한 간단한 소개를 작성해주세요.")
                         else editIntro.setText(channel_desc)
 
+                        if(image_profile!=null){
+                            val bitmap: Bitmap? = StringToBitmaps(image_profile)
+                            editProfile.setImageBitmap(bitmap)
+                        }
+                        if(image_background!=null) {
+                            val bitmap: Bitmap? = StringToBitmaps(image_background)
+                            editBackImg.setImageBitmap(bitmap)
+                        }
+
+
+
                     }
                 }
 
@@ -176,6 +196,11 @@ class BusinessManageActivity : AppCompatActivity() {
             hashMapOf(
                 "id" to id
             )
+        )
+        request.retryPolicy = DefaultRetryPolicy(
+            0,
+            -1,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
@@ -262,10 +287,10 @@ class BusinessManageActivity : AppCompatActivity() {
         var id = intent.getStringExtra("id")!!
         var isFirst = intent.getBooleanExtra("isFirst", true)
 
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editIntro = findViewById<EditText>(R.id.profileDesc)
-//        val editProfile = findViewById<ImageView>(R.id.profileImg)
-//        val editBackImg = findViewById<ImageView>(R.id.backgroundImg)
+        val channel_name = findViewById<EditText>(R.id.profileName).text.toString()
+        val channel_desc = findViewById<EditText>(R.id.profileDesc).text.toString()
+        val editProfile = findViewById<ImageView>(R.id.profileImg)
+        val editBackImg = findViewById<ImageView>(R.id.backgroundImg)
 
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)
@@ -273,52 +298,74 @@ class BusinessManageActivity : AppCompatActivity() {
         val urlBusinessProfileInsert = "http://seonho.dothome.co.kr/BusinessProfileInsert.php"
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdate.php"
 
+        Log.d("FIRst??", isFirst.toString())
+
         //처음 생성하는 것 -> BusinessProfile에 삽입
         if(isFirst){
+            loadingText.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
             val request = Login_Request(
                 Request.Method.POST,
                 urlBusinessProfileInsert,
                 { response ->
-                    Log.d("09123", response)
+                    Log.d("bussinesssssss", response.toString())
+                    if(!response.equals("business profile insert fail")) {
 
+                        Toast.makeText(this, "비즈니스 채널 프로필 생성 완료", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "비즈니스 채널 프로필 생성 실패", Toast.LENGTH_SHORT).show()
+                    }
 
-                }, { Log.d("business profile failed", "error......${this.let { it1 -> error(it1) }}") },
+                    loadingText.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+
+                }, { Log.d("business profile failed", "error......${error(this)}") },
                 hashMapOf(
                     "id" to id,
-                    "channel_name" to editName.text.toString(),
-                    "channel_desc" to editIntro.text.toString(),
-                    "image_background" to image_background,
-                    "image_profile" to image_profile
+                    "Channel_Name" to channel_name,
+                    "Channel_Message" to channel_desc,
+                    "Channel_Back_Img" to image_background,
+                    "Channel_Profile_Img" to image_profile
                 )
+            )
+            request.retryPolicy = DefaultRetryPolicy(
+                0,
+                -1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
             )
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
+
         }
         //원래 있던 프로필 업데이트 -> BusinessProfile update
         else{
-            val request = Board_Request(
+            loadingText.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
+            val request = Login_Request(
                 Request.Method.POST,
                 urlBusinessProfileUpdate,
                 { response ->
-                    Log.d("09123", response)
-
+                    Log.d("bussine123", response.toString())
+                    if(!response.equals("business Chan update fail")) {
+                        Toast.makeText(this, "비즈니스 채널 프로필 업데이트 완료", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "비즈니스 채널 프로필 업데이트 실패", Toast.LENGTH_SHORT).show()
+                    }
                     loadingText.visibility = View.GONE
                     progressBar.visibility = View.GONE
 
                 }, { Log.d("business profile failed", "error......${this.let { it1 -> error(it1) }}") },
                 hashMapOf(
                     "id" to id,
-                    "channel_name" to editName.text.toString(),
-                    "channel_desc" to editIntro.text.toString(),
-                    "image_background" to image_background,
-                    "image_profile" to image_profile
+                    "Channel_Name" to channel_name,
+                    "Channel_Message" to channel_desc,
+                    "Channel_Back_Img" to image_background,
+                    "Channel_Profile_Img" to image_profile
                 )
             )
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
 
-            loadingText.visibility = View.VISIBLE
-            progressBar.visibility = View.VISIBLE
         }
     }
 
@@ -338,6 +385,8 @@ class BusinessManageActivity : AppCompatActivity() {
             if(requestCode == GALLERY) {
                 val currentImgUri : Uri? = data?.data
 
+                Log.d("DNFKDS", editWhichOne.toString())
+
                 if(editWhichOne==0) {
                     try {
                         var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
@@ -351,13 +400,14 @@ class BusinessManageActivity : AppCompatActivity() {
                         bitmap = resize(bitmap)
                         backgroundImg.setImageBitmap(bitmap)
                         image_background = BitMapToString(bitmap)
+                        Log.d("image_Bakc", image_background)
 
                     } catch (e:Exception) {
                         e.printStackTrace()
                     }
                 }
 
-                else if(editWhichOne==1) {
+                else {
                     try {
                         var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
                         profileImg.setImageBitmap(bitmap)
@@ -368,8 +418,9 @@ class BusinessManageActivity : AppCompatActivity() {
                         bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
                         bitmap = resize(bitmap)
-
+                        profileImg.setImageBitmap(bitmap)
                         image_profile = BitMapToString(bitmap)
+                        Log.d("image_Profiele", image_profile)
                     } catch (e:Exception) {
                         e.printStackTrace()
                     }
@@ -404,7 +455,7 @@ class BusinessManageActivity : AppCompatActivity() {
         var bitmap_width : Int? = bitmap?.width
         var bitmap_height : Int? = bitmap?.height
 
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, bitmap_width!!, bitmap_height!!, true)
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
         Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap
     }
