@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.database.Cursor
 import android.graphics.*
-import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,19 +19,17 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Image
+import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Request
+import com.android.volley.*
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.android.synthetic.main.business_board_items.*
-import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
-import kotlinx.android.synthetic.main.business_manage_create.*
-import kotlinx.android.synthetic.main.business_writing.*
+import com.example.medi_nion.VolleyMultipartRequest2.DataPart
+import kotlinx.android.synthetic.main.business_home.*
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
@@ -52,7 +50,12 @@ class BusinessManageActivity : AppCompatActivity() {
     // RecyclerView.adapter에 지정할 Adapter
     private lateinit var listAdapter: BusinessManageRecyclerAdapter
 
+    var profileImgPath : String = ""
+    private var resultLauncher //콜백함수
+            : ActivityResultLauncher<Intent>? = null
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,13 +68,16 @@ class BusinessManageActivity : AppCompatActivity() {
         fetchProfile()
         fetchBusinessPost()
 
+        findViewById<RadioGroup>(R.id.businessSetting_RadioGroup).bringToFront()
+
         val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
         val saveBtn = findViewById<Button>(R.id.save_btn)
         val subscribe_count = findViewById<EditText>(R.id.subscribe_count)
 
+        val editProfile = findViewById<ImageView>(R.id.profileImg)
         val editName = findViewById<EditText>(R.id.profileName)
-        val editIntro = findViewById<EditText>(R.id.profileDesc)
+        val editDesc = findViewById<EditText>(R.id.profileDesc)
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -102,27 +108,63 @@ class BusinessManageActivity : AppCompatActivity() {
             requestBusinessProfile()
         }
 
+        editName.isEnabled = false
+        editDesc.isEnabled = false
 
-//        editProfileBtn.setOnClickListener{
-//            openGallery()
-//        }
+        val settingBtn = findViewById<Button>(R.id.businessSettingBtn)
+        settingBtn.setOnClickListener{
+            val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
 
-        editName.setOnClickListener{
-            editName.setHint("")
-        }
-//        editNameBtn.setOnClickListener{
-//            inputMethodManager.showSoftInput(editName, 0)
-//            editName.setHint("")
-//        }
+            val editProfile_RadioBtn = findViewById<RadioButton>(R.id.edit_profile)
+            val editName_RadioBtn = findViewById<RadioButton>(R.id.edit_chanName)
+            val editDesc_RadioBtn = findViewById<RadioButton>(R.id.edit_chanDesc)
 
-        editIntro.setOnClickListener{
-            editIntro.setHint("")
+            setting_RadioGroup.bringToFront()
+
+            if(setting_RadioGroup.visibility == View.VISIBLE) setting_RadioGroup.visibility = View.GONE
+            else setting_RadioGroup.visibility = View.VISIBLE
+
+            editProfile_RadioBtn.setOnClickListener{
+//                openGallery()
+                showFileChooser()
+            }
+
+            editName_RadioBtn.setOnClickListener{
+                Log.d("92123", "clickName")
+                setting_RadioGroup.visibility = View.GONE
+                editName.isEnabled = true
+                editName.setFocusableInTouchMode(true);
+                editName.setFocusable(true);
+                editName.requestFocus();
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT)
+                editName.setSelection(editName.length()); //커서를 끝에 위치!
+
+                editName_RadioBtn.isSelected = false
+                editName_RadioBtn.isChecked = false
+            }
+
+            editDesc_RadioBtn.setOnClickListener{
+                Log.d("92123", "clickDesc")
+                setting_RadioGroup.visibility = View.GONE
+                editDesc.isEnabled = true
+                editDesc.setFocusableInTouchMode(true);
+                editDesc.setFocusable(true);
+                editDesc.requestFocus();
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editDesc, InputMethodManager.SHOW_IMPLICIT)
+                editDesc.setSelection(editDesc.length()); //커서를 끝에 위치!
+
+                editDesc_RadioBtn.isSelected = false
+                editDesc_RadioBtn.isChecked = false
+            }
         }
 
         if(image_profile!=null){
             val bitmap: Bitmap? = StringToBitmaps(image_profile)
             profileImg.setImageBitmap(bitmap)
         }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -132,7 +174,7 @@ class BusinessManageActivity : AppCompatActivity() {
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
         val editName = findViewById<EditText>(R.id.profileName)
-        val editIntro = findViewById<EditText>(R.id.profileDesc)
+        val editDesc = findViewById<EditText>(R.id.profileDesc)
         val editProfile = findViewById<ImageView>(R.id.profileImg)
         val subscribe_text = findViewById<EditText>(R.id.subscribe_count)
 
@@ -161,8 +203,8 @@ class BusinessManageActivity : AppCompatActivity() {
                         else editName.setText(channel_name)
 
                         if(channel_desc == null)
-                            editIntro.setHint("채널에 대한 간단한 소개를 작성해주세요.")
-                        else editIntro.setText(channel_desc)
+                            editDesc.setHint("채널에 대한 간단한 소개를 작성해주세요.")
+                        else editDesc.setText(channel_desc)
 
                         if(image_profile!=null){
                             val bitmap: Bitmap? = StringToBitmaps(image_profile)
@@ -283,6 +325,16 @@ class BusinessManageActivity : AppCompatActivity() {
 
         Log.d("FIRst??", isFirst.toString())
 
+        var image_profile1 : String = ""
+        var image_profile2 : String = ""
+        if(image_profile != "null"){
+            image_profile1 = image_profile.substring(0,image_profile.length/2+1)
+            image_profile2 = image_profile.substring(image_profile.length/2+1,image_profile.length)
+        }
+
+        Log.d("skfasd", image_profile)
+
+
         //처음 생성하는 것 -> BusinessProfile에 삽입
         if(isFirst){
             loadingText.visibility = View.VISIBLE
@@ -308,6 +360,8 @@ class BusinessManageActivity : AppCompatActivity() {
                     loadingText.visibility = View.GONE
                     progressBar.visibility = View.GONE
 
+                    val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
+                    setting_RadioGroup.visibility = View.GONE
 
                 }, { Log.d("business profile failed", "error......${error(this)}") },
                 hashMapOf(
@@ -363,6 +417,13 @@ class BusinessManageActivity : AppCompatActivity() {
         startActivityForResult(intent, GALLERY)
     }
 
+    private fun showFileChooser() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY)
+    }
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
@@ -371,7 +432,7 @@ class BusinessManageActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if(requestCode == GALLERY) {
                 val currentImgUri : Uri? = data?.data
-
+                profileImgPath = currentImgUri?.let { getRealPathFromUri(it) }.toString()
 
                 try {
                     var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
@@ -383,9 +444,12 @@ class BusinessManageActivity : AppCompatActivity() {
                     bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
                     bitmap = resize(bitmap)
+                    uploadBitmap(bitmap);
                     profileImg.setImageBitmap(bitmap)
                     image_profile = BitMapToString(bitmap)
-                    Log.d("image_Profiele", image_profile)
+
+                    val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
+                    setting_RadioGroup.visibility = View.GONE
                 } catch (e:Exception) {
                     e.printStackTrace()
                 }
@@ -394,6 +458,19 @@ class BusinessManageActivity : AppCompatActivity() {
                 Log.d("activity result", "wrong")
             }
         }
+    }
+
+    private fun uploadBitmap(bitmap: Bitmap) {
+
+
+
+    }
+
+
+    fun getFileDataFromDrawable(bitmap: Bitmap): ByteArray? {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
     }
 
     fun roundAll(iv: ImageView, curveRadius : Float)  : ImageView {
@@ -411,6 +488,18 @@ class BusinessManageActivity : AppCompatActivity() {
             iv.clipToOutline = true
         }
         return iv
+    }
+
+    //이미지 주소를 절대경로로 바꿔주는 메소드
+    fun getRealPathFromUri(uri: Uri): String {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val loader = CursorLoader(this, uri, proj, null, null, null)
+        val cursor: Cursor = loader.loadInBackground()!!
+        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val result: String = cursor.getString(column_index)
+        cursor.close()
+        return result
     }
 
     private fun resize(bitmap: Bitmap): Bitmap? {
