@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">>
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/linearLayout8"
@@ -163,43 +163,30 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:orientation="horizontal">
 
-                <android.widget.Button
-                    android:id="@+id/scrap_btn"
-                    android:layout_width="185dp"
-                    android:layout_height="38dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="16dp"
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:background="@drawable/business_round_button"
-                    android:drawableLeft="@drawable/bookmark"
-                    android:text="북마크바"
-                    android:textColor="#000000"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewMore"
+                    android:button="@null"
+                    android:drawableStart="@drawable/business_like_checkbox"
+                    android:text=""
                     tools:ignore="TouchTargetSizeCheck" />
 
-                <android.widget.Button
-                    android:id="@+id/scrap_btn2"
-                    android:layout_width="185dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/business_round_button"
-                    android:drawableLeft="@drawable/like"
-                    android:text="좋아요"
-                    android:textColor="#000000"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viewMore"
+                    android:button="@null"
+                    android:drawableStart="@drawable/business_bookmark_checkbox"
+                    android:text=""
                     tools:ignore="TouchTargetSizeCheck" />
+
             </LinearLayout>
         </LinearLayout>
 

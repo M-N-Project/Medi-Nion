@@ -4,14 +4,18 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.Image
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
 class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
@@ -19,6 +23,8 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
 
     interface OnItemClickListener{
         fun onProfileClick(v:View, data: BusinessBoardItem, pos : Int)
+        fun onItemHeart(v:View, data: BusinessBoardItem, pos: Int)
+        fun onItemBook(v:View, data: BusinessBoardItem, pos: Int)
     }
     private var listener : OnItemClickListener? = null
 
@@ -54,6 +60,9 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
         private var view: View = v
         private var profileImg = v.findViewById<ImageView>(R.id.profileImg2)
 
+        private var bookmark = v.findViewById<CheckBox>(R.id.checkBox)
+        private var heart = v.findViewById<CheckBox>(R.id.checkBox2)
+
 
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
@@ -63,6 +72,9 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
             view.time.text = item.time
 //            view.profileImg2.setImageDrawable(item.profileImg)
             view.content.text = item.content
+            bookmark.isChecked = item.isBookm
+            heart.isChecked = item.isHeart
+
 
             if(item.image1 != "null"){
                 val bitmap: Bitmap? = StringToBitmaps(item.image1)
@@ -88,6 +100,14 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 listener?.onProfileClick(itemView,item,pos)
             }
 
+            if(pos!= RecyclerView.NO_POSITION) {
+                bookmark.setOnClickListener {
+                    listener?.onItemBook(itemView,item,pos)
+                }
+                heart.setOnClickListener{
+                    listener?.onItemHeart(itemView,item,pos)
+                }
+            }
 
 
 //            view.scrap_btn.text = item.scrap.toString()

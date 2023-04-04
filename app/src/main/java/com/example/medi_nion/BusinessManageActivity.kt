@@ -207,7 +207,7 @@ class BusinessManageActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
-                    val BusinessItem = BusinessBoardItem(id, channel_name, title, content, time, image1, image2, image3)
+                    val BusinessItem = BusinessBoardItem(num, id, channel_name, title, content, time, image1, image2, image3, false, false)
 
                     items.add(BusinessItem)
                     all_items.add(BusinessItem)

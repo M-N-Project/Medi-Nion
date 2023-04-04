@@ -226,6 +226,7 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Heart_list.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
         var id = intent?.getStringExtra("id").toString()
+        val board = intent?.getStringExtra("board").toString()
 
         val Like_Btn = findViewById<CheckBox>(R.id.imageView_like2)
         val Like_count = findViewById<TextView>(R.id.textView_likecount2)
@@ -259,6 +260,7 @@ class BoardDetail : AppCompatActivity() {
 
             }, { Log.d("like Failed", "error......${error(applicationContext)}") },
             hashMapOf(
+                "board" to board,
                 "post_num" to post_num
             )
         )
@@ -1047,6 +1049,7 @@ class BoardDetail : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/Bookmark_list.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
         var id = intent?.getStringExtra("id").toString()
+        val board = intent?.getStringExtra("board").toString()
 
         val Book_Btn = findViewById<CheckBox>(R.id.checkbox_bookmark2)
         val Book_count = findViewById<TextView>(R.id.textView_bookmarkcount2)
@@ -1077,6 +1080,7 @@ class BoardDetail : AppCompatActivity() {
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
             hashMapOf(
+                "board" to board,
                 "post_num" to post_num
             )
         )
