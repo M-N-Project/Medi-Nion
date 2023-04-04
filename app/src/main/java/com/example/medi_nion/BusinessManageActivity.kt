@@ -38,9 +38,7 @@ import java.io.ByteArrayOutputStream
 class BusinessManageActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
      private val GALLERY = 1
-    var image_background : String = "null"
     var image_profile : String = "null"
-    var editWhichOne = 0 //0은 background, 1은 profile
 
     private var haveChan = false
     var items =ArrayList<BusinessBoardItem>()
@@ -103,15 +101,9 @@ class BusinessManageActivity : AppCompatActivity() {
             requestBusinessProfile()
         }
 
-        //배경사진 수정 버튼
-        editBackgroundBtn.setOnClickListener{
-            openGallery()
-            editWhichOne = 0
-        }
 
         editProfileBtn.setOnClickListener{
             openGallery()
-            editWhichOne = 1
         }
 
         editName.setOnClickListener{
@@ -133,10 +125,6 @@ class BusinessManageActivity : AppCompatActivity() {
         if(image_profile!=null){
             val bitmap: Bitmap? = StringToBitmaps(image_profile)
             profileImg.setImageBitmap(bitmap)
-        }
-        if(image_background!=null) {
-            val bitmap: Bitmap? = StringToBitmaps(image_background)
-            backgroundImg.setImageBitmap(bitmap)
         }
     }
 
@@ -289,8 +277,6 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val channel_name = findViewById<EditText>(R.id.profileName).text.toString()
         val channel_desc = findViewById<EditText>(R.id.profileDesc).text.toString()
-        val editProfile = findViewById<ImageView>(R.id.profileImg)
-        val editBackImg = findViewById<ImageView>(R.id.backgroundImg)
 
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)
@@ -324,7 +310,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     "id" to id,
                     "Channel_Name" to channel_name,
                     "Channel_Message" to channel_desc,
-                    "Channel_Back_Img" to image_background,
                     "Channel_Profile_Img" to image_profile
                 )
             )
@@ -359,7 +344,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     "id" to id,
                     "Channel_Name" to channel_name,
                     "Channel_Message" to channel_desc,
-                    "Channel_Back_Img" to image_background,
                     "Channel_Profile_Img" to image_profile
                 )
             )
@@ -385,45 +369,22 @@ class BusinessManageActivity : AppCompatActivity() {
             if(requestCode == GALLERY) {
                 val currentImgUri : Uri? = data?.data
 
-                Log.d("DNFKDS", editWhichOne.toString())
 
-                if(editWhichOne==0) {
-                    try {
-                        var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
-                        backgroundImg.setImageBitmap(bitmap)
+                try {
+                    var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+                    profileImg.setImageBitmap(bitmap)
+                    roundAll(profileImg, 70.0f)
 
-                        var source: ImageDecoder.Source? =
-                            currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
-                        bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
+                    var source: ImageDecoder.Source? =
+                        currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
+                    bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
 
-
-                        bitmap = resize(bitmap)
-                        backgroundImg.setImageBitmap(bitmap)
-                        image_background = BitMapToString(bitmap)
-                        Log.d("image_Bakc", image_background)
-
-                    } catch (e:Exception) {
-                        e.printStackTrace()
-                    }
-                }
-
-                else {
-                    try {
-                        var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
-                        profileImg.setImageBitmap(bitmap)
-                        roundAll(profileImg, 70.0f)
-
-                        var source: ImageDecoder.Source? =
-                            currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
-                        bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-
-                        bitmap = resize(bitmap)
-                        profileImg.setImageBitmap(bitmap)
-                        image_profile = BitMapToString(bitmap)
-                        Log.d("image_Profiele", image_profile)
-                    } catch (e:Exception) {
-                        e.printStackTrace()
-                    }
+                    bitmap = resize(bitmap)
+                    profileImg.setImageBitmap(bitmap)
+                    image_profile = BitMapToString(bitmap)
+                    Log.d("image_Profiele", image_profile)
+                } catch (e:Exception) {
+                    e.printStackTrace()
                 }
 
             } else {
