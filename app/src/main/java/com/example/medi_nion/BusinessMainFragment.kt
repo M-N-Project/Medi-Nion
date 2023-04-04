@@ -78,46 +78,46 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         val jsonArray = JSONArray(response)
                         items.clear()
                         all_items.clear()
+
                         for (i in jsonArray.length() - 1 downTo 0) {
                             val item = jsonArray.getJSONObject(i)
 
-                            num = item.getInt("num")
-                            writerId = item.getString("id")
-                            channel_name = item.getString("channel_name")
-                            title = item.getString("title")
-                            content = item.getString("content")
-                            time = item.getString("time")
-                            image1 = item.getString("image1")
-                            image2 = item.getString("image2")
-                            image3 = item.getString("image3")
-
-                            val BusinessItem = BusinessBoardItem(num, writerId, channel_name, title, content, time, image1, image2, image3, isHeart, isBookmark)
+                            val num = item.getInt("num")
+                            val writerId = item.getString("id")
+                            val channel_name = item.getString("channel_name")
+                            val title = item.getString("title")
+                            val content = item.getString("content")
+                            val time = item.getString("time")
+                            val image1 = item.getString("image1")
+                            val image2 = item.getString("image2")
+                            val image3 = item.getString("image3")
 
                             val bookfetchrequest = Login_Request(
                                 Request.Method.POST,
                                 urlBookmark,
-                                { response ->
-                                    Log.d("Bookmark fetch", response)
-                                    if (response.equals("Success Bookmark")) {
+                                { responseBookmark ->
+                                    Log.d("Bookmark fetch", responseBookmark)
+                                    if (responseBookmark.equals("Success Bookmark")) {
                                         isBookmark = true
                                         Log.d("bookrequest", "success Bookmark")
-                                    } else if (response.equals("No Bookmark")) {
+                                    } else if (responseBookmark.equals("No Bookmark")) {
                                         isBookmark = false
                                         Log.d("bookrequest", "no bookmark")
                                     }
                                     val likerequest = Login_Request(
                                         Request.Method.POST,
                                         urlLike,
-                                        { response ->
-                                            Log.d("Like fetch", response)
-                                            if (response.equals("Success Heart")) {
+                                        { responseLike ->
+                                            Log.d("Like fetch", responseLike)
+                                            if (responseLike.equals("Success Heart")) {
                                                 Log.d("likerequest", "success heart")
                                                 isHeart = true
-                                            } else if (response.equals("No Heart")) {
+                                            } else if (responseLike.equals("No Heart")) {
                                                 isHeart = false
                                                 Log.d("likerequest", "no heart")
                                             }
 
+                                            Log.d("9012312", num.toString())
                                             val BusinessItem = BusinessBoardItem(
                                                 num,
                                                 writerId,
