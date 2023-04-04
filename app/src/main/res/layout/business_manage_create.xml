@@ -180,7 +180,7 @@
                     android:layout_weight="1">
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/channelPlusBtn"
                         android:layout_width="20dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"

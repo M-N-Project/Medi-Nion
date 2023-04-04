@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/noBusinessPostTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="200dp"
+        android:layout_weight="2"
+        android:text="내가 작성한 비즈니스 채널 글이 없습니다."
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout7"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout7"
+        android:visibility="gone"/>
+
+    <android.widget.ProgressBar
+        android:id="@+id/progressbarBusiness"
+        android:layout_width="2dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:indeterminate="false"
+        android:max="100"
+        android:progressBackgroundTint="#FFFFFF"
+        android:progressDrawable="@drawable/circle_progressbar"
+        android:progressTint="#edbf41"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/loading_textView_business"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="비즈니스 채널 업로드 중..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressbarBusiness"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/businessChanTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="10"
+                android:text="00님의 비즈니스 채널"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
+        <!--    <ImageView-->
+        <!--        android:id="@+id/backgroundImg"-->
+        <!--        android:layout_width="413dp"-->
+        <!--        android:layout_height="200dp"-->
+        <!--        android:layout_marginTop="8dp"-->
+        <!--        android:scaleType="center"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        app:layout_constraintTop_toBottomOf="@+id/businessChanTitle"-->
+        <!--        app:srcCompat="@color/business_background" />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:orientation="vertical">
+
+            <!--            <androidx.cardview.widget.CardView-->
+            <!--                android:id="@+id/cardview_member"-->
+            <!--                android:layout_width="80dp"-->
+            <!--                android:layout_height="80dp"-->
+            <!--                android:elevation="6dp"-->
+            <!--                app:cardCornerRadius="100dp"-->
+            <!--                app:layout_constraintBottom_toTopOf="@+id/backgroundImg"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="0.498"-->
+            <!--                app:layout_constraintStart_toStartOf="parent">-->
+
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/profileImg"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent"-->
+            <!--                    app:srcCompat="@drawable/logo" />-->
+
+            <!--            </androidx.cardview.widget.CardView>-->
+            <ImageView
+                android:id="@+id/profileImg"
+                android:layout_width="130dp"
+                android:layout_height="117dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/business_profile"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/profileName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/logo" />
+
+            <android.widget.CheckBox
+                android:id="@+id/channelPlusBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="24dp"
+                android:button="@null"
+                android:drawableStart="@drawable/subscribe_checkbox"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/profileImg"
+                app:layout_constraintStart_toEndOf="@+id/profileImg"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="#C5EFE1"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/profileDesc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/profileDesc"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:background="#30C5EFE1"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="TextContrastCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#B8B8B8" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/myBusinessPostScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="312dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profileDesc">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@id/BusinessBoardRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/business_item_recycler" />
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

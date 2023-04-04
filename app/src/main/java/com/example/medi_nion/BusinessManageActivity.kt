@@ -131,7 +131,6 @@ class BusinessManageActivity : AppCompatActivity() {
         val editName = findViewById<EditText>(R.id.profileName)
         val editIntro = findViewById<EditText>(R.id.profileDesc)
         val editProfile = findViewById<ImageView>(R.id.profileImg)
-        val editBackImg = findViewById<ImageView>(R.id.backgroundImg)
 
         Toast.makeText(this, "로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
 
