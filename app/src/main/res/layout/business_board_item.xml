@@ -163,7 +163,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -183,8 +183,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:button="@null"
-                    android:text=""
                     android:drawableStart="@drawable/business_bookmark_checkbox"
+                    android:text=""
                     tools:ignore="TouchTargetSizeCheck" />
 
             </LinearLayout>
