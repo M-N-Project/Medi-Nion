@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
+import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -126,6 +128,15 @@ class BusinessManageActivity : AppCompatActivity() {
             inputMethodManager.showSoftInput(editIntro, 0)
             editIntro.setHint("")
         }
+
+        if(image_profile!=null){
+            val bitmap: Bitmap? = StringToBitmaps(image_profile)
+            profileImg.setImageBitmap(bitmap)
+        }
+        if(image_background!=null) {
+            val bitmap: Bitmap? = StringToBitmaps(image_background)
+            backgroundImg.setImageBitmap(bitmap)
+        }
     }
 
     fun fetchProfile(){
@@ -227,6 +238,8 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val editName = findViewById<EditText>(R.id.profileName)
         val editIntro = findViewById<EditText>(R.id.profileDesc)
+//        val editProfile = findViewById<ImageView>(R.id.profileImg)
+//        val editBackImg = findViewById<ImageView>(R.id.backgroundImg)
 
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)
@@ -247,15 +260,13 @@ class BusinessManageActivity : AppCompatActivity() {
                 hashMapOf(
                     "id" to id,
                     "channel_name" to editName.text.toString(),
-                    "channel_desc" to editIntro.text.toString()
-//                    "image_background" to image_background,
-//                    "image_profile" to image_profile
+                    "channel_desc" to editIntro.text.toString(),
+                    "image_background" to image_background,
+                    "image_profile" to image_profile
                 )
             )
             val queue = Volley.newRequestQueue(this)
             queue.add(request)
-
-
         }
         //원래 있던 프로필 업데이트 -> BusinessProfile update
         else{
@@ -283,8 +294,6 @@ class BusinessManageActivity : AppCompatActivity() {
             loadingText.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
         }
-
-
     }
 
     private fun openGallery() {
@@ -294,9 +303,11 @@ class BusinessManageActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
 
+        var backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
+        var profileImg = findViewById<ImageView>(R.id.profileImg)
         if (resultCode == Activity.RESULT_OK) {
             if(requestCode == GALLERY) {
                 val currentImgUri : Uri? = data?.data
@@ -312,7 +323,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
 
                         bitmap = resize(bitmap)
-
+                        backgroundImg.setImageBitmap(bitmap)
                         image_background = BitMapToString(bitmap)
 
                     } catch (e:Exception) {
@@ -329,7 +340,6 @@ class BusinessManageActivity : AppCompatActivity() {
                         var source: ImageDecoder.Source? =
                             currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
                         bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-
 
                         bitmap = resize(bitmap)
 

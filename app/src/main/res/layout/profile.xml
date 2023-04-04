@@ -56,7 +56,7 @@
                         android:text="나의 활동"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -95,7 +95,7 @@
                             android:layout_weight="1"
                             android:text="내가 쓴 글"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -125,7 +125,7 @@
                             android:layout_weight="1"
                             android:text="내가 스크랩한 글"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -175,7 +175,7 @@
                         android:text="비즈니스 채널 관리"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -213,7 +213,7 @@
                             android:layout_weight="1"
                             android:text="내가 구독한 비즈니스 채널"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -243,7 +243,7 @@
                             android:layout_weight="1"
                             android:text="비즈니스 프로필 관리"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -294,7 +294,7 @@
                         android:text="어플 설정"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -332,7 +332,7 @@
                             android:layout_weight="1"
                             android:text="알림 설정"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -362,7 +362,7 @@
                             android:layout_weight="1"
                             android:text="다크모드 설정"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -413,7 +413,7 @@
                         android:text="계정 설정"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -451,7 +451,7 @@
                             android:layout_weight="1"
                             android:text="비밀번호 변경"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -481,7 +481,7 @@
                             android:layout_weight="1"
                             android:text="로그아웃"
                             android:textColor="#595959"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -511,7 +511,7 @@
                             android:layout_weight="1"
                             android:text="서비스 탈퇴"
                             android:textColor="#FF6A6A"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -561,7 +561,7 @@
                         android:text="공지사항"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
@@ -609,7 +609,7 @@
                         android:text="고객센터"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
@@ -657,7 +657,7 @@
                         android:text="이용 약관"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
@@ -705,7 +705,7 @@
                         android:text="개인정보 처리 방침"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
@@ -753,7 +753,7 @@
                         android:text="서비스 이용 동의"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
@@ -801,7 +801,7 @@
                         android:text="오픈 소스 라이선스"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View

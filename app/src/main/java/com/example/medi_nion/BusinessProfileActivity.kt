@@ -60,7 +60,18 @@ class BusinessProfileActivity : AppCompatActivity() {
         all_items.clear()
 
         fetchProfile()
+//        requestBusinessProfile()
         fetchBusinessPost()
+
+//        if(image_profile != null) {
+//            val bitmap: Bitmap? = StringToBitmaps(image_profile)
+//            profileImg.setImageBitmap(bitmap)
+//        }
+//        if(image_background != null) {
+//            val bitmap: Bitmap? = StringToBitmaps(image_background)
+//            backgroundImg.setImageBitmap(bitmap)
+//        }
+
 
         val profileImg = findViewById<ImageView>(R.id.profileImg)
         val backgroundImg = findViewById<ImageView>(R.id.backgroundImg)
@@ -210,9 +221,9 @@ class BusinessProfileActivity : AppCompatActivity() {
                 hashMapOf(
                     "id" to id,
                     "channel_name" to editName.text.toString(),
-                    "channel_desc" to editIntro.text.toString()
-//                    "image_background" to image_background,
-//                    "image_profile" to image_profile
+                    "channel_desc" to editIntro.text.toString(),
+                    "image_background" to image_background,
+                    "image_profile" to image_profile
                 )
             )
             val queue = Volley.newRequestQueue(this)

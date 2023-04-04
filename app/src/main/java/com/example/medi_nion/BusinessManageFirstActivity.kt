@@ -2,6 +2,7 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.ContactsContract.Data
 import android.util.Log
@@ -14,12 +15,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.android.volley.Request
-import com.android.volley.toolbox.Volley
+
 import com.example.medi_nion.databinding.BusinessCreateHome1Binding
-import com.example.medi_nion.databinding.BusinessCreateHomeBinding
 import kotlinx.android.synthetic.main.business_create_home1.*
 import org.json.JSONArray
 
