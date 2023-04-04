@@ -45,6 +45,52 @@
         app:layout_constraintTop_toBottomOf="@+id/progressbarBusiness"
         android:visibility="gone" />
 
+    <RadioGroup
+        android:id="@+id/businessSetting_RadioGroup"
+        android:layout_width="110dp"
+        android:layout_height="148dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="90dp"
+        android:background="@drawable/selector_radio_button_group"
+        app:layout_constraintBottom_toTopOf="@+id/progressbarBusiness"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_top"
+            android:button="@null"
+            android:text="프로필 변경"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/edit_chanName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_middle"
+            android:button="@null"
+            android:text="채널명 편집"
+            android:textAlignment="center" />
+
+        <RadioButton
+            android:id="@+id/edit_chanDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_bottom"
+            android:button="@null"
+            android:text="소개글 편집"
+            android:textAlignment="center" />
+    </RadioGroup>
+
     <LinearLayout
         android:id="@+id/linearLayout7"
         android:layout_width="match_parent"
@@ -180,7 +226,7 @@
                     android:layout_weight="1">
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/businessSettingBtn"
                         android:layout_width="20dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
@@ -191,31 +237,41 @@
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/profileDesc"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:background="#FFFFFF"
-                android:hint="채널에 대한 간단한 소개글을 작성해주세요."
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="14sp"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
-                tools:ignore="TextContrastCheck" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/introEditBtn"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/pencil"
-                android:backgroundTint="#90000000"
-                app:layout_constraintBottom_toBottomOf="@+id/profileDesc"
-                app:layout_constraintStart_toEndOf="@+id/profileDesc"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                <EditText
+                    android:id="@+id/profileDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:background="#FFFFFF"
+                    android:hint="채널에 대한 간단한 소개글을 작성해주세요."
+                    android:textAlignment="viewStart"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+                    tools:ignore="TextContrastCheck" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/introEditBtn"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/pencil"
+                    android:backgroundTint="#90000000"
+                    app:layout_constraintBottom_toBottomOf="@+id/profileDesc"
+                    app:layout_constraintStart_toEndOf="@+id/profileDesc"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
