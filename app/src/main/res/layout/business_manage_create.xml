@@ -165,10 +165,13 @@
                         tools:ignore="TextContrastCheck" />
 
                     <EditText
+                        android:id="@+id/subscribe_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="구독자수"
-                        android:textSize="12sp"></EditText>
+                        android:textSize="12sp"
+                        android:focusableInTouchMode="false"
+                        android:backgroundTint="#CCCCCC"/>
 
                 </LinearLayout>
 
@@ -199,23 +202,12 @@
                 android:layout_marginTop="8dp"
                 android:background="#FFFFFF"
                 android:hint="채널에 대한 간단한 소개글을 작성해주세요."
-                android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
                 tools:ignore="TextContrastCheck" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/introEditBtn"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/pencil"
-                android:backgroundTint="#90000000"
-                app:layout_constraintBottom_toBottomOf="@+id/profileDesc"
-                app:layout_constraintStart_toEndOf="@+id/profileDesc"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
