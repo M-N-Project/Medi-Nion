@@ -20,8 +20,8 @@
 
     <android.widget.ProgressBar
         android:id="@+id/progressbarBusiness"
-        android:layout_width="2dp"
-        android:layout_height="3dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:indeterminate="false"
         android:max="100"
@@ -38,12 +38,12 @@
         android:id="@+id/loading_textView_business"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="비즈니스 채널 업로드 중..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressbarBusiness"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/linearLayout7"
@@ -116,13 +116,13 @@
                 android:id="@+id/backgroundImg"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginBottom="48dp"
                 android:layout_weight="6"
                 android:background="@drawable/business_manage_background"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@color/business_background" />
 
             <androidx.appcompat.widget.AppCompatButton
