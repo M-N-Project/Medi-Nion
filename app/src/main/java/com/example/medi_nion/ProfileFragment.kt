@@ -273,7 +273,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
             } else { //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
                 val intent = Intent(context, BusinessManageActivity::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("isFirst", true)
+                intent.putExtra("isFirst", false)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                 startActivity(intent)
             }
