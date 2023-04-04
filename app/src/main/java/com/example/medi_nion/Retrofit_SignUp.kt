@@ -46,6 +46,7 @@ import org.opencv.imgproc.Imgproc
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
+import java.lang.invoke.ConstantCallSite
 import java.lang.reflect.Type
 import java.util.regex.Pattern
 import kotlin.math.max
@@ -435,12 +436,10 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
 
         cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-            Log.d("0-09123","permission4")
             idImgView = findViewById(R.id.idImgView)
             idImgView.visibility = View.VISIBLE
             if (it) {
-                Log.d("0-09123","permission5")
-                Log.d("0-09123","$it")
+
                 idImgView.setImageURI(photoUri)
 
                 doOCR()
@@ -673,6 +672,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
         var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
+        var userGrade = "bronze"
 
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
@@ -702,13 +702,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val server = retrofit?.create(SignUp_Request::class.java)
 
-        val call: Call<Data_SignUp_Request>? = server?.getUser(
-            basicUserBtn.text.toString(),
-            userDept,
-            nickname_editText,
-            id_editText,
-            passwd_editText
-        )
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText, userGrade)
 
         if (basicUserBtn.isChecked) {
             if (call != null) {
@@ -732,12 +726,12 @@ class Retrofit_SignUp : AppCompatActivity() {
 
                     })
             }
-        } else {
-            server?.getUser(
-                corpUserBtn.text.toString(), userDept, nickname_editText,
-                id_editText, passwd_editText
-            )
-                ?.enqueue(object :
+        }
+        else
+           {
+            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
+                id_editText, passwd_editText, userGrade)
+                ?.enqueue(object:
                     Callback<Data_SignUp_Request> {
                     override fun onResponse(
                         call: Call<Data_SignUp_Request>,
@@ -753,6 +747,7 @@ class Retrofit_SignUp : AppCompatActivity() {
                     }
                 })
         }
+
 
 
 //        //POST 방식으로 db에 데이터 전송
@@ -823,11 +818,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         ): Converter<ResponseBody, *> {
             val delegate: Converter<ResponseBody, *> =
                 retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
-            return Converter { body ->
-                if (body.contentLength() == 0L) null else delegate.convert(
-                    body
-                )
-            }
+            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
         }
     }
 
@@ -933,7 +924,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         photoUri = FileProvider.getUriForFile(
             this, "${packageName}.provider", photoFile
         )
-        Log.d("0-09123","permission3")
+
         cameraLauncher.launch(photoUri)
     }
 

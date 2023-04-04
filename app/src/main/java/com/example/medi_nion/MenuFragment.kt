@@ -12,7 +12,11 @@ package com.example.medi_nion
     import android.widget.TextView
     import android.widget.Toast
     import androidx.fragment.app.Fragment
+    import androidx.fragment.app.FragmentManager
+    import androidx.navigation.NavController
+    import androidx.navigation.Navigation
     import androidx.navigation.fragment.findNavController
+    import kotlinx.android.synthetic.main.activity_main.*
     import kotlinx.android.synthetic.main.bottom_menu.*
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
@@ -28,6 +32,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     private lateinit var employeeInfoBtn: Button
     private lateinit var hospitalHomePageBtn: Button
     private lateinit var medicalNewsBtn: Button
+    private lateinit var scheduleBtn: Button
 
     private lateinit var manageBusinessBtn: Button
     private lateinit var allBoardDetail: LinearLayout
@@ -86,9 +91,9 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
         academyBtn = view.findViewById(R.id.menu7)
         employeeInfoBtn = view.findViewById(R.id.menu8)
-        hospitalHomePageBtn = view.findViewById(R.id.menu9)
         medicalNewsBtn = view.findViewById(R.id.menu_news)
         manageBusinessBtn = view.findViewById(R.id.menu_buss)
+        scheduleBtn = view.findViewById(R.id.menu_schedule)
 
         basicBoardTextView = view.findViewById(R.id.basicboard_TextView)
         marketBoardTextView = view.findViewById(R.id.marketboard_TextView)
@@ -494,13 +499,19 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
+        scheduleBtn.setOnClickListener {
+            val scheduleFragment = ScheduleFragment()
+            fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, scheduleFragment)?.commit()
+        }
+
 
         manageBusinessBtn.setOnClickListener { //비즈니스 관리(프로필수정, 글쓰기 화면으로 이동)
-            activity?.let{
-                val intent = Intent(context, BusinessMainFragment::class.java)
-                intent.putExtra("id", id)
-                startActivity(intent)
-            }
+            val businessFragment = BusinessMainFragment()
+            var bundle = Bundle()
+            bundle.putString("id",id)
+//            bundle.putString("userGrade", userGrade)
+            businessFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
+            fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, businessFragment)?.commit()
         }
     }
 
