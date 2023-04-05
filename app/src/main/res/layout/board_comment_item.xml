@@ -44,11 +44,12 @@
                         android:layout_weight="7"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <com.makeramen.roundedimageview.RoundedImageView
                             android:id="@+id/imageView_basicprofile1"
                             android:layout_width="32dp"
                             android:layout_height="28dp"
-                            android:src="@drawable/basic_profile1"
+                            android:src="@drawable/profile_mous"
+                            app:riv_corner_radius="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.065"
                             app:layout_constraintStart_toStartOf="parent"

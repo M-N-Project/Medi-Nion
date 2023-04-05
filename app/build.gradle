@@ -82,4 +82,6 @@ dependencies {
     implementation "org.bytedeco.javacpp-presets:opencv:4.0.1-1.4.4"
     implementation 'me.relex:circleindicator:2.1.6'
 
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
 }
