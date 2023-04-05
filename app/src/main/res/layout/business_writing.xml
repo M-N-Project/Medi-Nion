@@ -24,7 +24,7 @@
 
             <TextView
                 android:id="@+id/businessChanTitle4"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -72,7 +72,6 @@
             android:id="@+id/linearLayout11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
 
@@ -82,6 +81,7 @@
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
                 android:background="@android:color/transparent"
+                android:layout_weight="0"
                 android:ems="10"
                 android:hint="제목"
                 android:inputType="textPersonName"
@@ -96,7 +96,8 @@
                 android:id="@+id/imageButton_business"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="25dp"
+                android:layout_weight="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/postBtn_business"
                 app:srcCompat="@drawable/image_icon1"
