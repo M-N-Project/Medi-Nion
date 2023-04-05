@@ -8,21 +8,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.CheckBox
+import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_home.*
+import kotlinx.android.synthetic.main.business_hot.*
 import org.json.JSONArray
 
 
 class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레그먼트
     var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
+    var adapter = BusinessRecyclerAdapter(items)
+
+    private var hotListItems = ArrayList<BusinessHotListItem>()
+
+
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
-    var adapter = BusinessRecyclerAdapter(items)
+
+
     var scrollFlag = false
     var itemIndex = ArrayList<Int>()
     // RecyclerView.adapter에 지정할 Adapter
@@ -56,9 +64,74 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         items.clear()
         all_items.clear()
 
+        fetchHotProfile()
         fetchData()
     }
 
+    ////////////////// 인기 채널 가져오는 fetch 함수 //////////////////////////////////////////////////////
+    fun fetchHotProfile() {
+        val urlHotProfile = "http://seonho.dothome.co.kr/Business_profileHot_list.php"
+        val request = Board_Request(
+            Request.Method.POST,
+            urlHotProfile,
+            { response ->
+                if (response != "no BusinessProfile"){
+                    hotListItems.clear()
+                    Log.d("rrrrrrrrrrrrrrrr", response)
+                    val jsonArray = JSONArray(response)
+
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
+
+                        val chanName = item.getString("channel_name")
+                        val chanProfile = item.getString("channel_profile_img")
+
+                        val HotListItem = BusinessHotListItem(chanName, chanProfile)
+                        hotListItems.add(HotListItem)
+                    }
+
+                    var hotAdapter = BusinessHotListAdapter(hotListItems)
+                    hotAdapter.notifyDataSetChanged()
+                    BusinessSubRecycler.adapter = hotAdapter
+
+                    hotAdapter.setOnItemClickListener(object :
+                        BusinessHotListAdapter.OnItemClickListener {
+                        override fun onProfileClick(
+                            v: View,
+                            data: BusinessHotListItem,
+                            pos: Int
+                        ){
+                            val intent =
+                                Intent(
+                                    context,
+                                    BusinessProfileActivity::class.java
+                                )
+                            intent.putExtra("id", id)
+                            intent.putExtra(
+                                "channel_name",
+                                data.chanName
+                            )
+                            startActivity(intent)
+                        }
+                    })
+                }
+                else {
+                    Toast.makeText(context, "프로필가져오기 실패", Toast.LENGTH_SHORT)
+                }
+            },
+            {
+                Log.d(
+                    "login failed",
+                    "error......${context?.let { it1 -> error(it1) }}"
+                )
+            },
+            hashMapOf()
+        )
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
+    }
+
+    ////////////////// 구독 중인 채널의 게시물 가져오는 fetch 함수 + 좋아요&북마크 //////////////////////////////////////////////////////
     fun fetchData() {
         // url to post our data
         var appUser = arguments?.getString("id").toString()
@@ -96,28 +169,21 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                 Request.Method.POST,
                                 urlBookmark,
                                 { responseBookmark ->
-                                    Log.d("Bookmark fetch", responseBookmark)
                                     if (responseBookmark.equals("Success Bookmark")) {
                                         isBookmark = true
-                                        Log.d("bookrequest", "success Bookmark")
                                     } else if (responseBookmark.equals("No Bookmark")) {
                                         isBookmark = false
-                                        Log.d("bookrequest", "no bookmark")
                                     }
                                     val likerequest = Login_Request(
                                         Request.Method.POST,
                                         urlLike,
                                         { responseLike ->
-                                            Log.d("Like fetch", responseLike)
                                             if (responseLike.equals("Success Heart")) {
-                                                Log.d("likerequest", "success heart")
                                                 isHeart = true
                                             } else if (responseLike.equals("No Heart")) {
                                                 isHeart = false
-                                                Log.d("likerequest", "no heart")
                                             }
 
-                                            Log.d("9012312", num.toString())
                                             val BusinessItem = BusinessBoardItem(
                                                 num,
                                                 writerId,
@@ -133,7 +199,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                             )
                                             items.add(BusinessItem)
                                             all_items.add(BusinessItem)
-                                            Log.d("businessItem", BusinessItem.isHeart.toString())
 
                                             var recyclerViewState =
                                                 BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
