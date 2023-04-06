@@ -20,14 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.board_comment_item.*
-import kotlinx.android.synthetic.main.board_comment_item.view.*
 import kotlinx.android.synthetic.main.board_detail.*
-import kotlinx.android.synthetic.main.board_detail.CommentRecyclerView
-import kotlinx.android.synthetic.main.board_detail.refresh_layout
-import kotlinx.android.synthetic.main.board_detail.view.*
-import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.android.synthetic.main.comment_comment_detail.*
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -77,6 +70,7 @@ class BoardDetail : AppCompatActivity() {
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         var id = intent.getStringExtra("id") //접속한 유저의 아이디
         var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
+        var userMedal = intent.getIntExtra("userMedal", 0)
         val post_num = intent?.getIntExtra("num", 0).toString() //현재 상세보기 중인 게시물의 num
         val title = intent.getStringExtra("title") // 게시물 제목
         val content = intent.getStringExtra("content") // 게시물 내용
@@ -105,6 +99,7 @@ class BoardDetail : AppCompatActivity() {
 
 //=================================================== 게시물 상세 내용 fetch ================================================================================
 
+
         title_textView.setText(title) // 제목
         content_textView.setText(content) // 내용
         time_textView.setText(time) //시간
@@ -123,6 +118,7 @@ class BoardDetail : AppCompatActivity() {
             }
         }
 
+        fetchMedalData() // 메달 fetch
         fetchLikeData() // 좋아요 fetch
         fetchCommentData() // 댓글 fetch
         fetchBookmarkData() // 북마크 fetch
@@ -157,6 +153,7 @@ class BoardDetail : AppCompatActivity() {
                 intent.putExtra("update", 1)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
+                intent.putExtra("userMedal", userMedal)
 
                 startActivity(intent)
             }
@@ -221,13 +218,50 @@ class BoardDetail : AppCompatActivity() {
     }
 
 
-//fetch 함수들 =====================================================================================================================
+//fetch 함수들 ====================================================================================================================
+    // emdal fetch ---------------------------------------------------------------------------
+    fun fetchMedalData() {
+        val medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
+        var writerid = intent.getStringExtra("writerId").toString()
+        val medalImage = findViewById<ImageView>(R.id.medal)
+
+        val request = Login_Request(
+            Request.Method.POST,
+            medalurl,
+            { response ->
+                Log.d("medlaSele", response)
+
+                when (response) {
+                    "king" -> {
+                        medalImage.setImageResource(R.drawable.king_medal)
+                    }
+                    "gold" -> {
+                        medalImage.setImageResource(R.drawable.gold_medal)
+                    }
+                    "silver" -> {
+                        medalImage.setImageResource(R.drawable.silver_medal)
+                    }
+                    else -> {
+                        medalImage.setImageResource(R.drawable.bronze_medal)
+                    }
+                }
+
+            }, { Log.d("like Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "id" to writerid
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
 
     // 좋아요 fetch ----------------------------------------------------------------------------
     fun fetchLikeData() {
         val url = "http://seonho.dothome.co.kr/Heart_list.php"
         var post_num = intent?.getIntExtra("num", 0).toString()
-        var id = intent?.getStringExtra("id").toString()
+        var id = intent?.getStringExtra("id").toString() //하트를 누른 유저의 아이디
+
         val board = intent?.getStringExtra("board").toString()
 
         val Like_Btn = findViewById<CheckBox>(R.id.imageView_like2)
@@ -294,6 +328,7 @@ class BoardDetail : AppCompatActivity() {
                             CommentListAdapter(comment_items)
                         CommentRecyclerView.adapter =
                             Commentadapter
+
                     }
                     else{
                         comment_items.clear()
@@ -314,6 +349,7 @@ class BoardDetail : AppCompatActivity() {
                             val comment_num = item.getInt("comment_num")
                             val heart = item.getInt("heart")
                             var isHeartMap = HashMap<String, Boolean>()
+
 
                             if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                                 comment_user.size + 1
@@ -641,11 +677,41 @@ class BoardDetail : AppCompatActivity() {
                                                                 val isHeart =
                                                                     if (isHeartMap.containsKey(appUser)) (isHeartMap[appUser]) else false
 
+                                                                val medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
+                                                                var id = intent.getStringExtra("id").toString()
+                                                                var comment_medal_text : String = "bronze"
+
+                                                                val request = Login_Request(
+                                                                    Request.Method.POST,
+                                                                    medalurl,
+                                                                    { medalresponse ->
+                                                                        Log.d("medfsfdasd", medalresponse)
+
+                                                                        when (medalresponse) {
+                                                                            "king" -> {
+                                                                                comment_medal_text =
+                                                                                    "king"
+                                                                            }
+                                                                            "gold" -> {
+                                                                                comment_medal_text =
+                                                                                    "gold"
+                                                                            }
+                                                                            "silver" -> {
+                                                                                comment_medal_text =
+                                                                                    "silver"
+                                                                            }
+                                                                            else -> {
+                                                                                comment_medal_text =
+                                                                                    "bronze"
+                                                                            }
+                                                                        }
+
                                                                 val commentItem = CommentItem(
                                                                     id,
                                                                     writerId,
                                                                     comment_user[writerId]!!,
                                                                     comment,
+                                                                    comment_medal_text,
                                                                     comment_num,
                                                                     comment_time,
                                                                     heart,
@@ -980,6 +1046,13 @@ class BoardDetail : AppCompatActivity() {
                                                                             // board에서 comment count 줄이기
                                                                         }
                                                                     })
+                                                                    }, { Log.d("like Failed", "error......${error(applicationContext)}") },
+                                                                    hashMapOf(
+                                                                        "id" to id
+                                                                    )
+                                                                )
+                                                                val queue = Volley.newRequestQueue(this)
+                                                                queue.add(request)
 
                                                             }
                                                         },
@@ -1029,7 +1102,6 @@ class BoardDetail : AppCompatActivity() {
                             val queue = Volley.newRequestQueue(this)
                             queue.add(requestCommentLike)
                             //------------------------------------------------------------------------------------------------
-
                         }
                     }
 
@@ -1163,6 +1235,32 @@ class BoardDetail : AppCompatActivity() {
                             if (!responseLike.equals("update fail")) {
                                 post_num = responseLike.toString()
                                 like_count = responseLike.toString()
+
+                                // medal ---------------------------------------------------------------------------
+                                val medalurl = "http://seonho.dothome.co.kr/Medal.php"
+                                var writerid = intent.getStringExtra("writerId").toString()
+                                val medalImage = findViewById<ImageView>(R.id.medal)
+
+                                val request = Login_Request(
+                                    Request.Method.POST,
+                                    medalurl,
+                                    { response ->
+                                        Log.d("medlall", response)
+                                        if(response != "medal fail") {
+                                            Log.d("userGraade", "up")
+                                        }
+
+                                    }, { Log.d("like Failed", "error......${error(applicationContext)}") },
+                                    hashMapOf(
+                                        "id" to writerid
+                                    )
+                                )
+                                val queue = Volley.newRequestQueue(this)
+                                queue.add(request)
+
+
+                                Log.d("writerId", "$writerid, $id")
+
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -1188,10 +1286,6 @@ class BoardDetail : AppCompatActivity() {
                         String.format("좋아요가 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.d(
-                        "bookmark success",
-                        "$id, $post_num"
-                    )
 
                 } else {
 
@@ -1201,7 +1295,6 @@ class BoardDetail : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                Log.d("bookmark Request", "${board}, ${post_num}, ${flag.toString()}")
 
             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
 
@@ -1268,6 +1361,8 @@ class BoardDetail : AppCompatActivity() {
                         String.format("댓글이 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    UpdateGrade()
 
                     Log.d(
                         "comment success",
@@ -1351,6 +1446,9 @@ class BoardDetail : AppCompatActivity() {
                         String.format("대댓글이 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    UpdateGrade()
+
                     Log.d(
                         "comment2 success",
                         "$board, $id, $post_num, $comment_num, $comment2, $comment2_time"
@@ -1457,6 +1555,29 @@ class BoardDetail : AppCompatActivity() {
                 "id" to id,
                 "post_num" to post_num,
                 "flag" to flag.toString()
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    fun UpdateGrade() {
+        val medalurl = "http://seonho.dothome.co.kr/Grade.php"
+        var nickname = intent.getStringExtra("nickname").toString()
+
+        val request = Login_Request(
+            Request.Method.POST,
+            medalurl,
+            { response ->
+                Log.d("gradeeeeeeeeeee", response)
+                Log.d("gradeNickname", nickname)
+                if(response != "grade fail") {
+                    Log.d("userGraade", "up")
+                }
+
+            }, { Log.d("grade Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "nickname" to nickname
             )
         )
         val queue = Volley.newRequestQueue(this)

@@ -52,6 +52,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
         private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
         private val itemCommentHeart: CheckBox = itemView.findViewById(R.id.imageView_comment_like)
         private val itemCommentHeartCnt: TextView = itemView.findViewById(R.id.comment_heart_count)
+        private val itemCommentMedal: ImageView = itemView.findViewById(R.id.comment_medal)
         private val itemCommentComment: ImageView =
             itemView.findViewById(R.id.imageView_comment_comment)
         private val itemCommentDetail: RecyclerView =
@@ -63,6 +64,21 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
             itemCommentTime.text = item.comment_time
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.commentHeart.toString()
+
+            when (item.comment_medal) {
+                "king" -> {
+                    itemCommentMedal.setImageResource(R.drawable.king_medal)
+                }
+                "gold" -> {
+                    itemCommentMedal.setImageResource(R.drawable.gold_medal)
+                }
+                "silver" -> {
+                    itemCommentMedal.setImageResource(R.drawable.silver_medal)
+                }
+                else -> {
+                    itemCommentMedal.setImageResource(R.drawable.bronze_medal)
+                }
+            }
 
             Log.d("-=1342", "${item.id} .. ${item.writerId}")
             if(item.id == item.writerId) {

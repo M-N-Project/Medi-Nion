@@ -48,6 +48,7 @@ class BoardWrite : AppCompatActivity() {
         val update = intent.getIntExtra("update", 0)
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
+        var userMedal = intent.getIntExtra("userMedal", 0)
 
         //수정으로 글쓰기 화면 넘어왔을 때
         if(update == 1){
@@ -157,6 +158,7 @@ class BoardWrite : AppCompatActivity() {
         var board = intent.getStringExtra("board").toString()
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
+        var userMedal = intent.getIntExtra("userMedal", 0)
         var postTitle = findViewById<EditText>(R.id.editText_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
@@ -197,6 +199,7 @@ class BoardWrite : AppCompatActivity() {
                         Log.d("게시물 수정 완료", userDept)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
+                        intent.putExtra("userMedal", userMedal)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                         startActivity(intent)
 
@@ -227,49 +230,6 @@ class BoardWrite : AppCompatActivity() {
             val postUrl = "http://seonho.dothome.co.kr/createBoard.php"
             Log.d("123", "123")
 
-//            val gson = GsonBuilder().setLenient().create()
-//            val uri = "http://seonho.dothome.co.kr/"
-//
-//            val retrofit = createOkHttpClient()?.let {
-//                Retrofit.Builder()
-//                    .baseUrl(uri)
-//                    .addConverterFactory(nullOnEmptyConverterFactory)
-//                    .addConverterFactory(GsonConverterFactory.create(gson))
-//                    .client(it)
-//                    .build()
-//            }
-//
-//            val server = retrofit?.create(Create_Board_Request::class.java)
-//
-//            val call : Call<Data_CreateBoard_Request>? = server?.Create_Board(flagUpdate, id, board_select, postTitle, postContent, img1, img2)
-////                    "userType" to userType,
-////                    "userDept" to userDept
-//
-//            call?.enqueue(object :
-//                Callback<Data_CreateBoard_Request> {
-//                override fun onFailure(call: Call<Data_CreateBoard_Request>, t: Throwable) {
-//                    t.localizedMessage?.let { Log.d("createBoard fail", it) }
-//                    Toast.makeText(applicationContext, "createBoard fail", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                @SuppressLint("SuspiciousIndentation")
-//                override fun onResponse(
-//                    call: Call<Data_CreateBoard_Request>,
-//                    response: Response<Data_CreateBoard_Request>
-//                ) {
-//                    Log.d("createBoard success", response.toString())
-//                    Toast.makeText(applicationContext, "createBoard success", Toast.LENGTH_SHORT).show()
-//
-//                    var intent = Intent(applicationContext, Board::class.java)
-//                        intent.putExtra("id", id)
-//                        intent.putExtra("board", board)
-//                        intent.putExtra("userType", userType)
-//                        intent.putExtra("userDept", userDept)
-//                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-//                        startActivity(intent)
-//                }
-//            })
-
             val request = Upload_Request(
                 Request.Method.POST,
                 postUrl,
@@ -283,11 +243,14 @@ class BoardWrite : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
+                        UpdateGrade()
+
                         var intent = Intent(applicationContext, Board::class.java)
                         intent.putExtra("id", id)
                         intent.putExtra("board", board)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
+                        intent.putExtra("userMedal", userMedal)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                         startActivity(intent)
 
@@ -324,6 +287,29 @@ class BoardWrite : AppCompatActivity() {
         findViewById<TextView>(R.id.loading_textView).visibility = View.VISIBLE
         var progressBar = findViewById<ProgressBar>(R.id.progressbar)
         progressBar.visibility = View.VISIBLE
+    }
+
+    fun UpdateGrade() {
+        val medalurl = "http://seonho.dothome.co.kr/Grade.php"
+        var nickname = intent.getStringExtra("nickname").toString()
+
+        val request = Login_Request(
+            Request.Method.POST,
+            medalurl,
+            { response ->
+                Log.d("gradeeeeeeeeeee", response)
+                Log.d("gradeNickname", nickname)
+                if(response != "grade fail") {
+                    Log.d("userGraade", "up")
+                }
+
+            }, { Log.d("grade Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "nickname" to nickname
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

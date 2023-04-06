@@ -13,22 +13,13 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_home.refresh_layout
-import kotlinx.android.synthetic.main.board_profile_home.*
-import kotlinx.android.synthetic.main.board_scroll_paging.*
-import kotlinx.android.synthetic.main.business_writing.view.*
-import kotlinx.coroutines.launch
 import org.json.JSONArray
-import java.lang.Thread.sleep
-import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,9 +66,10 @@ class Board : AppCompatActivity() {
         boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
 
         var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
-
+        val userMedal = intent.getIntExtra("userMedal", 0).toString()
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         writingFAB.setOnClickListener {
@@ -85,10 +77,12 @@ class Board : AppCompatActivity() {
             board = intent.getStringExtra("board").toString()
             val intent = Intent(applicationContext, BoardWrite::class.java)
             intent.putExtra("id", id)
+            intent.putExtra("nickname", nickname)
             intent.putExtra("board", board)
             intent.putExtra("update", 0)
             intent.putExtra("userType", userType)
             intent.putExtra("userDept", userDept)
+            intent.putExtra("userMedal", userMedal)
             Log.d("Floating Button Clicked", userType)
             startActivity(intent)
         }
@@ -172,12 +166,15 @@ class Board : AppCompatActivity() {
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
         var board :String = ""
         board = intent.getStringExtra("board").toString()
         var userType :String = ""
         userType = intent.getStringExtra("userType").toString()
         var userDept :String = ""
         userDept = intent.getStringExtra("userDept").toString()
+        var userMedal : Int = 0
+        userMedal = intent.getIntExtra("userMedal", 0)
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
@@ -253,6 +250,7 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("board", board)
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
                                         intent.putExtra("title", detailTitle)
                                         intent.putExtra("content", detailContent)
@@ -260,6 +258,7 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("image", detailImg)
                                         intent.putExtra("userType", userType)
                                         intent.putExtra("userDept", userDept)
+                                        intent.putExtra("userMedal", userMedal)
                                         intent.putExtra("commentCnt", detailCommentCnt)
                                         startActivity(intent)
                                     }

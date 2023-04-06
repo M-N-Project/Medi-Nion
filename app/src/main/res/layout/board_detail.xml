@@ -128,12 +128,12 @@
                                         app:layout_constraintTop_toTopOf="parent" />
 
                                     <ImageView
-                                        android:id="@+id/userGrade"
+                                        android:id="@+id/medal"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="3dp"
                                         android:layout_marginTop="5dp"
-                                        app:srcCompat="@drawable/bronze_medal"
+                                        android:src="@drawable/bronze_medal"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintHorizontal_bias="0.0"
                                         app:layout_constraintTop_toTopOf="parent" />

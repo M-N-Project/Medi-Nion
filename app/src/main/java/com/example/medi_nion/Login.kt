@@ -1,7 +1,6 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -237,7 +236,6 @@ class Login : AppCompatActivity() {
         var passwd = findViewById<EditText>(R.id.password).text.toString()
         var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
         var intent = Intent(this, MainActivity::class.java)
-        var userGrade = ""
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
@@ -247,6 +245,8 @@ class Login : AppCompatActivity() {
             { response ->
                 var userType = ""
                 var userDept = ""
+                var userMedal = 0
+                var nickname = ""
                 var intent = Intent(this, MainActivity::class.java)
                 if (!response.equals("Login Failed")) {
                     val userSearch = Login_Request(
@@ -264,11 +264,17 @@ class Login : AppCompatActivity() {
 
                                     userType = item.getString("userType")
                                     userDept = item.getString("userDept")
+                                    userMedal = item.getInt("userMedal")
+                                    nickname = item.getString("nickname")
 
                                     intent.putExtra("userType", userType)
                                     intent.putExtra("userDept", userDept)
+                                    intent.putExtra("userMedal", userMedal)
+                                    intent.putExtra("nickname", nickname)
 
                                     Log.d("userSearch", "type : ${item.getString("userType")}, dept : ${item.getString("userDept")}")
+                                    Log.d("userMedal", userMedal.toString())
+                                    Log.d("nickname", nickname)
 
                                     Toast.makeText(
                                         baseContext,
@@ -278,7 +284,6 @@ class Login : AppCompatActivity() {
 
                                     intent.putExtra("id", id)
                                     intent.putExtra("passwd", passwd)
-                                    intent.putExtra("userGrade", userGrade)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
                                     startActivity(intent)
                                 }
