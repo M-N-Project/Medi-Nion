@@ -196,11 +196,11 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         corpUserBtn.setOnClickListener {
             val basicUserGroup =
-                findViewById<RadioGroup>(R.id.basicUser_RadioGroup); // 일반회원의 종류를 담은 RadioGroup, RadioButton
+                findViewById<RadioGroup>(R.id.basicUser_RadioGroup) // 일반회원의 종류를 담은 RadioGroup, RadioButton
             basicUserGroup.visibility = View.GONE
 
             //키보드 숨기기
-            imm.hideSoftInputFromWindow(corpUserBtn.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(corpUserBtn.getWindowToken(), 0)
 
             userType = "corp"
             basicUserBtn.text = "일반 회원"

@@ -1,54 +1,85 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/home_hot"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text="좋아요 댓글 가장 많은 게시물 제목"
-        android:textSize="12sp"
-        android:ellipsize="end"
-        android:singleLine="true" />
 
-    <ImageView
-        android:id="@+id/home_hot_like_Img"
-        android:layout_width="15dp"
-        android:layout_height="20dp"
-        android:src="@drawable/favorite_border" />
-
-    <TextView
-        android:id="@+id/home_hot_like"
+    <LinearLayout
+        android:id="@+id/linearLayout12"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="20"
-        android:textSize="10sp" />
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/home_hot_num"
+        <TextView
+            android:id="@+id/home_hot"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="좋아요 댓글 가장 많은 게시물 제목"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:layout_marginEnd="48dp"
+        android:layout_weight="0"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/home_hot_comm_Img"
-        android:layout_width="15dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/comment_icon" />
+        <ImageView
+            android:id="@+id/home_hot_like_Img"
+            android:layout_width="15dp"
+            android:layout_height="20dp"
+            android:layout_weight="0.5"
+            android:src="@drawable/favorite_border" />
 
-    <TextView
-        android:id="@+id/home_hot_comm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="20"
-        android:textSize="10sp" />
+        <TextView
+            android:id="@+id/home_hot_like"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:text="20"
+            android:textSize="10sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/home_hot_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/home_hot_comm_Img"
+            android:layout_width="15dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/comment_icon" />
+
+        <TextView
+            android:id="@+id/home_hot_comm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:text="20"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
