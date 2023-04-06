@@ -77,7 +77,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
             { response ->
                 if (response != "no BusinessProfile"){
                     hotListItems.clear()
-                    Log.d("rrrrrrrrrrrrrrrr", response)
                     val jsonArray = JSONArray(response)
 
                     for (i in jsonArray.length() - 1 downTo 0) {
@@ -90,6 +89,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         hotListItems.add(HotListItem)
                     }
 
+                    hotListItems.reverse()
                     var hotAdapter = BusinessHotListAdapter(hotListItems)
                     hotAdapter.notifyDataSetChanged()
                     BusinessSubRecycler.adapter = hotAdapter
