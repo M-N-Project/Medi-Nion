@@ -20,6 +20,112 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/my_profile"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="8dp"
+                android:paddingBottom="16dp"
+                android:background="@drawable/menu_button"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <ImageView
+                        android:id="@+id/imageView_myprofile"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="15dp"
+                        android:src="@drawable/basic_profile1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.043"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView_nickname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="닉네임"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/grade"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginStart="5dp"
+                                android:src="@drawable/sprout"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="4dp">
+
+
+                            <TextView
+                                android:id="@+id/textView_dept"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:text="진료과"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="77dp" />
+
+                            <TextView
+                                android:id="@+id/textView_job"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="직종"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="77dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/line12"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="#000000"
+                android:backgroundTint="#E6E6E6"
+                android:foregroundTint="#000000" />
+
             <LinearLayout
                 android:id="@+id/item1"
                 android:layout_width="match_parent"

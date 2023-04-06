@@ -49,6 +49,7 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.heart.toString()
 
+
             if(item.id == item.writerId) {
                 itemCommentMore.setOnClickListener{
                     itemCommentMore.visibility = View.VISIBLE
