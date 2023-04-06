@@ -83,8 +83,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
 
             }
             else{
-                itemCommentMore.visibility = View.INVISIBLE
-
+                itemCommentMore.visibility = View.INVISIBLE ////디테일 안보이는 원인후보1,,,
             }
 
             if (item.isHeart == true) itemCommentHeart.isChecked = true

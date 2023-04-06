@@ -12,6 +12,7 @@ import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -182,6 +183,7 @@ class BoardDetail : AppCompatActivity() {
 
         // 댓글 버튼 눌렀을때----------------------------------------------------------------------
         Comment_Btn.setOnClickListener {
+            //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
             if(comment_comment_flag == true){ //대댓글
                 comment_comment_num = if(comment2_count.containsKey(comment_comment_posPresent+1)) comment2_count[comment_comment_posPresent+1]!! else 1
                 Comment2Request(comment_comment_posPresent+1 , ++comment_comment_num)
@@ -323,7 +325,7 @@ class BoardDetail : AppCompatActivity() {
                                 { response ->
                                     if(response != "Comment Heart Fetch fail") {
                                         if (response != "no Comment Heart") {
-                                            val heartUserList = ArrayList<String>()
+                                            val heartUserList = ArrayList<String>() //디테일 안보이는 원인후보2,,,
                                             val jsonArrayHeart = JSONArray(response)
 
                                             for (i in 0 until jsonArrayHeart.length()) {
@@ -337,7 +339,7 @@ class BoardDetail : AppCompatActivity() {
                                             }
 
                                             if(heartUserList.contains(appUser))
-                                                isHeartMap[appUser] = true
+                                                isHeartMap[appUser] = true ////디테일 안보이는 원인후보3,,,
                                         }
 
                                         // 해당되는 대댓글들 가져오기

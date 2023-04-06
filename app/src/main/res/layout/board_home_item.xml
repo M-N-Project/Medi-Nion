@@ -127,12 +127,12 @@
                     android:layout_marginStart="3dp"
                     android:text="1" />
 
-                <CheckBox
+                <ImageView
                     android:id="@+id/checkbox_bookmark"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
-                    android:button="@drawable/bookmark_checkbox"
+                    app:srcCompat="@drawable/bookmark_checkbox"
                     android:text="" />
 
                 <TextView

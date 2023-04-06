@@ -155,7 +155,7 @@
                                 android:id="@+id/moreBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="120dp"
+                                android:layout_marginLeft="100dp"
                                 android:background="@drawable/board_detail_more_btn"
                                 android:textColor="@color/black"
                                 android:visibility="gone"
@@ -306,7 +306,7 @@
 
                 <ImageView
                     android:id="@+id/imageView_ad"
-                    android:layout_width="match_parent"
+                    android:layout_width="330dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="8dp"
@@ -359,29 +359,36 @@
 
             <EditText
                 android:id="@+id/Comment_editText"
-                android:layout_width="290dp"
-                android:layout_height="match_parent"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
                 android:hint="댓글을 입력해주세요."
+                android:layout_weight="0.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/Comment_Btn"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#86C9C6"
-                android:backgroundTint="#86C9C6"
-                android:text="등록"
-                android:textColor="#0D47A1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:strokeColor="#FFFFFF" />
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/Comment_Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#86C9C6"
+                    android:backgroundTint="#86C9C6"
+                    android:text="등록"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:strokeColor="#FFFFFF" />
+
+            </LinearLayout>
 
         </LinearLayout>
-        </LinearLayout>
+    </LinearLayout>
 
 
 </GridLayout>

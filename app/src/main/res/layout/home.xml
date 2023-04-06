@@ -226,7 +226,8 @@
                         layout="@layout/home_hot_detail"
                         android:layout_width="350dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5sp" />
+                        android:layout_marginTop="5sp"
+                        android:layout_weight="0" />
 
                     <LinearLayout
                         android:id="@+id/hot_detail_basic_more"
@@ -249,6 +250,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5sp" />
                     </LinearLayout>
+
+                    <!--                    구분선 긋기-->
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="#289C9C9C" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -302,6 +311,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5sp" />
                     </LinearLayout>
+
+                    <!--                    구분선 긋기-->
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="#289C9C9C" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

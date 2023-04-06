@@ -87,27 +87,34 @@
                 android:inputType="textPersonName"
                 android:textColorHint="#8085AFD6"
                 android:textSize="24sp"
+                android:layout_weight="0.5"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton_business"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/businessChanTitle4"
                 tools:ignore="TouchTargetSizeCheck" />
 
-            <ImageButton
-                android:id="@+id/imageButton_business"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/postBtn_business"
-                app:srcCompat="@drawable/image_icon1"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/imageButton_business"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/postBtn_business"
+                    app:srcCompat="@drawable/image_icon1"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <View
             android:id="@+id/view2"
-            android:layout_width="370dp"
+            android:layout_width="420dp"
             android:layout_height="1dp"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="8dp"
             android:background="#8085AFD6"
             app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +125,7 @@
 
         <EditText
             android:id="@+id/business_Content"
-            android:layout_width="378dp"
+            android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
