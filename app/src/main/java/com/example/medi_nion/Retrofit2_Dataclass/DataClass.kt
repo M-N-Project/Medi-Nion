@@ -8,7 +8,7 @@ data class Data_SignUp_Request(
     val nickname: String,
     val id: String,
     val passwd: String,
-    val userGrade: String
+    val userMedal: Int
 )
 
 data class Data_Login_Request (

@@ -196,11 +196,11 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         corpUserBtn.setOnClickListener {
             val basicUserGroup =
-                findViewById<RadioGroup>(R.id.basicUser_RadioGroup); // 일반회원의 종류를 담은 RadioGroup, RadioButton
+                findViewById<RadioGroup>(R.id.basicUser_RadioGroup) // 일반회원의 종류를 담은 RadioGroup, RadioButton
             basicUserGroup.visibility = View.GONE
 
             //키보드 숨기기
-            imm.hideSoftInputFromWindow(corpUserBtn.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(corpUserBtn.getWindowToken(), 0)
 
             userType = "corp"
             basicUserBtn.text = "일반 회원"
@@ -664,7 +664,6 @@ class Retrofit_SignUp : AppCompatActivity() {
 
     //db 연동 시작
     private fun signUPRequest(url: String) {
-
         var basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
         var corpUserBtn = findViewById<RadioButton>(R.id.corpUser_RadioBtn)
 
@@ -672,7 +671,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
         var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
-        var userGrade = "bronze"
+        var userMedal = 0
 
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
@@ -702,7 +701,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         val server = retrofit?.create(SignUp_Request::class.java)
 
-        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText, userGrade)
+        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText, userMedal)
 
         if (basicUserBtn.isChecked) {
             if (call != null) {
@@ -711,7 +710,7 @@ class Retrofit_SignUp : AppCompatActivity() {
                         Callback<Data_SignUp_Request> {
                         override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
                             t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
-                            Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onResponse(
@@ -720,7 +719,7 @@ class Retrofit_SignUp : AppCompatActivity() {
                         ) {
                             //if (!response.equals("SignUP fail")) {
                             Log.d("retrofit1 success", response.toString())
-                            Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT).show()
                             //}
                         }
 
@@ -729,84 +728,25 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
         else
            {
-            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
-                id_editText, passwd_editText, userGrade)
+               server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
+                id_editText, passwd_editText, userMedal)
                 ?.enqueue(object:
                     Callback<Data_SignUp_Request> {
+                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+                        Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+
                     override fun onResponse(
                         call: Call<Data_SignUp_Request>,
                         response: Response<Data_SignUp_Request>
                     ) {
                         Log.d("retrofit2 success", response.toString())
-                        Toast.makeText(applicationContext, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT)
+                        Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT)
                             .show()
-                    }
-
-                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
                     }
                 })
         }
-
-
-
-//        //POST 방식으로 db에 데이터 전송
-//        val request = SignUP_Request(
-//            Request.Method.POST,
-//            url,
-//            { response ->
-//
-//                //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
-//                if (passwd_editText == passwdCheck_editText) {
-//                    if (!response.equals("SignUP fail")) {
-//
-//                        nickname_editText = response.toString()
-//                        id_editText = response.toString()
-//                        passwd_editText = response.toString()
-//                        basicUserBtn.text = response.toString()
-//                        corpUserBtn.text = response.toString()
-//
-//                        Toast.makeText(
-//                            baseContext,
-//                            String.format("가입을 환영합니다. 로그인 해주세요."),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-///*
-//                        Log.d(
-//                            "success",
-//                            "$nickname_editText, $id_editText, $passwd_editText, $basicUserBtn, $corpUserBtn"
-//                        )
-// */
-//                    }
-//                } else {
-//                    Toast.makeText(
-//                        applicationContext,
-//                        "비밀번호를 다시 확인해주세요.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            },
-//            { Log.d("failed", "error......${error(applicationContext)}") },
-//            if(basicUserBtn.isChecked) {
-//                hashMapOf(
-//                    "nickname" to nickname_editText,
-//                    "id" to id_editText,
-//                    "passwd" to passwd_editText,
-//                    "userType" to basicUserBtn.text.toString(),
-//                    "userDept" to userDept
-//                )
-//            } else {
-//                hashMapOf(
-//                    "nickname" to nickname_editText,
-//                    "id" to id_editText,
-//                    "passwd" to passwd_editText,
-//                    "userType" to corpUserBtn.text.toString(),
-//                    "userDept" to corpUserBtn.text.toString()
-//                )
-//            }
-//        )
-//        val queue = Volley.newRequestQueue(this)
-//        queue.add(request)
     }
     //db 연동 끝
 

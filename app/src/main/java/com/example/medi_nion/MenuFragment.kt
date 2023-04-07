@@ -5,19 +5,11 @@ package com.example.medi_nion
     import android.os.Bundle
     import android.util.Log
     import android.view.View
-    import android.view.animation.Animation
-    import android.view.animation.AnimationUtils
     import android.widget.Button
     import android.widget.LinearLayout
     import android.widget.TextView
     import android.widget.Toast
     import androidx.fragment.app.Fragment
-    import androidx.fragment.app.FragmentManager
-    import androidx.navigation.NavController
-    import androidx.navigation.Navigation
-    import androidx.navigation.fragment.findNavController
-    import kotlinx.android.synthetic.main.activity_main.*
-    import kotlinx.android.synthetic.main.bottom_menu.*
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
 
@@ -76,8 +68,10 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
         // bundle 에서 id, userType, userDept 값 가져오기
         val id = arguments?.getString("id")
+        val nickname = arguments?.getString("nickname")
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
+        val userMedal = arguments?.getInt("userMedal")
 
         allBoard = view.findViewById(R.id.menu_All) // 전체 게시판
         basicBoard = view.findViewById(R.id.menu_basic) // 자유 게시판
@@ -139,26 +133,34 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 basicBoardTextView.setOnClickListener {
                     var intent = Intent(context, Board::class.java)
                     intent.putExtra("id", id)
+                    intent.putExtra("nickname", nickname)
+                    intent.putExtra("userMedal", userMedal)
                     intent.putExtra("board", "자유 게시판")
                     startActivity(intent)
                 }
                 marketBoardTextView.setOnClickListener {
                     val intent = Intent(context, Board::class.java)
                     intent.putExtra("id", id)
+                    intent.putExtra("nickname", nickname)
+                    intent.putExtra("userMedal", userMedal)
                     intent.putExtra("board", "장터 게시판")
                     startActivity(intent)
                 }
                 QnABoardTextView.setOnClickListener {
                     val intent = Intent(context, Board::class.java)
                     intent.putExtra("id", id)
+                    intent.putExtra("nickname", nickname)
+                    intent.putExtra("userMedal", userMedal)
                     intent.putExtra("board", "QnA 게시판")
                     startActivity(intent)
                 }
                 jobBoardTextView.setOnClickListener {
                     val intent = Intent(context, Board::class.java)
                     intent.putExtra("id", id)
+                    intent.putExtra("nickname", nickname)
                     intent.putExtra("userType", userType)
                     intent.putExtra("userDept", userDept)
+                    intent.putExtra("userMedal", userMedal)
                     intent.putExtra("board", "직종별 게시판")
                     startActivity(intent)
                 }
@@ -166,6 +168,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                     val intent = Intent(context, Board::class.java)
                     //Log.d("userSearch", "$userType  $userDept")
                     intent.putExtra("id", id)
+                    intent.putExtra("nickname", nickname)
+                    intent.putExtra("userMedal", userMedal)
                     intent.putExtra("userType", userType)
                     intent.putExtra("userDept", userDept)
                     intent.putExtra("board", "진료과별 게시판")
@@ -178,6 +182,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "직종별 게시판")
@@ -189,6 +195,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "직종별 게시판")
@@ -200,6 +208,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "직종별 게시판")
@@ -211,6 +221,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "직종별 게시판")
@@ -222,6 +234,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "직종별 게시판")
@@ -235,6 +249,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -246,6 +262,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -257,6 +275,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -268,6 +288,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -279,6 +301,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -290,6 +314,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -301,6 +327,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -312,6 +340,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -323,6 +353,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -334,6 +366,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -345,6 +379,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -356,6 +392,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -367,6 +405,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -378,6 +418,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -389,6 +431,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -400,6 +444,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -411,6 +457,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -422,6 +469,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -433,6 +482,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                         val intent = Intent(context, Board::class.java)
                         Log.d("userSearch", "$userType  $userDept")
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
+                        intent.putExtra("userMedal", userMedal)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
                         intent.putExtra("board", "진료과별 게시판")
@@ -454,6 +505,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "자유 게시판")
@@ -464,6 +517,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "직종별 게시판")
@@ -475,6 +530,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 val intent = Intent(context, Board::class.java)
                 Log.d("userSearch", "$userType  $userDept")
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
                 intent.putExtra("board", "진료과별 게시판")
@@ -485,6 +542,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "장터 게시판")
                 startActivity(intent)
             }
@@ -494,6 +553,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             activity?.let{
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "QnA 게시판")
                 startActivity(intent)
             }
@@ -509,7 +570,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             val businessFragment = BusinessMainFragment()
             var bundle = Bundle()
             bundle.putString("id",id)
-//            bundle.putString("userGrade", userGrade)
             businessFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
             fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, businessFragment)?.commit()
         }
