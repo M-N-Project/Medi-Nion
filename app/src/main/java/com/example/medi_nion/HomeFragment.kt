@@ -329,6 +329,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         return view
     }
+
 /*
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

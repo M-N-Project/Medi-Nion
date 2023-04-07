@@ -39,16 +39,19 @@
                     app:layout_constraintTop_toTopOf="parent">
 
 
-                    <ImageView
+                    <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/imageView_myprofile"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
+                        android:layout_width="43dp"
+                        android:layout_height="38dp"
+                        android:src="@drawable/profile_mous"
+                        android:layout_marginTop="1dp"
                         android:layout_marginStart="15dp"
-                        android:src="@drawable/basic_profile1"
+                        app:riv_corner_radius="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.043"
+                        app:layout_constraintHorizontal_bias="0.065"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingClass" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -98,6 +101,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="3dp"
                                 android:text="진료과"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="77dp" />
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="3dp"
+                                android:text=" / "
                                 android:textStyle="bold"
                                 android:textSize="12sp"
                                 app:layout_constraintEnd_toEndOf="parent"

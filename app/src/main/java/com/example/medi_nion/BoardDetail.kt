@@ -459,6 +459,35 @@ class BoardDetail : AppCompatActivity() {
                                                                         }
                                                                     }
 
+                                                                    val comment2medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
+                                                                    val id = intent.getStringExtra("id").toString()
+                                                                    var comment2_medal_text : String = "bronze"
+
+                                                                    val request = Login_Request(
+                                                                        Request.Method.POST,
+                                                                        comment2medalurl,
+                                                                        { medal2response ->
+                                                                            Log.d("medfsfdasd", medal2response)
+
+                                                                            when (medal2response) {
+                                                                                "king" -> {
+                                                                                    comment2_medal_text =
+                                                                                        "king"
+                                                                                }
+                                                                                "gold" -> {
+                                                                                    comment2_medal_text =
+                                                                                        "gold"
+                                                                                }
+                                                                                "silver" -> {
+                                                                                    comment2_medal_text =
+                                                                                        "silver"
+                                                                                }
+                                                                                else -> {
+                                                                                    comment2_medal_text =
+                                                                                        "bronze"
+                                                                                }
+                                                                            }
+
                                                                     val commentDetailItem =
                                                                         CommentDetailItem(
                                                                             id,
@@ -466,6 +495,7 @@ class BoardDetail : AppCompatActivity() {
                                                                             writerUser,
                                                                             comment_num,
                                                                             comment2,
+                                                                            comment2_medal_text,
                                                                             comment2_num,
                                                                             comment2_time,
                                                                             heart,
@@ -669,7 +699,16 @@ class BoardDetail : AppCompatActivity() {
                                                                         "commmentDetailItem",
                                                                         "$id, $post_num, $comment_num,  $comment2_num, $comment2, $writerUser, $comment2_time , $heart"
                                                                     )
-                                                                }
+                                                                }, { Log.d("like Failed", "error......${error(applicationContext)}") },
+                                                                hashMapOf(
+                                                                    "id" to id
+                                                                )
+                                                                )
+                                                                val queue = Volley.newRequestQueue(this)
+                                                                queue.add(request)
+
+                                                            }
+
 
                                                                 if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                                                                     comment_user.size + 1
