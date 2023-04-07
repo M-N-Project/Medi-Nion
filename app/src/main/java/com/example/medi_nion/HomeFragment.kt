@@ -27,9 +27,10 @@ var qnaItems = java.util.ArrayList<qnaNewItem>()
 class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 프레그먼트(게시판 구분은 추후에)
 
     private lateinit var id: String
+    private lateinit var nickname: String
     private lateinit var userType: String
     private lateinit var userDept: String
-    private lateinit var userGrade: String
+    private lateinit var userMedal: String
 
     class PagerRecyclerAdapter(private val qnaItem: java.util.ArrayList<qnaNewItem>) :
         RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
@@ -109,11 +110,12 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val imageView_ad = view.findViewById<ImageView>(R.id.imageView_ad)
         val imageView_ad2 = view.findViewById<ImageView>(R.id.imageView_ad2)
 
-        // bundle 에서 id, userType, userDept 값 가져오기
+        // bundle 에서 id, userType, userDept, userMedal 값 가져오기
         id = arguments?.getString("id").toString()
+        nickname = arguments?.getString("nickname").toString()
         userType = arguments?.getString("userType").toString()
         userDept = arguments?.getString("userDept").toString()
-        userGrade = arguments?.getString("userGrade").toString()
+        userMedal = arguments?.getInt("userMedal").toString()
 
 
         imageView_ad.setOnClickListener {
@@ -134,7 +136,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("userGrade", userGrade)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "자유 게시판")
                 startActivity(intent)
             }
@@ -144,9 +147,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
-                intent.putExtra("userGrade", userGrade)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "직종별 게시판")
                 startActivity(intent)
             }
@@ -156,9 +160,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
-                intent.putExtra("userGrade", userGrade)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "진료과별 게시판")
                 startActivity(intent)
             }
@@ -168,7 +173,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("userGrade", userGrade)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "장터 게시판")
                 startActivity(intent)
             }
@@ -178,7 +184,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("userGrade", userGrade)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "QnA 게시판")
                 startActivity(intent)
             }
@@ -337,8 +344,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
         val id = arguments?.getString("id")
+        var nickname = arguments?.getString("nickname")
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
+        val userMedal = arguments?.getInt("userMedal").toString()
 
         val request = Board_Request(
             Request.Method.POST,
@@ -403,13 +412,16 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                         intent.putExtra("board", "QnA 게시판")
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
+
                                         intent.putExtra("title", detailTitle)
                                         intent.putExtra("content", detailContent)
                                         intent.putExtra("time", detailTime)
                                         intent.putExtra("image", detailImg)
                                         intent.putExtra("userType", userType)
                                         intent.putExtra("userDept", userDept)
+                                        intent.putExtra("userMedal", userMedal)
                                         startActivity(intent)
                                     }
 
@@ -454,6 +466,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val urlhotpost = "http://seonho.dothome.co.kr/Hot_post_list.php"
 
         val id = arguments?.getString("id").toString()
+        var nickname = arguments?.getString("nickname").toString()
         val userType = arguments?.getString("userType").toString()
         val userDept = arguments?.getString("userDept").toString()
         //Log.d("user", "$userType $userDept")
@@ -626,6 +639,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         intent.putExtra("board", board)
                         intent.putExtra("num", post_num)
                         intent.putExtra("id", id)
+                        intent.putExtra("nickname", nickname)
                         intent.putExtra("writerId", detailId)
                         intent.putExtra("title", detailTitle)
                         intent.putExtra("content", detailContent)

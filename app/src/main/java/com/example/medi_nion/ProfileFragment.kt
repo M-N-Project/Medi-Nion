@@ -10,17 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
 import kotlinx.android.synthetic.main.profile_password_reset.*
-import org.json.JSONArray
 import org.json.JSONObject
-import org.w3c.dom.Text
 
 class ProfileFragment : Fragment(R.layout.profile) {
     private var mBinding: ProfileBinding? = null
@@ -40,7 +36,15 @@ class ProfileFragment : Fragment(R.layout.profile) {
         val id = arguments?.getString("id")
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
+        val userGrade = arguments?.getInt("userGrade")
         val passwd = arguments?.getString("passwd")
+        val nickname = arguments?.getString("nickname")
+
+
+        binding.textViewNickname.text = nickname
+        binding.textViewDept.text = userDept
+        binding.textViewJob.text = userType
+        fetchGrade()
 
         //나의 활동 
         binding.item1.setOnClickListener{
@@ -62,6 +66,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
             intent.putExtra("profileMenuType", "post")
             intent.putExtra("userType", userType)
             intent.putExtra("userDept", userDept)
+            intent.putExtra("userGrade", userGrade)
             intent.putExtra("board", "자유 게시판")
             startActivity(intent)
         }
@@ -73,6 +78,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
             intent.putExtra("profileMenuType", "scrap")
             intent.putExtra("userType", userType)
             intent.putExtra("userDept", userDept)
+            intent.putExtra("userGrade", userGrade)
             intent.putExtra("board", "자유 게시판")
             startActivity(intent)
         }
@@ -341,6 +347,41 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         val queue = Volley.newRequestQueue(context)
         queue.add(chanNamerequest)
+    }
+
+    fun fetchGrade() {
+        val gradeurl = "http://seonho.dothome.co.kr/Grade_Select.php"
+        var nickname = arguments?.getString("nickname").toString()
+        val gradeImage = binding.grade
+
+        val request = Login_Request(
+            Request.Method.POST,
+            gradeurl,
+            { response ->
+                Log.d("gradedkd", response)
+
+                when (response) {
+                    "berry" -> {
+                        gradeImage.setImageResource(R.drawable.berry)
+                    }
+                    "flower" -> {
+                        gradeImage.setImageResource(R.drawable.flower)
+                    }
+                    "branch" -> {
+                        gradeImage.setImageResource(R.drawable.branch)
+                    }
+                    else -> {
+                        gradeImage.setImageResource(R.drawable.sprout)
+                    }
+                }
+
+            }, { Log.d("grade Failed", "error......${error(this)}") },
+            hashMapOf(
+                "nickname" to nickname
+            )
+        )
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
     }
 }
 

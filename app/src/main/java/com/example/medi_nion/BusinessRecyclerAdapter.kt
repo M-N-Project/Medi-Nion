@@ -36,14 +36,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: BusinessRecyclerAdapter.ViewHolder, position: Int) {
-//        val item = items[position]
-//        val listener = View.OnClickListener { it ->
-//            Toast.makeText(it.context, "Clicked: ${item.title}", Toast.LENGTH_SHORT).show()
-//        }
-//        holder.apply {
-//            bind(listener, item)
-//            itemView.tag = item
-//        }
         val safePosition = holder.absoluteAdapterPosition
         holder.bind(items[position])
     }
