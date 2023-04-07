@@ -326,6 +326,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
+                Log.d("res",response)
                 val jsonObject = JSONObject(response)
                 val success = jsonObject.getBoolean("success");
                 if (success) {

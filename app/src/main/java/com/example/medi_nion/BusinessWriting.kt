@@ -18,9 +18,12 @@ import android.view.View.OnClickListener
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
+import com.android.volley.*
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_writing.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -134,43 +137,44 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    val request = Upload_Request(
-                        Request.Method.POST,
-                        postUrl,
-                        { response ->
-                            if (!response.equals("upload fail")) {
-                                Toast.makeText(
-                                    baseContext,
-                                    String.format("채널 포스트 업로드가 완료되었습니다."),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                val request: StringRequest =
+                    object : StringRequest(Method.POST, postUrl, object : Response.Listener<String?> {
+                        override fun onResponse(response: String?) {
+                            Log.d("bussinewriting", response.toString())
 
-                                var intent = Intent(applicationContext, BusinessManageActivity::class.java)
-                                intent.putExtra("id", id)
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                                startActivity(intent)
+                            var intent = Intent(applicationContext, BusinessManageActivity::class.java)
+                            intent.putExtra("id", id)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                            startActivity(intent)
+                        }
+                    }, object : Response.ErrorListener {
+                        override fun onErrorResponse(error: VolleyError) {
+                            Log.d("bussinewriting", error.toString())
+                        }
+                    }) {
+                        @Throws(AuthFailureError::class)
+                        override fun getParams(): Map<String, String>? {
+                            val map: MutableMap<String, String> = HashMap()
+                            // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
+                            map["id"] = id
+                            map["Channel_Name"] = chanName
+                            map["title"] = postTitle
+                            map["content"] = postContent
+                            map["Channel_Profile_Img1"] = image1
+                            map["Channel_Profile_Img2"] = image2
+                            return map
+                        }
+                    }
 
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "게시물 업로드가 실패했습니다.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        },
-                        { Log.d("failed", "error......${error(applicationContext)}") },
-                        mutableMapOf(
-                            "id" to id,
-                            "chanName" to chanName,
-                            "title" to postTitle,
-                            "content" to postContent,
-                            "image1" to image1,
-                            "image2" to image2
-                        )
+                request.setRetryPolicy(
+                    DefaultRetryPolicy(
+                        40000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
                     )
-
-                    val queue = Volley.newRequestQueue(this)
-                    queue.add(request)
+                )
+                val queue = Volley.newRequestQueue(applicationContext)
+                queue.add(request)
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
             hashMapOf(
@@ -238,7 +242,8 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
                                 bitmap = resize(bitmap)
-                                image1 = BitMapToString(bitmap)
+//                                image1 = BitMapToString(bitmap)
+                                image1 = encodeBitmapImage(bitmap)
 
                             }
                             1 -> {
@@ -252,7 +257,8 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
                                 bitmap = resize(bitmap)
-                                image2 = BitMapToString(bitmap)
+//                                image2 = BitMapToString(bitmap)
+                                image2 = encodeBitmapImage(bitmap)
                             }
                             2 -> {
                                 image3_delete.visibility = View.VISIBLE
@@ -265,7 +271,8 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
                                 bitmap = resize(bitmap)
-                                image3 = BitMapToString(bitmap)
+//                                image3 = BitMapToString(bitmap)
+                                image3 = encodeBitmapImage(bitmap)
                             }
                             3 -> {
                                 image4_delete.visibility = View.VISIBLE
@@ -278,7 +285,8 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
                                 bitmap = resize(bitmap)
-                                image4 = BitMapToString(bitmap)
+//                                image4 = BitMapToString(bitmap)
+                                image4 = encodeBitmapImage(bitmap)
                             }
                             4 -> {
                                 image5_delete.visibility = View.VISIBLE
@@ -291,7 +299,8 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
                                 bitmap = resize(bitmap)
-                                image5 = BitMapToString(bitmap)
+//                                image5 = BitMapToString(bitmap)
+                                image5 = encodeBitmapImage(bitmap)
                             }
                         }
                     }
@@ -315,7 +324,12 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         }
     }
 
-
+    private fun encodeBitmapImage(bitmap: Bitmap) : String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val bytesOfImage = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(bytesOfImage, Base64.DEFAULT)
+    }
 
 //    @RequiresApi(Build.VERSION_CODES.P)
 //    fun uriToBitmap(ImageData : Uri) : String {
