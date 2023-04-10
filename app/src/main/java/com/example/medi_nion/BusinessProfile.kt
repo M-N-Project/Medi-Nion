@@ -24,7 +24,7 @@ class BusinessProfile : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.business_home)
+        setContentView(R.layout.business_profile_home)
 
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
 
@@ -53,12 +53,15 @@ class BusinessProfile : AppCompatActivity() {
 //
 //        })
 
+        /*
         //글쓰기
         val write = findViewById<Button>(R.id.write_btn)
         write.setOnClickListener {
             val intent = Intent(applicationContext, BusinessWriting::class.java)
             startActivity(intent)
         }
+
+         */
     }
 
     fun fetchData() {

@@ -41,6 +41,7 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
         private val itemCommentHeart : CheckBox =  itemView.findViewById(R.id.imageView_comment2_like)
         private val itemCommentHeartCnt : TextView = itemView.findViewById(R.id.comment2_heartCnt)
         private val itemCommentMore : Button = itemView.findViewById(R.id.commentMoreBtn2)
+        private val itemCommentMedal: ImageView = itemView.findViewById(R.id.comment_comment_medal)
 
 
         fun bind(item: CommentDetailItem, pos : Int) {
@@ -49,6 +50,20 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.heart.toString()
 
+            when (item.comment2_medal) {
+                "king" -> {
+                    itemCommentMedal.setImageResource(R.drawable.king_medal)
+                }
+                "gold" -> {
+                    itemCommentMedal.setImageResource(R.drawable.gold_medal)
+                }
+                "silver" -> {
+                    itemCommentMedal.setImageResource(R.drawable.silver_medal)
+                }
+                else -> {
+                    itemCommentMedal.setImageResource(R.drawable.bronze_medal)
+                }
+            }
 
             if(item.id == item.writerId) {
                 itemCommentMore.setOnClickListener{

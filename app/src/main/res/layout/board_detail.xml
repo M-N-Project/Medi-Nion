@@ -93,15 +93,18 @@
                             android:layout_height="48dp"
                             android:orientation="horizontal">
 
-                            <ImageView
+                            <com.makeramen.roundedimageview.RoundedImageView
                                 android:id="@+id/imageView_basicprofile"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/basic_profile1"
+                                android:layout_width="37dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/profile_mous"
+                                android:layout_marginTop="8dp"
+                                app:riv_corner_radius="10dp"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.043"
+                                app:layout_constraintHorizontal_bias="0.065"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="MissingClass" />
 
 
                             <LinearLayout
@@ -132,7 +135,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="3dp"
-                                        android:layout_marginTop="5dp"
+                                        android:layout_marginTop="3dp"
                                         android:src="@drawable/bronze_medal"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintHorizontal_bias="0.0"
@@ -265,7 +268,6 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.026" />
 
--->
                             <CheckBox
                                 android:id="@+id/checkbox_bookmark2"
                                 android:layout_width="27dp"
@@ -377,13 +379,14 @@
                     android:id="@+id/Comment_Btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="#86C9C6"
                     android:backgroundTint="#86C9C6"
                     android:text="등록"
-                    android:layout_weight="1"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:strokeColor="#FFFFFF" />
+                    app:strokeColor="#FFFFFF"
+                    tools:ignore="TextContrastCheck" />
 
             </LinearLayout>
 

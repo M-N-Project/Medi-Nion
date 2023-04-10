@@ -11,9 +11,7 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 
 class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
 
