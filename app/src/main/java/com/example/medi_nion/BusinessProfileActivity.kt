@@ -68,17 +68,6 @@ class BusinessProfileActivity : AppCompatActivity() {
         all_items.clear()
 
         fetchProfile()
-//        requestBusinessProfile()
-//        fetchBusinessPost()
-
-//        if(image_profile != null) {
-//            val bitmap: Bitmap? = StringToBitmaps(image_profile)
-//            profileImg.setImageBitmap(bitmap)
-//        }
-//        if(image_background != null) {
-//            val bitmap: Bitmap? = StringToBitmaps(image_background)
-//            backgroundImg.setImageBitmap(bitmap)
-//        }
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -212,6 +201,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                                         }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                                         hashMapOf(
+                                            "channel_name" to channel_name,
                                             "id" to id
                                         )
                                     )
@@ -222,6 +212,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                             }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                             hashMapOf(
+                                "channel_name" to channel_name,
                                 "id" to id
                             )
                         )
