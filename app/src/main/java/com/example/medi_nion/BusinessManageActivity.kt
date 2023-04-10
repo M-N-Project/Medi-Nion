@@ -337,10 +337,6 @@ class BusinessManageActivity : AppCompatActivity() {
                             editProfile.setImageBitmap(bitmap)
                         }
 
-                        Log.d("fetch ", "$channel_name, $channel_desc, $image_profile, $subscribe_count")
-                        subscribe_text.setText("구독자 수: " + subscribe_count.toString() + "명")
-
-
                     }
                 }
 
