@@ -7,11 +7,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.ImageDecoder
+import android.graphics.*
 import android.graphics.ImageDecoder.ImageInfo
-import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -615,7 +612,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
 
         Log.d("tess-two", "ocr")
-        Toast.makeText(applicationContext, "글자 추출중입니다.\n잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "신분증 인식에 30초~1분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
         printOCRResult(dst)
     }
 
@@ -856,14 +853,27 @@ class Retrofit_SignUp : AppCompatActivity() {
             ".jpg",
             getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         )
-
-
         photoUri = FileProvider.getUriForFile(
             this, "${packageName}.provider", photoFile
         )
 
+
         cameraLauncher.launch(photoUri)
     }
+
+    private fun convertToGrayscale(bitmap: Bitmap): Bitmap {
+        val grayBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(grayBitmap)
+        val paint = Paint()
+        val colorMatrix = ColorMatrix().apply {
+            setSaturation(0f)
+        }
+        val filter = ColorMatrixColorFilter(colorMatrix)
+        paint.colorFilter = filter
+        canvas.drawBitmap(bitmap, 0f, 0f, paint)
+        return grayBitmap
+    }
+
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val focusView: View? = currentFocus
