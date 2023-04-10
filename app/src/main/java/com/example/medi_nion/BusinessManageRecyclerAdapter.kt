@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
-class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessManageBoardItem>) :
+class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessManageRecyclerAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
@@ -46,7 +46,7 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessManageB
         private var view: View = v
 
 
-        fun bind(listener: View.OnClickListener, item: BusinessManageBoardItem) {
+        fun bind(listener: View.OnClickListener, item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
 
             setViewMore(view.content, view.viewMore)

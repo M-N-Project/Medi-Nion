@@ -14,7 +14,7 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     private String urlStr;
     private ImageView imageView;
 
-    public static HashMap<String, Bitmap> bitmapHash = new HashMap<String, Bitmap>();
+    private static HashMap<String, Bitmap> bitmapHash = new HashMap<String, Bitmap>();
 
     public ImageLoadTask(String urlStr, ImageView imageView){
         this.urlStr = urlStr;
@@ -38,11 +38,8 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
             Log.d("taks??", "i'm here 4");
             // 이미 url을 통해 불러온 적이 있다면 이전 bitmap을 삭제
             if(bitmapHash.containsKey(urlStr)) {
+                Log.d("taks..?!", urlStr);
                 Bitmap oldBitmap = bitmapHash.remove(urlStr);
-                if(oldBitmap != null){
-                    oldBitmap.recycle();
-                    oldBitmap = null;
-                }
             }
 
             URL url = new URL(urlStr);
@@ -66,7 +63,6 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
 
-        Log.d("imageView", "set!");
         imageView.setImageBitmap(bitmap);
         imageView.invalidate();
 

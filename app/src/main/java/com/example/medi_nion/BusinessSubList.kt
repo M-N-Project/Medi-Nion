@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -99,7 +100,8 @@ class BusinessSubList : AppCompatActivity() {
                         }
                     }
                     else{
-                        //구독한 채널 없다는 메세지 띄우기.
+                        findViewById<TextView>(R.id.noSubList).visibility = View.VISIBLE
+                        findViewById<TextView>(R.id.noSubList).bringToFront()
                     }
                 }
 

@@ -50,8 +50,8 @@ class BusinessManageActivity : AppCompatActivity() {
     private var boardProfileMap = HashMap<String, Bitmap>()
 
     private var haveChan = false
-    var items =ArrayList<BusinessManageBoardItem>()
-    var all_items = ArrayList<BusinessManageBoardItem>()
+    var items =ArrayList<BusinessBoardItem>()
+    var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
     var adapter = BusinessManageRecyclerAdapter(items)
@@ -234,7 +234,6 @@ class BusinessManageActivity : AppCompatActivity() {
                         Log.d("bussine123", response.toString())
 
                         loadingText.visibility = View.GONE
-                        loadingText.setText("프로필 사진 업로드는 최대 2분 소요될 수 있습니다.")
                         progressBar.visibility = View.GONE
                     }
                 }, object : Response.ErrorListener {
@@ -455,13 +454,13 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessManageBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
 
                                     var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BusinessManageBoardItem>()
+                                    var new_items = ArrayList<BusinessBoardItem>()
                                     new_items.addAll(items)
                                     adapter = BusinessManageRecyclerAdapter(new_items)
                                     BusinessBoardRecyclerView.adapter = adapter
@@ -509,7 +508,7 @@ class BusinessManageActivity : AppCompatActivity() {
         val intent: Intent = Intent(applicationContext, ProfileFragment::class.java)
 
         loadingText.visibility = View.VISIBLE
-        loadingText.setText("프로필 사진 업로드는 최대 2분 소요될 수 있습니다.")
+        loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
         progressBar.visibility = View.VISIBLE
         progressBar.bringToFront()
         val request = Login_Request(

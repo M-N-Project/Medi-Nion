@@ -164,13 +164,15 @@
                     android:layout_marginEnd="35dp"
                     android:layout_weight="1">
 
-                    <Button
+                    <android.widget.CheckBox
                         android:id="@+id/channelPlusBtn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@drawable/subscribe_checkbox" />
+                        android:button="@null"
+                        android:drawableStart="@drawable/subscribe_checkbox"
+                        android:textColor="@color/black"
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 

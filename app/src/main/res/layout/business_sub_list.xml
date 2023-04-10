@@ -54,6 +54,21 @@
             android:layout_marginBottom="3dp"
             android:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/noSubList"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_below="@+id/board_ad"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="300dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="330dp"
+            android:text="내가 구독한 채널이 없습니다."
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
