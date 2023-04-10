@@ -2,16 +2,20 @@ package com.example.medi_nion
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Outline
 import android.media.Image
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.android.volley.Request
@@ -62,10 +66,21 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
 
             view.titleName.text = item.channel_name
             view.time.text = item.time
-//            view.profileImg2.setImageDrawable(item.profileImg)
             view.content.text = item.content
             bookmark.isChecked = item.isBookm
             heart.isChecked = item.isHeart
+
+            profileImg.setImageResource(R.drawable.logo)
+
+            if(item.profileImg.length >= 5){
+                if(item.profileImg.substring((item.profileImg).length-4, (item.profileImg).length) == ".jpg"){
+                    val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${item.profileImg}"
+                    val task = ImageLoadTask(imgUrl, profileImg)
+                    task.execute()
+                }
+            }
+
+            roundAll(view.profileImg2, 100.0f)
 
 
             if(item.image1 != "null"){
@@ -124,7 +139,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                                 viewMoreTextView.text = "간략히 보기"
                             }
                             else{
-                                contentTextView.maxLines = Int.MAX_VALUE
+                                contentTextView.maxLines = Int.MIN_VALUE
                                 viewMoreTextView.text = "더보기"
                             }
 
@@ -133,6 +148,23 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                     }
                 }
             }
+        }
+
+        fun roundAll(iv: ImageView, curveRadius : Float)  : ImageView {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                iv.outlineProvider = object : ViewOutlineProvider() {
+
+                    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+                    override fun getOutline(view: View?, outline: Outline?) {
+                        outline?.setRoundRect(0, 0, view!!.width, view.height, curveRadius)
+                    }
+                }
+
+                iv.clipToOutline = true
+            }
+            return iv
         }
 
         // String -> Bitmap 변환
