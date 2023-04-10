@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -38,6 +39,7 @@ class BusinessProfileActivity : AppCompatActivity() {
      private val GALLERY = 1
     var image_background : String = "null"
     var image_profile : String = "null"
+    var profileMap = HashMap<String, Bitmap>()
 
     private var haveChan = false
     var items =ArrayList<BusinessBoardItem>()
@@ -72,7 +74,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 //        }
 
 
-        val profileImg = findViewById<ImageView>(R.id.profileImg)
+
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -195,8 +197,12 @@ class BusinessProfileActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
+                    val profileImg = findViewById<ImageView>(R.id.profileImg)
 
-                    val BusinessItem = BusinessBoardItem(num, id, channel_name, title, content, time, image1, image2, image3,false, false)
+                    val d: BitmapDrawable = (profileImg).drawable as BitmapDrawable
+                    val profileBitmap: Bitmap = d.getBitmap()
+                    profileMap.put(id, profileBitmap)
+                    val BusinessItem = BusinessBoardItem(num, id, profileMap, channel_name, title, content, time, image1, image2, image3,false, false)
 
                     items.add(BusinessItem)
                     all_items.add(BusinessItem)

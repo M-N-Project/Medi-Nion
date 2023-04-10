@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 
-class BusinessBoardItem(
+class BusinessManageBoardItem(
     val post_num : Int,
     val id : String,
     val profileImg : String,

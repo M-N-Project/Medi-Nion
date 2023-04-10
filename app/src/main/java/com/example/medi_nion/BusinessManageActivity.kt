@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -46,9 +47,11 @@ class BusinessManageActivity : AppCompatActivity() {
     var isEditName : Boolean = false
     var isEditDesc : Boolean = false
 
+    private var boardProfileMap = HashMap<String, Bitmap>()
+
     private var haveChan = false
-    var items =ArrayList<BusinessBoardItem>()
-    var all_items = ArrayList<BusinessBoardItem>()
+    var items =ArrayList<BusinessManageBoardItem>()
+    var all_items = ArrayList<BusinessManageBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
     var adapter = BusinessManageRecyclerAdapter(items)
@@ -76,7 +79,6 @@ class BusinessManageActivity : AppCompatActivity() {
         if(!isFirst){
             fetchProfile()
             fetchProfileImg()
-            fetchBusinessPost()
         }
 
         findViewById<RadioGroup>(R.id.businessSetting_RadioGroup).bringToFront()
@@ -215,56 +217,53 @@ class BusinessManageActivity : AppCompatActivity() {
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdate2.php"
 
 
-//        Intent(this, BusinessProfileService::class.java).also { intent ->
-//            intent.putExtra("id", id)
-//            intent.putExtra("isFirst", isFirst)
-//            intent.putExtra("channel_name", channel_name)
-//            intent.putExtra("channel_desc", channel_desc)
-//            intent.putExtra("profile_img", profileEncoded)
-//
-//            startService(intent)
-//        }
+        Intent(this, BusinessProfileService::class.java).also { intent ->
+            intent.putExtra("id", id)
+            intent.putExtra("isFirst", isFirst)
+            intent.putExtra("channel_name", channel_name)
+            intent.putExtra("channel_desc", channel_desc)
+            intent.putExtra("profile_img", profileEncoded)
 
-//        loadingText.visibility = View.GONE
-//        progressBar.visibility = View.GONE
+            startService(intent)
+        }
 
-//        GlobalScope.launch{
-//            val request: StringRequest =
-//                object : StringRequest(Method.POST, urlBusinessProfileUpdate, object : Response.Listener<String?> {
-//                    override fun onResponse(response: String?) {
-//                        Log.d("bussine123", response.toString())
-//
-//                        loadingText.visibility = View.GONE
-//                        loadingText.setText("프로필 사진 업로드는 최대 2분 소요될 수 있습니다.")
-//                        progressBar.visibility = View.GONE
-//                    }
-//                }, object : Response.ErrorListener {
-//                    override fun onErrorResponse(error: VolleyError) {
-//                        Log.d("bussine123", error.toString())
-//                    }
-//                }) {
-//                    @Throws(AuthFailureError::class)
-//                    override fun getParams(): Map<String, String>? {
-//                        val map: MutableMap<String, String> = HashMap()
-//                        // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
-//                        map["id"] = id
-//                        map["Channel_Name"] = channel_name
-//                        map["Channel_Desc"] = channel_desc
-//                        map["Channel_Profile_Img"] = profileEncoded
-//                        return map
-//                    }
-//                }
-//
-//            request.setRetryPolicy(
-//                DefaultRetryPolicy(
-//                    40000,
-//                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-//                )
-//            )
-//            val queue = Volley.newRequestQueue(applicationContext)
-//            queue.add(request)
-//        }
+        GlobalScope.launch{
+            val request: StringRequest =
+                object : StringRequest(Method.POST, urlBusinessProfileUpdate, object : Response.Listener<String?> {
+                    override fun onResponse(response: String?) {
+                        Log.d("bussine123", response.toString())
+
+                        loadingText.visibility = View.GONE
+                        loadingText.setText("프로필 사진 업로드는 최대 2분 소요될 수 있습니다.")
+                        progressBar.visibility = View.GONE
+                    }
+                }, object : Response.ErrorListener {
+                    override fun onErrorResponse(error: VolleyError) {
+                        Log.d("bussine123", error.toString())
+                    }
+                }) {
+                    @Throws(AuthFailureError::class)
+                    override fun getParams(): Map<String, String>? {
+                        val map: MutableMap<String, String> = HashMap()
+                        // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
+                        map["id"] = id
+                        map["Channel_Name"] = channel_name
+                        map["Channel_Desc"] = channel_desc
+                        map["Channel_Profile_Img"] = profileEncoded
+                        return map
+                    }
+                }
+
+            request.setRetryPolicy(
+                DefaultRetryPolicy(
+                    40000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                )
+            )
+            val queue = Volley.newRequestQueue(applicationContext)
+            queue.add(request)
+        }
 
 
 
@@ -382,8 +381,10 @@ class BusinessManageActivity : AppCompatActivity() {
 
                         val task = ImageLoadTask(imgUrl, editProfile)
                         task.execute()
-                        roundAll(editProfile, 70.0f)
+                        roundAll(editProfile, 100.0f)
 
+
+                        fetchBusinessPost(editProfile)
 //                        if(image_profile!=null){
 //                            val bitmap: Bitmap? = StringToBitmaps(image_profile)
 //                            editProfile.setImageBitmap(bitmap)
@@ -409,11 +410,12 @@ class BusinessManageActivity : AppCompatActivity() {
         queue.add(request)
     }
 
-    fun fetchBusinessPost() {
+    fun fetchBusinessPost(profile : ImageView) {
         // url to post our data
         var appUser = intent.getStringExtra("id")!!
         val urlBoard = "http://seonho.dothome.co.kr/BusinessManage.php"
         val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
+        val urlProfile = "http://seonho.dothome.co.kr/BusinessProfile.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
         val request = Board_Request(
@@ -437,43 +439,46 @@ class BusinessManageActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
-                    var isSub = false
 
-                    val requestSub = Board_Request(
+                    val requestProfile = Board_Request(
                         Request.Method.POST,
-                        urlIsSub,
-                        { responseIsSub ->
-                            if(responseIsSub != "business subscribers list fail"){
-                                val jsonArray = JSONArray(responseIsSub)
+                        urlProfile,
+                        { responseProfile ->
+                            if(!response.equals("business profile fail")){
+                                val jsonArray = JSONArray(responseProfile)
 
                                 for (i in jsonArray.length()-1  downTo  0) {
-                                    if(jsonArray[i].toString() == appUser) {
-                                        isSub = true
-                                        break
-                                    }
+                                    val item = jsonArray.getJSONObject(i)
+
+                                    val channel_name = item.getString("Channel_Name")
+                                    val channel_desc = item.getString("Channel_Message")
+                                    val image_profile = item.getString("Channel_Profile_Img")
+                                    val subscribe_count = item.getInt("subscribe_count")
+
+                                    val BusinessItem = BusinessManageBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
+
+                                    items.add(BusinessItem)
+                                    all_items.add(BusinessItem)
+
+                                    var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                                    var new_items = ArrayList<BusinessManageBoardItem>()
+                                    new_items.addAll(items)
+                                    adapter = BusinessManageRecyclerAdapter(new_items)
+                                    BusinessBoardRecyclerView.adapter = adapter
+                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                    BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
                                 }
                             }
 
                         }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                         hashMapOf(
-                            "channel_name" to channel_name
+                            "id" to id
                         )
                     )
                     val queue = Volley.newRequestQueue(this)
-                    queue.add(requestSub)
-
-                    val BusinessItem = BusinessBoardItem(num, id, channel_name, title, content, time, image1, image2, image3,false, false)
-
-                    items.add(BusinessItem)
-                    all_items.add(BusinessItem)
+                    queue.add(requestProfile)
                 }
-                var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<BusinessBoardItem>()
-                new_items.addAll(items)
-                adapter = BusinessManageRecyclerAdapter(new_items)
-                BusinessBoardRecyclerView.adapter = adapter
-                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
 
             }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
             hashMapOf(
@@ -506,6 +511,7 @@ class BusinessManageActivity : AppCompatActivity() {
         loadingText.visibility = View.VISIBLE
         loadingText.setText("프로필 사진 업로드는 최대 2분 소요될 수 있습니다.")
         progressBar.visibility = View.VISIBLE
+        progressBar.bringToFront()
         val request = Login_Request(
 
             Request.Method.POST,

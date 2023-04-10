@@ -144,6 +144,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
 
                             var intent = Intent(applicationContext, BusinessManageActivity::class.java)
                             intent.putExtra("id", id)
+                            intent.putExtra("isFirst", false)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                             startActivity(intent)
                         }

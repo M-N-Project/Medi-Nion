@@ -39,8 +39,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
         val userGrade = arguments?.getInt("userGrade")
         val passwd = arguments?.getString("passwd")
         val nickname = arguments?.getString("nickname")
-
-
+        
         binding.textViewNickname.text = nickname
         binding.textViewDept.text = userDept
         binding.textViewJob.text = userType

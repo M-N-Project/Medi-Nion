@@ -1,17 +1,18 @@
 package com.example.medi_nion
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.CheckBox
-import android.widget.LinearLayout
-import androidx.core.os.bundleOf
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_home.*
@@ -25,22 +26,14 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var adapter = BusinessRecyclerAdapter(items)
 
     private var hotListItems = ArrayList<BusinessHotListItem>()
-
-
-    val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
-    var scroll_count = 1
-
-
-    var scrollFlag = false
-    var itemIndex = ArrayList<Int>()
-    // RecyclerView.adapter에 지정할 Adapter
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.business_home, container, false)
+       val view =  inflater.inflate(R.layout.business_home, container, false)
+        return view
     }
 
     var appUser = ""
@@ -83,12 +76,37 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         val item = jsonArray.getJSONObject(i)
 
                         val chanName = item.getString("channel_name")
+                        var writerId = item.getString("id")
                         val chanProfile = item.getString("channel_profile_img")
+
+                        Log.d("0712321", chanProfile)
+
+//                        if(chanProfile != null){
+//                            val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/$chanProfile"
+//                            Log.d("8912312", imgUrl)
+//
+//                            var tempProfileImg = view?.findViewById<ImageView>(R.id.tempProfile)
+//
+//                            tempProfileImg?.visibility = View.VISIBLE
+//                            val task = ImageLoadTask(imgUrl, tempProfileImg)
+//                            task.execute()
+//
+//                            if(ImageLoadTask.bitmapHash.containsKey(imgUrl)){
+//                                val d: BitmapDrawable = (tempProfileImg as ImageView).drawable as BitmapDrawable
+//                                val profileBitmap: Bitmap = d.getBitmap()
+//
+//                                Log.d("97123", profileBitmap.toString())
+//
+//                                hotProfileMap.put(chanName, profileBitmap)
+//                                tempProfileImg.visibility = View.GONE
+//                            }
+//
+//                        }
 
                         val HotListItem = BusinessHotListItem(chanName, chanProfile)
                         hotListItems.add(HotListItem)
-                    }
 
+                    }
                     hotListItems.reverse()
                     var hotAdapter = BusinessHotListAdapter(hotListItems)
                     hotAdapter.notifyDataSetChanged()
@@ -152,6 +170,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         items.clear()
                         all_items.clear()
 
+                        
                         for (i in jsonArray.length() - 1 downTo 0) {
                             val item = jsonArray.getJSONObject(i)
 
@@ -165,192 +184,240 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                             val image2 = item.getString("image2")
                             val image3 = item.getString("image3")
 
-                            val bookfetchrequest = Login_Request(
+                            val urlProfile = "http://seonho.dothome.co.kr/BusinessProfile.php"
+
+                            val request = Board_Request(
                                 Request.Method.POST,
-                                urlBookmark,
-                                { responseBookmark ->
-                                    if (responseBookmark.equals("Success Bookmark")) {
-                                        isBookmark = true
-                                    } else if (responseBookmark.equals("No Bookmark")) {
-                                        isBookmark = false
-                                    }
-                                    val likerequest = Login_Request(
-                                        Request.Method.POST,
-                                        urlLike,
-                                        { responseLike ->
-                                            if (responseLike.equals("Success Heart")) {
-                                                isHeart = true
-                                            } else if (responseLike.equals("No Heart")) {
-                                                isHeart = false
-                                            }
+                                urlProfile,
+                                { response ->
+                                    if(!response.equals("business profile fail")){
+                                        val jsonArray = JSONArray(response)
 
-                                            val BusinessItem = BusinessBoardItem(
-                                                num,
-                                                writerId,
-                                                channel_name,
-                                                title,
-                                                content,
-                                                time,
-                                                image1,
-                                                image2,
-                                                image3,
-                                                isHeart,
-                                                isBookmark
-                                            )
-                                            items.add(BusinessItem)
-                                            all_items.add(BusinessItem)
+                                        for (i in jsonArray.length()-1  downTo  0) {
+                                            val item = jsonArray.getJSONObject(i)
 
-                                            var recyclerViewState =
-                                                BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                                            var new_items = ArrayList<BusinessBoardItem>()
-                                            new_items.addAll(items)
-                                            adapter = BusinessRecyclerAdapter(new_items)
-                                            BusinessBoardRecyclerView.adapter = adapter
-                                            adapter.stateRestorationPolicy =
-                                                RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                            BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
-                                                recyclerViewState
-                                            );
+                                            val image_profile = item.getString("Channel_Profile_Img")
 
-                                            adapter.setOnItemClickListener(object :
-                                                BusinessRecyclerAdapter.OnItemClickListener {
-                                                override fun onProfileClick(
-                                                    v: View,
-                                                    data: BusinessBoardItem,
-                                                    pos: Int
-                                                ) {
-                                                    val intent =
-                                                        Intent(
-                                                            context,
-                                                            BusinessProfileActivity::class.java
-                                                        )
-                                                    intent.putExtra("id", id)
-                                                    intent.putExtra(
-                                                        "channel_name",
-                                                        data.channel_name
-                                                    )
-                                                    startActivity(intent)
-                                                }
+//                                            if(image_profile != null){
+//                                                val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/$image_profile"
+//
+//                                                val task = ImageLoadTask(imgUrl, tempProfileImg)
+//                                                task.execute()
+//
+//                                                Log.d("profile fetch..", tempProfileImg.toString())
+//
+//                                                val d: BitmapDrawable = (tempProfileImg as ImageView).drawable as BitmapDrawable
+//                                                if(d != null){
+//                                                    Log.d("9817231", "$d// ${d.getBitmap()}")
+//                                                    var profileBitmap: Bitmap = d.getBitmap()
+//                                                    boardProfileMap.put(channel_name, profileBitmap)
+//                                                    tempProfileImg.visibility = View.GONE
+//                                                }
+//
+//                                            }
 
-                                                override fun onItemHeart(
-                                                    v: View,
-                                                    data: BusinessBoardItem,
-                                                    pos: Int
-                                                ) {
-                                                    val heartrequest = Board_Request(
+                                            val bookfetchrequest = Login_Request(
+                                                Request.Method.POST,
+                                                urlBookmark,
+                                                { responseBookmark ->
+                                                    if (responseBookmark.equals("Success Bookmark")) {
+                                                        isBookmark = true
+                                                    } else if (responseBookmark.equals("No Bookmark")) {
+                                                        isBookmark = false
+                                                    }
+                                                    val likerequest = Login_Request(
                                                         Request.Method.POST,
-                                                        "http://seonho.dothome.co.kr/BusinessLike.php",
-                                                        { response ->
-                                                            if (response != "Heart fail") {
-                                                                data.isHeart = !data.isHeart
-                                                                Toast.makeText(
-                                                                    context,
-                                                                    "좋아요 완료",
-                                                                    Toast.LENGTH_SHORT
-                                                                )
-                                                                    .show()
-                                                            } else Log.d(
-                                                                "heartrequest fail",
-                                                                response
-                                                            )
-                                                        },
-                                                        {
-                                                            Log.d(
-                                                                "b-heart failed",
-                                                                "error......${
-                                                                    context?.let { it1 ->
-                                                                        error(
-                                                                            it1
-                                                                        )
-                                                                    }
-                                                                }"
-                                                            )
-                                                        },
-                                                        hashMapOf(
-                                                            "id" to appUser,
-                                                            "post_num" to data.post_num.toString(),
-                                                            "flag" to (!data.isHeart).toString()
-                                                        )
-                                                    )
-
-                                                    val queue = Volley.newRequestQueue(context)
-                                                    queue.add(heartrequest)
-                                                }
-
-                                                override fun onItemBook(
-                                                    v: View,
-                                                    data: BusinessBoardItem,
-                                                    pos: Int
-                                                ) {
-                                                    val bookrequest = Board_Request(
-                                                        Request.Method.POST,
-                                                        "http://seonho.dothome.co.kr/BusinessBookmark.php",
-                                                        { response ->
-                                                            if (response != "Bookmark fail") {
-                                                                data.isBookm = !data.isBookm
-                                                                Toast.makeText(
-                                                                    context,
-                                                                    "북마크 완료",
-                                                                    Toast.LENGTH_SHORT
-                                                                )
-                                                                    .show()
-                                                            } else {
-                                                                Log.d("bookrequest fail", response)
+                                                        urlLike,
+                                                        { responseLike ->
+                                                            if (responseLike.equals("Success Heart")) {
+                                                                isHeart = true
+                                                            } else if (responseLike.equals("No Heart")) {
+                                                                isHeart = false
                                                             }
+
+                                                            val BusinessItem = BusinessBoardItem(
+                                                                num,
+                                                                writerId,
+                                                                image_profile,
+                                                                channel_name,
+                                                                title,
+                                                                content,
+                                                                time,
+                                                                image1,
+                                                                image2,
+                                                                image3,
+                                                                isHeart,
+                                                                isBookmark
+                                                            )
+                                                            items.add(BusinessItem)
+                                                            all_items.add(BusinessItem)
+
+                                                            var recyclerViewState =
+                                                                BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                                                            var new_items = ArrayList<BusinessBoardItem>()
+                                                            new_items.addAll(items)
+                                                            adapter = BusinessRecyclerAdapter(new_items)
+                                                            BusinessBoardRecyclerView.adapter = adapter
+                                                            adapter.stateRestorationPolicy =
+                                                                RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                                            BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
+                                                                recyclerViewState
+                                                            );
+
+                                                            adapter.setOnItemClickListener(object :
+                                                                BusinessRecyclerAdapter.OnItemClickListener {
+                                                                override fun onProfileClick(
+                                                                    v: View,
+                                                                    data: BusinessBoardItem,
+                                                                    pos: Int
+                                                                ) {
+                                                                    val intent =
+                                                                        Intent(
+                                                                            context,
+                                                                            BusinessProfileActivity::class.java
+                                                                        )
+                                                                    intent.putExtra("id", id)
+                                                                    intent.putExtra(
+                                                                        "channel_name",
+                                                                        data.channel_name
+                                                                    )
+                                                                    startActivity(intent)
+                                                                }
+
+                                                                override fun onItemHeart(
+                                                                    v: View,
+                                                                    data: BusinessBoardItem,
+                                                                    pos: Int
+                                                                ) {
+                                                                    val heartrequest = Board_Request(
+                                                                        Request.Method.POST,
+                                                                        "http://seonho.dothome.co.kr/BusinessLike.php",
+                                                                        { response ->
+                                                                            if (response != "Heart fail") {
+                                                                                data.isHeart = !data.isHeart
+                                                                                Toast.makeText(
+                                                                                    context,
+                                                                                    "좋아요 완료",
+                                                                                    Toast.LENGTH_SHORT
+                                                                                )
+                                                                                    .show()
+                                                                            } else Log.d(
+                                                                                "heartrequest fail",
+                                                                                response
+                                                                            )
+                                                                        },
+                                                                        {
+                                                                            Log.d(
+                                                                                "b-heart failed",
+                                                                                "error......${
+                                                                                    context?.let { it1 ->
+                                                                                        error(
+                                                                                            it1
+                                                                                        )
+                                                                                    }
+                                                                                }"
+                                                                            )
+                                                                        },
+                                                                        hashMapOf(
+                                                                            "id" to appUser,
+                                                                            "post_num" to data.post_num.toString(),
+                                                                            "flag" to (!data.isHeart).toString()
+                                                                        )
+                                                                    )
+
+                                                                    val queue = Volley.newRequestQueue(context)
+                                                                    queue.add(heartrequest)
+                                                                }
+
+                                                                override fun onItemBook(
+                                                                    v: View,
+                                                                    data: BusinessBoardItem,
+                                                                    pos: Int
+                                                                ) {
+                                                                    val bookrequest = Board_Request(
+                                                                        Request.Method.POST,
+                                                                        "http://seonho.dothome.co.kr/BusinessBookmark.php",
+                                                                        { response ->
+                                                                            if (response != "Bookmark fail") {
+                                                                                data.isBookm = !data.isBookm
+                                                                                Toast.makeText(
+                                                                                    context,
+                                                                                    "북마크 완료",
+                                                                                    Toast.LENGTH_SHORT
+                                                                                )
+                                                                                    .show()
+                                                                            } else {
+                                                                                Log.d("bookrequest fail", response)
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            Log.d(
+                                                                                "b-bookmark failed",
+                                                                                "error......${
+                                                                                    context?.let { it1 ->
+                                                                                        error(
+                                                                                            it1
+                                                                                        )
+                                                                                    }
+                                                                                }"
+                                                                            )
+                                                                        },
+                                                                        hashMapOf(
+                                                                            "id" to appUser,
+                                                                            "post_num" to data.post_num.toString(),
+                                                                            "flag" to (!data.isBookm).toString()
+                                                                        )
+                                                                    )
+
+                                                                    val queue = Volley.newRequestQueue(context)
+                                                                    queue.add(bookrequest)
+
+                                                                }
+                                                            })
                                                         },
                                                         {
                                                             Log.d(
-                                                                "b-bookmark failed",
-                                                                "error......${
-                                                                    context?.let { it1 ->
-                                                                        error(
-                                                                            it1
-                                                                        )
-                                                                    }
-                                                                }"
+                                                                "login failed",
+                                                                "error......${context?.let { it1 -> error(it1) }}"
                                                             )
                                                         },
                                                         hashMapOf(
                                                             "id" to appUser,
-                                                            "post_num" to data.post_num.toString(),
-                                                            "flag" to (!data.isBookm).toString()
+                                                            "post_num" to num.toString()
                                                         )
                                                     )
-
                                                     val queue = Volley.newRequestQueue(context)
-                                                    queue.add(bookrequest)
-
-                                                }
-                                            })
-                                        },
-                                        {
-                                            Log.d(
-                                                "login failed",
-                                                "error......${context?.let { it1 -> error(it1) }}"
+                                                    queue.add(likerequest)
+                                                },
+                                                {
+                                                    Log.d(
+                                                        "login failed",
+                                                        "error......${context?.let { it1 -> error(it1) }}"
+                                                    )
+                                                },
+                                                hashMapOf(
+                                                    "id" to appUser,
+                                                    "post_num" to num.toString()
+                                                )
                                             )
-                                        },
-                                        hashMapOf(
-                                            "id" to appUser,
-                                            "post_num" to num.toString()
-                                        )
-                                    )
-                                    val queue = Volley.newRequestQueue(context)
-                                    queue.add(likerequest)
-                                },
-                                {
-                                    Log.d(
-                                        "login failed",
-                                        "error......${context?.let { it1 -> error(it1) }}"
-                                    )
-                                },
+
+                                            val queue = Volley.newRequestQueue(context)
+                                            queue.add(bookfetchrequest)
+                                        }
+                                    }
+
+                                }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                                 hashMapOf(
-                                    "id" to appUser,
-                                    "post_num" to num.toString()
+                                    "id" to writerId
                                 )
                             )
-
+                            request.retryPolicy = DefaultRetryPolicy(
+                                0,
+                                -1,
+                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                            )
                             val queue = Volley.newRequestQueue(context)
-                            queue.add(bookfetchrequest)
+                            queue.add(request)
 
 
 //                    if(i >= jsonArray.length() - item_count*scroll_count){
@@ -375,4 +442,5 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         queue.add(request)
 
     }
+
 }

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <TextView
         android:id="@+id/subChan_Title"
         android:layout_width="match_parent"
@@ -18,11 +19,28 @@
         tools:layout_editor_absoluteX="9dp"
         tools:layout_editor_absoluteY="7dp" />
 
+    <ImageView
+        android:id="@+id/tempProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/business_profile"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/profileName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo"
+        android:visibility="gone"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/BusinessSubRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/business_hot_item"
         />
