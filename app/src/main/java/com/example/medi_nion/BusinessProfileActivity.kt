@@ -104,7 +104,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     fun fetchProfile(){
         var channel_name = intent.getStringExtra("channel_name")!!
         var appUser = intent.getStringExtra("appUser")!!
-        val url = "http://seonho.dothome.co.kr/BusinessProfileInfo.php"
+        val url = "http://seonho.dothome.co.kr/BusinessProfileInfo2.php"
         val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
@@ -112,6 +112,7 @@ class BusinessProfileActivity : AppCompatActivity() {
         val chanDesc = findViewById<TextView>(R.id.profileDesc)
         val chanIsSub = findViewById<CheckBox>(R.id.channelPlusBtn)
         val businessPageTitle = findViewById<TextView>(R.id.businessChanTitle)
+        val chanSubNum = findViewById<TextView>(R.id.profileSubscribe)
 
         val request = Board_Request(
             Request.Method.POST,
@@ -119,16 +120,18 @@ class BusinessProfileActivity : AppCompatActivity() {
             { response ->
                 if(response != "business profile fail"){
                     val jsonArray = JSONArray(response)
-
                     for (i in jsonArray.length()-1  downTo  0) {
                         val item = jsonArray.getJSONObject(i)
 
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
+                        val chanSub_num = item.getString("subscribe_count")
 
                         chanName.setText(channel_name)
                         chanDesc.setText(channel_desc)
                         businessPageTitle.setText("${channel_name}님의 비즈니스 채널")
+
+                        chanSubNum.text = chanSub_num+" 명 구독 중"
 
                         val requestSub = Board_Request(
                             Request.Method.POST,

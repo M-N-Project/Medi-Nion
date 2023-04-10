@@ -129,6 +129,7 @@ class BusinessManageActivity : AppCompatActivity() {
     fun fetchProfile(){
         var id = intent.getStringExtra("id")!!
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
+        val url2 = "http://seonho.dothome.co.kr/BusinessProfile2.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
         val editName = findViewById<EditText>(R.id.profileName)
@@ -152,9 +153,28 @@ class BusinessManageActivity : AppCompatActivity() {
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
                         val image_profile = item.getString("Channel_Profile_Img")
-                        val subscribe_count = item.getInt("subscribe_count")
+                        val request = Board_Request(
+                            Request.Method.POST,
+                            url2,
+                            { response ->
+                                if(!response.equals("no Subscribe")){
+                                    val jsonArray = JSONArray(response)
+                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val item = jsonArray.getJSONObject(i)
+                                        val subscribe_count = item.getInt("subscribe_count")
+                                        subscribe_text.setText("구독자 수: " + subscribe_count.toString() + "명")
+                                    }
+                                }else subscribe_text.setText("구독자 수: 0명")
+                            }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+                            hashMapOf(
+                                "id" to id
+                            )
+                        )
+                        val queue = Volley.newRequestQueue(this)
+                        queue.add(request)
 
-                        Log.d("4444", "$channel_name, $channel_desc, $image_profile")
+
+                        //Log.d("4444", "$channel_name, $channel_desc, $image_profile")
 
                         if(channel_name == null)
                             editName.setHint("채널명")
@@ -169,7 +189,7 @@ class BusinessManageActivity : AppCompatActivity() {
                             editProfile.setImageBitmap(bitmap)
                         }
 
-                        subscribe_text.setText("구독자 수: " + subscribe_count.toString() + "명")
+
 
 
                     }
