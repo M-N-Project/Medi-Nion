@@ -7,14 +7,15 @@ import android.os.Bundle
 import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 
 import com.example.medi_nion.databinding.BusinessCreateHome1Binding
 import kotlinx.android.synthetic.main.business_create_home1.*
@@ -35,10 +36,37 @@ class BusinessManageFirstActivity : AppCompatActivity() {
 
         indicator1.setViewPager(viewPager)
 
-        val id: String? = this.intent.getStringExtra("id")
+        val id: String = this.intent.getStringExtra("id").toString()
+        val urlBusinessProfileInsert = "http://seonho.dothome.co.kr/BusinessProfileInsert.php"
 
         findViewById<Button>(R.id.createBusinessChan_btn1).setOnClickListener{
             //비즈니스 채널 관리로 넘어가기.
+            val request = Login_Request(
+                Request.Method.POST,
+                urlBusinessProfileInsert,
+                { response ->
+                    Log.d("bussinesssssss", response.toString())
+                    if(!response.equals("business profile insert fail")) {
+                        Toast.makeText(this, "비즈니스 채널 프로필 생성 완료", Toast.LENGTH_SHORT).show()
+
+
+                    } else {
+                        Toast.makeText(this, "비즈니스 채널 프로필 생성 실패", Toast.LENGTH_SHORT).show()
+                    }
+
+                }, { Log.d("business profile failed", "error......${error(this)}") },
+                hashMapOf(
+                    "id" to id
+                )
+            )
+            request.retryPolicy = DefaultRetryPolicy(
+                0,
+                -1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
+
             val intent = Intent(this, BusinessManageActivity::class.java)
             intent.putExtra("id", id)
             intent.putExtra("isFirst", true)

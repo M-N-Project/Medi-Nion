@@ -1,10 +1,13 @@
 package com.example.medi_nion
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.widget.ImageView
 
 class BusinessBoardItem(
     val post_num : Int,
     val id : String,
+    val profileImg : String,
     val channel_name : String,
     val title: String,
     val content : String,
