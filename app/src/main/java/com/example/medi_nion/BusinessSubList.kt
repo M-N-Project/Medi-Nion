@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -52,78 +53,6 @@ class BusinessSubList : AppCompatActivity() {
         all_items.clear()
 
         businessChanListRecyclerView.setLayoutManager(businessChanListRecyclerView.layoutManager);
-
-//        businessChanListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                if(scrollFlag==false){
-//                    if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
-//
-//                        refresh_layout.setOnRefreshListener { //새로고침
-//
-//                            try {
-//                                //TODO 액티비티 화면 재갱신 시키는 코드
-//                                val intent = intent
-//                                finish() //현재 액티비티 종료 실시
-//                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-//                                startActivity(intent) //현재 액티비티 재실행 실시
-//                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-//
-//                                refresh_layout.isRefreshing = false //새로고침 없애기
-//                            } catch (e: Exception) {
-//                                e.printStackTrace()
-//                            }
-//                        }
-//
-//                    } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
-//                        //로딩
-//                        if(all_items.size > 20){
-//                            scrollFlag = true
-//
-//                            var progressBar : ProgressBar = findViewById(R.id.progressBar_subList)
-//                            progressBar.visibility = View.VISIBLE
-//
-//                            Handler(Looper.getMainLooper()).postDelayed({
-//                                progressBar.visibility = View.INVISIBLE
-//                            }, 2500)
-//
-//
-//                            if((all_items.size - item_count*scroll_count) > 20){
-//                                for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
-//                                    items.add(all_items[i])
-////                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
-//                                }
-//
-//                                var recyclerViewState = businessChanListRecyclerView.layoutManager?.onSaveInstanceState()
-//                                var new_items = ArrayList<BusinessChanListItem>()
-//                                new_items.addAll(items)
-//                                adapter = BusinessSubListAdapter(new_items)
-//                                businessChanListRecyclerView.adapter = adapter
-//                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-//                                businessChanListRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-//
-//                                scrollFlag = false
-//                            }
-//                            else{
-//                                for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
-//                                    items.add(all_items[i])
-////                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
-//
-//                                }
-//                                var recyclerViewState = businessChanListRecyclerView.layoutManager?.onSaveInstanceState()
-//                                var new_items = ArrayList<BusinessChanListItem>()
-//                                new_items.addAll(items)
-//                                adapter = BusinessSubListAdapter(new_items)
-//                                businessChanListRecyclerView.adapter = adapter
-//                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-//                                businessChanListRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-//                            }
-//
-//                            scroll_count ++
-//                        }
-//                    }
-//                }
-//            }
-//        })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -148,7 +77,6 @@ class BusinessSubList : AppCompatActivity() {
                             val channel_message = item.getString("channel_message")
                             val id = item.getString("id")
                             val profileImg = item.getString("profile_img")
-                            val backImg = item.getString("back_img")
 
                             var recyclerViewState = businessChanListRecyclerView.layoutManager?.onSaveInstanceState()
                             val businessChanItem = BusinessChanListItem(channel_name, channel_message, profileImg)
@@ -172,7 +100,8 @@ class BusinessSubList : AppCompatActivity() {
                         }
                     }
                     else{
-                        //구독한 채널 없다는 메세지 띄우기.
+                        findViewById<TextView>(R.id.noSubList).visibility = View.VISIBLE
+                        findViewById<TextView>(R.id.noSubList).bringToFront()
                     }
                 }
 

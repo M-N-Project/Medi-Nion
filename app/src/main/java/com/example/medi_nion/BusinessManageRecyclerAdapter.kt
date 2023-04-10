@@ -2,12 +2,19 @@ package com.example.medi_nion
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Outline
+import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
@@ -46,8 +53,23 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
             view.titleName.text = item.channel_name
             view.time.text = item.time
-//            view.profileImg2.setImageDrawable(item.profileImg)
             view.content.text = item.content
+
+
+            view.profileImg2.setImageResource(R.drawable.logo)
+
+            if(item.profileImg.length >= 5){
+                if(item.profileImg.substring((item.profileImg).length-4, (item.profileImg).length) == ".jpg"){
+                    val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${item.profileImg}"
+                    val task = ImageLoadTask(imgUrl, view.profileImg2)
+                    task.execute()
+                }
+            }
+
+            roundAll(view.profileImg2, 100.0f)
+
+//            view.profileImg2.setImageBitmap(item.profileImg)
+//            roundAll(view.profileImg2, 100.0f)
 
             if(item.image1 != "null"){
                 val bitmap: Bitmap? = StringToBitmaps(item.image1)
@@ -97,6 +119,23 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
                     }
                 }
             }
+        }
+
+        fun roundAll(iv: ImageView, curveRadius : Float)  : ImageView {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                iv.outlineProvider = object : ViewOutlineProvider() {
+
+                    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+                    override fun getOutline(view: View?, outline: Outline?) {
+                        outline?.setRoundRect(0, 0, view!!.width, view.height, curveRadius)
+                    }
+                }
+
+                iv.clipToOutline = true
+            }
+            return iv
         }
 
         // String -> Bitmap 변환

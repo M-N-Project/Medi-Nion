@@ -39,8 +39,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
         val userGrade = arguments?.getInt("userGrade")
         val passwd = arguments?.getString("passwd")
         val nickname = arguments?.getString("nickname")
-
-
+        
         binding.textViewNickname.text = nickname
         binding.textViewDept.text = userDept
         binding.textViewJob.text = userType
@@ -332,6 +331,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
+                Log.d("res",response)
                 val jsonObject = JSONObject(response)
                 val success = jsonObject.getBoolean("success");
                 if (success) {

@@ -2,20 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA" /> <!--카메라 권한-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />    <!--저장소 읽기 권한-->
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 저장소 읽기 권한 -->
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />    <!--저장소 쓰기 권한-->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />  <!--계정 목록 권한-->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" /> <!-- 저장소 쓰기 권한 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- 계정 목록 권한 -->
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,12 +27,17 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediNion"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <service
+            android:name=".BusinessProfileService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <activity
             android:name=".Login"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,51 +48,63 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Agreement"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FirstTimeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Board"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".BoardWrite"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Retrofit_SignUp"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Board_profile"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".HospitalProfile"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".BusinessSubList"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".BoardDetail"
+        <activity
+            android:name=".Agreement"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FirstTimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Board"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BoardWrite"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Retrofit_SignUp"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Board_profile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HospitalProfile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BusinessSubList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BoardDetail"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".BusinessManageActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".BusinessManageFirstActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".BusinessWriting"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".BusinessProfileActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".BusinessManageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BusinessManageFirstActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BusinessWriting"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BusinessProfileActivity"
             android:screenOrientation="portrait" />
 
+        <uses-library
+            android:name="org.apache.http.params"
+            android:required="false" />
 
-        <uses-library android:name="org.apache.http.params" android:required="false"/>
         <provider
-            android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
-
     </application>
 
 </manifest>
