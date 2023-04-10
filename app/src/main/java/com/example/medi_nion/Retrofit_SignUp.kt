@@ -4,11 +4,14 @@ package com.example.medi_nion
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.ImageDecoder
+import android.graphics.ImageDecoder.ImageInfo
+import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -27,7 +30,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.android.volley.Request
-import com.android.volley.toolbox.*
+import com.android.volley.toolbox.Volley
 import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
 import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
 import com.google.gson.GsonBuilder
@@ -35,10 +38,9 @@ import com.googlecode.tesseract.android.TessBaseAPI
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import org.opencv.android.BaseLoaderCallback
-import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
+import org.opencv.core.Mat
 import org.opencv.core.MatOfPoint
 import org.opencv.core.MatOfPoint2f
 import org.opencv.core.Size
@@ -46,7 +48,6 @@ import org.opencv.imgproc.Imgproc
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
-import java.lang.invoke.ConstantCallSite
 import java.lang.reflect.Type
 import java.util.regex.Pattern
 import kotlin.math.max
@@ -469,15 +470,19 @@ class Retrofit_SignUp : AppCompatActivity() {
 
     }
 
-    private fun doOCR(){
+    private fun doOCR() {
         try {
             bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(
-                    ImageDecoder.createSource(
-                        contentResolver,
-                        photoUri!!
-                    )
+                val source = ImageDecoder.createSource(
+                    contentResolver,
+                    photoUri!!
                 )
+
+                ImageDecoder.decodeBitmap(
+                    source
+                ) { decoder: ImageDecoder, _: ImageInfo?, _: ImageDecoder.Source? ->
+                    decoder.isMutableRequired = true
+                }
             } else {
                 MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
             }
@@ -485,22 +490,26 @@ class Retrofit_SignUp : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        val mat = org.opencv.core.Mat()
+        val mat = Mat()
         Utils.bitmapToMat(bitmap, mat)
 
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY)
-        val graySrc = mat
+        //흑백 영상으로 전환
+        Log.d("ggdf", "흑백")
+        val graySrc = Mat()
+        Imgproc.cvtColor(mat, graySrc, Imgproc.COLOR_RGB2GRAY)
+        Log.d("gradt", graySrc.toString())
 
         //2.이진화
         Log.d("tess-two", "이진화")
-        val binarySrc = org.opencv.core.Mat()
+        val binarySrc = Mat()
         Imgproc.threshold(graySrc, binarySrc, 0.0, 255.0, Imgproc.THRESH_OTSU)
+        Log.d("binary", binarySrc.toString())
 
         //3. 윤곽선 검출
         // 윤곽선 찾기
         Log.d("tess-two", "윤곽선")
         val contours = ArrayList<MatOfPoint>()
-        val hierarchy = org.opencv.core.Mat()
+        val hierarchy = Mat()
         Imgproc.findContours(
             binarySrc,
             contours,
@@ -524,7 +533,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         if (biggestContour == null) {
             throw IllegalArgumentException("No Contour")
         }
-// 너무 작아도 안됨
+        // 너무 작아도 안됨
         if (biggestContourArea < 400) {
             throw IllegalArgumentException("too small")
         }
@@ -596,39 +605,18 @@ class Retrofit_SignUp : AppCompatActivity() {
             org.opencv.core.Point(dw, dh),
             org.opencv.core.Point(dw, 0.0)
         )
+
         // 투시변환 매트릭스 구하기
         val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
 
         // 투시변환 된 결과 영상 얻기
-        val dst = org.opencv.core.Mat()
+        val dst = Mat()
         Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
-
-        dataPath = "$filesDir/tesseract/" //언어데이터의 경로 미리 지정
-
-        checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-        checkFile(File(dataPath + "tessdata/"), "eng")
-
-        val lang: String = "kor+eng"
-        tess = TessBaseAPI() //api준비
-        tess.init(dataPath, lang) //해당 사용할 언어데이터로 초기화
 
 
         Log.d("tess-two", "ocr")
-        printOCRResult(applicationContext, mat)
-    }
-
-    private fun makeGray(bitmap : Bitmap) : org.opencv.core.Mat{
-        val mat = org.opencv.core.Mat()
-        Utils.bitmapToMat(bitmap, mat)
-
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGB2GRAY)
-
-        return mat
-
-//        val grayBitmap = bitmap.copy(bitmap.config, true)
-//        Utils.matToBitmap(mat, grayBitmap)
-//
-//        return grayBitmap
+        Toast.makeText(applicationContext, "글자 추출중입니다.\n잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+        printOCRResult(dst)
     }
 
     // 사각형 꼭짓점 정보로 사각형 최대 사이즈 구하기
@@ -650,13 +638,22 @@ class Retrofit_SignUp : AppCompatActivity() {
         return Size(maxWidth, maxHeight)
     }
 
-    fun printOCRResult(context: Context, src:org.opencv.core.Mat){
+    fun printOCRResult(src: Mat){
         with(TessBaseAPI()){
-            val dst = org.opencv.core.Mat()
+            val result = findViewById<TextView>(R.id.text_result)
+            dataPath = "$filesDir/tesseract/"
+            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+            checkFile(File(dataPath + "tessdata/"), "eng")
+            init(dataPath, "kor+eng")
+
+            val dst = Mat()
             Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
+            Log.d("scr", src.toString())
             val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
             Utils.matToBitmap(dst, bitmap)
+            Log.d("dst", dst.toString())
             setImage(bitmap)
+            result.text = utF8Text
             Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
         }
     }
@@ -727,8 +724,8 @@ class Retrofit_SignUp : AppCompatActivity() {
             }
         }
         else
-           {
-               server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
+        {
+            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
                 id_editText, passwd_editText, userMedal)
                 ?.enqueue(object:
                     Callback<Data_SignUp_Request> {
