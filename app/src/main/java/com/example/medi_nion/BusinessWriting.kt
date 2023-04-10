@@ -58,9 +58,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         var postContent = findViewById<EditText>(R.id.business_Content)
 
         imgbtn.setOnClickListener { //imageButton_gallery 클릭시 갤러리로 이동
-//            val intent = Intent(Intent.ACTION_GET_CONTENT)
-//            intent.type = "image/*" //intent.setType("image/*)
-//            startActivityForResult(intent, GALLERY)
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
             //사진을 여러개 선택할수 있도록 한다
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -119,6 +116,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         var postTitle = findViewById<EditText>(R.id.business_Title).text.toString()
         var postContent = findViewById<EditText>(R.id.business_Content).text.toString()
 
+        Log.d("9812313", image1)
         val chanNamerequest = Login_Request(
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
@@ -163,6 +161,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                             map["content"] = postContent
                             map["Channel_Profile_Img1"] = image1
                             map["Channel_Profile_Img2"] = image2
+//                            map["Channel_Profile_Img3"] = image3
                             return map
                         }
                     }
@@ -228,7 +227,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                     // 다이얼로그를 띄워주기
                     builder.show()
                 }
-                for (i in 0 .. clipData.itemCount) {
+                for (i in 0 until imageCnt) {
                     if (i < imageCnt) {
                         val urione = clipData.getItemAt(i).uri
                         when (i) {
@@ -246,6 +245,8 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
 //                                image1 = BitMapToString(bitmap)
                                 image1 = encodeBitmapImage(bitmap)
 
+                                Log.d("img..1", image1)
+
                             }
                             1 -> {
                                 image2_delete.visibility = View.VISIBLE
@@ -260,6 +261,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 bitmap = resize(bitmap)
 //                                image2 = BitMapToString(bitmap)
                                 image2 = encodeBitmapImage(bitmap)
+                                Log.d("img..2", image2)
                             }
                             2 -> {
                                 image3_delete.visibility = View.VISIBLE

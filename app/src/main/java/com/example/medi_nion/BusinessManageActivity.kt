@@ -656,8 +656,6 @@ class BusinessManageActivity : AppCompatActivity() {
                         currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
                     bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
 
-
-
                     val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
                     setting_RadioGroup.visibility = View.GONE
                 } catch (e:Exception) {
