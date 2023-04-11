@@ -278,7 +278,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                             context,
                                                                             BusinessProfileActivity::class.java
                                                                         )
-                                                                    intent.putExtra("id", id)
+                                                                    intent.putExtra("appUser", appUser)
                                                                     intent.putExtra(
                                                                         "channel_name",
                                                                         data.channel_name
