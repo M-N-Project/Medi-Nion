@@ -39,6 +39,7 @@ class BusinessManageFirstActivity : AppCompatActivity() {
         val id: String = this.intent.getStringExtra("id").toString()
         val urlBusinessProfileInsert = "http://seonho.dothome.co.kr/BusinessProfileInsert.php"
 
+        Log.d("0173213", id)
         findViewById<Button>(R.id.createBusinessChan_btn1).setOnClickListener{
             //비즈니스 채널 관리로 넘어가기.
             val request = Login_Request(

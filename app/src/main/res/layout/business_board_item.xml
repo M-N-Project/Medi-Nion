@@ -5,17 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
     android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
     android:layout_marginBottom="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/business_item_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/business_item_border">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -38,8 +40,8 @@
                     android:id="@+id/profileImg2"
                     android:layout_width="48dp"
                     android:layout_height="50dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/business_profile2"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toTopOf="@+id/profileName"
@@ -102,10 +104,11 @@
             <HorizontalScrollView
                 android:id="@+id/businessMG_Img"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="120dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 android:visibility="gone"
                 tools:ignore="SpeakableTextPresentCheck">
 

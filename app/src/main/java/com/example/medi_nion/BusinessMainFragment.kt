@@ -172,7 +172,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         items.clear()
                         all_items.clear()
 
-
                         for (i in jsonArray.length() - 1 downTo 0) {
                             val item = jsonArray.getJSONObject(i)
 
@@ -185,6 +184,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                             val image1 = item.getString("image1")
                             val image2 = item.getString("image2")
                             val image3 = item.getString("image3")
+                            val image4 = item.getString("image4")
+                            val image5 = item.getString("image5")
 
                             val urlProfile = "http://seonho.dothome.co.kr/BusinessProfile.php"
 
@@ -199,24 +200,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                             val item = jsonArray.getJSONObject(i)
 
                                             val image_profile = item.getString("Channel_Profile_Img")
-
-//                                            if(image_profile != null){
-//                                                val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/$image_profile"
-//
-//                                                val task = ImageLoadTask(imgUrl, tempProfileImg)
-//                                                task.execute()
-//
-//                                                Log.d("profile fetch..", tempProfileImg.toString())
-//
-//                                                val d: BitmapDrawable = (tempProfileImg as ImageView).drawable as BitmapDrawable
-//                                                if(d != null){
-//                                                    Log.d("9817231", "$d// ${d.getBitmap()}")
-//                                                    var profileBitmap: Bitmap = d.getBitmap()
-//                                                    boardProfileMap.put(channel_name, profileBitmap)
-//                                                    tempProfileImg.visibility = View.GONE
-//                                                }
-//
-//                                            }
 
                                             val bookfetchrequest = Login_Request(
                                                 Request.Method.POST,
@@ -248,6 +231,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 image1,
                                                                 image2,
                                                                 image3,
+                                                                image4,
+                                                                image5,
                                                                 isHeart,
                                                                 isBookmark
                                                             )
