@@ -491,14 +491,15 @@ class BusinessManageActivity : AppCompatActivity() {
                                         ) {
                                             // 글쓰기 화면으로 이동
                                             var intent = Intent(applicationContext, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
-                                            intent.putExtra("id", appUser)
-                                            intent.putExtra("chanName", channel_name)
-                                            intent.putExtra("num", num)
-                                            intent.putExtra("title", title)
-                                            intent.putExtra("content", content)
-                                            intent.putExtra("image1", image1)
-                                            intent.putExtra("image2", image2)
-                                            intent.putExtra("image3", image3)
+                                            intent.putExtra("id", data.id)
+                                            intent.putExtra("chanName", data.channel_name)
+                                            intent.putExtra("num", data.post_num.toString())
+                                            intent.putExtra("title", data.title)
+                                            intent.putExtra("content", data.content)
+                                            intent.putExtra("image1", data.image1)
+                                            intent.putExtra("image2", data.image2)
+                                            intent.putExtra("image3", data.image3)
+                                            intent.putExtra("time",data.time)
                                             intent.putExtra("update", 1)
                                             startActivity(intent)
                                         }
