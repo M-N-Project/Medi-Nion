@@ -123,59 +123,67 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
-                    val jsonObject = JSONObject(response)
-                    val success = jsonObject.getBoolean("success");
-                    if(success) {
-                        for (i in jsonObject.length() - 1 downTo 0) {
-                            chanName = jsonObject.getString("chanName")
-                            Log.d("business chanName", chanName)
-                        }
-                    } else{
-                        Toast.makeText(
-                            applicationContext,
-                            "chanName 검색 실패",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                val request: StringRequest =
-                    object : StringRequest(Method.POST, postUrl, object : Response.Listener<String?> {
-                        override fun onResponse(response: String?) {
-                            Log.d("bussinewriting", response.toString())
+                if(response != "Channel Name Fail") {
+                    val jsonArray = JSONArray(response)
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+                        chanName = item.getString("chanName")
+                        Log.d("business chanName", chanName)
 
-                            var intent = Intent(applicationContext, BusinessManageActivity::class.java)
-                            intent.putExtra("id", id)
-                            intent.putExtra("isFirst", false)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                            startActivity(intent)
-                        }
-                    }, object : Response.ErrorListener {
-                        override fun onErrorResponse(error: VolleyError) {
-                            Log.d("bussinewriting", error.toString())
-                        }
-                    }) {
-                        @Throws(AuthFailureError::class)
-                        override fun getParams(): Map<String, String>? {
-                            val map: MutableMap<String, String> = HashMap()
-                            // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
-                            map["id"] = id
-                            map["Channel_Name"] = chanName
-                            map["title"] = postTitle
-                            map["content"] = postContent
-                            map["Channel_Profile_Img1"] = image1
-                            map["Channel_Profile_Img2"] = image2
-                            return map
-                        }
                     }
+                    val request: StringRequest =
+                        object : StringRequest(
+                            Method.POST,
+                            postUrl,
+                            object : Response.Listener<String?> {
+                                override fun onResponse(response: String?) {
+                                    Log.d("bussinewriting", response.toString())
 
-                request.setRetryPolicy(
-                    DefaultRetryPolicy(
-                        40000,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                                    var intent = Intent(
+                                        applicationContext,
+                                        BusinessManageActivity::class.java
+                                    )
+                                    intent.putExtra("id", id)
+                                    intent.putExtra("isFirst", false)
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                                    startActivity(intent)
+                                }
+                            },
+                            object : Response.ErrorListener {
+                                override fun onErrorResponse(error: VolleyError) {
+                                    Log.d("bussinewriting", error.toString())
+                                }
+                            }) {
+                            @Throws(AuthFailureError::class)
+                            override fun getParams(): Map<String, String>? {
+                                val map: MutableMap<String, String> = HashMap()
+                                // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
+                                map["id"] = id
+                                map["Channel_Name"] = chanName
+                                map["title"] = postTitle
+                                map["content"] = postContent
+                                map["Channel_Profile_Img1"] = image1
+                                map["Channel_Profile_Img2"] = image2
+                                return map
+                            }
+                        }
+
+                    request.setRetryPolicy(
+                        DefaultRetryPolicy(
+                            40000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                        )
                     )
-                )
-                val queue = Volley.newRequestQueue(applicationContext)
-                queue.add(request)
+                    val queue = Volley.newRequestQueue(applicationContext)
+                    queue.add(request)
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "chanName 검색 실패",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
             hashMapOf(

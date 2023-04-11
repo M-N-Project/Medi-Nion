@@ -331,11 +331,9 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
-                Log.d("res",response)
-                val jsonObject = JSONObject(response)
-                val success = jsonObject.getBoolean("success");
-                if (success) {
-                    isChan = true
+                Log.d("fetchifChan", response)
+                if (!response.equals("Channel Name Fail")) {
+                    isChan = !response.equals("no Channel Name")
                 }
             },
             { Log.d("failed", "error......${activity?.applicationContext?.let { it1 -> error(it1) }}") },
