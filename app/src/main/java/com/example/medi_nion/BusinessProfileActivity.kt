@@ -47,7 +47,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
-    var adapter = BusinessManageRecyclerAdapter(items)
+    var adapter = BusinessRecyclerAdapter(items)
     var scrollFlag = false
     var itemIndex = ArrayList<Int>()
     // RecyclerView.adapter에 지정할 Adapter
@@ -56,7 +56,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return super.onCreateView(name, context, attrs)
 
-        adapter = BusinessManageRecyclerAdapter(items)
+        adapter = BusinessRecyclerAdapter(items)
         BusinessBoardRecyclerView.adapter = adapter
     }
 
@@ -195,7 +195,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                                 val image3 = item.getString("image3")
                                                 val profileImg = findViewById<ImageView>(R.id.profileImg)
 
-                                                val BusinessItem = BusinessBoardItem(num, id, channel_img, channel_name, title, content, time, image1, image2, image3,false, false)
+                                                val BusinessItem = BusinessBoardItem(num, id, channel_img, channel_name, title, content, time, image1, image2, image3,false, false, false)
 
                                                 Log.d("78123", BusinessItem.toString())
                                                 items.add(BusinessItem)
@@ -204,7 +204,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                                 var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
                                                 var new_items = ArrayList<BusinessBoardItem>()
                                                 new_items.addAll(items)
-                                                adapter = BusinessManageRecyclerAdapter(new_items)
+                                                adapter = BusinessRecyclerAdapter(new_items)
                                                 BusinessBoardRecyclerView.adapter = adapter
                                                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                                 BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
@@ -285,7 +285,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false, false)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
@@ -293,7 +293,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                     var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
                                     var new_items = ArrayList<BusinessBoardItem>()
                                     new_items.addAll(items)
-                                    adapter = BusinessManageRecyclerAdapter(new_items)
+                                    adapter = BusinessRecyclerAdapter(new_items)
                                     BusinessBoardRecyclerView.adapter = adapter
                                     adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                     BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);

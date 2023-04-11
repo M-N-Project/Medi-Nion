@@ -16,11 +16,12 @@ class BusinessBoardItem(
     val image2 : String,
     val image3 : String,
     var isHeart : Boolean,
-    var isBookm : Boolean
+    var isBookm : Boolean,
 //    val profileImg: Drawable,
 //    val content: String,
 //    val scrap: Int,
 //    val heart: Int
+    var isWriter : Boolean
     ) {
 
 }

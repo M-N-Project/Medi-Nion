@@ -470,7 +470,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false, true)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
@@ -749,5 +749,16 @@ class BusinessManageActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // 게시물 수정
+    fun updatePost(){
+
+    }
+
+
+    // 게시물 삭제
+    fun deletePost(){
+
     }
 }

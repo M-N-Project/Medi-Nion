@@ -17,7 +17,44 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/business_item_border">
 
+        <RadioGroup
+            android:id="@+id/busi_optionRadioGroup"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_radio_button_group_opt"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout13"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout13">
+
+            <RadioButton
+                android:id="@+id/busi_postUpdate_RadioBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp"
+                android:background="@drawable/selector_radio_button_top_opt"
+                android:button="@null"
+                android:text="게시물 수정"
+                android:textAlignment="center" />
+
+            <RadioButton
+                android:id="@+id/busi_postDelete_RadioBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/selector_radio_button_bottom_opt"
+                android:button="@null"
+                android:text="게시물 삭제"
+                android:textAlignment="center" />
+
+        </RadioGroup>
+
         <LinearLayout
+            android:id="@+id/linearLayout13"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -38,8 +75,8 @@
                     android:id="@+id/profileImg2"
                     android:layout_width="48dp"
                     android:layout_height="50dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/business_profile2"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toTopOf="@+id/profileName"
@@ -76,6 +113,15 @@
                         app:layout_constraintStart_toEndOf="@+id/profileImg2"
                         app:layout_constraintTop_toBottomOf="@+id/titleName" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/busi_moreBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/board_detail_more_btn"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
             </LinearLayout>
 
             <TextView

@@ -248,7 +248,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 image2,
                                                                 image3,
                                                                 isHeart,
-                                                                isBookmark
+                                                                isBookmark,
+                                                                false
                                                             )
                                                             items.add(BusinessItem)
                                                             all_items.add(BusinessItem)
