@@ -46,7 +46,6 @@ import org.opencv.imgproc.Imgproc
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
-import java.lang.invoke.ConstantCallSite
 import java.lang.reflect.Type
 import java.util.regex.Pattern
 import kotlin.math.max
@@ -469,14 +468,14 @@ class Retrofit_SignUp : AppCompatActivity() {
 
     }
 
-    private fun doOCR(){
+    private fun doOCR() {
         try {
             bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 ImageDecoder.decodeBitmap(
                     ImageDecoder.createSource(
-                        contentResolver,
-                        photoUri!!
-                    )
+                    contentResolver,
+                    photoUri!!
+                )
                 )
             } else {
                 MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
@@ -524,7 +523,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         if (biggestContour == null) {
             throw IllegalArgumentException("No Contour")
         }
-// 너무 작아도 안됨
+        // 너무 작아도 안됨
         if (biggestContourArea < 400) {
             throw IllegalArgumentException("too small")
         }
@@ -596,6 +595,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             org.opencv.core.Point(dw, dh),
             org.opencv.core.Point(dw, 0.0)
         )
+
         // 투시변환 매트릭스 구하기
         val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
 
