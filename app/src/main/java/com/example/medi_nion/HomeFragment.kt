@@ -90,6 +90,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         super.onStart()
         fetchNewQna()
         fetchHotPost()
+        fetchNewBusi()
     }
 
     override fun onCreateView(
@@ -665,6 +666,52 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             hashMapOf(
                 "board" to board,
                 "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
+        queue.add(request)
+    }
+
+    //////////////////////////////////// 구독채널 새소식 ////////////////////////////////////////////////////////////
+    fun fetchNewBusi() {
+        val urlBusiNew = "http://seonho.dothome.co.kr/HomeNewBusi.php"
+        val id = arguments?.getString("id").toString()
+
+        val chanName = view?.findViewById<TextView>(R.id.home_business_name)
+        val content = view?.findViewById<TextView>(R.id.home_business_detail)
+
+        val request = Login_Request(
+            Request.Method.POST,
+            urlBusiNew,
+            {
+                response->
+                if(!response.equals("No NewBusi")){
+                    Log.d("비즈니스 홈", response)
+                    val jsonArray = JSONArray(response)
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
+
+                        if (chanName != null) {
+                            chanName.setText(item.getString("channel_name"))
+                        }
+                        if (content != null) {
+                            content.setText(item.getString("content"))
+                        }
+                    }
+                }
+            }, {
+                Log.d(
+                    "failed", "error......${
+                        activity?.applicationContext?.let { it1 ->
+                            error(
+                                it1
+                            )
+                        }
+                    }"
+                )
+            },
+            hashMapOf(
+                "id" to id
             )
         )
         val queue = Volley.newRequestQueue(activity?.applicationContext)

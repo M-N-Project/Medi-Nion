@@ -110,7 +110,6 @@ class BusinessManageActivity : AppCompatActivity() {
                 var intent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
                 intent.putExtra("id", id)
                 intent.putExtra("chanName", editName.text.toString())
-                intent.putExtra("chanIntro", editIntro.text.toString())
                 startActivity(intent)
             }
 
@@ -329,6 +328,7 @@ class BusinessManageActivity : AppCompatActivity() {
                             editProfile.setImageBitmap(bitmap)
                         }
 
+
                     }
                 }
 
@@ -398,7 +398,7 @@ class BusinessManageActivity : AppCompatActivity() {
 //                            editProfile.setImageBitmap(bitmap)
 //                        }
 
-
+                        subscribe_text.setText("구독자 수: " + subscribe_count.toString() + "명")
 
 
                     }
@@ -465,7 +465,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false, true)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
@@ -477,6 +477,38 @@ class BusinessManageActivity : AppCompatActivity() {
                                     BusinessBoardRecyclerView.adapter = adapter
                                     adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                     BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+                                    // 수정 삭제 ItemClick 이벤트
+                                    adapter.setOnItemClickListener(object:BusinessManageRecyclerAdapter.OnItemClickListener{
+                                        override fun onUpdateClick(
+                                            v: View,
+                                            data: BusinessBoardItem,
+                                            pos: Int
+                                        ) {
+                                            // 글쓰기 화면으로 이동
+                                            var intent = Intent(applicationContext, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
+                                            intent.putExtra("id", data.id)
+                                            intent.putExtra("chanName", data.channel_name)
+                                            intent.putExtra("num", data.post_num.toString())
+                                            intent.putExtra("title", data.title)
+                                            intent.putExtra("content", data.content)
+                                            intent.putExtra("image1", data.image1)
+                                            intent.putExtra("image2", data.image2)
+                                            intent.putExtra("image3", data.image3)
+                                            intent.putExtra("time",data.time)
+                                            intent.putExtra("update", 1)
+                                            startActivity(intent)
+                                        }
+
+                                        override fun onDeleteClick(
+                                            v: View,
+                                            data: BusinessBoardItem,
+                                            pos: Int
+                                        ) {
+                                            PostDeleteRequest(channel_name, num.toString())
+                                        }
+
+                                    })
                                 }
                             }
 
@@ -500,6 +532,43 @@ class BusinessManageActivity : AppCompatActivity() {
 
     }
 
+    fun PostDeleteRequest(channel_name:String, num:String){
+        var appUser = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
+        val urlDelete = "http://seonho.dothome.co.kr/BusinessDelete.php"
+
+        val request = Login_Request(
+            Request.Method.POST,
+            urlDelete,
+            { response ->
+                if (!response.equals("delete fail")) {
+                    Toast.makeText(
+                        baseContext,
+                        String.format("게시물이 삭제되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    var intent = Intent(applicationContext, BusinessManageActivity::class.java)
+                    intent.putExtra("id", appUser)
+                    intent.putExtra("isFirst", false)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                    startActivity(intent)
+
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "fail",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+            hashMapOf(
+                "num" to num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun requestBusinessDesc() {
@@ -803,5 +872,16 @@ class BusinessManageActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // 게시물 수정
+    fun updatePost(){
+
+    }
+
+
+    // 게시물 삭제
+    fun deletePost(){
+
     }
 }

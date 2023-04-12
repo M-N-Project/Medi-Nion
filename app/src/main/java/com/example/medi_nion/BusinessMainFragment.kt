@@ -172,6 +172,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         items.clear()
                         all_items.clear()
 
+
                         for (i in jsonArray.length() - 1 downTo 0) {
                             val item = jsonArray.getJSONObject(i)
 
@@ -234,7 +235,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 image4,
                                                                 image5,
                                                                 isHeart,
-                                                                isBookmark
+                                                                isBookmark,
+                                                                false
                                                             )
                                                             items.add(BusinessItem)
                                                             all_items.add(BusinessItem)
@@ -245,7 +247,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                             new_items.addAll(items)
                                                             adapter = BusinessRecyclerAdapter(new_items)
                                                             BusinessBoardRecyclerView.adapter = adapter
-                                                            Log.d("제발쫌", adapter.toString())
                                                             adapter.stateRestorationPolicy =
                                                                 RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                                             BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
@@ -264,7 +265,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                             context,
                                                                             BusinessProfileActivity::class.java
                                                                         )
-                                                                    var appUser = arguments?.getString("id").toString()
                                                                     intent.putExtra("appUser", appUser)
                                                                     intent.putExtra(
                                                                         "channel_name",

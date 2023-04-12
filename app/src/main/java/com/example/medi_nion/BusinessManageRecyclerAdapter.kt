@@ -25,17 +25,23 @@ import kotlinx.android.synthetic.main.business_board_item.view.*
 class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessManageRecyclerAdapter.ViewHolder>() {
 
+    private var listener : OnItemClickListener? = null
+    interface OnItemClickListener{
+        fun onUpdateClick(v:View, data: BusinessBoardItem, pos:Int)
+        fun onDeleteClick(v:View, data: BusinessBoardItem, pos:Int)
+    }
+
+    fun setOnItemClickListener(listener: BusinessManageRecyclerAdapter.OnItemClickListener) {
+        this.listener = listener
+    }
     companion object bitmap
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: BusinessManageRecyclerAdapter.ViewHolder, position: Int) {
         val item = items[position]
-        val listener = View.OnClickListener { it ->
-            Toast.makeText(it.context, "Clicked: ${item.title}", Toast.LENGTH_SHORT).show()
-        }
         holder.apply {
-            bind(listener, item)
+            bind(item)
             itemView.tag = item
         }
     }
@@ -47,21 +53,23 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
         return ViewHolder(inflatedView)
     }
 
-    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private var view: View = v
 
 
-        fun bind(listener: View.OnClickListener, item: BusinessBoardItem) {
-            //뒤는 item class 변수명을 입력하면 된다,,,
+        fun bind(item: BusinessBoardItem) {
+             //뒤는 item class 변수명을 입력하면 된다,,,
 
             setViewMore(view.content, view.viewMore)
 
             view.titleName.text = item.channel_name
             view.time.text = item.time
             view.content.text = item.content
+            view.checkBox2.isEnabled = false
+            view.checkBox.isEnabled = false
 
-            view.findViewById<HorizontalScrollView>(R.id.businessMG_Img).visibility  = View.GONE
+
             view.profileImg2.setImageResource(R.drawable.logo)
 
             if (item.profileImg.length >= 5) {
@@ -88,7 +96,7 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
                     v: View,
                     data: BusinessPostImgItem,
                     pos: Int
-                ) {
+                ){
                     Log.d("click", pos.toString())
 
                 }
@@ -151,6 +159,24 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()
+
+            if(item.isWriter) {
+                view.busi_moreBtn.visibility = View.VISIBLE
+
+                view.busi_moreBtn.setOnClickListener{
+                    if(view.busi_optionRadioGroup.visibility == View.GONE)
+                        view.busi_optionRadioGroup.visibility = View.VISIBLE
+                    else view.busi_optionRadioGroup.visibility = View.GONE
+                }
+
+                val pos = absoluteAdapterPosition
+                view.busi_postDelete_RadioBtn.setOnClickListener{
+                    listener?.onDeleteClick(itemView,item,pos)
+                }
+                view.busi_postUpdate_RadioBtn.setOnClickListener{
+                    listener?.onUpdateClick(itemView,item,pos)
+                }
+            }
 
         }
 
