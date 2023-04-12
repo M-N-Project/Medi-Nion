@@ -556,11 +556,17 @@ class Retrofit_SignUp : AppCompatActivity() {
         //3-3 사각형인지 판별 -> 신분증은 사각형이므로..
         // 사각형 판별
         if (approxCandidate.rows() != 4) {
-            throw java.lang.IllegalArgumentException("It's not rectangle")
+            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            openCamera()
+            Log.d("newjeans", "omomgot")
+            //throw java.lang.IllegalArgumentException("It's not rectangle")
         }
         // 컨벡스(볼록한 도형)인지 판별
         if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
-            throw java.lang.IllegalArgumentException("It's not convex")
+            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            openCamera()
+            Log.d("newjeans1", "omomgot1")
+            //throw java.lang.IllegalArgumentException("It's not convex")
         }
 
         //4. 투시변환
