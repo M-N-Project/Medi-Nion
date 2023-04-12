@@ -690,7 +690,8 @@ class Retrofit_SignUp : AppCompatActivity() {
             pageSegMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
 
             // Set OCR engine mode to use LSTM-based OCR engine for better accuracy
-            val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+            //val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+            val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
             pageSegMode = ocrEngineMode
             val tessdataDir = File("$filesDir/tesseracts/tessdata/")
             val engTrainedData = File(tessdataDir, "eng.trained")
