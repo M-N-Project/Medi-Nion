@@ -126,8 +126,11 @@ class BusinessManageActivity : AppCompatActivity() {
             if(isEditProfile)
                 uploadDataToDB()
 
-            if(isEditName || isEditDesc)
-                requestBusinessProfile()
+            if(isEditDesc)
+                requestBusinessDesc()
+
+            if(isEditName)
+                requestBusinessName()
 
 //            var id = intent.getStringExtra("id")!!
 //            var isFirst = intent.getBooleanExtra("isFirst", true)
@@ -455,6 +458,8 @@ class BusinessManageActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
+                    val image4 = item.getString("image4")
+                    val image5 = item.getString("image5")
 
                     val requestProfile = Board_Request(
                         Request.Method.POST,
@@ -471,7 +476,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
@@ -508,7 +513,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun requestBusinessProfile() {
+    fun requestBusinessDesc() {
         // url to post our data
         var id = intent.getStringExtra("id")!!
         var isFirst = intent.getBooleanExtra("isFirst", true)
@@ -545,8 +550,69 @@ class BusinessManageActivity : AppCompatActivity() {
             }, { Log.d("business profile failed", "error......${this.let { it1 -> error(it1) }}") },
             hashMapOf(
                 "id" to id,
-                "Channel_Name" to channel_name,
                 "Channel_Message" to channel_desc
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun requestBusinessName() {
+        // url to post our data
+        var id = intent.getStringExtra("id")!!
+        var isFirst = intent.getBooleanExtra("isFirst", true)
+
+        val channel_name = findViewById<EditText>(R.id.profileName).text.toString()
+        val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
+        val loadingText = findViewById<TextView>(R.id.loading_textView_business)
+
+
+        val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdateName.php"
+        val urlBusinessProfileUpdateBoard = "http://seonho.dothome.co.kr/BusinessProfileNameBoardUpdate.php"
+
+        val intent: Intent = Intent(applicationContext, ProfileFragment::class.java)
+
+        loadingText.visibility = View.VISIBLE
+        loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
+        progressBar.visibility = View.VISIBLE
+        progressBar.bringToFront()
+        val request = Login_Request(
+
+            Request.Method.POST,
+            urlBusinessProfileUpdate,
+            { response ->
+                Log.d("bussine123", response.toString())
+                if(!response.equals("business Chan update fail")) {
+                    Toast.makeText(this, "비즈니스 채널 프로필 업데이트 완료", Toast.LENGTH_SHORT).show()
+
+                    val requestUpdateBoard = Login_Request(
+                        Request.Method.POST,
+                        urlBusinessProfileUpdateBoard,
+                        {responseBoard ->
+                            Log.d("business update Sucess", responseBoard)
+
+                        },{Log.d("business Profile fail","error......${this.let { it1 -> error(it1) }}" )},
+                        hashMapOf(
+                            "id" to id,
+                            "Channel_Name" to channel_name
+                        )
+                    )
+
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestUpdateBoard)
+                } else {
+                    Toast.makeText(this, "비즈니스 채널 프로필 업데이트 실패", Toast.LENGTH_SHORT).show()
+                }
+                loadingText.visibility = View.GONE
+                progressBar.visibility = View.GONE
+
+            }, { Log.d("business profile failed", "error......${this.let { it1 -> error(it1) }}") },
+            hashMapOf(
+                "id" to id,
+                "Channel_Name" to channel_name,
             )
         )
         val queue = Volley.newRequestQueue(this)
@@ -591,8 +657,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     var source: ImageDecoder.Source? =
                         currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
                     bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
-
-
 
                     val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
                     setting_RadioGroup.visibility = View.GONE

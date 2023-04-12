@@ -84,22 +84,39 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
 
 
             if(item.image1 != "null"){
-                val bitmap: Bitmap? = StringToBitmaps(item.image1)
-                view.businessMG_Img.visibility
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image1}"
+//                view.businessMG_Img.visibility = View.VISIBLE
                 view.businessMG_postImg1.visibility = View.VISIBLE
-                view.businessMG_postImg1.setImageBitmap(bitmap)
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg1)
+                task.execute()
             }
             if(item.image2 != "null"){
-                val bitmap: Bitmap? = StringToBitmaps(item.image2)
-                view.businessMG_Img.visibility
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image2}"
+//                view.businessMG_Img.visibility = View.VISIBLE
                 view.businessMG_postImg2.visibility = View.VISIBLE
-                view.businessMG_postImg2.setImageBitmap(bitmap)
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg2)
+                task.execute()
             }
             if(item.image3 != "null"){
-                val bitmap: Bitmap? = StringToBitmaps(item.image3)
-                view.businessMG_Img.visibility
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image3}"
+                view.businessMG_Img.visibility = View.VISIBLE
                 view.businessMG_postImg3.visibility = View.VISIBLE
-                view.businessMG_postImg3.setImageBitmap(bitmap)
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg3)
+                task.execute()
+            }
+            if(item.image4 != "null"){
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image4}"
+                view.businessMG_Img.visibility = View.VISIBLE
+                view.businessMG_postImg4.visibility = View.VISIBLE
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg4)
+                task.execute()
+            }
+            if(item.image5 != "null"){
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image5}"
+                view.businessMG_Img.visibility = View.VISIBLE
+                view.businessMG_postImg5.visibility = View.VISIBLE
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg5)
+                task.execute()
             }
 
 

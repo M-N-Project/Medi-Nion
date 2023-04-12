@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.business_board_item.view.*
 class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessManageRecyclerAdapter.ViewHolder>() {
 
+    companion object bitmap
+
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: BusinessManageRecyclerAdapter.ViewHolder, position: Int) {
@@ -44,6 +46,7 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private var view: View = v
+
 
 
         fun bind(listener: View.OnClickListener, item: BusinessBoardItem) {
@@ -71,23 +74,41 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 //            view.profileImg2.setImageBitmap(item.profileImg)
 //            roundAll(view.profileImg2, 100.0f)
 
+            view.businessMG_Img.visibility = View.GONE
+
             if(item.image1 != "null"){
-                val bitmap: Bitmap? = StringToBitmaps(item.image1)
-                view.businessMG_Img.visibility
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image1}"
+                view.businessMG_Img.visibility = View.VISIBLE
                 view.businessMG_postImg1.visibility = View.VISIBLE
-                view.businessMG_postImg1.setImageBitmap(bitmap)
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg1)
             }
             if(item.image2 != "null"){
-                val bitmap: Bitmap? = StringToBitmaps(item.image2)
-                view.businessMG_Img.visibility
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image2}"
+                view.businessMG_Img.visibility= View.VISIBLE
                 view.businessMG_postImg2.visibility = View.VISIBLE
-                view.businessMG_postImg2.setImageBitmap(bitmap)
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg2)
+                task.execute()
             }
             if(item.image3 != "null"){
-                val bitmap: Bitmap? = StringToBitmaps(item.image3)
-                view.businessMG_Img.visibility
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image3}"
+                view.businessMG_Img.visibility= View.VISIBLE
                 view.businessMG_postImg3.visibility = View.VISIBLE
-                view.businessMG_postImg3.setImageBitmap(bitmap)
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg3)
+                task.execute()
+            }
+            if(item.image4 != "null"){
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image4}"
+                view.businessMG_Img.visibility= View.VISIBLE
+                view.businessMG_postImg4.visibility = View.VISIBLE
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg4)
+                task.execute()
+            }
+            if(item.image5 != "null"){
+                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image5}"
+                view.businessMG_Img.visibility= View.VISIBLE
+                view.businessMG_postImg5.visibility = View.VISIBLE
+                val task = ImageLoadTask(imgUrl, view.businessMG_postImg5)
+                task.execute()
             }
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()

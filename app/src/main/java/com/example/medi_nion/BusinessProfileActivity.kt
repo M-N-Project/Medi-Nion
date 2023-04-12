@@ -68,17 +68,6 @@ class BusinessProfileActivity : AppCompatActivity() {
         all_items.clear()
 
         fetchProfile()
-//        requestBusinessProfile()
-//        fetchBusinessPost()
-
-//        if(image_profile != null) {
-//            val bitmap: Bitmap? = StringToBitmaps(image_profile)
-//            profileImg.setImageBitmap(bitmap)
-//        }
-//        if(image_background != null) {
-//            val bitmap: Bitmap? = StringToBitmaps(image_background)
-//            backgroundImg.setImageBitmap(bitmap)
-//        }
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -193,9 +182,11 @@ class BusinessProfileActivity : AppCompatActivity() {
                                                 val image1 = item.getString("image1")
                                                 val image2 = item.getString("image2")
                                                 val image3 = item.getString("image3")
+                                                val image4 = item.getString("image4")
+                                                val image5 = item.getString("image5")
                                                 val profileImg = findViewById<ImageView>(R.id.profileImg)
 
-                                                val BusinessItem = BusinessBoardItem(num, id, channel_img, channel_name, title, content, time, image1, image2, image3,false, false)
+                                                val BusinessItem = BusinessBoardItem(num, id, channel_img, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false)
 
                                                 Log.d("78123", BusinessItem.toString())
                                                 items.add(BusinessItem)
@@ -212,6 +203,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                                         }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                                         hashMapOf(
+                                            "channel_name" to channel_name,
                                             "id" to id
                                         )
                                     )
@@ -222,6 +214,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                             }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                             hashMapOf(
+                                "channel_name" to channel_name,
                                 "id" to id
                             )
                         )
@@ -268,6 +261,8 @@ class BusinessProfileActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
+                    val image4 = item.getString("image4")
+                    val image5 = item.getString("image5")
                     val profileImg = findViewById<ImageView>(R.id.profileImg)
 
                     val requestProfile = Board_Request(
@@ -285,7 +280,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
