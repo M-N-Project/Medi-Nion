@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.graphics.*
 import android.graphics.ImageDecoder.ImageInfo
+import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -32,15 +33,14 @@ import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
 import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
 import com.google.gson.GsonBuilder
 import com.googlecode.tesseract.android.TessBaseAPI
+import com.googlecode.tesseract.android.TessBaseAPI.VAR_CHAR_WHITELIST
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.bytedeco.javacpp.tesseract.OEM_LSTM_ONLY
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
-import org.opencv.core.Mat
-import org.opencv.core.MatOfPoint
-import org.opencv.core.MatOfPoint2f
-import org.opencv.core.Size
+import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -434,10 +434,18 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
 
         cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+
             idImgView = findViewById(R.id.idImgView)
             idImgView.visibility = View.VISIBLE
             if (it) {
 
+                idImgView.setImageURI(photoUri)
+
+                val matrix = ColorMatrix()
+                matrix.setSaturation(0F)
+
+                val filter = ColorMatrixColorFilter(matrix)
+                idImgView.colorFilter = filter
                 idImgView.setImageURI(photoUri)
 
                 doOCR()
@@ -606,6 +614,9 @@ class Retrofit_SignUp : AppCompatActivity() {
         // 투시변환 매트릭스 구하기
         val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
 
+        //사진 자르기?
+
+
         // 투시변환 된 결과 영상 얻기
         val dst = Mat()
         Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
@@ -635,25 +646,81 @@ class Retrofit_SignUp : AppCompatActivity() {
         return Size(maxWidth, maxHeight)
     }
 
-    fun printOCRResult(src: Mat){
-        with(TessBaseAPI()){
+
+//    fun printOCRResult(src: Mat){
+//        with(TessBaseAPI()){
+//            val result = findViewById<TextView>(R.id.text_result)
+//            dataPath = "$filesDir/tesseracts/"
+//            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+//            checkFile(File(dataPath + "tessdata/"), "eng")
+//            init(dataPath, "kor+eng")
+//
+//            val dst = Mat()
+//            Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
+//            Log.d("scr", src.toString())
+//            val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
+//            Utils.matToBitmap(dst, bitmap)
+//            Log.d("dst", dst.toString())
+//            setImage(bitmap)
+//            result.text = utF8Text
+//            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
+//        }
+//    }
+
+    fun printOCRResult(src: Mat) {
+        with(TessBaseAPI()) {
             val result = findViewById<TextView>(R.id.text_result)
-            dataPath = "$filesDir/tesseract/"
+            dataPath = "$filesDir/tesseracts/"
             checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
             checkFile(File(dataPath + "tessdata/"), "eng")
             init(dataPath, "kor+eng")
 
-            val dst = Mat()
-            Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
-            Log.d("scr", src.toString())
-            val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
-            Utils.matToBitmap(dst, bitmap)
-            Log.d("dst", dst.toString())
+            // Improve image quality by adjusting brightness and contrast
+            val contrast = 1.5
+            val brightness = 20.0
+            Core.addWeighted(src, contrast, Mat.zeros(src.size(), src.type()), 0.0, brightness, src)
+
+            // Apply image preprocessing techniques
+            Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2GRAY)
+            Imgproc.GaussianBlur(src, src, Size(5.0, 5.0), 0.0)
+            Imgproc.threshold(src, src, 0.0, 255.0, Imgproc.THRESH_BINARY_INV + Imgproc.THRESH_OTSU)
+            Imgproc.medianBlur(src, src, 3)
+
+            // Set page segmentation mode to treat the image as a single block of text
+            pageSegMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+
+            // Set OCR engine mode to use LSTM-based OCR engine for better accuracy
+            val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+            pageSegMode = ocrEngineMode
+            val tessdataDir = File("$filesDir/tesseracts/tessdata/")
+            val engTrainedData = File(tessdataDir, "eng.trained")
+            val korTrainedData = File(tessdataDir, "kor.trained")
+            if (engTrainedData.exists() && korTrainedData.exists()) {
+                val lang = "kor+eng"
+                setVariable(
+                    TessBaseAPI.VAR_CHAR_WHITELIST,
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                )
+                init(filesDir.absolutePath + "/tesseracts", lang)
+            } else {
+                Log.e("printOCRResult", "Trained data files are missing")
+            }
+
+            // Recognize text and set text result to the TextView
+            //setImage(src)
+            //recognize(null)
             setImage(bitmap)
             result.text = utF8Text
-            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
+
+            // Log UTF-8 text to the Android system log for debugging
+            Log.e("NameCardProcessor", "utF8Text :\n$utF8Text")
         }
     }
+
+
+
+
+
 
 
     //db 연동 시작
@@ -856,8 +923,6 @@ class Retrofit_SignUp : AppCompatActivity() {
         photoUri = FileProvider.getUriForFile(
             this, "${packageName}.provider", photoFile
         )
-
-
         cameraLauncher.launch(photoUri)
     }
 
