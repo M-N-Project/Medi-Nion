@@ -245,6 +245,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                             new_items.addAll(items)
                                                             adapter = BusinessRecyclerAdapter(new_items)
                                                             BusinessBoardRecyclerView.adapter = adapter
+                                                            Log.d("제발쫌", adapter.toString())
                                                             adapter.stateRestorationPolicy =
                                                                 RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                                             BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
