@@ -132,17 +132,6 @@ class BusinessManageActivity : AppCompatActivity() {
             if(isEditName)
                 requestBusinessName()
 
-//            var id = intent.getStringExtra("id")!!
-//            var isFirst = intent.getBooleanExtra("isFirst", true)
-//
-//            val channel_name = findViewById<EditText>(R.id.profileName).text.toString()
-//            val channel_desc = findViewById<EditText>(R.id.profileDesc).text.toString()
-//
-//
-//
-//            Log.d("FIRst??", isFirst.toString())
-//
-//            uploadBitmap(id, channel_name, channel_desc, bitmap);
         }
 
         editName.isEnabled = false

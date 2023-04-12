@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Outline
@@ -12,9 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
+import android.widget.Scroller
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
@@ -71,45 +74,76 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
             roundAll(view.profileImg2, 100.0f)
 
-//            view.profileImg2.setImageBitmap(item.profileImg)
-//            roundAll(view.profileImg2, 100.0f)
+            var imgItems = ArrayList<BusinessPostImgItem>()
+            var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
 
-            view.businessMG_Img.visibility = View.GONE
+            BusinessImgAdapter.setOnItemClickListener(object :
+                BusinessPostImgRecyclerAdapter.OnItemClickListener {
+                override fun onImgClick(
+                    v: View,
+                    data: BusinessPostImgItem,
+                    pos: Int
+                ){
+                    Log.d("click", pos.toString())
+
+                }
+            })
 
             if(item.image1 != "null"){
+                Log.d("imgtiem", item.image1)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image1}"
                 view.businessMG_Img.visibility = View.VISIBLE
-                view.businessMG_postImg1.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg1)
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+
+                imgItems.add(imgItem)
+                view.BusinessBoardImgRecyclerView.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL,false)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
             if(item.image2 != "null"){
+                Log.d("imgtiem", item.image2)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image2}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg2.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg2)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image3 != "null"){
+            if(item.image3 != ""){
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image3}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg3.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg3)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image4 != "null"){
+            if(item.image4 != ""){
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image4}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg4.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg4)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image5 != "null"){
+            if(item.image5 != ""){
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image5}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg5.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg5)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
+
+            BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+            view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
+
+
+
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()
 
