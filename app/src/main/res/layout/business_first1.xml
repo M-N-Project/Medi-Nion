@@ -50,5 +50,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bf1_textView3"
-        app:srcCompat="@drawable/ad2" />
+        app:srcCompat="@drawable/big_ad1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Outline
@@ -12,26 +13,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
+import android.widget.Scroller
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
 class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessManageRecyclerAdapter.ViewHolder>() {
 
+    private var listener : OnItemClickListener? = null
+    interface OnItemClickListener{
+        fun onUpdateClick(v:View, data: BusinessBoardItem, pos:Int)
+        fun onDeleteClick(v:View, data: BusinessBoardItem, pos:Int)
+    }
+
+    fun setOnItemClickListener(listener: BusinessManageRecyclerAdapter.OnItemClickListener) {
+        this.listener = listener
+    }
     companion object bitmap
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: BusinessManageRecyclerAdapter.ViewHolder, position: Int) {
         val item = items[position]
-        val listener = View.OnClickListener { it ->
-            Toast.makeText(it.context, "Clicked: ${item.title}", Toast.LENGTH_SHORT).show()
-        }
         holder.apply {
-            bind(listener, item)
+            bind(item)
             itemView.tag = item
         }
     }
@@ -43,13 +52,12 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
         return ViewHolder(inflatedView)
     }
 
-    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private var view: View = v
 
 
-
-        fun bind(listener: View.OnClickListener, item: BusinessBoardItem) {
+        fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
 
             setViewMore(view.content, view.viewMore)
@@ -57,6 +65,8 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
             view.titleName.text = item.channel_name
             view.time.text = item.time
             view.content.text = item.content
+            view.checkBox2.isEnabled = false
+            view.checkBox.isEnabled = false
 
 
             view.profileImg2.setImageResource(R.drawable.logo)
@@ -71,47 +81,96 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
             roundAll(view.profileImg2, 100.0f)
 
-//            view.profileImg2.setImageBitmap(item.profileImg)
-//            roundAll(view.profileImg2, 100.0f)
+            var imgItems = ArrayList<BusinessPostImgItem>()
+            var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
 
-            view.businessMG_Img.visibility = View.GONE
+            BusinessImgAdapter.setOnItemClickListener(object :
+                BusinessPostImgRecyclerAdapter.OnItemClickListener {
+                override fun onImgClick(
+                    v: View,
+                    data: BusinessPostImgItem,
+                    pos: Int
+                ){
+                    Log.d("click", pos.toString())
+
+                }
+            })
 
             if(item.image1 != "null"){
+                Log.d("imgtiem", item.image1)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image1}"
                 view.businessMG_Img.visibility = View.VISIBLE
-                view.businessMG_postImg1.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg1)
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+
+                imgItems.add(imgItem)
+                view.BusinessBoardImgRecyclerView.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL,false)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
             if(item.image2 != "null"){
+                Log.d("imgtiem", item.image2)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image2}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg2.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg2)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image3 != "null"){
+            if(item.image3 != ""){
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image3}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg3.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg3)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image4 != "null"){
+            if(item.image4 != ""){
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image4}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg4.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg4)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image5 != "null"){
+            if(item.image5 != ""){
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image5}"
-                view.businessMG_Img.visibility= View.VISIBLE
-                view.businessMG_postImg5.visibility = View.VISIBLE
-                val task = ImageLoadTask(imgUrl, view.businessMG_postImg5)
-                task.execute()
+                view.businessMG_Img.visibility = View.VISIBLE
+                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
+                imgItems.add(imgItem)
+
+                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
+
+            BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+            view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
+
+
+
 //            view.scrap_btn.text = item.scrap.toString()
 //            view.scrap_btn2.text = item.heart.toString()
+
+            if(item.isWriter) {
+                view.busi_moreBtn.visibility = View.VISIBLE
+
+                view.busi_moreBtn.setOnClickListener{
+                    if(view.busi_optionRadioGroup.visibility == View.GONE)
+                        view.busi_optionRadioGroup.visibility = View.VISIBLE
+                    else view.busi_optionRadioGroup.visibility = View.GONE
+                }
+
+                val pos = absoluteAdapterPosition
+                view.busi_postDelete_RadioBtn.setOnClickListener{
+                    listener?.onDeleteClick(itemView,item,pos)
+                }
+                view.busi_postUpdate_RadioBtn.setOnClickListener{
+                    listener?.onUpdateClick(itemView,item,pos)
+                }
+            }
 
         }
 
