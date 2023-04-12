@@ -4,6 +4,7 @@ package com.example.medi_nion
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
@@ -502,7 +503,6 @@ class Retrofit_SignUp : AppCompatActivity() {
         Log.d("ggdf", "흑백")
         val graySrc = Mat()
         Imgproc.cvtColor(mat, graySrc, Imgproc.COLOR_RGB2GRAY)
-        Log.d("gradt", graySrc.toString())
 
         //2.이진화
         Log.d("tess-two", "이진화")
@@ -623,7 +623,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
 
         Log.d("tess-two", "ocr")
-        Toast.makeText(applicationContext, "신분증 인식에 30초~1분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
         printOCRResult(dst)
     }
 
@@ -712,9 +712,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             //recognize(null)
             setImage(bitmap)
             result.text = utF8Text
-
-            // Log UTF-8 text to the Android system log for debugging
-            Log.e("NameCardProcessor", "utF8Text :\n$utF8Text")
+            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
         }
     }
 
