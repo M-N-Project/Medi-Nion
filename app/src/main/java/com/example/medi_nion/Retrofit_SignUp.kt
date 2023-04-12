@@ -4,11 +4,13 @@ package com.example.medi_nion
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.graphics.*
 import android.graphics.ImageDecoder.ImageInfo
+import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -37,10 +39,7 @@ import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
-import org.opencv.core.Mat
-import org.opencv.core.MatOfPoint
-import org.opencv.core.MatOfPoint2f
-import org.opencv.core.Size
+import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -437,7 +436,11 @@ class Retrofit_SignUp : AppCompatActivity() {
             idImgView = findViewById(R.id.idImgView)
             idImgView.visibility = View.VISIBLE
             if (it) {
+                val matrix = ColorMatrix()
+                matrix.setSaturation(0F)
 
+                val filter = ColorMatrixColorFilter(matrix)
+                idImgView.colorFilter = filter
                 idImgView.setImageURI(photoUri)
 
                 doOCR()
@@ -467,6 +470,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
     }
 
+
     private fun doOCR() {
         try {
             bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -494,7 +498,6 @@ class Retrofit_SignUp : AppCompatActivity() {
         Log.d("ggdf", "흑백")
         val graySrc = Mat()
         Imgproc.cvtColor(mat, graySrc, Imgproc.COLOR_RGB2GRAY)
-        Log.d("gradt", graySrc.toString())
 
         //2.이진화
         Log.d("tess-two", "이진화")
@@ -612,7 +615,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
 
         Log.d("tess-two", "ocr")
-        Toast.makeText(applicationContext, "신분증 인식에 30초~1분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
         printOCRResult(dst)
     }
 
@@ -635,23 +638,72 @@ class Retrofit_SignUp : AppCompatActivity() {
         return Size(maxWidth, maxHeight)
     }
 
-    fun printOCRResult(src: Mat){
-        with(TessBaseAPI()){
+//    fun printOCRResult(src: Mat){
+//        with(TessBaseAPI()){
+//            val result = findViewById<TextView>(R.id.text_result)
+//            dataPath = "$filesDir/tesseract/"
+//            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+//            checkFile(File(dataPath + "tessdata/"), "eng")
+//            init(dataPath, "kor+eng")
+//
+//            val dst = Mat()
+//            Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
+//            val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
+//            Utils.matToBitmap(dst, bitmap)
+//            setImage(bitmap)
+//            result.text = utF8Text
+//            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
+//        }
+//    }
+
+    fun printOCRResult(src: Mat) {
+        with(TessBaseAPI()) {
             val result = findViewById<TextView>(R.id.text_result)
+            Log.d("FileDir", "$filesDir")
             dataPath = "$filesDir/tesseract/"
             checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
             checkFile(File(dataPath + "tessdata/"), "eng")
             init(dataPath, "kor+eng")
 
-            val dst = Mat()
-            Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
-            Log.d("scr", src.toString())
-            val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
-            Utils.matToBitmap(dst, bitmap)
-            Log.d("dst", dst.toString())
+            // Improve image quality by adjusting brightness and contrast
+            val contrast = 1.5
+            val brightness = 20.0
+            Core.addWeighted(src, contrast, Mat.zeros(src.size(), src.type()), 0.0, brightness, src)
+
+            // Apply image preprocessing techniques
+            Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2GRAY)
+            Imgproc.GaussianBlur(src, src, Size(5.0, 5.0), 0.0)
+            Imgproc.threshold(src, src, 0.0, 255.0, Imgproc.THRESH_BINARY_INV + Imgproc.THRESH_OTSU)
+            Imgproc.medianBlur(src, src, 3)
+
+            // Set page segmentation mode to treat the image as a single block of text
+            pageSegMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+
+            // Set OCR engine mode to use LSTM-based OCR engine for better accuracy
+            val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+            pageSegMode = ocrEngineMode
+            val tessdataDir = File("$filesDir/tesseract/tessdata/")
+            val engTrainedData = File(tessdataDir, "eng.traineddata")
+            val korTrainedData = File(tessdataDir, "kor.traineddata")
+            if (engTrainedData.exists() && korTrainedData.exists()) {
+                val lang = "kor+eng"
+                setVariable(
+                    TessBaseAPI.VAR_CHAR_WHITELIST,
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+                )
+                init(filesDir.absolutePath + "/tesseract/", lang)
+            } else {
+                Log.e("printOCRResult", "Trained data files are missing")
+            }
+
+            // Recognize text and set text result to the TextView
+            //setImage(src)
+            //recognize(null)
             setImage(bitmap)
             result.text = utF8Text
-            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
+
+            // Log UTF-8 text to the Android system log for debugging
+            Log.e("NameCardProcessor", "utF8Text :\n$utF8Text")
         }
     }
 

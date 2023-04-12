@@ -1,16 +1,15 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -31,6 +30,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     private lateinit var userType: String
     private lateinit var userDept: String
     private lateinit var userMedal: String
+    private lateinit var ad_viewPager2: ViewPager2
 
     class PagerRecyclerAdapter(private val qnaItem: java.util.ArrayList<qnaNewItem>) :
         RecyclerView.Adapter<PagerRecyclerAdapter.PagerViewHolder>() {
@@ -86,12 +86,15 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
     }
 
+
     override fun onStart() {
         super.onStart()
         fetchNewQna()
         fetchHotPost()
     }
 
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,6 +113,9 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val imageView_ad = view.findViewById<ImageView>(R.id.imageView_ad)
         val imageView_ad2 = view.findViewById<ImageView>(R.id.imageView_ad2)
 
+        var currentPosition = 0
+
+
         // bundle 에서 id, userType, userDept, userMedal 값 가져오기
         id = arguments?.getString("id").toString()
         nickname = arguments?.getString("nickname").toString()
@@ -117,12 +123,76 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         userDept = arguments?.getString("userDept").toString()
         userMedal = arguments?.getInt("userMedal").toString()
 
+        val detector = GestureDetector(context, object : GestureDetector.OnGestureListener {
+            override fun onDown(p0: MotionEvent): Boolean {
+                return false
+            }
 
-        imageView_ad.setOnClickListener {
-            val address = "https://www.tripstore.kr/travels/b1653a2c-57ad-4f45-998b-7d79296dd444"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
-            startActivity(intent)
+            override fun onShowPress(p0: MotionEvent) {
+            }
+
+            override fun onSingleTapUp(p0: MotionEvent): Boolean {
+                Log.d("onSingleTapUp", "onSingleTapUp")
+                val address = "https://github.com/M-N-Project/Medi-Nion"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
+                startActivity(intent)
+                return false
+            }
+
+            override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+                return false
+            }
+
+            override fun onLongPress(p0: MotionEvent) {
+            }
+
+            override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+                return false
+            }
+
+        })
+        ad_viewPager2 = view.findViewById(R.id.ad_viewPager)
+        ad_viewPager2.adapter = ViewPager2Adapter_Ad(getAdImage())
+        ad_viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+        ad_viewPager2.getChildAt(0).setOnTouchListener { view, event ->
+            detector.onTouchEvent(event)
+            false
         }
+
+        fun setPage() {
+            if(currentPosition == 3)
+                currentPosition = 0
+            ad_viewPager2.setCurrentItem(currentPosition, true)
+            currentPosition+=1
+        }
+
+        val handler = Handler(Looper.getMainLooper()) {
+            setPage()
+            true
+        }
+
+
+        class PagerRunnable :Runnable{
+            override fun run() {
+                while(true){
+                    try {
+                        Thread.sleep(5000)
+                        handler.sendEmptyMessage(0)
+                    } catch (e : InterruptedException){
+                        Log.d("interupt", "interupt발생")
+                    }
+                }
+            }
+        }
+        val thread = Thread(PagerRunnable())
+        thread.start()
+
+//        imageView_ad.setOnClickListener {
+//            val address = "https://www.tripstore.kr/travels/b1653a2c-57ad-4f45-998b-7d79296dd444"
+//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
+//            startActivity(intent)
+//        }
 
         imageView_ad2.setOnClickListener {
             val address = "https://www.tripstore.kr/travels/720f181c-42db-46b9-a94d-060ca6691fcd?regionSub=%EB%8C%80%EB%A7%8C&path=detail"
@@ -330,14 +400,12 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         return view
     }
 
-/*
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        fetchNewQna()
-
+    private fun getAdImage(): ArrayList<Int> {
+        return arrayListOf<Int>(
+            R.drawable.ad1,
+            R.drawable.ad2,
+            R.drawable.ad3)
     }
-*/
     ///////////////////////// viewPager에 넣을 QnA 게시판 최신글 가져오는 fetch 함수 //////////////////////////////////////
 
     fun fetchNewQna() {
