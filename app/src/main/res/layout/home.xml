@@ -15,29 +15,24 @@
             android:orientation="vertical">
 
             <!-- 최신 qna -->
-            <include
-                layout="@layout/home_qna"
+            <include layout="@layout/home_qna"
 
                 />
 
             <!-- 첫번째 광고 -->
-            <ImageView
-                android:id="@+id/imageView_ad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                app:srcCompat="@drawable/ad1" />
+            <include layout="@layout/ad_viewpager2" />
+
 
             <!-- 즐겨찾는 게시판 -->
+
+            <!-- HOT 게시물 -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/home_boardList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:paddingBottom="16dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/home_qna_detail"
-                >
+                android:paddingBottom="20dp">
 
                 <TextView
                     android:id="@+id/home_boardList_title"
@@ -67,8 +62,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
 
                         <TextView
@@ -108,18 +103,16 @@
                             android:textSize="12sp" />
 
 
-
-
                     </LinearLayout>
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
@@ -159,21 +152,21 @@
                             android:textSize="12sp" />
 
 
-
                     </LinearLayout>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- HOT 게시물 -->
+            <!-- 구독 채널 새소식 -->
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/detail_box_hot"
-                android:background="@drawable/home_qna_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/home_qna_detail"
                 android:paddingLeft="8dp"
-                android:paddingBottom="16dp"
-                android:layout_margin="16dp">
+                android:paddingTop="8dp"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:id="@+id/home_hot_title"
@@ -289,7 +282,7 @@
                         android:layout_width="350dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5sp"
-                        android:layout_weight="0"/>
+                        android:layout_weight="0" />
 
                     <LinearLayout
                         android:id="@+id/hot_detail_job_more"
@@ -350,7 +343,7 @@
                         android:layout_width="350dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5sp"
-                        android:layout_weight="0"/>
+                        android:layout_weight="0" />
 
                     <LinearLayout
                         android:id="@+id/hot_detail_dept_more"
@@ -378,7 +371,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- 구독 채널 새소식 -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/home_business"
                 android:layout_width="match_parent"
@@ -388,9 +380,9 @@
                     android:id="@+id/home_subsc_box"
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/home_qna_detail"
                     android:backgroundTint="#8BE0C4"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -460,18 +452,42 @@
                 app:layout_constraintTop_toBottomOf="@+id/home_business" />
 
             <!-- 추천 비즈니스채널 프로필 -->
-            <include layout="@layout/business_newby"
+
+            <!-- 광고2 -->
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="400dp"
+                android:layout_height="2.5dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:background="#8BE0C4" />
+
+            <include
+                layout="@layout/business_newby"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <!-- 광고2 -->
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="400dp"
+                android:layout_height="2.5dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:background="#8BE0C4" />
+
             <ImageView
                 android:id="@+id/imageView_ad2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ad2"/>
+                android:layout_marginTop="16dp"
+                app:srcCompat="@drawable/big_ad1" />
 
         </LinearLayout>
     </ScrollView>

@@ -158,8 +158,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn1"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -176,7 +176,7 @@
                         android:text="나의 활동"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -277,8 +277,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn4"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -295,7 +295,7 @@
                         android:text="비즈니스 채널 관리"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -396,8 +396,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn2"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -414,7 +414,7 @@
                         android:text="어플 설정"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -515,8 +515,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn3"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -533,7 +533,7 @@
                         android:text="계정 설정"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -663,8 +663,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn5"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -681,7 +681,7 @@
                         android:text="공지사항"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View
@@ -711,8 +711,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn6"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -729,7 +729,7 @@
                         android:text="고객센터"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View
@@ -759,8 +759,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn7"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -777,7 +777,7 @@
                         android:text="이용 약관"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View
@@ -807,8 +807,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn8"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -825,7 +825,7 @@
                         android:text="개인정보 처리 방침"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View
@@ -855,8 +855,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn9"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -873,7 +873,7 @@
                         android:text="서비스 이용 동의"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View
@@ -903,8 +903,8 @@
 
                     <android.widget.Button
                         android:id="@+id/profile_basicBtn10"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
                         android:layout_marginRight="3dp"
@@ -921,7 +921,7 @@
                         android:text="오픈 소스 라이선스"
                         android:textAlignment="viewStart"
                         android:textColor="#000000"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View

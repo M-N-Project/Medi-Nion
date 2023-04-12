@@ -173,8 +173,16 @@
         android:id="@+id/idImgView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         app:srcCompat="@drawable/board_header"
+        android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/exImgView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/board_header"
         android:visibility="gone"/>
 
     <TextView
@@ -182,7 +190,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:text=""
         />
 
