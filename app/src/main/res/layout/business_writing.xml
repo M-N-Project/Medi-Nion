@@ -6,6 +6,33 @@
     android:layout_height="match_parent">
 
 
+    <TextView
+        android:id="@+id/loading_textView_business"
+        android:layout_width="73dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="8dp"
+        android:text="업로드 중..."
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar_business" />
+
+    <android.widget.ProgressBar
+        android:id="@+id/progressbar_business"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:layout_gravity="center"
+        android:indeterminate="false"
+        android:max="100"
+        android:progressBackgroundTint="#FFFFFF"
+        android:progressDrawable="@drawable/circle_progressbar"
+        android:progressTint="#edbf41"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -142,33 +169,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout11" />
 
-        <android.widget.ProgressBar
-            android:id="@+id/progressbar_business"
-            android:layout_width="76dp"
-            android:layout_height="76dp"
-            android:layout_gravity="center"
-            android:indeterminate="false"
-            android:max="100"
-            android:progressBackgroundTint="#FFFFFF"
-            android:progressDrawable="@drawable/circle_progressbar"
-            android:progressTint="#edbf41"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/loading_textView_business"
-            android:layout_width="73dp"
-            android:layout_height="22dp"
-            android:layout_marginTop="8dp"
-            android:text="업로드 중..."
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressbar_business" />
-
 
         <!--    <androidx.recyclerview.widget.RecyclerView-->
         <!--        android:id="@+id/businessPostImg_RecyclerView"-->
@@ -205,133 +205,68 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/postImg_delete"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_marginLeft="0dp"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/delete"
+                    tools:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/business_postImg1"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/postImg1_delete"
-                        android:layout_width="20dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/delete" />
-
-                    <ImageView
-                        android:id="@+id/business_postImg1"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/business_postImg2"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/postImg2_delete"
-                        android:layout_width="20dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="100dp"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/delete" />
-
-                    <ImageView
-                        android:id="@+id/business_postImg2"
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-
-                </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:visibility="visible"
+                    tools:visibility="gone" />
 
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/business_postImg3"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/postImg3_delete"
-                        android:layout_width="20dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="150dp"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/delete" />
-
-                    <ImageView
-                        android:id="@+id/business_postImg3"
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/business_postImg4"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/postImg4_delete"
-                        android:layout_width="20dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/delete" />
-
-                    <ImageView
-                        android:id="@+id/business_postImg4"
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/business_postImg5"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/postImg5_delete"
-                        android:layout_width="20dp"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/delete" />
-
-                    <ImageView
-                        android:id="@+id/business_postImg5"
-                        android:layout_width="100dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:visibility="gone" />
-                </LinearLayout>
 
             </LinearLayout>
 

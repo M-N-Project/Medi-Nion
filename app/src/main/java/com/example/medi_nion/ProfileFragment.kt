@@ -16,6 +16,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
 import kotlinx.android.synthetic.main.profile_password_reset.*
+import org.json.JSONArray
 import org.json.JSONObject
 
 class ProfileFragment : Fragment(R.layout.profile) {
@@ -268,7 +269,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         binding.item4List2Text.setOnClickListener{
             //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
-            Log.d("isChan 333333333", isChan.toString())
             if(!isChan) {
                 val intent = Intent(context, BusinessManageFirstActivity::class.java)
                 intent.putExtra("id", id)
@@ -331,11 +331,9 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
-                Log.d("res",response)
-                val jsonObject = JSONObject(response)
-                val success = jsonObject.getBoolean("success");
-                if (success) {
-                    isChan = true
+                Log.d("fetchifChan", response)
+                if (!response.equals("Channel Name Fail")) {
+                    isChan = !response.equals("no Channel Name")
                 }
             },
             { Log.d("failed", "error......${activity?.applicationContext?.let { it1 -> error(it1) }}") },
