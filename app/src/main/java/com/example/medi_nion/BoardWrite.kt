@@ -185,7 +185,6 @@ class BoardWrite : AppCompatActivity() {
                 Request.Method.POST,
                 updateUrl,
                 { response ->
-                    Log.d("dpd??", response)
                     if (!response.equals("update fail")) {
                         Toast.makeText(
                             baseContext,
@@ -234,9 +233,7 @@ class BoardWrite : AppCompatActivity() {
                 Request.Method.POST,
                 postUrl,
                 { response ->
-                    Log.d("11??", response)
                     if (!response.equals("upload fail")) {
-                        Log.d("post", "???")
                         Toast.makeText(
                             baseContext,
                             String.format("게시물 업로드가 완료되었습니다."),
@@ -297,8 +294,6 @@ class BoardWrite : AppCompatActivity() {
             Request.Method.POST,
             medalurl,
             { response ->
-                Log.d("gradeeeeeeeeeee", response)
-                Log.d("gradeNickname", nickname)
                 if(response != "grade fail") {
                     Log.d("userGraade", "up")
                 }
