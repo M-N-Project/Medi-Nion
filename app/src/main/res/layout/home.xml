@@ -15,14 +15,12 @@
             android:orientation="vertical">
 
             <!-- 최신 qna -->
-            <include
-                layout="@layout/home_qna"
+            <include layout="@layout/home_qna"
 
                 />
 
             <!-- 첫번째 광고 -->
-            <include
-                layout="@layout/ad_viewpager2" />
+            <include layout="@layout/ad_viewpager2" />
 
 
             <!-- 즐겨찾는 게시판 -->
@@ -34,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/home_qna_detail"
-                android:paddingBottom="16dp">
+                android:paddingBottom="20dp">
 
                 <TextView
                     android:id="@+id/home_boardList_title"
@@ -168,7 +166,7 @@
                 android:background="@drawable/home_qna_detail"
                 android:paddingLeft="8dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:id="@+id/home_hot_title"
@@ -461,10 +459,10 @@
                 android:id="@+id/view3"
                 android:layout_width="400dp"
                 android:layout_height="2.5dp"
+                android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center"
                 android:background="#8BE0C4" />
 
             <include
@@ -477,19 +475,19 @@
                 android:id="@+id/view2"
                 android:layout_width="400dp"
                 android:layout_height="2.5dp"
+                android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
-                android:layout_gravity="center"
                 android:background="#8BE0C4" />
 
             <ImageView
                 android:id="@+id/imageView_ad2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/big_ad1"/>
+                android:layout_marginTop="16dp"
+                app:srcCompat="@drawable/big_ad1" />
 
         </LinearLayout>
     </ScrollView>
