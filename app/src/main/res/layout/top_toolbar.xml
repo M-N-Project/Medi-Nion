@@ -52,7 +52,7 @@
             android:gravity="center"
             android:padding="7dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/bell_icon"
+            app:srcCompat="@drawable/bell1"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         <ImageButton
@@ -68,23 +68,23 @@
             android:gravity="center"
             android:padding="8dp"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/search_icon"
+            app:srcCompat="@drawable/search"
             tools:ignore="SpeakableTextPresentCheck" />
 
-        <SearchView
-            android:id="@+id/search_icon2"
-            android:layout_width="48dp"
-            android:layout_height="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:scaleType="fitCenter"
-            android:layout_marginRight="57dp"
-            android:layout_marginTop="2dp"
-            android:padding="8dp"
-            android:background="@android:color/transparent"
-            app:searchIcon="@drawable/search_icon"/>
+<!--        <SearchView-->
+<!--            android:id="@+id/search_icon2"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="25dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginRight="57dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:gravity="center"-->
+<!--            android:padding="8dp"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            app:searchIcon="@drawable/search" />-->
 
         <ImageView
             android:id="@+id/alarm_red_dot"
