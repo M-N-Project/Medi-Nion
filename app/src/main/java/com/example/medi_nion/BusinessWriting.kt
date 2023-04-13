@@ -121,18 +121,23 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                     DialogInterface.OnClickListener { dialog, id ->
                         image1_ImageView.setImageResource(0)
                         image1_ImageView.visibility = View.GONE
+                        image1 = "null"
 
                         image2_ImageView.setImageResource(0)
                         image2_ImageView.visibility = View.GONE
+                        image2 = "null"
 
                         image3_ImageView.setImageResource(0)
                         image3_ImageView.visibility = View.GONE
+                        image3 = "null"
 
                         image4_ImageView.setImageResource(0)
                         image4_ImageView.visibility = View.GONE
+                        image4 = "null"
 
                         image5_ImageView.setImageResource(0)
                         image5_ImageView.visibility = View.GONE
+                        image5 = "null"
 
                         image_delete.visibility = View.GONE
 
