@@ -461,13 +461,8 @@
                 android:layout_height="wrap_content" />
 
             <!-- 광고2 -->
-            <ImageView
-                android:id="@+id/imageView_ad2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/big_ad1"/>
+            <include
+                layout="@layout/big_ad_viewpager"/>
 
         </LinearLayout>
     </ScrollView>
