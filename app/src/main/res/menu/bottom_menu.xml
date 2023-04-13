@@ -5,19 +5,19 @@
     <item
         android:id="@+id/homeFragment"
         android:title="Home"
-        android:icon="@drawable/bottom_home_icon1"/>
+        android:icon="@drawable/bottom_home2"/>
     <item
         android:id="@+id/menuFragment"
         android:title="Menu"
-        android:icon="@drawable/bottom_menu1"/>
+        android:icon="@drawable/bottom_menu2"/>
     <item
         android:id="@+id/scheduleFragment"
         android:title="Schedule"
-        android:icon="@drawable/bottom_schedule1"/>
+        android:icon="@drawable/bottom_schedule2"/>
     <item
         android:id="@+id/businessFragment"
         android:title="Business"
-        android:icon="@drawable/bottom_business1"/>
+        android:icon="@drawable/bottom_business2"/>
     <item
         android:id="@+id/profileFragment"
         android:title="Profile"
