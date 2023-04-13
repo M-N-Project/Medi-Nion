@@ -85,7 +85,7 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
                 }
             }
 
-            roundAll(view.profileImg2, 100.0f)
+//            roundAll(view.profileImg2, 100.0f)
 
             var imgItems = ArrayList<BusinessPostImgItem>()
             var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
@@ -98,7 +98,6 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
                     pos: Int
                 ){
                     Log.d("click", pos.toString())
-
                 }
             })
 

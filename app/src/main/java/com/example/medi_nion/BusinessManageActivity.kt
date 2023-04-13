@@ -706,7 +706,7 @@ class BusinessManageActivity : AppCompatActivity() {
                     bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
                     profileImg.setImageBitmap(bitmap)
 
-                    bitmap = resize(bitmap)
+//                    bitmap = resize(bitmap)
                     image_profile = BitMapToString(bitmap)
                     encodeBitmapImage(bitmap)
 
