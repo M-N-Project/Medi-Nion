@@ -11,10 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,6 +69,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
             heart.isChecked = item.isHeart
 
             profileImg.setImageResource(R.drawable.logo)
+            view.findViewById<HorizontalScrollView>(R.id.businessMG_Img).visibility  = View.GONE
 
             if(item.profileImg.length >= 5){
                 if(item.profileImg.substring((item.profileImg).length-4, (item.profileImg).length) == ".jpg"){
@@ -111,7 +109,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 }
             })
 
-            if(item.image1 != "null"){
+            if(item.image1 != ""){
                 Log.d("imgtiem", item.image1)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image1}"
                 view.businessMG_Img.visibility = View.VISIBLE
@@ -123,7 +121,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
                 view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image2 != "null"){
+            if(item.image2 != ""){
                 Log.d("imgtiem", item.image2)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image2}"
                 view.businessMG_Img.visibility = View.VISIBLE

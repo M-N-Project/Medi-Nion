@@ -44,10 +44,15 @@ class Board_profile : AppCompatActivity() {
 
         var board_select = findViewById<TextView>(R.id.board_select_profile) //게시판 종류 선택
         var profileType = intent.getStringExtra("profileMenuType")
+        Log.d("start", profileType.toString())
         if(profileType=="post")
             fetchPost(board_select.text.toString())
         else if(profileType=="scrap")
             fetchScrap(board_select.text.toString())
+        else if(profileType=="like")
+            fetchLike(board_select.text.toString())
+        else if(profileType=="comment")
+            fetchComment(board_select.text.toString())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,11 +72,17 @@ class Board_profile : AppCompatActivity() {
         var market_RadioBtn = findViewById<RadioButton>(R.id.market_RadioBtn_profile)
         var QnA_RadioBtn = findViewById<RadioButton>(R.id.QnA_RadioBtn_profile)
 
+
         var profileType = intent.getStringExtra("profileMenuType")
+        Log.d("create", profileType.toString())
         if(profileType=="post")
             fetchPost(board_select.text.toString())
         else if(profileType=="scrap")
             fetchScrap(board_select.text.toString())
+        else if(profileType=="like")
+            fetchLike(board_select.text.toString())
+        else if(profileType=="comment")
+            fetchComment(board_select.text.toString())
 
         board_select.text = "자유 게시판"
         var boardInit = intent.getStringExtra("board")
@@ -100,6 +111,10 @@ class Board_profile : AppCompatActivity() {
                     fetchPost(board_select.text.toString())
                 else if(profileType=="scrap")
                     fetchScrap(board_select.text.toString())
+                else if(profileType=="like")
+                    fetchLike(board_select.text.toString())
+                else if(profileType=="comment")
+                    fetchComment(board_select.text.toString())
             }
 
             job_RadioBtn.setOnClickListener {
@@ -109,6 +124,10 @@ class Board_profile : AppCompatActivity() {
                     fetchPost(board_select.text.toString())
                 else if(profileType=="scrap")
                     fetchScrap(board_select.text.toString())
+                else if(profileType=="like")
+                    fetchLike(board_select.text.toString())
+                else if(profileType=="comment")
+                    fetchComment(board_select.text.toString())
             }
 
             department_RadioBtn.setOnClickListener {
@@ -118,6 +137,10 @@ class Board_profile : AppCompatActivity() {
                     fetchPost(board_select.text.toString())
                 else if(profileType=="scrap")
                     fetchScrap(board_select.text.toString())
+                else if(profileType=="like")
+                    fetchLike(board_select.text.toString())
+                else if(profileType=="comment")
+                    fetchComment(board_select.text.toString())
             }
 
             my_hospital_RadioBtn.setOnClickListener {
@@ -127,6 +150,10 @@ class Board_profile : AppCompatActivity() {
                     fetchPost(board_select.text.toString())
                 else if(profileType=="scrap")
                     fetchScrap(board_select.text.toString())
+                else if(profileType=="like")
+                    fetchLike(board_select.text.toString())
+                else if(profileType=="comment")
+                    fetchComment(board_select.text.toString())
             }
 
             market_RadioBtn.setOnClickListener {
@@ -136,6 +163,10 @@ class Board_profile : AppCompatActivity() {
                     fetchPost(board_select.text.toString())
                 else if(profileType=="scrap")
                     fetchScrap(board_select.text.toString())
+                else if(profileType=="like")
+                    fetchLike(board_select.text.toString())
+                else if(profileType=="comment")
+                    fetchComment(board_select.text.toString())
             }
 
             QnA_RadioBtn.setOnClickListener {
@@ -145,6 +176,10 @@ class Board_profile : AppCompatActivity() {
                     fetchPost(board_select.text.toString())
                 else if(profileType=="scrap")
                     fetchScrap(board_select.text.toString())
+                else if(profileType=="like")
+                    fetchLike(board_select.text.toString())
+                else if(profileType=="comment")
+                    fetchComment(board_select.text.toString())
             }
         }
 
@@ -531,9 +566,352 @@ class Board_profile : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(requestScrapNum)
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun fetchLike(boardSelect : String) {
+        // url to post our data
+        var id = intent.getStringExtra("id")
+        var board :String = ""
+        board = intent.getStringExtra("board").toString()
+        var userType :String = ""
+        userType = intent.getStringExtra("userType").toString()
+        var userDept :String = ""
+        userDept = intent.getStringExtra("userDept").toString()
+        val urlLike = "http://seonho.dothome.co.kr/BoardProfileLikeNum.php"
+        val urlBoard = "http://seonho.dothome.co.kr/BoardProfileLike.php"
+        val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+        Log.d("-0123", "kiki")
+
+        val requestScrapNum = Board_Request(
+            Request.Method.POST,
+            urlLike,
+            { responseLikeNum ->
+                if(responseLikeNum != "Like Profile Fetch Fail"){
+                    val jsonArrayLikeNum = JSONArray(responseLikeNum)
+
+                    items.clear()
+                    all_items.clear()
+
+                    val noItemText = findViewById<TextView>(R.id.no_myitem)
+                    if (jsonArrayLikeNum.length() == 0) {
+                        noItemText.visibility = View.VISIBLE
+                        noItemText.text = "좋아요한 게시물이 없습니다."
+                        noItemText.bringToFront()
+
+                        adapter = BoardListAdapter(items)
+                        boardRecyclerView_profile.adapter = adapter
+                    } else {
+                        noItemText.visibility = View.GONE
+
+                        Log.d("9091233", jsonArrayLikeNum.length().toString())
+
+                        for (i in jsonArrayLikeNum.length() - 1 downTo 0) {
+                            val item = jsonArrayLikeNum.getJSONObject(i)
+
+                            val post_num = item.getInt("post_num")
+                            val count = item.getInt("count")
+
+                            Log.d("099123", "$post_num ,, $boardSelect")
+
+                            val requestScrapBoard = Board_Request(
+                                Request.Method.POST,
+                                urlBoard,
+                                { responseLikeBoard ->
+                                    Log.d("099123", responseLikeBoard)
+                                    val jsonArrayLikeBoard = JSONArray(responseLikeBoard)
+
+                                    items.clear()
+                                    all_items.clear()
+
+                                    for (i in jsonArrayLikeBoard.length()-1  downTo  0) {
+                                        val item = jsonArrayLikeBoard.getJSONObject(i)
+
+                                        val num = item.getInt("num")
+                                        val title = item.getString("title")
+                                        val content = item.getString("content")
+                                        val board_time = item.getString("time")
+                                        val image = item.getString("image")
+                                        var heart = item.getInt("heart")
+                                        var comment = item.getInt("comment")
+                                        var bookmark = item.getInt("bookmark")
+
+                                        val simpleTime = timeDiff(board_time)
+
+                                        val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
+
+                                        if(i >= jsonArrayLikeBoard.length() - item_count*scroll_count){
+                                            items.add(boardItem)
+                                            itemIndex.add(num) //앞에다가 추가.
+                                        }
+
+                                        all_items.add(boardItem)
+                                    }
+
+                                    var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
+                                    var new_items = ArrayList<BoardItem>()
+                                    new_items.addAll(items)
+                                    adapter = BoardListAdapter(new_items)
+                                    boardRecyclerView_profile.adapter = adapter
+                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                    boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+
+                                    var detailId : String = ""
+                                    var detailTitle : String = ""
+                                    var detailContent : String = ""
+                                    var detailTime : String = ""
+                                    var detailImg : String = ""
+
+                                    //게시판 상세
+                                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                                            val request = Login_Request(
+                                                Request.Method.POST,
+                                                urlDetail,
+                                                { response ->
+                                                    if(response!="Detail Info Error"){
+                                                        val jsonArray = JSONArray(response)
+                                                        items.clear()
+                                                        for (i in jsonArray.length()-1  downTo  0) {
+                                                            val item = jsonArray.getJSONObject(i)
+
+                                                            detailId = item.getString("id")
+                                                            detailTitle = item.getString("title")
+                                                            detailContent = item.getString("content")
+                                                            detailTime = item.getString("time")
+                                                            detailImg = item.getString("image")
+
+                                                            val intent = Intent(applicationContext, BoardDetail::class.java)
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                                            intent.putExtra("board", board)
+                                                            intent.putExtra("num", data.num)
+                                                            intent.putExtra("id", id)
+                                                            intent.putExtra("writerId", detailId)
+                                                            intent.putExtra("title", detailTitle)
+                                                            intent.putExtra("content", detailContent)
+                                                            intent.putExtra("time", detailTime)
+                                                            intent.putExtra("image", detailImg)
+                                                            intent.putExtra("userType", userType)
+                                                            intent.putExtra("userDept", userDept)
+                                                            startActivity(intent)
+                                                        }
+
+
+                                                    }
+
+                                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                                hashMapOf(
+                                                    "board" to boardSelect,
+                                                    "post_num" to post_num.toString()
+                                                )
+                                            )
+                                            val queue = Volley.newRequestQueue(applicationContext)
+                                            queue.add(request)
+                                        }
+
+                                    })
+
+
+                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                hashMapOf(
+                                    "post_num" to post_num.toString(),
+                                    "board" to boardSelect
+                                )
+                            )
+                            val queue = Volley.newRequestQueue(this)
+                            queue.add(requestScrapBoard)
+                        }
+                    }
+
+
+                }
+
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "id" to id.toString(),
+                "board" to boardSelect
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(requestScrapNum)
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun fetchComment(boardSelect : String) {
+        // url to post our data
+        var id = intent.getStringExtra("id")
+        var board :String = ""
+        board = intent.getStringExtra("board").toString()
+        var userType :String = ""
+        userType = intent.getStringExtra("userType").toString()
+        var userDept :String = ""
+        userDept = intent.getStringExtra("userDept").toString()
+        val urlComment = "http://seonho.dothome.co.kr/BoardProfileCommentNum.php"
+        val urlBoard = "http://seonho.dothome.co.kr/BoardProfileComment.php"
+        val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+        Log.d("-0123", "kiki")
+
+        val requestScrapNum = Board_Request(
+            Request.Method.POST,
+            urlComment,
+            { responseCommentNum ->
+                Log.d("resss?", responseCommentNum)
+                if(responseCommentNum != "Comment Profile Fetch Fail"){
+                    val jsonArrayCommentNum = JSONArray(responseCommentNum)
+
+                    items.clear()
+                    all_items.clear()
+
+                    val noItemText = findViewById<TextView>(R.id.no_myitem)
+                    if (jsonArrayCommentNum.length() == 0) {
+                        noItemText.visibility = View.VISIBLE
+                        noItemText.text = "댓글 쓴 게시물이 없습니다."
+                        noItemText.bringToFront()
+
+                        adapter = BoardListAdapter(items)
+                        boardRecyclerView_profile.adapter = adapter
+                    } else {
+                        noItemText.visibility = View.GONE
+
+                        Log.d("9091233", jsonArrayCommentNum.length().toString())
+
+                        for (i in jsonArrayCommentNum.length() - 1 downTo 0) {
+                            val item = jsonArrayCommentNum.getJSONObject(i)
+
+                            val post_num = item.getInt("post_num")
+                            val count = item.getInt("count")
+
+                            Log.d("099123", "$post_num ,, $boardSelect")
+
+                            val requestScrapBoard = Board_Request(
+                                Request.Method.POST,
+                                urlBoard,
+                                { responseScrapBoard ->
+                                    Log.d("099123", responseScrapBoard)
+                                    val jsonArrayScrapBoard = JSONArray(responseScrapBoard)
+
+                                    items.clear()
+                                    all_items.clear()
+
+                                    for (i in jsonArrayScrapBoard.length()-1  downTo  0) {
+                                        val item = jsonArrayScrapBoard.getJSONObject(i)
+
+                                        val num = item.getInt("num")
+                                        val title = item.getString("title")
+                                        val content = item.getString("content")
+                                        val board_time = item.getString("time")
+                                        val image = item.getString("image")
+                                        var heart = item.getInt("heart")
+                                        var comment = item.getInt("comment")
+                                        var bookmark = item.getInt("bookmark")
+
+                                        val simpleTime = timeDiff(board_time)
+
+                                        val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
+
+                                        if(i >= jsonArrayScrapBoard.length() - item_count*scroll_count){
+                                            items.add(boardItem)
+                                            itemIndex.add(num) //앞에다가 추가.
+                                        }
+                                        all_items.add(boardItem)
+                                    }
+
+                                    var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
+                                    var new_items = ArrayList<BoardItem>()
+                                    new_items.addAll(items)
+
+                                    Log.d("item??", new_items.size.toString())
+                                    adapter = BoardListAdapter(new_items)
+                                    boardRecyclerView_profile.adapter = adapter
+                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                    boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+                                    var detailId : String = ""
+                                    var detailTitle : String = ""
+                                    var detailContent : String = ""
+                                    var detailTime : String = ""
+                                    var detailImg : String = ""
+
+                                    //게시판 상세
+                                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                                            val request = Login_Request(
+                                                Request.Method.POST,
+                                                urlDetail,
+                                                { response ->
+                                                    if(response!="Detail Info Error"){
+                                                        val jsonArray = JSONArray(response)
+                                                        items.clear()
+                                                        for (i in jsonArray.length()-1  downTo  0) {
+                                                            val item = jsonArray.getJSONObject(i)
+
+                                                            detailId = item.getString("id")
+                                                            detailTitle = item.getString("title")
+                                                            detailContent = item.getString("content")
+                                                            detailTime = item.getString("time")
+                                                            detailImg = item.getString("image")
+
+                                                            val intent = Intent(applicationContext, BoardDetail::class.java)
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                                            intent.putExtra("board", board)
+                                                            intent.putExtra("num", data.num)
+                                                            intent.putExtra("id", id)
+                                                            intent.putExtra("writerId", detailId)
+                                                            intent.putExtra("title", detailTitle)
+                                                            intent.putExtra("content", detailContent)
+                                                            intent.putExtra("time", detailTime)
+                                                            intent.putExtra("image", detailImg)
+                                                            intent.putExtra("userType", userType)
+                                                            intent.putExtra("userDept", userDept)
+                                                            startActivity(intent)
+                                                        }
+
+
+                                                    }
+
+                                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                                hashMapOf(
+                                                    "board" to boardSelect,
+                                                    "post_num" to post_num.toString()
+                                                )
+                                            )
+                                            val queue = Volley.newRequestQueue(applicationContext)
+                                            queue.add(request)
+                                        }
+
+                                    })
+
+
+                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                hashMapOf(
+                                    "post_num" to post_num.toString(),
+                                    "board" to boardSelect
+                                )
+                            )
+                            val queue = Volley.newRequestQueue(this)
+                            queue.add(requestScrapBoard)
+                        }
+                    }
+
+
+                }
+
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "id" to id.toString(),
+                "board" to boardSelect
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(requestScrapNum)
+
 
 
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun Millis(postTime : String) : Long {
