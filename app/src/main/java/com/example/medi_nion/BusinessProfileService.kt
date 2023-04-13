@@ -157,6 +157,5 @@ class BusinessProfileService : Service() {
     }
 
     override fun onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
     }
 }

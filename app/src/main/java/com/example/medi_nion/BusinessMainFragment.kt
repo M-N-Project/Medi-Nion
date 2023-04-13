@@ -137,8 +137,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                     })
                 }
                 else {
-                    Toast.makeText(context, "프로필가져오기 실패", Toast.LENGTH_SHORT)
-
                     //인기채널이 없을때 -> 랜덤으로 프로필 가져오기.
                     val request = Board_Request(
                         Request.Method.POST,
