@@ -15,9 +15,9 @@
 
         <ImageView
             android:id="@+id/board_ad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ad1" />
+            android:layout_marginStart="20dp"
+            android:layout_width="350dp"
+            android:layout_height="70dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/boardRecyclerView"
