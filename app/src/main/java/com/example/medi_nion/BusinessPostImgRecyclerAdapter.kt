@@ -54,8 +54,9 @@ class BusinessPostImgRecyclerAdapter(private val items: ArrayList<BusinessPostIm
         private var view: View = v
         private var postImg = view.findViewById<ImageView>(R.id.businessMG_postImg)
 
+
         fun bind(item: BusinessPostImgItem) {
-            if(item.imageUrl != "null"){
+            if(item.imageUrl != ""){
                 val task = ImageLoadTask(item.imageUrl, postImg)
                 task.execute()
             }

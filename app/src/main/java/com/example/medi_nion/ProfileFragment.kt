@@ -71,11 +71,47 @@ class ProfileFragment : Fragment(R.layout.profile) {
             startActivity(intent)
         }
 
+        //내 좋아요 ->
+        binding.item1List3Text.setOnClickListener{
+            val intent = Intent(context, Board_profile::class.java)
+            intent.putExtra("id", id)
+            intent.putExtra("profileMenuType", "like")
+            intent.putExtra("userType", userType)
+            intent.putExtra("userDept", userDept)
+            intent.putExtra("userGrade", userGrade)
+            intent.putExtra("board", "자유 게시판")
+            startActivity(intent)
+        }
+
+        //내 댓글 ->
+        binding.item1List4Text.setOnClickListener{
+            val intent = Intent(context, Board_profile::class.java)
+            intent.putExtra("id", id)
+            intent.putExtra("profileMenuType", "comment")
+            intent.putExtra("userType", userType)
+            intent.putExtra("userDept", userDept)
+            intent.putExtra("userGrade", userGrade)
+            intent.putExtra("board", "자유 게시판")
+            startActivity(intent)
+        }
+
         //내 스크랩 -> board에 내 스크랩 검색해서 만들기
         binding.item1List2Text.setOnClickListener{
             val intent = Intent(context, Board_profile::class.java)
             intent.putExtra("id", id)
             intent.putExtra("profileMenuType", "scrap")
+            intent.putExtra("userType", userType)
+            intent.putExtra("userDept", userDept)
+            intent.putExtra("userGrade", userGrade)
+            intent.putExtra("board", "자유 게시판")
+            startActivity(intent)
+        }
+
+        //내 북마크 -> business에서 북마크한 글 찾기
+        binding.item1List5Text.setOnClickListener{
+            val intent = Intent(context, Board_profile::class.java)
+            intent.putExtra("id", id)
+            intent.putExtra("profileMenuType", "post")
             intent.putExtra("userType", userType)
             intent.putExtra("userDept", userDept)
             intent.putExtra("userGrade", userGrade)

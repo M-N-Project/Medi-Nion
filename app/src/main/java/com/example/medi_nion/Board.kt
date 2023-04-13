@@ -18,7 +18,6 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.android.synthetic.main.board_home.refresh_layout
 import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,6 +42,13 @@ class Board : AppCompatActivity() {
         fetchData()
     }
 
+    var ad_images = intArrayOf(
+        R.drawable.ad1,
+        R.drawable.ad2,
+        R.drawable.ad3
+    )
+
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
@@ -51,6 +57,9 @@ class Board : AppCompatActivity() {
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
         val board_ad = findViewById<ImageView>(R.id.board_ad)
+
+        val imageId = (Math.random() * ad_images.size).toInt()
+        board_ad.setBackgroundResource(ad_images[imageId])
 
         board_ad.setOnClickListener {
             val address = "https://www.tripstore.kr/travels/b1653a2c-57ad-4f45-998b-7d79296dd444"

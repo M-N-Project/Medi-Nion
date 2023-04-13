@@ -453,8 +453,6 @@
 
             <!-- 추천 비즈니스채널 프로필 -->
 
-            <!-- 광고2 -->
-
             <View
                 android:id="@+id/view3"
                 android:layout_width="400dp"
@@ -481,13 +479,9 @@
                 android:layout_marginRight="20dp"
                 android:background="#8BE0C4" />
 
-            <ImageView
-                android:id="@+id/imageView_ad2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                app:srcCompat="@drawable/big_ad1" />
+            <!-- 두번째 광고 -->
+            <include
+                layout="@layout/big_ad_viewpager"/>
 
         </LinearLayout>
     </ScrollView>
