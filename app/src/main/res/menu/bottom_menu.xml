@@ -5,23 +5,23 @@
     <item
         android:id="@+id/homeFragment"
         android:title="Home"
-        android:icon="@drawable/bottom_home_icon"/>
+        android:icon="@drawable/bottom_home_icon1"/>
     <item
         android:id="@+id/menuFragment"
         android:title="Menu"
-        android:icon="@drawable/bottom_menu_icon"/>
+        android:icon="@drawable/bottom_menu1"/>
     <item
         android:id="@+id/scheduleFragment"
         android:title="Schedule"
-        android:icon="@drawable/bottom_schedule_icon"/>
+        android:icon="@drawable/bottom_schedule1"/>
     <item
         android:id="@+id/businessFragment"
         android:title="Business"
-        android:icon="@drawable/bottom_business_icon"/>
+        android:icon="@drawable/bottom_business1"/>
     <item
         android:id="@+id/profileFragment"
         android:title="Profile"
-        android:icon="@drawable/bottom_profile_icon"/>
+        android:icon="@drawable/bottom_profile2"/>
 
 
 </menu>
