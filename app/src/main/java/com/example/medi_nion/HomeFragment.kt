@@ -879,6 +879,68 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
     }
 
+    fun fetchRanProfile() {
+        val urlBusiRan = "http://seonho.dothome.co.kr/Business_profileRan_list.php"
+
+        val profileview = view?.findViewById<View>(R.id.business_newby)
+        val profile1 = profileview?.findViewById<ImageView>(R.id.business_new1)
+        val profile2 = profileview?.findViewById<ImageView>(R.id.business_new2)
+        val profile3 = profileview?.findViewById<ImageView>(R.id.business_new3)
+        val profile4 = profileview?.findViewById<ImageView>(R.id.business_new4)
+
+        var profileList = ArrayList<ImageView>()
+        if (profile1 != null) {
+            profileList.add(profile1)
+        }
+        if (profile2 != null) {
+            profileList.add(profile2)
+        }
+        if (profile3 != null) {
+            profileList.add(profile3)
+        }
+        if (profile4 != null) {
+            profileList.add(profile4)
+        }
+
+        val request = Login_Request(
+            Request.Method.POST,
+            urlBusiRan,
+            {response->
+                if(!response.equals("no BusinessProfile")){
+                    val jsonArray = JSONArray(response)
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
+                        chanName = item.getString("channel_name")
+                        val writerId = item.getString("id")
+                        val imgUrl =
+                            "http://seonho.dothome.co.kr/images/businessProfile/${writerId}BusinessProfile.jpg"
+
+                        val profile = profileList.removeAt(0)
+                        if (profile != null) {
+                            val task = ImageLoadTask(imgUrl, profile1)
+                            task.execute()
+                            roundAll(profile, 100.0f)
+                        }
+                    }
+                } else Log.d("BusiRanProfile fail", "0000000000")
+            }, {
+                Log.d(
+                    "failed", "error......${
+                        activity?.applicationContext?.let { it1 ->
+                            error(
+                                it1
+                            )
+                        }
+                    }"
+                )
+            },
+            hashMapOf(
+            )
+        )
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
+        queue.add(request)
+    }
+
     fun roundAll(iv: ImageView, curveRadius: Float): ImageView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

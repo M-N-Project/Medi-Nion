@@ -464,6 +464,7 @@
                 android:background="#8BE0C4" />
 
             <include
+                android:id="@+id/business_newby"
                 layout="@layout/business_newby"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
