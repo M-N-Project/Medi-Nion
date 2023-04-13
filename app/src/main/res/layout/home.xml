@@ -488,6 +488,9 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 app:srcCompat="@drawable/big_ad1" />
+            <!-- 광고2 -->
+            <include
+                layout="@layout/big_ad_viewpager"/>
 
         </LinearLayout>
     </ScrollView>

@@ -5,13 +5,12 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView_ad"
+        android:id="@+id/imageView_big_ad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ad1" />
-
+        app:srcCompat="@drawable/big_ad1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
