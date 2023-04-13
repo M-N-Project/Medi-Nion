@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/board_ad"
-            android:layout_marginStart="20dp"
-            android:layout_width="350dp"
+            android:layout_marginStart="15dp"
+            android:layout_width="330dp"
             android:layout_height="70dp" />
 
         <androidx.recyclerview.widget.RecyclerView
