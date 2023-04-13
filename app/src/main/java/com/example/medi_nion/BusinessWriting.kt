@@ -170,7 +170,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                     updateUrl,
                     object : Response.Listener<String?> {
                         override fun onResponse(response: String?) {
-
                             var intent = Intent(
                                 applicationContext,
                                 BusinessManageActivity::class.java
@@ -316,7 +315,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
+//                                bitmap = resize(bitmap)
 //                                image1 = BitMapToString(bitmap)
                                 image1 = encodeBitmapImage(bitmap)
 
@@ -333,7 +332,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
+//                                bitmap = resize(bitmap)
 //                                image2 = BitMapToString(bitmap)
                                 image2 = encodeBitmapImage(bitmap)
                             }
@@ -347,7 +346,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
+//                                bitmap = resize(bitmap)
 //                                image3 = BitMapToString(bitmap)
                                 image3 = encodeBitmapImage(bitmap)
                             }
@@ -361,7 +360,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
+//                                bitmap = resize(bitmap)
 //                                image4 = BitMapToString(bitmap)
                                 image4 = encodeBitmapImage(bitmap)
                             }
@@ -375,7 +374,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
+//                                bitmap = resize(bitmap)
 //                                image5 = BitMapToString(bitmap)
                                 image5 = encodeBitmapImage(bitmap)
                             }
@@ -390,7 +389,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                 var source: ImageDecoder.Source? =
                     uri?.let { ImageDecoder.createSource(contentResolver, it) }
                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                bitmap = resize(bitmap)
+//                bitmap = resize(bitmap)
                 image1 = BitMapToString(bitmap)
 
                 imageCnt++
@@ -407,34 +406,6 @@ private fun encodeBitmapImage(bitmap: Bitmap): String {
     val bytesOfImage = byteArrayOutputStream.toByteArray()
     return Base64.encodeToString(bytesOfImage, Base64.DEFAULT)
 }
-
-//    @RequiresApi(Build.VERSION_CODES.P)
-//    fun uriToBitmap(ImageData : Uri) : String {
-//        try {
-//            var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, ImageData)
-//
-//            var source: ImageDecoder.Source? =
-//                ImageData?.let { ImageDecoder.createSource(contentResolver, it) }
-//            bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//
-//
-//            bitmap = resize(bitmap)
-//
-//
-////                    image = bitmapToByteArray(bitmap)
-//            image = BitMapToString(bitmap)
-//        } catch (e: FileNotFoundException) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace()
-//        } catch (e: IOException) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace()
-//        } catch (e: OutOfMemoryError) {
-//            Toast.makeText(applicationContext, "이미지 용량이 너무 큽니다.", Toast.LENGTH_SHORT)
-//                .show()
-//        }
-//        return image
-//    }
 
 private fun resize(bitmap: Bitmap): Bitmap? {
     var bitmap: Bitmap? = bitmap

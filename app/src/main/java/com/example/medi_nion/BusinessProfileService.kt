@@ -133,7 +133,6 @@ class BusinessProfileService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show()
         id = intent.getStringExtra("id").toString()
         isFirst = intent.getBooleanExtra("isFirst", true)
         channel_name = intent.getStringExtra("channel_name").toString()
@@ -158,6 +157,5 @@ class BusinessProfileService : Service() {
     }
 
     override fun onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show()
     }
 }

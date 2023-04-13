@@ -120,7 +120,9 @@ class BusinessManageActivity : AppCompatActivity() {
             val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
             val loadingText = findViewById<TextView>(R.id.loading_textView_business)
             loadingText.visibility = View.VISIBLE
+            loadingText.bringToFront()
             progressBar.visibility = View.VISIBLE
+            progressBar.bringToFront()
 
             if(isEditProfile)
                 uploadDataToDB()
@@ -589,6 +591,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
         loadingText.visibility = View.VISIBLE
         loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
+        loadingText.bringToFront()
         progressBar.visibility = View.VISIBLE
         progressBar.bringToFront()
         val request = Login_Request(
@@ -706,7 +709,7 @@ class BusinessManageActivity : AppCompatActivity() {
                     bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
                     profileImg.setImageBitmap(bitmap)
 
-                    bitmap = resize(bitmap)
+//                    bitmap = resize(bitmap)
                     image_profile = BitMapToString(bitmap)
                     encodeBitmapImage(bitmap)
 

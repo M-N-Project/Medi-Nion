@@ -132,6 +132,8 @@ class BusinessProfileActivity : AppCompatActivity() {
                         val chanSub_num = item.getString("subscribe_count")
                         val channel_img = item.getString("Channel_Profile_Img")
 
+
+
                         chanName.text = channel_name
                         chanDesc.text = channel_desc
                         businessPageTitle.text = "${channel_name}님의 비즈니스 채널"

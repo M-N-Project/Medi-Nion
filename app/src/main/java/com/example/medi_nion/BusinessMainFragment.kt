@@ -65,6 +65,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     fun fetchHotProfile() {
         var appUser = arguments?.getString("id").toString()
         val urlHotProfile = "http://seonho.dothome.co.kr/Business_profileHot_list.php"
+        val urlRandProfile = "http://seonho.dothome.co.kr/Business_profileNew_list.php"
         val request = Board_Request(
             Request.Method.POST,
             urlHotProfile,
@@ -136,7 +137,68 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                     })
                 }
                 else {
-                    Toast.makeText(context, "프로필가져오기 실패", Toast.LENGTH_SHORT)
+                    //인기채널이 없을때 -> 랜덤으로 프로필 가져오기.
+                    val request = Board_Request(
+                        Request.Method.POST,
+                        urlRandProfile,
+                        { responseRand ->
+                            Log.d("0712312", responseRand)
+                            if (responseRand != "no BusinessProfile"){
+                                hotListItems.clear()
+                                val jsonArray = JSONArray(responseRand)
+
+                                for (i in jsonArray.length() - 1 downTo 0) {
+                                    val item = jsonArray.getJSONObject(i)
+
+                                    val chanName = item.getString("channel_name")
+                                    val chanProfile = item.getString("channel_profile_img")
+
+                                    val HotListItem = BusinessHotListItem(chanName, chanProfile)
+                                    hotListItems.add(HotListItem)
+
+                                }
+                                hotListItems.reverse()
+                                var hotAdapter = BusinessHotListAdapter(hotListItems)
+                                hotAdapter.notifyDataSetChanged()
+                                BusinessSubRecycler.adapter = hotAdapter
+
+                                hotAdapter.setOnItemClickListener(object :
+                                    BusinessHotListAdapter.OnItemClickListener {
+                                    override fun onProfileClick(
+                                        v: View,
+                                        data: BusinessHotListItem,
+                                        pos: Int
+                                    ){
+                                        val intent =
+                                            Intent(
+                                                context,
+                                                BusinessProfileActivity::class.java
+                                            )
+
+                                        var appUser = arguments?.getString("id").toString()
+                                        intent.putExtra("appUser", appUser)
+                                        intent.putExtra(
+                                            "channel_name",
+                                            data.chanName
+                                        )
+                                        startActivity(intent)
+                                    }
+                                })
+                            }
+                            else {
+                                Toast.makeText(context, "프로필가져오기 실패", Toast.LENGTH_SHORT)
+                            }
+                        },
+                        {
+                            Log.d(
+                                "login failed",
+                                "error......${context?.let { it1 -> error(it1) }}"
+                            )
+                        },
+                        hashMapOf()
+                    )
+                    val queue = Volley.newRequestQueue(context)
+                    queue.add(request)
                 }
             },
             {

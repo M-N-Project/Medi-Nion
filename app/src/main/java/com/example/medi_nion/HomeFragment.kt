@@ -2,11 +2,23 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Outline
 import android.net.Uri
+import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewOutlineProvider
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -423,6 +435,12 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             }
         }
 
+        val BusiNewView = view.findViewById<View>(R.id.home_subsc_box)
+        BusiNewView.setOnClickListener{
+            Log.d("클릭이벤트 발생", "123123123")
+            gotoProfile()
+        }
+
         return view
     }
 
@@ -776,12 +794,14 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     }
 
     //////////////////////////////////// 구독채널 새소식 ////////////////////////////////////////////////////////////
+    private var chanName : String = ""
     fun fetchNewBusi() {
         val urlBusiNew = "http://seonho.dothome.co.kr/HomeNewBusi.php"
         val id = arguments?.getString("id").toString()
 
-        val chanName = view?.findViewById<TextView>(R.id.home_business_name)
-        val content = view?.findViewById<TextView>(R.id.home_business_detail)
+        val chanNameView = view?.findViewById<TextView>(R.id.home_business_name)
+        val contentView = view?.findViewById<TextView>(R.id.home_business_detail)
+        val chanImg = view?.findViewById<ImageView>(R.id.imageView6)
 
         val request = Login_Request(
             Request.Method.POST,
@@ -789,17 +809,35 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             {
                 response->
                 if(!response.equals("No NewBusi")){
-                    Log.d("비즈니스 홈", response)
                     val jsonArray = JSONArray(response)
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
+                        chanName = item.getString("channel_name")
+                        val writerId = item.getString("id")
+                        val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${writerId}BusinessProfile.jpg"
 
-                        if (chanName != null) {
-                            chanName.setText(item.getString("channel_name"))
+                        if (chanNameView != null) {
+                            chanNameView.text = chanName
                         }
-                        if (content != null) {
-                            content.setText(item.getString("content"))
+                        if (contentView != null) {
+                            contentView.text = item.getString("content")
                         }
+
+                        if (chanImg != null) {
+                            val task = ImageLoadTask(imgUrl, chanImg)
+                            task.execute()
+                            roundAll(chanImg, 100.0f)
+                        }
+                    }
+                } else{
+                    if (chanNameView != null) {
+                        chanNameView.text = "비즈니스 채널 구독을 시작해보세요!"
+                    }
+                    if (contentView != null) {
+                        contentView.text = ""
+                    }
+                    if (chanImg != null) {
+                        chanImg.visibility = View.GONE
                     }
                 }
             }, {
@@ -819,5 +857,42 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         )
         val queue = Volley.newRequestQueue(activity?.applicationContext)
         queue.add(request)
+    }
+
+    ////////////////// 비즈니스 새소식 클릭하면 profile로 //////////////////////
+    fun gotoProfile() {
+
+        if(!chanName.equals("")) {
+            Log.d("패널이름", chanName.toString())
+            val intent =
+                Intent(
+                    context,
+                    BusinessProfileActivity::class.java
+                )
+            var appUser = arguments?.getString("id").toString()
+            intent.putExtra("appUser", appUser)
+            intent.putExtra(
+                "channel_name",
+                chanName
+            )
+            startActivity(intent)
+        }
+    }
+
+    fun roundAll(iv: ImageView, curveRadius: Float): ImageView {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            iv.outlineProvider = object : ViewOutlineProvider() {
+
+                @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+                override fun getOutline(view: View?, outline: Outline?) {
+                    outline?.setRoundRect(0, 0, view!!.width, view.height, curveRadius)
+                }
+            }
+
+            iv.clipToOutline = true
+        }
+        return iv
     }
 }
