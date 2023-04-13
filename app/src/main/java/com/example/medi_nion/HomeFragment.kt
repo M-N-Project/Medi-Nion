@@ -112,6 +112,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
 
         var currentPosition = 0
+        var big_currentPosition = 0
 
 
         // bundle 에서 id, userType, userDept, userMedal 값 가져오기
@@ -197,10 +198,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 
         fun setBigPage() {
-            if(currentPosition == 4)
-                currentPosition = 0
-            big_ad_viewPager2.setCurrentItem(currentPosition, true)
-            currentPosition+=1
+            if(big_currentPosition == 4)
+                big_currentPosition = 0
+            big_ad_viewPager2.setCurrentItem(big_currentPosition, true)
+            big_currentPosition+=1
         }
 
         val handler1 = Handler(Looper.getMainLooper()) {
@@ -429,7 +430,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         return arrayListOf<Int>(
             R.drawable.ad1,
             R.drawable.ad2,
-            R.drawable.ad3)
+            R.drawable.ad3
+        )
     }
 
     private fun getBigAdImage(): ArrayList<Int> {
