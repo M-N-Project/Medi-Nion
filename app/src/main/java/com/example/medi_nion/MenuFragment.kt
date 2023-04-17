@@ -73,6 +73,13 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         val userDept = arguments?.getString("userDept")
         val userMedal = arguments?.getInt("userMedal")
 
+        Log.d("menuFragment", "id: $id")
+        Log.d("menuFragment", "nickname: $nickname")
+        Log.d("menuFragment", "userType: $userType")
+        Log.d("menuFragment", "userDept: $userDept")
+        Log.d("menuFragment", "userMedal: $userMedal")
+
+
         allBoard = view.findViewById(R.id.menu_All) // 전체 게시판
         basicBoard = view.findViewById(R.id.menu_basic) // 자유 게시판
         jobBoard = view.findViewById(R.id.menu_job) //직종별 게시판

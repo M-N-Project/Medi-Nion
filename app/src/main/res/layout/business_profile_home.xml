@@ -74,7 +74,7 @@
                 android:layout_weight="5"
                 android:text="00님의 비즈니스 채널"
                 android:textColor="#000000"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -187,7 +187,7 @@
                 android:hint="00님의 소개입니다"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
                 tools:ignore="TextContrastCheck" />

@@ -168,11 +168,20 @@
 
             </HorizontalScrollView>
 
+            <View
+                android:id="@+id/view2"
+                android:layout_width="420dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="#8BE0C4" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:orientation="horizontal">
+
+
 
                 <CheckBox
                     android:id="@+id/checkBox2"

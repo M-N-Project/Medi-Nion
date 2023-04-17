@@ -120,7 +120,7 @@
                 android:layout_weight="5"
                 android:text="나의 비즈니스 채널 관리"
                 android:textColor="#000000"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,9 +145,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:layout_marginBottom="12dp"
-            android:background="#50B8B8B8" />
+            android:background="#8BE0C4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -199,12 +199,12 @@
                         android:id="@+id/profileName"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="6dp"
                         android:layout_marginBottom="8dp"
                         android:background="#50C5EFE1"
                         android:hint="채널명"
+                        android:paddingStart="6dp"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toTopOf="@+id/profileDesc"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -321,8 +321,8 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#50B8B8B8" />
+            android:layout_height="1dp"
+            android:background="#8BE0C4" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/myBusinessPostScrollView"
