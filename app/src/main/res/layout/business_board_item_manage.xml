@@ -77,11 +77,10 @@
                     android:id="@+id/profileImg2"
                     android:layout_width="68dp"
                     android:layout_height="70dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/business_profile2"
                     android:scaleType="center"
-                    android:layout_gravity="center"
                     app:layout_constraintBottom_toTopOf="@+id/profileName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
@@ -97,11 +96,8 @@
                         android:id="@+id/titleName"
                         android:layout_width="283dp"
                         android:layout_height="33dp"
-                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
                         android:text="채널 이름"
                         android:textColor="#000000"
                         android:textSize="20sp"
@@ -114,7 +110,6 @@
                         android:layout_width="284dp"
                         android:layout_height="21dp"
                         android:layout_marginStart="16dp"
-                        android:layout_weight="1"
                         android:text="게시물 등록 시간"
                         android:textSize="10sp"
                         app:layout_constraintStart_toEndOf="@+id/profileImg2"
@@ -140,6 +135,7 @@
                 android:layout_marginEnd="20dp"
                 android:ellipsize="end"
                 android:maxLines="4"
+                android:paddingBottom="5dp"
                 android:text="내용내용내용...\n내용내용내용"
                 android:textColor="#000000" />
 
@@ -167,40 +163,12 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/BusinessBoardImgRecyclerView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     tools:listitem="@layout/business_image_item"/>
 
 
             </HorizontalScrollView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/checkBox2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableStart="@drawable/business_like_checkbox"
-                    android:text=""
-                    tools:ignore="TouchTargetSizeCheck" />
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableStart="@drawable/business_bookmark_checkbox"
-                    android:text=""
-                    tools:ignore="TouchTargetSizeCheck" />
-
-            </LinearLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

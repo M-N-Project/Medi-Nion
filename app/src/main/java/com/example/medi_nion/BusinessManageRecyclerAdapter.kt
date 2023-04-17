@@ -49,7 +49,7 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.business_board_item, parent, false)
+            .inflate(R.layout.business_board_item_manage, parent, false)
         return ViewHolder(inflatedView)
     }
 
@@ -66,8 +66,6 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
             view.titleName.text = item.channel_name
             view.time.text = item.time
             view.content.text = item.content
-            view.checkBox2.isEnabled = false
-            view.checkBox.isEnabled = false
 
 
             view.profileImg2.setImageResource(R.drawable.logo)

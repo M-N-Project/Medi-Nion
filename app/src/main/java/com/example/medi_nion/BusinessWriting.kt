@@ -315,7 +315,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//                                bitmap = resize(bitmap)
+                                bitmap = resize(bitmap)
 //                                image1 = BitMapToString(bitmap)
                                 image1 = encodeBitmapImage(bitmap)
 
@@ -332,7 +332,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//                                bitmap = resize(bitmap)
+                                bitmap = resize(bitmap)
 //                                image2 = BitMapToString(bitmap)
                                 image2 = encodeBitmapImage(bitmap)
                             }
@@ -346,7 +346,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//                                bitmap = resize(bitmap)
+                                bitmap = resize(bitmap)
 //                                image3 = BitMapToString(bitmap)
                                 image3 = encodeBitmapImage(bitmap)
                             }
@@ -360,7 +360,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//                                bitmap = resize(bitmap)
+                                bitmap = resize(bitmap)
 //                                image4 = BitMapToString(bitmap)
                                 image4 = encodeBitmapImage(bitmap)
                             }
@@ -374,7 +374,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 var source: ImageDecoder.Source? =
                                     urione?.let { ImageDecoder.createSource(contentResolver, it) }
                                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//                                bitmap = resize(bitmap)
+                                bitmap = resize(bitmap)
 //                                image5 = BitMapToString(bitmap)
                                 image5 = encodeBitmapImage(bitmap)
                             }
@@ -389,7 +389,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                 var source: ImageDecoder.Source? =
                     uri?.let { ImageDecoder.createSource(contentResolver, it) }
                 bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-//                bitmap = resize(bitmap)
+                bitmap = resize(bitmap)
                 image1 = BitMapToString(bitmap)
 
                 imageCnt++
@@ -410,18 +410,11 @@ private fun encodeBitmapImage(bitmap: Bitmap): String {
 private fun resize(bitmap: Bitmap): Bitmap? {
     var bitmap: Bitmap? = bitmap
     val config: Configuration = Resources.getSystem().configuration
-    bitmap = if (config.smallestScreenWidthDp >= 800) Bitmap.createScaledBitmap(
-        bitmap!!,
-        400,
-        440,
-        true
-    ) else if (config.smallestScreenWidthDp >= 600) Bitmap.createScaledBitmap(
-        bitmap!!, 300, 180, true
-    ) else if (config.smallestScreenWidthDp >= 400) Bitmap.createScaledBitmap(
-        bitmap!!, 200, 120, true
-    ) else if (config.smallestScreenWidthDp >= 360) Bitmap.createScaledBitmap(
-        bitmap!!, 180, 108, true
-    ) else Bitmap.createScaledBitmap(bitmap!!, 160, 96, true)
+    var bitmap_width : Int? = bitmap?.width
+    var bitmap_height : Int? = bitmap?.height
+
+    bitmap = Bitmap.createScaledBitmap(bitmap!!, 300, 300, true)
+    Log.d("please", "$bitmap_height, $bitmap_width")
     return bitmap
 }
 

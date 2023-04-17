@@ -15,7 +15,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/business_profile2"
-        android:scaleType="centerCrop"
+        android:scaleType="center"
         android:layout_gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/profileName"
         app:layout_constraintEnd_toEndOf="parent"
