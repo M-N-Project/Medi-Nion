@@ -28,6 +28,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
     private lateinit var manageBusinessBtn: Button
     private lateinit var allBoardDetail: LinearLayout
+    private lateinit var allBoard_jobBoardDetail: LinearLayout
+    private lateinit var allBoard_deptBoardDetail: LinearLayout
 
     private lateinit var basicBoardTextView: TextView
     private lateinit var marketBoardTextView: TextView
@@ -85,7 +87,9 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         jobBoard = view.findViewById(R.id.menu_job) //직종별 게시판
         secBoard = view.findViewById(R.id.menu_dept) //진료과별 게시판
         dealBoard = view.findViewById(R.id.menu_market) // 장터 게시판
-        allBoardDetail = view.findViewById(R.id.Allboard_Detail)
+        allBoardDetail = view.findViewById(R.id.Allboard_Detail) // 전체 게시판 목록
+        allBoard_jobBoardDetail = view.findViewById(R.id.jobboard_detail) // 전체 게시판 안의 직종별 게시판
+        allBoard_deptBoardDetail = view.findViewById(R.id.deptboard_detail) // 전체 게시판 안의 진료과별 게시판
 
 
         qnaBtn = view.findViewById(R.id.menu_qna)
@@ -136,6 +140,16 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                 if(allBoardDetail.visibility == View.GONE) allBoardDetail.visibility = View.VISIBLE
                 else allBoardDetail.visibility = View.GONE
 
+                jobBoardTextView.setOnClickListener {
+                    if(allBoard_jobBoardDetail.visibility == View.GONE) allBoard_jobBoardDetail.visibility = View.VISIBLE
+                    else allBoard_jobBoardDetail.visibility = View.GONE
+                }
+
+                deptBoardTextView.setOnClickListener {
+                    if(allBoard_deptBoardDetail.visibility == View.GONE) allBoard_deptBoardDetail.visibility = View.VISIBLE
+                    else allBoard_deptBoardDetail.visibility = View.GONE
+                }
+
 ///////////////// 전체 게시판 하위 버튼 (텍스트뷰) ////////////////////////////////
                 basicBoardTextView.setOnClickListener {
                     var intent = Intent(context, Board::class.java)
@@ -159,27 +173,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
                     intent.putExtra("nickname", nickname)
                     intent.putExtra("userMedal", userMedal)
                     intent.putExtra("board", "QnA 게시판")
-                    startActivity(intent)
-                }
-                jobBoardTextView.setOnClickListener {
-                    val intent = Intent(context, Board::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("nickname", nickname)
-                    intent.putExtra("userType", userType)
-                    intent.putExtra("userDept", userDept)
-                    intent.putExtra("userMedal", userMedal)
-                    intent.putExtra("board", "직종별 게시판")
-                    startActivity(intent)
-                }
-                deptBoardTextView.setOnClickListener {
-                    val intent = Intent(context, Board::class.java)
-                    //Log.d("userSearch", "$userType  $userDept")
-                    intent.putExtra("id", id)
-                    intent.putExtra("nickname", nickname)
-                    intent.putExtra("userMedal", userMedal)
-                    intent.putExtra("userType", userType)
-                    intent.putExtra("userDept", userDept)
-                    intent.putExtra("board", "진료과별 게시판")
                     startActivity(intent)
                 }
 
