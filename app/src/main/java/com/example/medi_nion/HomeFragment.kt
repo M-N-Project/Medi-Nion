@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Outline
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -104,6 +103,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         fetchNewQna()
         fetchHotPost()
         fetchNewBusi()
+        fetchHotProfile()
     }
 
 
@@ -172,10 +172,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 
         fun setPage() {
-            if(currentPosition == 3)
+            if (currentPosition == 3)
                 currentPosition = 0
             ad_viewPager2.setCurrentItem(currentPosition, true)
-            currentPosition+=1
+            currentPosition += 1
         }
 
         val handler = Handler(Looper.getMainLooper()) {
@@ -184,18 +184,19 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 
 
-        class PagerRunnable :Runnable{
+        class PagerRunnable : Runnable {
             override fun run() {
-                while(true){
+                while (true) {
                     try {
                         Thread.sleep(5000)
                         handler.sendEmptyMessage(0)
-                    } catch (e : InterruptedException){
+                    } catch (e: InterruptedException) {
                         Log.d("interrupt", "interrupt")
                     }
                 }
             }
         }
+
         val thread = Thread(PagerRunnable())
         thread.start()
 
@@ -210,10 +211,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 
         fun setBigPage() {
-            if(big_currentPosition == 4)
+            if (big_currentPosition == 4)
                 big_currentPosition = 0
             big_ad_viewPager2.setCurrentItem(big_currentPosition, true)
-            big_currentPosition+=1
+            big_currentPosition += 1
         }
 
         val handler1 = Handler(Looper.getMainLooper()) {
@@ -222,25 +223,25 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 
 
-        class PagerRunnable1 :Runnable{
+        class PagerRunnable1 : Runnable {
             override fun run() {
-                while(true){
+                while (true) {
                     try {
                         Thread.sleep(5000)
                         handler1.sendEmptyMessage(0)
-                    } catch (e : InterruptedException){
+                    } catch (e: InterruptedException) {
                         Log.d("interrupt", "interrupt")
                     }
                 }
             }
         }
+
         val thread1 = Thread(PagerRunnable1())
         thread1.start()
 
 
 ///////////////////  즐겨찾는 게시판 클릭 이벤트 ////////////////////////////////////////////
         basicBoard.setOnClickListener {
-            Log.d("aaaa", "aabb")
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
@@ -435,10 +436,29 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             }
         }
 
+        //////////////////// 비즈니스 핫 프로필 클릭이벤트 //////////////////////
+        val profileView = view?.findViewById<View>(R.id.business_newby)
+
+        profileView?.findViewById<LinearLayout>(R.id.business_new1)?.setOnClickListener {
+            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId1)?.text.toString())
+        }
+
+        profileView?.findViewById<LinearLayout>(R.id.business_new2)?.setOnClickListener {
+            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId2)?.text.toString())
+        }
+
+        profileView?.findViewById<LinearLayout>(R.id.business_new3)?.setOnClickListener {
+            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId3)?.text.toString())
+        }
+
+        profileView?.findViewById<LinearLayout>(R.id.business_new4)?.setOnClickListener {
+            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId4)?.text.toString())
+        }
+
+
         val BusiNewView = view.findViewById<View>(R.id.home_subsc_box)
-        BusiNewView.setOnClickListener{
-            Log.d("클릭이벤트 발생", "123123123")
-            gotoProfile()
+        BusiNewView.setOnClickListener {
+            //gotoProfile()
         }
 
         return view
@@ -794,8 +814,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     }
 
     //////////////////////////////////// 구독채널 새소식 ////////////////////////////////////////////////////////////
-    private var chanName : String = ""
-    fun fetchNewBusi() {
+    private fun fetchNewBusi() {
         val urlBusiNew = "http://seonho.dothome.co.kr/HomeNewBusi.php"
         val id = arguments?.getString("id").toString()
 
@@ -812,7 +831,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     val jsonArray = JSONArray(response)
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
-                        chanName = item.getString("channel_name")
+                        val chanName = item.getString("channel_name")
                         val writerId = item.getString("id")
                         val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${writerId}BusinessProfile.jpg"
 
@@ -860,69 +879,63 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     }
 
     ////////////////// 비즈니스 새소식 클릭하면 profile로 //////////////////////
-    fun gotoProfile() {
-
-        if(!chanName.equals("")) {
-            Log.d("패널이름", chanName.toString())
-            val intent =
-                Intent(
-                    context,
-                    BusinessProfileActivity::class.java
-                )
-            var appUser = arguments?.getString("id").toString()
-            intent.putExtra("appUser", appUser)
-            intent.putExtra(
-                "channel_name",
-                chanName
+    private fun gotoProfile(chanName: String) {
+        val intent =
+            Intent(
+                context,
+                BusinessProfileActivity::class.java
             )
-            startActivity(intent)
-        }
+        var appUser = arguments?.getString("id").toString()
+        intent.putExtra("appUser", appUser)
+        intent.putExtra(
+            "channel_name",
+            chanName
+        )
+        startActivity(intent)
+
     }
 
-    fun fetchRanProfile() {
-        val urlBusiRan = "http://seonho.dothome.co.kr/Business_profileRan_list.php"
-
-        val profileview = view?.findViewById<View>(R.id.business_newby)
-        val profile1 = profileview?.findViewById<ImageView>(R.id.business_new1)
-        val profile2 = profileview?.findViewById<ImageView>(R.id.business_new2)
-        val profile3 = profileview?.findViewById<ImageView>(R.id.business_new3)
-        val profile4 = profileview?.findViewById<ImageView>(R.id.business_new4)
+    fun fetchHotProfile() {
+        val urlBusiHot = "http://seonho.dothome.co.kr/Business_profileHot_list.php"
 
         var profileList = ArrayList<ImageView>()
-        if (profile1 != null) {
-            profileList.add(profile1)
-        }
-        if (profile2 != null) {
-            profileList.add(profile2)
-        }
-        if (profile3 != null) {
-            profileList.add(profile3)
-        }
-        if (profile4 != null) {
-            profileList.add(profile4)
-        }
+        val profileView = view?.findViewById<View>(R.id.business_newby)
+
+        profileView?.findViewById<ImageView>(R.id.business_newImg1)?.let { profileList.add(it) }
+        profileView?.findViewById<ImageView>(R.id.business_newImg2)?.let { profileList.add(it) }
+        profileView?.findViewById<ImageView>(R.id.business_newImg3)?.let { profileList.add(it) }
+        profileView?.findViewById<ImageView>(R.id.business_newImg4)?.let { profileList.add(it) }
+
+        var idList = ArrayList<TextView>()
+        profileView?.findViewById<TextView>(R.id.business_newId1)?.let { idList.add(it) }
+        profileView?.findViewById<TextView>(R.id.business_newId2)?.let { idList.add(it) }
+        profileView?.findViewById<TextView>(R.id.business_newId3)?.let { idList.add(it) }
+        profileView?.findViewById<TextView>(R.id.business_newId4)?.let { idList.add(it) }
 
         val request = Login_Request(
             Request.Method.POST,
-            urlBusiRan,
+            urlBusiHot,
             {response->
+                Log.d("비즈니스채널", response)
                 if(!response.equals("no BusinessProfile")){
                     val jsonArray = JSONArray(response)
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
-                        chanName = item.getString("channel_name")
+                        val chanName = item.getString("channel_name")
                         val writerId = item.getString("id")
                         val imgUrl =
                             "http://seonho.dothome.co.kr/images/businessProfile/${writerId}BusinessProfile.jpg"
 
                         val profile = profileList.removeAt(0)
                         if (profile != null) {
-                            val task = ImageLoadTask(imgUrl, profile1)
+                            val task = ImageLoadTask(imgUrl, profile)
                             task.execute()
                             roundAll(profile, 100.0f)
                         }
+                        val id = idList.removeAt(0)
+                        id.text = chanName
                     }
-                } else Log.d("BusiRanProfile fail", "0000000000")
+                } else Log.d("no BusinessProfile", "0000000000")
             }, {
                 Log.d(
                     "failed", "error......${
