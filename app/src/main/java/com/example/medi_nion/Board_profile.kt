@@ -293,6 +293,7 @@ class Board_profile : AppCompatActivity() {
                     noItemText.bringToFront()
                 } else noItemText.visibility = View.GONE
 
+                var new_items = ArrayList<BoardItem>()
 
                 items.clear()
                 all_items.clear()
@@ -322,7 +323,6 @@ class Board_profile : AppCompatActivity() {
                 }
 
                 var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<BoardItem>()
                 new_items.addAll(items)
                 adapter = BoardListAdapter(new_items)
                 boardRecyclerView_profile.adapter = adapter
@@ -434,7 +434,7 @@ class Board_profile : AppCompatActivity() {
                     } else {
                         noItemText.visibility = View.GONE
 
-                        Log.d("9091233", jsonArrayScrapNum.length().toString())
+                        var new_items = ArrayList<BoardItem>()
 
                         for (i in jsonArrayScrapNum.length() - 1 downTo 0) {
                             val item = jsonArrayScrapNum.getJSONObject(i)
@@ -479,7 +479,6 @@ class Board_profile : AppCompatActivity() {
                                     }
 
                                     var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BoardItem>()
                                     new_items.addAll(items)
                                     adapter = BoardListAdapter(new_items)
                                     boardRecyclerView_profile.adapter = adapter
@@ -501,6 +500,7 @@ class Board_profile : AppCompatActivity() {
                                                 urlDetail,
                                                 { response ->
                                                     if(response!="Detail Info Error"){
+                                                        Log.d("detailll", response)
                                                         val jsonArray = JSONArray(response)
                                                         items.clear()
                                                         for (i in jsonArray.length()-1  downTo  0) {
@@ -581,7 +581,7 @@ class Board_profile : AppCompatActivity() {
         val urlLike = "http://seonho.dothome.co.kr/BoardProfileLikeNum.php"
         val urlBoard = "http://seonho.dothome.co.kr/BoardProfileLike.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
-        Log.d("-0123", "kiki")
+
 
         val requestScrapNum = Board_Request(
             Request.Method.POST,
@@ -604,7 +604,7 @@ class Board_profile : AppCompatActivity() {
                     } else {
                         noItemText.visibility = View.GONE
 
-                        Log.d("9091233", jsonArrayLikeNum.length().toString())
+                        var new_items = ArrayList<BoardItem>()
 
                         for (i in jsonArrayLikeNum.length() - 1 downTo 0) {
                             val item = jsonArrayLikeNum.getJSONObject(i)
@@ -618,11 +618,12 @@ class Board_profile : AppCompatActivity() {
                                 Request.Method.POST,
                                 urlBoard,
                                 { responseLikeBoard ->
-                                    Log.d("099123", responseLikeBoard)
                                     val jsonArrayLikeBoard = JSONArray(responseLikeBoard)
-
+                                    Log.d("099123", jsonArrayLikeBoard.length().toString())
                                     items.clear()
                                     all_items.clear()
+
+
 
                                     for (i in jsonArrayLikeBoard.length()-1  downTo  0) {
                                         val item = jsonArrayLikeBoard.getJSONObject(i)
@@ -640,6 +641,8 @@ class Board_profile : AppCompatActivity() {
 
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
+
+
                                         if(i >= jsonArrayLikeBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
                                             itemIndex.add(num) //앞에다가 추가.
@@ -649,13 +652,13 @@ class Board_profile : AppCompatActivity() {
                                     }
 
                                     var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BoardItem>()
-                                    new_items.addAll(items)
+                                    new_items.addAll(all_items)
                                     adapter = BoardListAdapter(new_items)
                                     boardRecyclerView_profile.adapter = adapter
                                     adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                                     boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
+                                    Log.d("itemmmmm/", new_items.size.toString())
 
                                     var detailId : String = ""
                                     var detailTitle : String = ""
@@ -776,7 +779,7 @@ class Board_profile : AppCompatActivity() {
                     } else {
                         noItemText.visibility = View.GONE
 
-                        Log.d("9091233", jsonArrayCommentNum.length().toString())
+                        var new_items = ArrayList<BoardItem>()
 
                         for (i in jsonArrayCommentNum.length() - 1 downTo 0) {
                             val item = jsonArrayCommentNum.getJSONObject(i)
@@ -820,7 +823,6 @@ class Board_profile : AppCompatActivity() {
                                     }
 
                                     var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BoardItem>()
                                     new_items.addAll(items)
 
                                     Log.d("item??", new_items.size.toString())
