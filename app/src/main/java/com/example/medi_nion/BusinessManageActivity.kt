@@ -8,16 +8,18 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -30,6 +32,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.VolleyMultipartRequest2.DataPart
 import kotlinx.android.synthetic.main.business_home.*
+import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
+import kotlinx.android.synthetic.main.business_manage_create.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -70,6 +74,7 @@ class BusinessManageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         val id:String? = this.intent.getStringExtra("id")
         var isFirst = intent.getBooleanExtra("isFirst", true)
 
@@ -85,7 +90,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val write = findViewById<Button>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
-        val saveBtn = findViewById<Button>(R.id.save_btn)
+//        val saveBtn = findViewById<Button>(R.id.save_btn)
         val subscribe_count = findViewById<EditText>(R.id.subscribe_count)
 
         val editProfile = findViewById<ImageView>(R.id.profileImg)
@@ -116,24 +121,6 @@ class BusinessManageActivity : AppCompatActivity() {
         }
 
 
-        saveBtn.setOnClickListener {
-            val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
-            val loadingText = findViewById<TextView>(R.id.loading_textView_business)
-            loadingText.visibility = View.VISIBLE
-            loadingText.bringToFront()
-            progressBar.visibility = View.VISIBLE
-            progressBar.bringToFront()
-
-            if(isEditProfile)
-                uploadDataToDB()
-
-            if(isEditDesc)
-                requestBusinessDesc()
-
-            if(isEditName)
-                requestBusinessName()
-
-        }
 
         editName.isEnabled = false
         editDesc.isEnabled = false
@@ -171,10 +158,21 @@ class BusinessManageActivity : AppCompatActivity() {
 
                 editName_RadioBtn.isSelected = false
                 editName_RadioBtn.isChecked = false
+
             }
 
+            editName.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+                override fun onFocusChange(view: View, hasFocus: Boolean) {
+                    if (hasFocus) {
+                        //  .. 포커스시
+                    } else {
+                        requestBusinessName()
+                    }
+                }
+            })
+
+
             editDesc_RadioBtn.setOnClickListener{
-                Log.d("92123", "clickDesc")
                 isEditDesc = true
                 setting_RadioGroup.visibility = View.GONE
                 editDesc.isEnabled = true
@@ -187,7 +185,19 @@ class BusinessManageActivity : AppCompatActivity() {
 
                 editDesc_RadioBtn.isSelected = false
                 editDesc_RadioBtn.isChecked = false
+
+
             }
+
+            editDesc.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+                override fun onFocusChange(view: View, hasFocus: Boolean) {
+                    if (hasFocus) {
+                        //  .. 포커스시
+                    } else {
+                        requestBusinessDesc()
+                    }
+                }
+            })
         }
 
         if(image_profile!=null){
@@ -209,7 +219,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdate2.php"
 
-
+        Log.d("uplload", "2")
         Intent(this, BusinessProfileService::class.java).also { intent ->
             intent.putExtra("id", id)
             intent.putExtra("isFirst", isFirst)
@@ -228,6 +238,8 @@ class BusinessManageActivity : AppCompatActivity() {
 
                         loadingText.visibility = View.GONE
                         progressBar.visibility = View.GONE
+
+                        fetchBusinessPost(findViewById(R.id.profileImg))
                     }
                 }, object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError) {
@@ -327,6 +339,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
                         if(image_profile!="null"){
                             val bitmap: Bitmap? = StringToBitmaps(image_profile)
+                            roundAll(editProfile, 70.0f)
                             editProfile.setImageBitmap(bitmap)
                         }
 
@@ -449,8 +462,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
-                    val image4 = item.getString("image4")
-                    val image5 = item.getString("image5")
 
                     val requestProfile = Board_Request(
                         Request.Method.POST,
@@ -467,7 +478,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false, true)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false, true)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
@@ -688,28 +699,24 @@ class BusinessManageActivity : AppCompatActivity() {
         startActivityForResult(intent, GALLERY)
     }
 
-    private fun showFileChooser() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY)
-    }
-
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
 
         var profileImg = findViewById<ImageView>(R.id.profileImg)
         val id:String? = this.intent.getStringExtra("id")
+        val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
+        val loadingText = findViewById<TextView>(R.id.loading_textView_business)
         if (resultCode == Activity.RESULT_OK) {
             if(requestCode == GALLERY) {
                 val currentImgUri : Uri? = data?.data
+                Log.d("sel IMGGG", "sel2")
 
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
                     profileImg.setImageBitmap(bitmap)
 
-//                    bitmap = resize(bitmap)
+                    bitmap = resizeProfile(bitmap)
                     image_profile = BitMapToString(bitmap)
                     encodeBitmapImage(bitmap)
 
@@ -719,11 +726,23 @@ class BusinessManageActivity : AppCompatActivity() {
                         currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
                     bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
 
-                    val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
+                    val setting_RadioGroup =
+                        findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
                     setting_RadioGroup.visibility = View.GONE
-                } catch (e:Exception) {
+
+                    loadingText.visibility = View.VISIBLE
+                    loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
+                    loadingText.bringToFront()
+                    progressBar.visibility = View.VISIBLE
+                    progressBar.bringToFront()
+
+
+                    uploadDataToDB()
+
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
+
 
             } else {
                 Log.d("activity result", "wrong")
@@ -770,13 +789,6 @@ class BusinessManageActivity : AppCompatActivity() {
 
     }
 
-
-    fun getFileDataFromDrawable(bitmap: Bitmap): ByteArray? {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream)
-        return byteArrayOutputStream.toByteArray()
-    }
-
     fun roundAll(iv: ImageView, curveRadius : Float)  : ImageView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -794,27 +806,32 @@ class BusinessManageActivity : AppCompatActivity() {
         return iv
     }
 
-    //이미지 주소를 절대경로로 바꿔주는 메소드
-    fun getRealPathFromUri(uri: Uri): String {
-        val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val loader = CursorLoader(this, uri, proj, null, null, null)
-        val cursor: Cursor = loader.loadInBackground()!!
-        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor.moveToFirst()
-        val result: String = cursor.getString(column_index)
-        cursor.close()
-        return result
-    }
 
-    private fun resize(bitmap: Bitmap): Bitmap {
+    private fun resizeProfile(bitmap: Bitmap): Bitmap {
         var bitmap: Bitmap? = bitmap
         val config: Configuration = Resources.getSystem().configuration
         var bitmap_width : Int? = bitmap?.width
         var bitmap_height : Int? = bitmap?.height
 
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
+        val resize_size = 260
+
+        //사진의 가로길이가 더 길거나 같으면
+        if(bitmap_width!=null && bitmap_height!=null){
+            if(bitmap_width >= bitmap_height){
+
+                val ratio = (bitmap_height*resize_size)/bitmap_width
+                bitmap = Bitmap.createScaledBitmap(bitmap!!, resize_size, ratio, true)
+            }
+            //사진의 세로길이가 더 길면
+            else{
+                val ratio = (bitmap_width*resize_size)/bitmap_height
+                bitmap = Bitmap.createScaledBitmap(bitmap!!, ratio, resize_size , true)
+            }
+        }
+
+//    bitmap = Bitmap.createScaledBitmap(bitmap!!, 300, 300, true)
         Log.d("please", "$bitmap_height, $bitmap_width")
-        return bitmap
+        return bitmap!!
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
