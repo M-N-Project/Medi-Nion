@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.business_home.*
+import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
 import org.json.JSONArray
 
@@ -435,32 +437,12 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 )
             }
         }
-
-        //////////////////// 비즈니스 핫 프로필 클릭이벤트 //////////////////////
-        val profileView = view?.findViewById<View>(R.id.business_newby)
-
-        profileView?.findViewById<LinearLayout>(R.id.business_new1)?.setOnClickListener {
-            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId1)?.text.toString())
-        }
-
-        profileView?.findViewById<LinearLayout>(R.id.business_new2)?.setOnClickListener {
-            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId2)?.text.toString())
-        }
-
-        profileView?.findViewById<LinearLayout>(R.id.business_new3)?.setOnClickListener {
-            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId3)?.text.toString())
-        }
-
-        profileView?.findViewById<LinearLayout>(R.id.business_new4)?.setOnClickListener {
-            gotoProfile(profileView.findViewById<TextView>(R.id.business_newId4)?.text.toString())
-        }
-
-
+/*
         val BusiNewView = view.findViewById<View>(R.id.home_subsc_box)
         BusiNewView.setOnClickListener {
             //gotoProfile()
         }
-
+*/
         return view
     }
 
@@ -814,11 +796,75 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     }
 
     //////////////////////////////////// 구독채널 새소식 ////////////////////////////////////////////////////////////
+
     private fun fetchNewBusi() {
+        val urlBusiNew = "http://seonho.dothome.co.kr/HomeNewBusi.php"
+        val appUser = arguments?.getString("id").toString()
+
+        var newBusiItems = ArrayList<HomeNewRecyclerItem>()
+
+        val request = Board_Request(
+            Request.Method.POST,
+            urlBusiNew,
+            { response ->
+                Log.d("비즈니스새소식새소식새소식", response)
+                val jsonArray = JSONArray(response)
+                newBusiItems.clear()
+                for (i in jsonArray.length() - 1 downTo 0) {
+                    val item = jsonArray.getJSONObject(i)
+                    val chanName = item.getString("channel_name")
+                    val writerId = item.getString("id")
+                    val title = item.getString("title")
+                    val content = item.getString("content")
+
+                    val newItem = HomeNewRecyclerItem(chanName, writerId, title, content)
+                    newBusiItems.add(newItem)
+                }
+
+                // RecyclerView.Adapter<ViewHolder>()
+                val adapter2 = HomeNewRecyclerAdapter(newBusiItems)
+                homeBusiNew.adapter = adapter2
+                // ViewPager의 Paging 방향은 Horizontal
+                homeBusiNew.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                var detailId: String = ""
+                var detailTitle: String = ""
+                var detailContent: String = ""
+                var detailTime: String = ""
+                var detailImg: String = ""
+
+
+                //게시판 상세
+                adapter2.setOnItemClickListener(object : HomeNewRecyclerAdapter.OnItemClickListener {
+                    override fun onItemClick(v: View, data: HomeNewRecyclerItem, pos: Int) {
+                        val intent =
+                            Intent(
+                                context,
+                                BusinessProfileActivity::class.java
+                            )
+                        var appUser = arguments?.getString("id").toString()
+                        intent.putExtra("appUser", appUser)
+                        intent.putExtra(
+                            "channel_name",
+                            data.chanName
+                        )
+                        startActivity(intent)
+                    }
+                })
+            }, { Log.d("login failed", "error......${activity?.applicationContext}") },
+            hashMapOf(
+                "id" to appUser
+            )
+        )
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
+        queue.add(request)
+    }
+    /*
+    private fun fetchNewBusi2() {
         val urlBusiNew = "http://seonho.dothome.co.kr/HomeNewBusi.php"
         val id = arguments?.getString("id").toString()
 
-        val chanNameView = view?.findViewById<TextView>(R.id.home_business_name)
+        val chanNameView = view?.findViewById<TextView>(R.id.home_business_title)
         val contentView = view?.findViewById<TextView>(R.id.home_business_detail)
         val chanImg = view?.findViewById<ImageView>(R.id.imageView6)
 
@@ -878,6 +924,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         queue.add(request)
     }
 
+     */
+
     ////////////////// 비즈니스 새소식 클릭하면 profile로 //////////////////////
     private fun gotoProfile(chanName: String) {
         val intent =
@@ -895,62 +943,133 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
     }
 
+    private var hotListItems = ArrayList<BusinessHotListItem>()
+
     fun fetchHotProfile() {
-        val urlBusiHot = "http://seonho.dothome.co.kr/Business_profileHot_list.php"
-
-        var profileList = ArrayList<ImageView>()
-        val profileView = view?.findViewById<View>(R.id.business_newby)
-
-        profileView?.findViewById<ImageView>(R.id.business_newImg1)?.let { profileList.add(it) }
-        profileView?.findViewById<ImageView>(R.id.business_newImg2)?.let { profileList.add(it) }
-        profileView?.findViewById<ImageView>(R.id.business_newImg3)?.let { profileList.add(it) }
-        profileView?.findViewById<ImageView>(R.id.business_newImg4)?.let { profileList.add(it) }
-
-        var idList = ArrayList<TextView>()
-        profileView?.findViewById<TextView>(R.id.business_newId1)?.let { idList.add(it) }
-        profileView?.findViewById<TextView>(R.id.business_newId2)?.let { idList.add(it) }
-        profileView?.findViewById<TextView>(R.id.business_newId3)?.let { idList.add(it) }
-        profileView?.findViewById<TextView>(R.id.business_newId4)?.let { idList.add(it) }
-
-        val request = Login_Request(
+        var appUser = arguments?.getString("id").toString()
+        val urlHotProfile = "http://seonho.dothome.co.kr/Business_profileHot_list.php"
+        val urlRandProfile = "http://seonho.dothome.co.kr/Business_profileNew_list.php"
+        val request = Board_Request(
             Request.Method.POST,
-            urlBusiHot,
-            {response->
-                Log.d("비즈니스채널", response)
-                if(!response.equals("no BusinessProfile")){
+            urlHotProfile,
+            { response ->
+                if (response != "no BusinessProfile"){
+                    hotListItems.clear()
                     val jsonArray = JSONArray(response)
+
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
-                        val chanName = item.getString("channel_name")
-                        val writerId = item.getString("id")
-                        val imgUrl =
-                            "http://seonho.dothome.co.kr/images/businessProfile/${writerId}BusinessProfile.jpg"
 
-                        val profile = profileList.removeAt(0)
-                        if (profile != null) {
-                            val task = ImageLoadTask(imgUrl, profile)
-                            task.execute()
-                            roundAll(profile, 100.0f)
-                        }
-                        val id = idList.removeAt(0)
-                        id.text = chanName
+                        val chanName = item.getString("channel_name")
+                        var writerId = item.getString("id")
+                        val chanProfile = item.getString("channel_profile_img")
+
+                        val HotListItem = BusinessHotListItem(chanName, chanProfile)
+                        hotListItems.add(HotListItem)
+
                     }
-                } else Log.d("no BusinessProfile", "0000000000")
-            }, {
-                Log.d(
-                    "failed", "error......${
-                        activity?.applicationContext?.let { it1 ->
-                            error(
-                                it1
+                    hotListItems.reverse()
+                    var hotAdapter = BusinessHotListAdapter(hotListItems)
+                    hotAdapter.notifyDataSetChanged()
+                    BusinessSubRecycler.adapter = hotAdapter
+
+                    hotAdapter.setOnItemClickListener(object :
+                        BusinessHotListAdapter.OnItemClickListener {
+                        override fun onProfileClick(
+                            v: View,
+                            data: BusinessHotListItem,
+                            pos: Int
+                        ){
+                            val intent =
+                                Intent(
+                                    context,
+                                    BusinessProfileActivity::class.java
+                                )
+                            var appUser = arguments?.getString("id").toString()
+                            intent.putExtra("appUser", appUser)
+                            intent.putExtra(
+                                "channel_name",
+                                data.chanName
                             )
+                            startActivity(intent)
                         }
-                    }"
+                    })
+                }
+                else {
+                    Toast.makeText(context, "프로필가져오기 실패", Toast.LENGTH_SHORT)
+
+                    //인기채널이 없을때 -> 랜덤으로 프로필 가져오기.
+                    val request = Board_Request(
+                        Request.Method.POST,
+                        urlRandProfile,
+                        { responseRand ->
+                            if (responseRand != "no BusinessProfile"){
+                                hotListItems.clear()
+                                val jsonArray = JSONArray(responseRand)
+
+                                for (i in jsonArray.length() - 1 downTo 0) {
+                                    val item = jsonArray.getJSONObject(i)
+
+                                    val chanName = item.getString("channel_name")
+                                    val chanProfile = item.getString("channel_profile_img")
+
+                                    val HotListItem = BusinessHotListItem(chanName, chanProfile)
+                                    hotListItems.add(HotListItem)
+
+                                }
+                                hotListItems.reverse()
+                                var hotAdapter = BusinessHotListAdapter(hotListItems)
+                                hotAdapter.notifyDataSetChanged()
+                                BusinessSubRecycler.adapter = hotAdapter
+
+                                hotAdapter.setOnItemClickListener(object :
+                                    BusinessHotListAdapter.OnItemClickListener {
+                                    override fun onProfileClick(
+                                        v: View,
+                                        data: BusinessHotListItem,
+                                        pos: Int
+                                    ){
+                                        val intent =
+                                            Intent(
+                                                context,
+                                                BusinessProfileActivity::class.java
+                                            )
+
+                                        var appUser = arguments?.getString("id").toString()
+                                        intent.putExtra("appUser", appUser)
+                                        intent.putExtra(
+                                            "channel_name",
+                                            data.chanName
+                                        )
+                                        startActivity(intent)
+                                    }
+                                })
+                            }
+                            else {
+                                Toast.makeText(context, "프로필가져오기 실패", Toast.LENGTH_SHORT)
+                            }
+                        },
+                        {
+                            Log.d(
+                                "login failed",
+                                "error......${context?.let { it1 -> error(it1) }}"
+                            )
+                        },
+                        hashMapOf()
+                    )
+                    val queue = Volley.newRequestQueue(context)
+                    queue.add(request)
+                }
+            },
+            {
+                Log.d(
+                    "login failed",
+                    "error......${context?.let { it1 -> error(it1) }}"
                 )
             },
-            hashMapOf(
-            )
+            hashMapOf()
         )
-        val queue = Volley.newRequestQueue(activity?.applicationContext)
+        val queue = Volley.newRequestQueue(context)
         queue.add(request)
     }
 
