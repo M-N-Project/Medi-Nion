@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginRight="10dp"
+    android:background="#00FFFFFF">
 
     <TextView
         android:id="@+id/noBusinessPostTextView"
@@ -13,10 +15,10 @@
         android:layout_weight="2"
         android:text="내가 작성한 비즈니스 채널 글이 없습니다."
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout7"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout7"
-        android:visibility="gone"/>
+        app:layout_constraintStart_toStartOf="@+id/linearLayout7" />
 
     <android.widget.ProgressBar
         android:id="@+id/progressbarBusiness"
@@ -39,22 +41,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#50ffffff"
         android:text="비즈니스 채널 업로드 중..."
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressbarBusiness"
-        android:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/progressbarBusiness" />
 
     <RadioGroup
         android:id="@+id/businessSetting_RadioGroup"
         android:layout_width="110dp"
         android:layout_height="148dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="90dp"
         android:background="@drawable/selector_radio_button_group"
-        app:layout_constraintBottom_toTopOf="@+id/progressbarBusiness"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone">
+        app:layout_constraintTop_toTopOf="@+id/linearLayout7">
 
         <RadioButton
             android:id="@+id/edit_profile"
@@ -116,30 +119,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="5"
-                android:text="나의 비즈니스 채널 관리"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:text="채널 기본 정보"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/save_btn"
-                android:layout_width="65dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:backgroundTint="#8BCEE0"
-                android:text="저장하기"
+            <TextView
+                android:id="@+id/view.."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="40"
                 android:textColor="#000000"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.895"
-                app:layout_constraintStart_toEndOf="@+id/businessChanTitle"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/businessSettingBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical|end"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/business_setting"
+                android:gravity="right|end" />
+
+            <!--            <androidx.appcompat.widget.AppCompatButton-->
+            <!--                android:id="@+id/save_btn"-->
+            <!--                android:layout_width="65dp"-->
+            <!--                android:layout_height="40dp"-->
+            <!--                android:layout_marginTop="2dp"-->
+            <!--                android:layout_marginEnd="10dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:backgroundTint="#8BCEE0"-->
+            <!--                android:text="저장하기"-->
+            <!--                android:textColor="#000000"-->
+            <!--                android:textSize="14sp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="0.895"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/businessChanTitle"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                tools:ignore="TouchTargetSizeCheck" />-->
         </LinearLayout>
 
 
@@ -152,53 +178,61 @@
         <androidx.constraintlayout.widget.ConstraintLayout
 
 
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="#000000"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/linearLayout9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
                 android:orientation="horizontal"
                 tools:ignore="MissingConstraints">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="114dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_weight="1">
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#00FFFFFF"
+                    android:padding="0dp">
 
 
                     <ImageView
                         android:id="@+id/profileImg"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/business_profile"
-                        android:scaleType="centerCrop"
+                        android:background="@drawable/business_profile2"
+                        android:foregroundGravity="center"
+                        android:padding="16dp"
+                        android:scaleType="fitCenter"
                         app:layout_constraintBottom_toTopOf="@+id/profileName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.498"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/logo" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="5"
+                    android:backgroundTint="#00FFFFFF"
                     android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/profileName"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="244dp"
+                        android:layout_height="36dp"
                         android:layout_marginBottom="8dp"
                         android:background="#50C5EFE1"
                         android:hint="채널명"
@@ -214,27 +248,10 @@
                         android:id="@+id/subscribe_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="구독자수"
-                        android:textSize="12sp"
+                        android:backgroundTint="#CCCCCC"
                         android:focusableInTouchMode="false"
-                        android:backgroundTint="#CCCCCC"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="35dp"
-                    android:layout_weight="1">
-
-                    <Button
-                        android:id="@+id/businessSettingBtn"
-                        android:layout_width="20dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@drawable/business_setting" />
+                        android:hint="구독자수"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -254,7 +271,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="5dp"
                     android:background="#FFFFFF"
                     android:hint="채널에 대한 간단한 소개글을 작성해주세요."
                     android:textAlignment="viewStart"
@@ -264,16 +281,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
                     tools:ignore="TextContrastCheck" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/introEditBtn"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/pencil"
-                    android:backgroundTint="#90000000"
-                    app:layout_constraintBottom_toBottomOf="@+id/profileDesc"
-                    app:layout_constraintStart_toEndOf="@+id/profileDesc"
-                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -284,6 +291,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="0.5"
+            android:background="#00FFFFFF"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -296,9 +304,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
                 android:layout_weight="5"
-                android:text="나의 비즈니스 게시물"
+                android:background="#00FFFFFF"
+                android:text="내 게시물 목록"
                 android:textColor="#000000"
-                android:textSize="15sp"
+                android:textSize="19sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -339,7 +348,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/business_item_recycler" />
+                tools:listitem="@layout/business_board_item_manage" />
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>

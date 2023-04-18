@@ -98,11 +98,8 @@
                         android:id="@+id/titleName"
                         android:layout_width="283dp"
                         android:layout_height="33dp"
-                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
                         android:text="채널 이름"
                         android:textColor="#000000"
                         android:textSize="20sp"
@@ -115,7 +112,6 @@
                         android:layout_width="284dp"
                         android:layout_height="21dp"
                         android:layout_marginStart="16dp"
-                        android:layout_weight="1"
                         android:text="게시물 등록 시간"
                         android:textSize="10sp"
                         app:layout_constraintStart_toEndOf="@+id/profileImg2"
@@ -141,6 +137,7 @@
                 android:layout_marginEnd="20dp"
                 android:ellipsize="end"
                 android:maxLines="4"
+                android:paddingBottom="5dp"
                 android:text="내용내용내용...\n내용내용내용"
                 android:textColor="#000000" />
 
@@ -168,56 +165,12 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/BusinessBoardImgRecyclerView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     tools:listitem="@layout/business_image_item"/>
 
 
             </HorizontalScrollView>
 
-            <View
-                android:id="@+id/view2"
-                android:layout_width="420dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#8BE0C4" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="horizontal">
-
-
-
-                <CheckBox
-                    android:id="@+id/checkBox2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableStart="@drawable/business_like_checkbox"
-                    android:text=""
-                    tools:ignore="TouchTargetSizeCheck" />
-
-                <TextView
-                    android:id="@+id/empty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5" />
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:drawableStart="@drawable/business_bookmark_checkbox"
-                    android:text=""
-                    tools:ignore="TouchTargetSizeCheck" />
-
-            </LinearLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
