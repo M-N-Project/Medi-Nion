@@ -418,7 +418,8 @@ private fun resize(bitmap: Bitmap): Bitmap? {
     //사진의 가로길이가 더 길거나 같으면
     if(bitmap_width!=null && bitmap_height!=null){
         if(bitmap_width >= bitmap_height){
-            val ratio = bitmap_height/bitmap_width
+
+            val ratio = (bitmap_height*resize_size)/bitmap_width
             bitmap = Bitmap.createScaledBitmap(bitmap!!, resize_size, ratio, true)
         }
         //사진의 세로길이가 더 길면

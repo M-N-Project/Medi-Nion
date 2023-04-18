@@ -352,6 +352,28 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                     startActivity(intent)
                                                                 }
 
+                                                                override fun onImgClick(
+                                                                    v: View,
+                                                                    data: BusinessBoardItem,
+                                                                    pos: Int,
+                                                                    BusinessImgAdapterMap : HashMap<Int,BusinessPostImgRecyclerAdapter>
+                                                                ) {
+                                                                    var BusinessImgAdapter = BusinessImgAdapterMap[data.post_num]
+                                                                    if(BusinessImgAdapter != null){
+                                                                        BusinessImgAdapter.setOnItemClickListener(object :
+                                                                            BusinessPostImgRecyclerAdapter.OnItemClickListener {
+                                                                            override fun onImgClick(
+                                                                                v: View,
+                                                                                data: BusinessPostImgItem,
+                                                                                pos: Int
+                                                                            ){
+                                                                                Log.d("click", pos.toString())
+                                                                            }
+                                                                        })
+                                                                    }
+
+                                                                }
+
                                                                 override fun onItemHeart(
                                                                     v: View,
                                                                     data: BusinessBoardItem,
