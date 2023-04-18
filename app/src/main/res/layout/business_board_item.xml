@@ -77,16 +77,17 @@
                     android:id="@+id/profileImg2"
                     android:layout_width="68dp"
                     android:layout_height="70dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/business_profile2"
-                    android:scaleType="center"
                     android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/business_profile2"
+                    android:foregroundGravity="center"
+                    android:padding="12dp"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toTopOf="@+id/profileName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@drawable/logo" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -176,7 +177,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
                 <CheckBox
@@ -189,11 +191,17 @@
                     android:text=""
                     tools:ignore="TouchTargetSizeCheck" />
 
+                <TextView
+                    android:id="@+id/empty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
                 <CheckBox
                     android:id="@+id/checkBox"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="0dp"
                     android:layout_weight="1"
                     android:button="@null"
                     android:drawableStart="@drawable/business_bookmark_checkbox"

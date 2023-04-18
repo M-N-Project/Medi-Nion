@@ -219,7 +219,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdate2.php"
 
-
+        Log.d("uplload", "2")
         Intent(this, BusinessProfileService::class.java).also { intent ->
             intent.putExtra("id", id)
             intent.putExtra("isFirst", isFirst)
@@ -738,6 +738,7 @@ class BusinessManageActivity : AppCompatActivity() {
                     progressBar.visibility = View.VISIBLE
                     progressBar.bringToFront()
 
+
                     uploadDataToDB()
 
                 } catch (e: Exception) {
@@ -814,9 +815,25 @@ class BusinessManageActivity : AppCompatActivity() {
         var bitmap_width : Int? = bitmap?.width
         var bitmap_height : Int? = bitmap?.height
 
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, 120, 120, true)
+        val resize_size = 260
+
+        //사진의 가로길이가 더 길거나 같으면
+        if(bitmap_width!=null && bitmap_height!=null){
+            if(bitmap_width >= bitmap_height){
+
+                val ratio = (bitmap_height*resize_size)/bitmap_width
+                bitmap = Bitmap.createScaledBitmap(bitmap!!, resize_size, ratio, true)
+            }
+            //사진의 세로길이가 더 길면
+            else{
+                val ratio = (bitmap_width*resize_size)/bitmap_height
+                bitmap = Bitmap.createScaledBitmap(bitmap!!, ratio, resize_size , true)
+            }
+        }
+
+//    bitmap = Bitmap.createScaledBitmap(bitmap!!, 300, 300, true)
         Log.d("please", "$bitmap_height, $bitmap_width")
-        return bitmap
+        return bitmap!!
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

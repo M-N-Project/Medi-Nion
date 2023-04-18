@@ -1,20 +1,26 @@
 package com.example.medi_nion
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.business_hot.*
 import org.json.JSONArray
@@ -24,6 +30,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     var adapter = BusinessRecyclerAdapter(items)
+    var imgAdapters = HashMap<Int, BusinessPostImgRecyclerAdapter>()
+    var imgItems = ArrayList<BusinessPostImgItem>()
 
     private var hotListItems = ArrayList<BusinessHotListItem>()
 
@@ -33,6 +41,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     ): View? {
         // Inflate the layout for this fragment
        val view =  inflater.inflate(R.layout.business_home, container, false)
+
         return view
     }
 
@@ -50,6 +59,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var isHeart = false // 좋아요 정보
     var isBookmark = false // 북마크 정보
     var isSub = false
+    var scrollFlag = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +69,12 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
         fetchHotProfile()
         fetchData()
+    }
+
+    //비즈니스 프래그먼트 새로고침하기
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.detach(fragment).attach(fragment).commit()
     }
 
     ////////////////// 인기 채널 가져오는 fetch 함수 //////////////////////////////////////////////////////
@@ -315,7 +331,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 recyclerViewState
                                                             );
 
-                                                            adapter.setOnItemClickListener(object :
+                                                            adapter.setOnItemClickListener(
+                                                                object :
                                                                 BusinessRecyclerAdapter.OnItemClickListener {
                                                                 override fun onProfileClick(
                                                                     v: View,
@@ -425,6 +442,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
                                                                 }
                                                             })
+
                                                         },
                                                         {
                                                             Log.d(

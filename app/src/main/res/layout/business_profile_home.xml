@@ -72,7 +72,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="2dp"
                 android:layout_weight="5"
-                android:text="00님의 비즈니스 채널"
+                android:text="00님의 채널"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -113,17 +113,18 @@
 
                     <ImageView
                         android:id="@+id/profileImg"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/business_profile"
-                        android:padding="3dp"
+                        android:background="@drawable/business_profile2"
+                        android:padding="16dp"
                         android:scaleType="fitCenter"
                         app:layout_constraintBottom_toTopOf="@+id/profileName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.498"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/logo" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 </LinearLayout>
 
@@ -213,7 +214,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
                 android:layout_weight="5"
-                android:text="00님의 비즈니스 게시물"
+                android:text="00님의 게시물"
                 android:textColor="#000000"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"

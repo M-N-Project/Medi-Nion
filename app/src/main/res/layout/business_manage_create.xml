@@ -207,17 +207,16 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center"
-                        android:layout_margin="0dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="0dp"
-                        android:background="@drawable/business_profile"
-                        android:padding="18dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/business_profile2"
+                        android:foregroundGravity="center"
+                        android:padding="16dp"
                         android:scaleType="fitCenter"
                         app:layout_constraintBottom_toTopOf="@+id/profileName"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.498"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/logo" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 </LinearLayout>
 
@@ -232,7 +231,7 @@
 
                     <EditText
                         android:id="@+id/profileName"
-                        android:layout_width="256dp"
+                        android:layout_width="244dp"
                         android:layout_height="36dp"
                         android:layout_marginBottom="8dp"
                         android:background="#50C5EFE1"
@@ -277,7 +276,7 @@
                     android:hint="채널에 대한 간단한 소개글을 작성해주세요."
                     android:textAlignment="viewStart"
                     android:textColor="#000000"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
                     tools:ignore="TextContrastCheck" />
@@ -308,7 +307,7 @@
                 android:background="#00FFFFFF"
                 android:text="내 게시물 목록"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="19sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -23,6 +23,9 @@ import kotlinx.android.synthetic.main.business_board_item.view.*
 class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessRecyclerAdapter.ViewHolder>() {
 
+    var imgItems = ArrayList<BusinessPostImgItem>()
+    var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+
     interface OnItemClickListener{
         fun onProfileClick(v:View, data: BusinessBoardItem, pos : Int)
         fun onItemHeart(v:View, data: BusinessBoardItem, pos: Int)
@@ -81,9 +84,22 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
 
             roundAll(view.profileImg2, 100.0f)
 
-            var imgItems = ArrayList<BusinessPostImgItem>()
-            var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
+            imgItems = ArrayList<BusinessPostImgItem>()
+            BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
 
+//            BusinessImgAdapter.setOnItemClickListener(object :
+//                BusinessPostImgRecyclerAdapter.OnItemClickListener {
+//                override fun onImgClick(
+//                    v: View,
+//                    data: BusinessPostImgItem,
+//                    pos: Int
+//                ){
+//                    Log.d("click", pos.toString())
+//
+//                }
+//            })
+//
+//
             BusinessImgAdapter.setOnItemClickListener(object :
                 BusinessPostImgRecyclerAdapter.OnItemClickListener {
                 override fun onImgClick(
@@ -91,20 +107,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                     data: BusinessPostImgItem,
                     pos: Int
                 ){
-                    Log.d("click", pos.toString())
-
-                }
-            })
-
-
-            BusinessImgAdapter.setOnItemClickListener(object :
-                BusinessPostImgRecyclerAdapter.OnItemClickListener {
-                override fun onImgClick(
-                    v: View,
-                    data: BusinessPostImgItem,
-                    pos: Int
-                ){
-                    Log.d("click", pos.toString())
+                    Log.d("click_adapter", pos.toString())
 
                 }
             })
@@ -167,6 +170,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
             profileImg.setOnClickListener {
                 listener?.onProfileClick(itemView,item,pos)
             }
+
 
             if(pos!= RecyclerView.NO_POSITION) {
                 bookmark.setOnClickListener {
