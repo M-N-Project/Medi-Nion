@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.example.medi_nion.databinding.BusinessBoardRecomBinding
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.business_hot.*
@@ -27,13 +29,21 @@ import org.json.JSONArray
 
 
 class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레그먼트
+
+    private lateinit var BusinessBoardRecyclerView : RecyclerView
+    private lateinit var BusinessSubRecycler : RecyclerView
+    private lateinit var activity : Activity
     var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
+    var new_items = ArrayList<BusinessBoardItem>()
     var adapter = BusinessRecyclerAdapter(items)
+
+    private var hotListItems = ArrayList<BusinessHotListItem>()
+    var hotAdapter = BusinessHotListAdapter(hotListItems)
     var imgAdapters = HashMap<Int, BusinessPostImgRecyclerAdapter>()
     var imgItems = ArrayList<BusinessPostImgItem>()
 
-    private var hotListItems = ArrayList<BusinessHotListItem>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +51,11 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     ): View? {
         // Inflate the layout for this fragment
        val view =  inflater.inflate(R.layout.business_home, container, false)
+        BusinessBoardRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardRecyclerView)
+        BusinessSubRecycler = view.findViewById<RecyclerView>(R.id.BusinessSubRecycler)
 
+        BusinessBoardRecyclerView.adapter = adapter
+        BusinessSubRecycler.adapter = hotAdapter
         return view
     }
 
@@ -69,6 +83,14 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
         fetchHotProfile()
         fetchData()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if(context is Activity){
+            activity = context as Activity
+        }
     }
 
     //비즈니스 프래그먼트 새로고침하기
@@ -126,7 +148,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
                     }
                     hotListItems.reverse()
-                    var hotAdapter = BusinessHotListAdapter(hotListItems)
+                    hotAdapter = BusinessHotListAdapter(hotListItems)
                     hotAdapter.notifyDataSetChanged()
                     BusinessSubRecycler.adapter = hotAdapter
 
@@ -213,7 +235,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         },
                         hashMapOf()
                     )
-                    val queue = Volley.newRequestQueue(context)
+                    val queue = Volley.newRequestQueue(activity?.applicationContext)
                     queue.add(request)
                 }
             },
@@ -225,7 +247,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
             },
             hashMapOf()
         )
-        val queue = Volley.newRequestQueue(context)
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
         queue.add(request)
     }
 
@@ -317,17 +339,15 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                             items.add(BusinessItem)
                                                             all_items.add(BusinessItem)
 
-                                                            var recyclerViewState =
-                                                                BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                                                            var new_items = ArrayList<BusinessBoardItem>()
+//                                                            var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                                                            new_items.clear()
                                                             new_items.addAll(items)
                                                             adapter = BusinessRecyclerAdapter(new_items)
+
                                                             BusinessBoardRecyclerView.adapter = adapter
                                                             adapter.stateRestorationPolicy =
                                                                 RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                                            BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
-                                                                recyclerViewState
-                                                            );
+//                                                            BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState( recyclerViewState );
 
                                                             adapter.setOnItemClickListener(
                                                                 object :
@@ -391,7 +411,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                         )
                                                                     )
 
-                                                                    val queue = Volley.newRequestQueue(context)
+                                                                    val queue = Volley.newRequestQueue(activity?.applicationContext)
                                                                     queue.add(heartrequest)
                                                                 }
 
@@ -435,7 +455,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                         )
                                                                     )
 
-                                                                    val queue = Volley.newRequestQueue(context)
+                                                                    val queue = Volley.newRequestQueue(activity?.applicationContext)
                                                                     queue.add(bookrequest)
 
                                                                 }
@@ -453,7 +473,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                             "post_num" to num.toString()
                                                         )
                                                     )
-                                                    val queue = Volley.newRequestQueue(context)
+                                                    val queue = Volley.newRequestQueue(activity?.applicationContext)
                                                     queue.add(likerequest)
                                                 },
                                                 {
@@ -467,8 +487,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                     "post_num" to num.toString()
                                                 )
                                             )
-
-                                            val queue = Volley.newRequestQueue(context)
+                                            val queue = Volley.newRequestQueue(activity?.applicationContext)
                                             queue.add(bookfetchrequest)
                                         }
                                     }
@@ -483,7 +502,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                 -1,
                                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
                             )
-                            val queue = Volley.newRequestQueue(context)
+                            val queue = Volley.newRequestQueue(activity?.applicationContext)
                             queue.add(request)
 
 
@@ -505,7 +524,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                 "id" to appUser
             )
         )
-        val queue = Volley.newRequestQueue(context)
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
         queue.add(request)
 
     }

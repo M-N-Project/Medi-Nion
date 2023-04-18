@@ -1,6 +1,8 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Outline
 import android.net.Uri
@@ -37,6 +39,7 @@ var qnaItems = java.util.ArrayList<qnaNewItem>()
 
 class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 프레그먼트(게시판 구분은 추후에)
 
+    private lateinit var activity : Activity
     private lateinit var id: String
     private lateinit var nickname: String
     private lateinit var userType: String
@@ -82,6 +85,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             return PagerViewHolder(view)
         }
 
+
         override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
             val safePosition = holder.bindingAdapterPosition
             holder.bind(qnaItem[4 - safePosition])
@@ -106,6 +110,14 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         fetchHotPost()
         fetchNewBusi()
         fetchHotProfile()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if(context is Activity){
+            activity = context as Activity
+        }
     }
 
 
@@ -706,7 +718,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                 "userDept" to userDept
                             )
                         )
-                        val queue = Volley.newRequestQueue(context)
+                        val queue = Volley.newRequestQueue(activity?.applicationContext)
                         queue.add(deptrequest)
 
                     }, { Log.d("hot fetch failed", "error......${activity?.applicationContext}") },
@@ -726,7 +738,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 "userDept" to userDept
             )
         )
-        val queue = Volley.newRequestQueue(context)
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
         queue.add(basicrequest)
 
     }
@@ -1060,7 +1072,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         },
                         hashMapOf()
                     )
-                    val queue = Volley.newRequestQueue(context)
+                    val queue = Volley.newRequestQueue(activity?.applicationContext)
                     queue.add(request)
                 }
             },
