@@ -251,7 +251,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         isHeart = false
                                     }
 
-
                                     val BusinessItem = BusinessBoardItem(
                                         num,
                                         writerid,
@@ -263,8 +262,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         image1,
                                         image2,
                                         image3,
-                                        image4,
-                                        image5,
                                         isHeart,
                                         isBookmark,
                                         false

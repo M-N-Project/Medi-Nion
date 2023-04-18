@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.business_board_item.view.*
 class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessRecyclerAdapter.ViewHolder>() {
 
+    var BusinessImgAdapterMap = HashMap<Int,BusinessPostImgRecyclerAdapter>()
+
     interface OnItemClickListener{
         fun onProfileClick(v:View, data: BusinessBoardItem, pos : Int)
         fun onItemHeart(v:View, data: BusinessBoardItem, pos: Int)
@@ -57,6 +59,8 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
         private var bookmark = v.findViewById<CheckBox>(R.id.checkBox)
         private var heart = v.findViewById<CheckBox>(R.id.checkBox2)
 
+        private val imgRecyclerView = v.findViewById<RecyclerView>(R.id.BusinessBoardImgRecyclerView)
+
 
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
@@ -83,31 +87,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
 
             var imgItems = ArrayList<BusinessPostImgItem>()
             var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
-
-            BusinessImgAdapter.setOnItemClickListener(object :
-                BusinessPostImgRecyclerAdapter.OnItemClickListener {
-                override fun onImgClick(
-                    v: View,
-                    data: BusinessPostImgItem,
-                    pos: Int
-                ){
-                    Log.d("click", pos.toString())
-
-                }
-            })
-
-
-            BusinessImgAdapter.setOnItemClickListener(object :
-                BusinessPostImgRecyclerAdapter.OnItemClickListener {
-                override fun onImgClick(
-                    v: View,
-                    data: BusinessPostImgItem,
-                    pos: Int
-                ){
-                    Log.d("click", pos.toString())
-
-                }
-            })
+            BusinessImgAdapterMap[item.post_num] = BusinessImgAdapter
 
             if(item.image1 != ""){
                 Log.d("imgtiem", item.image1)
@@ -140,24 +120,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
                 view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image4 != ""){
-                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image4}"
-                view.businessMG_Img.visibility = View.VISIBLE
-                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
-                imgItems.add(imgItem)
-
-                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
-                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
-            }
-            if(item.image5 != ""){
-                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image5}"
-                view.businessMG_Img.visibility = View.VISIBLE
-                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
-                imgItems.add(imgItem)
-
-                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
-                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
-            }
 
             BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
             view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
@@ -168,6 +130,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 listener?.onProfileClick(itemView,item,pos)
             }
 
+
             if(pos!= RecyclerView.NO_POSITION) {
                 bookmark.setOnClickListener {
                     listener?.onItemBook(itemView,item,pos)
@@ -177,9 +140,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 }
             }
 
-
-//            view.scrap_btn.text = item.scrap.toString()
-//            view.scrap_btn2.text = item.heart.toString()
 
         }
 
