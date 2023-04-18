@@ -29,7 +29,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
         fun onProfileClick(v:View, data: BusinessBoardItem, pos : Int)
         fun onItemHeart(v:View, data: BusinessBoardItem, pos: Int)
         fun onItemBook(v:View, data: BusinessBoardItem, pos: Int)
-        fun onImgClick(v: View, data:BusinessBoardItem, pos:Int, BusinessImgAdapterMap : HashMap<Int,BusinessPostImgRecyclerAdapter>)
     }
     private var listener : OnItemClickListener? = null
 
@@ -90,34 +89,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
             var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
             BusinessImgAdapterMap[item.post_num] = BusinessImgAdapter
 
-//            BusinessImgAdapter.setOnItemClickListener(object :
-//                BusinessPostImgRecyclerAdapter.OnItemClickListener {
-//                override fun onImgClick(
-//                    v: View,
-//                    data: BusinessPostImgItem,
-//                    pos: Int
-//                ){
-//                    Log.d("click", pos.toString())
-//
-//                }
-//            })
-//
-//
-            Log.d("posss", item.post_num.toString())
-            if(BusinessImgAdapterMap[item.post_num]!=null){
-                BusinessImgAdapterMap[item.post_num]!!.setOnItemClickListener(object :
-                BusinessPostImgRecyclerAdapter.OnItemClickListener {
-                    override fun onImgClick(
-                        v: View,
-                        data: BusinessPostImgItem,
-                        pos: Int
-                    ){
-                        Log.d("click", pos.toString())
-
-                    }
-                })
-            }
-
             if(item.image1 != ""){
                 Log.d("imgtiem", item.image1)
                 val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image1}"
@@ -149,24 +120,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
                 view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
             }
-            if(item.image4 != ""){
-                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image4}"
-                view.businessMG_Img.visibility = View.VISIBLE
-                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
-                imgItems.add(imgItem)
-
-                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
-                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
-            }
-            if(item.image5 != ""){
-                val imgUrl = "http://seonho.dothome.co.kr/images/businessPost/${item.image5}"
-                view.businessMG_Img.visibility = View.VISIBLE
-                val imgItem = BusinessPostImgItem(item.post_num, item.id, imgUrl)
-                imgItems.add(imgItem)
-
-                BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
-                view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
-            }
 
             BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
             view.BusinessBoardImgRecyclerView.adapter = BusinessImgAdapter
@@ -187,14 +140,6 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
                 }
             }
 
-            imgRecyclerView.setOnClickListener{
-                listener?.onImgClick(itemView,item,pos, BusinessImgAdapterMap)
-            }
-
-
-
-//            view.scrap_btn.text = item.scrap.toString()
-//            view.scrap_btn2.text = item.heart.toString()
 
         }
 

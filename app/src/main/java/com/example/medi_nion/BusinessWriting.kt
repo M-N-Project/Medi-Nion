@@ -32,8 +32,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
     var image1 : String = "null"
     var image2 : String = "null"
     var image3 : String = "null"
-    var image4 : String = "null"
-    var image5 : String = "null"
 
     var update: Int = 0
     var isUpdate = false
@@ -49,8 +47,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         val image1_ImageView = findViewById<ImageView>(R.id.business_postImg1)
         val image2_ImageView = findViewById<ImageView>(R.id.business_postImg2)
         val image3_ImageView = findViewById<ImageView>(R.id.business_postImg3)
-        val image4_ImageView = findViewById<ImageView>(R.id.business_postImg4)
-        val image5_ImageView = findViewById<ImageView>(R.id.business_postImg5)
 
         val url_Business = "http://seonho.dothome.co.kr/BusinessWriting.php"
 
@@ -110,8 +106,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         image1_ImageView.setOnClickListener(imgListener)
         image2_ImageView.setOnClickListener(imgListener)
         image3_ImageView.setOnClickListener(imgListener)
-        image4_ImageView.setOnClickListener(imgListener)
-        image5_ImageView.setOnClickListener(imgListener)
 
         image_delete.setOnClickListener{
             val builder = AlertDialog.Builder(this)
@@ -130,14 +124,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                         image3_ImageView.setImageResource(0)
                         image3_ImageView.visibility = View.GONE
                         image3 = "null"
-
-                        image4_ImageView.setImageResource(0)
-                        image4_ImageView.visibility = View.GONE
-                        image4 = "null"
-
-                        image5_ImageView.setImageResource(0)
-                        image5_ImageView.visibility = View.GONE
-                        image5 = "null"
 
                         image_delete.visibility = View.GONE
 
@@ -195,8 +181,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                         map["Channel_Profile_Img1"] = image1
                         map["Channel_Profile_Img2"] = image2
                         map["Channel_Profile_Img3"] = image3
-                        map["Channel_Profile_Img4"] = image4
-                        map["Channel_Profile_Img5"] = image5
                         map["num"] = intent.getStringExtra("num").toString()
                         return map
                     }
@@ -248,8 +232,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                         map["Channel_Profile_Img1"] = image1
                         map["Channel_Profile_Img2"] = image2
                         map["Channel_Profile_Img3"] = image3
-                        map["Channel_Profile_Img4"] = image4
-                        map["Channel_Profile_Img5"] = image5
                         return map
                     }
                 }
@@ -278,8 +260,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
         val image1_ImageView = findViewById<ImageView>(R.id.business_postImg1)
         val image2_ImageView = findViewById<ImageView>(R.id.business_postImg2)
         val image3_ImageView = findViewById<ImageView>(R.id.business_postImg3)
-        val image4_ImageView = findViewById<ImageView>(R.id.business_postImg4)
-        val image5_ImageView = findViewById<ImageView>(R.id.business_postImg5)
         //사진버튼 눌러서 여러개 선택.
         if (requestCode == GALLERY_MULTI) {
             val uri = data?.data
@@ -289,13 +269,13 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
             //이미지 URI 를 이용하여 이미지뷰에 순서대로 세팅한다.
             if (clipData != null) {
                 imageCnt += clipData.itemCount
-                if (imageCnt > 5) {
+                if (imageCnt > 3) {
                     val builder = androidx.appcompat.app.AlertDialog.Builder(this)
                     builder.setTitle("사진 개수 초과")
-                        .setMessage("사진은 최대 5개만 첨부 가능합니다.")
+                        .setMessage("사진은 최대 3개만 첨부 가능합니다.")
                         .setPositiveButton("확인",
                             DialogInterface.OnClickListener { dialog, id ->
-                                imageCnt = 5
+                                imageCnt = 3
                             })
                     // 다이얼로그를 띄워주기
                     builder.show()
@@ -318,8 +298,6 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                                 bitmap = resize(bitmap)
 //                                image1 = BitMapToString(bitmap)
                                 image1 = encodeBitmapImage(bitmap)
-
-                                Log.d("img..1", "image1")
 
                             }
                             1 -> {
@@ -350,34 +328,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
 //                                image3 = BitMapToString(bitmap)
                                 image3 = encodeBitmapImage(bitmap)
                             }
-                            3 -> {
-                                image4_ImageView.visibility = View.VISIBLE
-                                image4_ImageView.setImageURI(urione)
-                                var bitmap =
-                                    MediaStore.Images.Media.getBitmap(contentResolver, urione)
-                                image4_ImageView.setImageBitmap(bitmap)
 
-                                var source: ImageDecoder.Source? =
-                                    urione?.let { ImageDecoder.createSource(contentResolver, it) }
-                                bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
-//                                image4 = BitMapToString(bitmap)
-                                image4 = encodeBitmapImage(bitmap)
-                            }
-                            4 -> {
-                                image5_ImageView.visibility = View.VISIBLE
-                                image5_ImageView.setImageURI(urione)
-                                var bitmap =
-                                    MediaStore.Images.Media.getBitmap(contentResolver, urione)
-                                image5_ImageView.setImageBitmap(bitmap)
-
-                                var source: ImageDecoder.Source? =
-                                    urione?.let { ImageDecoder.createSource(contentResolver, it) }
-                                bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
-                                bitmap = resize(bitmap)
-//                                image5 = BitMapToString(bitmap)
-                                image5 = encodeBitmapImage(bitmap)
-                            }
                         }
                     }
                 }
@@ -413,7 +364,7 @@ private fun resize(bitmap: Bitmap): Bitmap? {
     var bitmap_width : Int? = bitmap?.width
     var bitmap_height : Int? = bitmap?.height
 
-    val resize_size = 300
+    val resize_size = 200
 
     //사진의 가로길이가 더 길거나 같으면
     if(bitmap_width!=null && bitmap_height!=null){

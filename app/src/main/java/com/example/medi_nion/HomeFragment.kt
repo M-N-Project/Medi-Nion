@@ -808,49 +808,52 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             urlBusiNew,
             { response ->
                 Log.d("비즈니스새소식새소식새소식", response)
-                val jsonArray = JSONArray(response)
-                newBusiItems.clear()
-                for (i in jsonArray.length() - 1 downTo 0) {
-                    val item = jsonArray.getJSONObject(i)
-                    val chanName = item.getString("channel_name")
-                    val writerId = item.getString("id")
-                    val title = item.getString("title")
-                    val content = item.getString("content")
+                if(response != "No NewBusi"){
+                    val jsonArray = JSONArray(response)
+                    newBusiItems.clear()
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
+                        val chanName = item.getString("channel_name")
+                        val writerId = item.getString("id")
+                        val title = item.getString("title")
+                        val content = item.getString("content")
 
-                    val newItem = HomeNewRecyclerItem(chanName, writerId, title, content)
-                    newBusiItems.add(newItem)
+                        val newItem = HomeNewRecyclerItem(chanName, writerId, title, content)
+                        newBusiItems.add(newItem)
+                    }
+
+                    // RecyclerView.Adapter<ViewHolder>()
+                    val adapter2 = HomeNewRecyclerAdapter(newBusiItems)
+                    homeBusiNew.adapter = adapter2
+                    // ViewPager의 Paging 방향은 Horizontal
+                    homeBusiNew.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                    var detailId: String = ""
+                    var detailTitle: String = ""
+                    var detailContent: String = ""
+                    var detailTime: String = ""
+                    var detailImg: String = ""
+
+
+                    //게시판 상세
+                    adapter2.setOnItemClickListener(object : HomeNewRecyclerAdapter.OnItemClickListener {
+                        override fun onItemClick(v: View, data: HomeNewRecyclerItem, pos: Int) {
+                            val intent =
+                                Intent(
+                                    context,
+                                    BusinessProfileActivity::class.java
+                                )
+                            var appUser = arguments?.getString("id").toString()
+                            intent.putExtra("appUser", appUser)
+                            intent.putExtra(
+                                "channel_name",
+                                data.chanName
+                            )
+                            startActivity(intent)
+                        }
+                    })
                 }
 
-                // RecyclerView.Adapter<ViewHolder>()
-                val adapter2 = HomeNewRecyclerAdapter(newBusiItems)
-                homeBusiNew.adapter = adapter2
-                // ViewPager의 Paging 방향은 Horizontal
-                homeBusiNew.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-                var detailId: String = ""
-                var detailTitle: String = ""
-                var detailContent: String = ""
-                var detailTime: String = ""
-                var detailImg: String = ""
-
-
-                //게시판 상세
-                adapter2.setOnItemClickListener(object : HomeNewRecyclerAdapter.OnItemClickListener {
-                    override fun onItemClick(v: View, data: HomeNewRecyclerItem, pos: Int) {
-                        val intent =
-                            Intent(
-                                context,
-                                BusinessProfileActivity::class.java
-                            )
-                        var appUser = arguments?.getString("id").toString()
-                        intent.putExtra("appUser", appUser)
-                        intent.putExtra(
-                            "channel_name",
-                            data.chanName
-                        )
-                        startActivity(intent)
-                    }
-                })
             }, { Log.d("login failed", "error......${activity?.applicationContext}") },
             hashMapOf(
                 "id" to appUser

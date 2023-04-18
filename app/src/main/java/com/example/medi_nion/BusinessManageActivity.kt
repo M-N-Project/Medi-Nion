@@ -462,8 +462,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     val image1 = item.getString("image1")
                     val image2 = item.getString("image2")
                     val image3 = item.getString("image3")
-                    val image4 = item.getString("image4")
-                    val image5 = item.getString("image5")
 
                     val requestProfile = Board_Request(
                         Request.Method.POST,
@@ -480,7 +478,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3, image4, image5,false, false, true)
+                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false, true)
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)

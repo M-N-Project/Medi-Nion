@@ -310,8 +310,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 image1,
                                                                 image2,
                                                                 image3,
-                                                                image4,
-                                                                image5,
                                                                 isHeart,
                                                                 isBookmark,
                                                                 false
@@ -350,28 +348,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                         data.channel_name
                                                                     )
                                                                     startActivity(intent)
-                                                                }
-
-                                                                override fun onImgClick(
-                                                                    v: View,
-                                                                    data: BusinessBoardItem,
-                                                                    pos: Int,
-                                                                    BusinessImgAdapterMap : HashMap<Int,BusinessPostImgRecyclerAdapter>
-                                                                ) {
-                                                                    var BusinessImgAdapter = BusinessImgAdapterMap[data.post_num]
-                                                                    if(BusinessImgAdapter != null){
-                                                                        BusinessImgAdapter.setOnItemClickListener(object :
-                                                                            BusinessPostImgRecyclerAdapter.OnItemClickListener {
-                                                                            override fun onImgClick(
-                                                                                v: View,
-                                                                                data: BusinessPostImgItem,
-                                                                                pos: Int
-                                                                            ){
-                                                                                Log.d("click", pos.toString())
-                                                                            }
-                                                                        })
-                                                                    }
-
                                                                 }
 
                                                                 override fun onItemHeart(
