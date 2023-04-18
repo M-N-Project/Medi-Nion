@@ -70,7 +70,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         super.onViewCreated(view, savedInstanceState)
 
         // bundle 에서 id, userType, userDept 값 가져오기]
-        //val id = arguments?.getString("id")
         val id = arguments?.getString("id")
         val nickname = arguments?.getString("nickname")
         val userType = arguments?.getString("userType")

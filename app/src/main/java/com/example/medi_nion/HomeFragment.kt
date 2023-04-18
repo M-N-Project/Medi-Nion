@@ -127,12 +127,21 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         var big_currentPosition = 0
 
 
+
         // bundle 에서 id, userType, userDept, userMedal 값 가져오기
         id = arguments?.getString("id").toString()
         nickname = arguments?.getString("nickname").toString()
         userType = arguments?.getString("userType").toString()
         userDept = arguments?.getString("userDept").toString()
         userMedal = arguments?.getInt("userMedal").toString()
+
+//        arguments?.let {
+//            id = it.getString("id", "")
+//            userType = it.getString("userType", "").toString()
+//            userDept = it.getString("userDept", "").toString()
+//            userMedal = it.getInt("userMedal", 0).toString()
+//            nickname = it.getString("nickname", "").toString()
+//        }
 
         val detector = GestureDetector(context, object : GestureDetector.OnGestureListener {
             override fun onDown(p0: MotionEvent): Boolean {
