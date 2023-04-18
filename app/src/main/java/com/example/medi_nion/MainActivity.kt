@@ -2,6 +2,7 @@
 //
 //import androidx.appcompat.app.AppCompatActivity
 //import android.os.Bundle
+//import android.util.Log
 //import android.widget.Toast
 //import com.google.android.material.bottomnavigation.BottomNavigationView
 //import kotlinx.android.synthetic.main.activity_main.*
@@ -72,6 +73,7 @@
 //                    bundle.putInt("userMedal", userMedal)
 //                    bundle.putString("nickname", nickname)
 //                    profileFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
+//                    Log.d("wowowowo", "$bundle")
 //                    supportFragmentManager.beginTransaction().replace(R.id.linearLayout, profileFragment).commit()
 //                }
 //            }
@@ -114,33 +116,26 @@ private var backPressedTime: Long = 0
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener { //mainactivity, 여기서는 프레그먼트 제어를 담당
 
     //OnNavigationItemSelectedListener
+    private lateinit var viewPager2: ViewPager2
     lateinit var binding: ActivityMainBinding
 
-    private var id: String? = null
-    private var nickname: String? = null
-    private var userType: String? = null
-    private var userDept: String? = null
-    private var passwd: String? = null
-    private var userMedal: Int = 0
+//    private var id: String? = null
+//    private var nickname: String? = null
+//    private var userType: String? = null
+//    private var userDept: String? = null
+//    private var passwd: String? = null
+//    private var userMedal: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        id = intent.getStringExtra("id")
-        nickname = intent.getStringExtra("nickname")
-        userType = intent.getStringExtra("userType")
-        userDept = intent.getStringExtra("userDept")
-        passwd = intent.getStringExtra("passwd")
-        userMedal = intent.getIntExtra("userMedal", 0)
+        ///id자리
 
-        Log.d("omomg", "$id")
-        Log.d("omomg", "$userType")
-        Log.d("omomg", "$userDept")
 
-        linearLayout.isUserInputEnabled = true
 
+        linearLayout.isUserInputEnabled = true //false시 스크롤 막힘
 
         //여기서 linearLayout은 ViewPager2, id바꿀시 혹시 에러날까봐 냅둠
         binding.linearLayout.adapter = ViewPagerAdapter2_Main(this)
@@ -163,11 +158,24 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
 
+        var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
+        var userType = intent.getStringExtra("userType")
+        var userDept = intent.getStringExtra("userDept")
+        var passwd = intent.getStringExtra("passwd")
+        var userMedal = intent.getIntExtra("userMedal", 0)
+
+        Log.d("omomg", "$id")
+        Log.d("omomg", "$userType")
+        Log.d("omomg", "$userDept")
+
         Log.d("onNavigationItemSelect", "id: $id")
         Log.d("onNavigationItemSelect", "nickname: $nickname")
         Log.d("onNavigationItemSelect", "userType: $userType")
         Log.d("onNavigationItemSelect", "userDept: $userDept")
         Log.d("onNavigationItemSelect", "userMedal: $userMedal")
+
+        Log.d("wowowowo", "$id")
 
         when(item.itemId){
             R.id.homeFragment -> {
@@ -175,7 +183,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 val homeFragment = HomeFragment()
                 val bundle = Bundle()
                 bundle.putString("id", id)
-                Log.d("wowowowo", "$id")
                 bundle.putString("nickname", nickname)
                 bundle.putString("userType", userType)
                 bundle.putString("userDept", userDept)
@@ -197,6 +204,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 Log.d("wowowowo", "$userDept")
 
                 menuFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
+                Log.d("wowowowo1", "$bundle")
                 return true
             }
             R.id.scheduleFragment -> {

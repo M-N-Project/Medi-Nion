@@ -1,15 +1,16 @@
 package com.example.medi_nion
 
-    import android.annotation.SuppressLint
-    import android.content.Intent
-    import android.os.Bundle
-    import android.util.Log
-    import android.view.View
-    import android.widget.Button
-    import android.widget.LinearLayout
-    import android.widget.TextView
-    import android.widget.Toast
-    import androidx.fragment.app.Fragment
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
 
@@ -68,7 +69,8 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // bundle 에서 id, userType, userDept 값 가져오기
+        // bundle 에서 id, userType, userDept 값 가져오기]
+        //val id = arguments?.getString("id")
         val id = arguments?.getString("id")
         val nickname = arguments?.getString("nickname")
         val userType = arguments?.getString("userType")

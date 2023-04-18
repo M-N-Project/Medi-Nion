@@ -34,14 +34,20 @@ class ProfileFragment : Fragment(R.layout.profile) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mBinding = ProfileBinding.inflate(inflater, container, false)
 
-        val id = arguments?.getString("id")
-        val userType = arguments?.getString("userType")
-        val userDept = arguments?.getString("userDept")
-        val userGrade = arguments?.getInt("userGrade")
-        val passwd = arguments?.getString("passwd")
-        val nickname = arguments?.getString("nickname")
+        val id = arguments?.getString("id").toString()
+        val userType = arguments?.getString("userType").toString()
+        val userDept = arguments?.getString("userDept").toString()
+        val userGrade = arguments?.getInt("userGrade").toString()
+        val passwd = arguments?.getString("passwd").toString()
+        val nickname = arguments?.getString("nickname").toString()
 
-        Log.d("profile id receive", "$userType")
+        Log.d("profileFragment", "id: $id")
+        Log.d("profileFragment", "passwd: $passwd")
+        Log.d("profileFragment", "nickname: $nickname")
+        Log.d("profileFragment", "userType: $userType")
+        Log.d("profileFragment", "userDept: $userDept")
+        Log.d("profileFragment", "userGrade: $userGrade")
+
         
         binding.textViewNickname.text = nickname
         binding.textViewDept.text = userDept
