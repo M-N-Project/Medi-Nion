@@ -2,6 +2,7 @@ package com.example.medi_nion
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         var passwd = intent.getStringExtra("passwd")
         var userMedal = intent.getIntExtra("userMedal", 0)
 
-        when(item.itemId){
+        when(item.itemId) {
             R.id.homeFragment -> {
                 binding.linearLayout.currentItem = 0
                 return true
@@ -91,9 +92,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             else -> {
                 return false
             }
-            true
-        }
-            selectedItemId = R.id.homeFragment
         }
     }
 
