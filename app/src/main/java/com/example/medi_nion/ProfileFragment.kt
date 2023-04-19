@@ -111,13 +111,8 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         //내 북마크 -> business에서 북마크한 글 찾기
         binding.item1List5Text.setOnClickListener{
-            val intent = Intent(context, Board_profile::class.java)
+            val intent = Intent(context, Business_bookmark__profile::class.java)
             intent.putExtra("id", id)
-            intent.putExtra("profileMenuType", "post")
-            intent.putExtra("userType", userType)
-            intent.putExtra("userDept", userDept)
-            intent.putExtra("userGrade", userGrade)
-            intent.putExtra("board", "자유 게시판")
             startActivity(intent)
         }
 
