@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
@@ -105,6 +106,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
 
     override fun onStart() {
+        id = arguments?.getString("id").toString()
+        Log.d("idididiidid   Home", id)
         super.onStart()
         fetchNewQna()
         fetchHotPost()
