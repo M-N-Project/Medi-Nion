@@ -30,38 +30,6 @@ class BusinessProfile : AppCompatActivity() {
 
         fetchData()
 
-
-//        val adapter = BusinessRecyclerAdapter(businessitems)
-//        BusinessBoardRecyclerView.adapter = adapter
-
-//        val dataObserver: Observer<ArrayList<BoardItem>> = Observer {
-//            items.value = it
-//            val adapter = BoardListAdapter(items)
-//            boardRecyclerView.adapter = adapter
-//        }
-//
-//        viewModel.itemList.observe(this, dataObserver)
-
-
-//        adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-//            override fun onItemClick(v: View, data: BusinessBoardItem, pos: Int) {
-//                Intent(this@BusinessProfile, BusinessBoard::class.java).apply {
-//                    putExtra("data", data.toString())
-//                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                }.run { startActivity(this) }
-//            }
-//
-//        })
-
-        /*
-        //글쓰기
-        val write = findViewById<Button>(R.id.write_btn)
-        write.setOnClickListener {
-            val intent = Intent(applicationContext, BusinessWriting::class.java)
-            startActivity(intent)
-        }
-
-         */
     }
 
     fun fetchData() {
