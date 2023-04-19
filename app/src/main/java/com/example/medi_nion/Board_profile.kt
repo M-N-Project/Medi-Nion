@@ -11,18 +11,12 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_home.refresh_layout
 import kotlinx.android.synthetic.main.board_profile_home.*
-import kotlinx.android.synthetic.main.board_scroll_paging.*
-import kotlinx.android.synthetic.main.sign_up.view.*
 import org.json.JSONArray
-import java.lang.Thread.sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,7 +38,6 @@ class Board_profile : AppCompatActivity() {
 
         var board_select = findViewById<TextView>(R.id.board_select_profile) //게시판 종류 선택
         var profileType = intent.getStringExtra("profileMenuType")
-        Log.d("start", profileType.toString())
         if(profileType=="post")
             fetchPost(board_select.text.toString())
         else if(profileType=="scrap")
@@ -75,14 +68,14 @@ class Board_profile : AppCompatActivity() {
 
         var profileType = intent.getStringExtra("profileMenuType")
         Log.d("create", profileType.toString())
-        if(profileType=="post")
-            fetchPost(board_select.text.toString())
-        else if(profileType=="scrap")
-            fetchScrap(board_select.text.toString())
-        else if(profileType=="like")
-            fetchLike(board_select.text.toString())
-        else if(profileType=="comment")
-            fetchComment(board_select.text.toString())
+//        if(profileType=="post")
+//            fetchPost(board_select.text.toString())
+//        else if(profileType=="scrap")
+//            fetchScrap(board_select.text.toString())
+//        else if(profileType=="like")
+//            fetchLike(board_select.text.toString())
+//        else if(profileType=="comment")
+//            fetchComment(board_select.text.toString())
 
         board_select.text = "자유 게시판"
         var boardInit = intent.getStringExtra("board")
@@ -294,9 +287,6 @@ class Board_profile : AppCompatActivity() {
                 } else noItemText.visibility = View.GONE
 
 
-                items.clear()
-                all_items.clear()
-
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
 
@@ -311,9 +301,10 @@ class Board_profile : AppCompatActivity() {
 
                     val simpleTime = timeDiff(board_time)
 
-                    val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
+                    val boardItem =
+                        BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
-                    if(i >= jsonArray.length() - item_count*scroll_count){
+                    if (i >= jsonArray.length() - item_count * scroll_count) {
                         items.add(boardItem)
                         itemIndex.add(num) //앞에다가 추가.
                     }
@@ -322,9 +313,7 @@ class Board_profile : AppCompatActivity() {
                 }
 
                 var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<BoardItem>()
-                new_items.addAll(items)
-                adapter = BoardListAdapter(new_items)
+                adapter = BoardListAdapter(all_items)
                 boardRecyclerView_profile.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
@@ -338,7 +327,6 @@ class Board_profile : AppCompatActivity() {
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                        Log.d("0998123", "$board // ${data.num}")
                         val request = Login_Request(
                             Request.Method.POST,
                             urlDetail,
@@ -385,8 +373,6 @@ class Board_profile : AppCompatActivity() {
                     }
 
                 })
-
-
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "id" to id.toString(),
@@ -411,13 +397,17 @@ class Board_profile : AppCompatActivity() {
         val urlScrap = "http://seonho.dothome.co.kr/BoardProfileScrapNum.php"
         val urlBoard = "http://seonho.dothome.co.kr/BoardProfileScrap.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
-        Log.d("-0123", "kiki")
+
+
+        var newItems: MutableMap<Int, BoardItem> = HashMap()
+        var index = 0
 
         val requestScrapNum = Board_Request(
             Request.Method.POST,
             urlScrap,
             { responseScrapNum ->
-                if(responseScrapNum != "Bookmark Profile Fetch Fail"){
+                Log.d("183123", responseScrapNum)
+                if(responseScrapNum != "Like Profile Fetch Fail"){
                     val jsonArrayScrapNum = JSONArray(responseScrapNum)
 
                     items.clear()
@@ -426,7 +416,7 @@ class Board_profile : AppCompatActivity() {
                     val noItemText = findViewById<TextView>(R.id.no_myitem)
                     if (jsonArrayScrapNum.length() == 0) {
                         noItemText.visibility = View.VISIBLE
-                        noItemText.text = "스크랩한 게시물이 없습니다."
+                        noItemText.text = "댓글 단 게시물이 없습니다."
                         noItemText.bringToFront()
 
                         adapter = BoardListAdapter(items)
@@ -434,28 +424,29 @@ class Board_profile : AppCompatActivity() {
                     } else {
                         noItemText.visibility = View.GONE
 
-                        Log.d("9091233", jsonArrayScrapNum.length().toString())
-
                         for (i in jsonArrayScrapNum.length() - 1 downTo 0) {
-                            val item = jsonArrayScrapNum.getJSONObject(i)
+                            val itemNum = jsonArrayScrapNum.getJSONObject(i)
 
-                            val post_num = item.getInt("post_num")
-                            val count = item.getInt("count")
+                            val post_num = itemNum.getInt("post_num")
+                            val count = itemNum.getInt("count")
 
+                            //여기까진 정상
                             Log.d("099123", "$post_num ,, $boardSelect")
 
+                            items.clear()
+                            all_items.clear()
+
+
+                            //여기서 request 보낼때 순서 뒤죽박죽....
                             val requestScrapBoard = Board_Request(
                                 Request.Method.POST,
                                 urlBoard,
-                                { responseScrapBoard ->
-                                    Log.d("099123", responseScrapBoard)
-                                    val jsonArrayScrapBoard = JSONArray(responseScrapBoard)
+                                { responseLikeBoard ->
+                                    val jsonArrayLikeBoard = JSONArray(responseLikeBoard)
+                                    Log.d("099123!", jsonArrayLikeBoard.toString())
 
-                                    items.clear()
-                                    all_items.clear()
-
-                                    for (i in jsonArrayScrapBoard.length()-1  downTo  0) {
-                                        val item = jsonArrayScrapBoard.getJSONObject(i)
+                                    for (i in 0 until  jsonArrayLikeBoard.length()) {
+                                        val item = jsonArrayLikeBoard.getJSONObject(i)
 
                                         val num = item.getInt("num")
                                         val title = item.getString("title")
@@ -466,82 +457,85 @@ class Board_profile : AppCompatActivity() {
                                         var comment = item.getInt("comment")
                                         var bookmark = item.getInt("bookmark")
 
+                                        Log.d("099123", title)
+
                                         val simpleTime = timeDiff(board_time)
 
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
-
-                                        if(i >= jsonArrayScrapBoard.length() - item_count*scroll_count){
+                                        if(i >= jsonArrayLikeBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
                                             itemIndex.add(num) //앞에다가 추가.
                                         }
-
+                                        newItems[index++] = boardItem
                                         all_items.add(boardItem)
-                                    }
 
-                                    var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BoardItem>()
-                                    new_items.addAll(items)
-                                    adapter = BoardListAdapter(new_items)
-                                    boardRecyclerView_profile.adapter = adapter
-                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                                        val sortedMap: MutableMap<Int, BoardItem> = LinkedHashMap()
+                                        newItems.entries.sortedBy { it.key }.forEach { sortedMap[it.key] = it.value }
 
 
-                                    var detailId : String = ""
-                                    var detailTitle : String = ""
-                                    var detailContent : String = ""
-                                    var detailTime : String = ""
-                                    var detailImg : String = ""
+                                        for(i in 0 until all_items.size)
+                                            Log.d("fjkladsf", all_items[i].title)
+                                        var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
+                                        adapter = BoardListAdapter(all_items)
+                                        boardRecyclerView_profile.adapter = adapter
+                                        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                        boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
-                                    //게시판 상세
-                                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-                                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                                            val request = Login_Request(
-                                                Request.Method.POST,
-                                                urlDetail,
-                                                { response ->
-                                                    if(response!="Detail Info Error"){
-                                                        val jsonArray = JSONArray(response)
-                                                        items.clear()
-                                                        for (i in jsonArray.length()-1  downTo  0) {
-                                                            val item = jsonArray.getJSONObject(i)
+                                        var detailId : String = ""
+                                        var detailTitle : String = ""
+                                        var detailContent : String = ""
+                                        var detailTime : String = ""
+                                        var detailImg : String = ""
 
-                                                            detailId = item.getString("id")
-                                                            detailTitle = item.getString("title")
-                                                            detailContent = item.getString("content")
-                                                            detailTime = item.getString("time")
-                                                            detailImg = item.getString("image")
+                                        //게시판 상세
+                                        adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                                            override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                                                val request = Login_Request(
+                                                    Request.Method.POST,
+                                                    urlDetail,
+                                                    { response ->
+                                                        if(response!="Detail Info Error"){
+                                                            val jsonArray = JSONArray(response)
+                                                            items.clear()
+                                                            for (i in jsonArray.length()-1  downTo  0) {
+                                                                val item = jsonArray.getJSONObject(i)
 
-                                                            val intent = Intent(applicationContext, BoardDetail::class.java)
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                                            intent.putExtra("board", board)
-                                                            intent.putExtra("num", data.num)
-                                                            intent.putExtra("id", id)
-                                                            intent.putExtra("writerId", detailId)
-                                                            intent.putExtra("title", detailTitle)
-                                                            intent.putExtra("content", detailContent)
-                                                            intent.putExtra("time", detailTime)
-                                                            intent.putExtra("image", detailImg)
-                                                            intent.putExtra("userType", userType)
-                                                            intent.putExtra("userDept", userDept)
-                                                            startActivity(intent)
+                                                                detailId = item.getString("id")
+                                                                detailTitle = item.getString("title")
+                                                                detailContent = item.getString("content")
+                                                                detailTime = item.getString("time")
+                                                                detailImg = item.getString("image")
+
+                                                                val intent = Intent(applicationContext, BoardDetail::class.java)
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                                                intent.putExtra("board", boardSelect)
+                                                                intent.putExtra("num", data.num)
+                                                                intent.putExtra("id", id)
+                                                                intent.putExtra("writerId", detailId)
+                                                                intent.putExtra("title", detailTitle)
+                                                                intent.putExtra("content", detailContent)
+                                                                intent.putExtra("time", detailTime)
+                                                                intent.putExtra("image", detailImg)
+                                                                intent.putExtra("userType", userType)
+                                                                intent.putExtra("userDept", userDept)
+                                                                startActivity(intent)
+                                                            }
+
+
                                                         }
 
-
-                                                    }
-
-                                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                                                hashMapOf(
-                                                    "board" to boardSelect,
-                                                    "post_num" to post_num.toString()
+                                                    }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                                    hashMapOf(
+                                                        "board" to boardSelect,
+                                                        "post_num" to data.num.toString()
+                                                    )
                                                 )
-                                            )
-                                            val queue = Volley.newRequestQueue(applicationContext)
-                                            queue.add(request)
-                                        }
+                                                val queue = Volley.newRequestQueue(applicationContext)
+                                                queue.add(request)
+                                            }
 
-                                    })
-
+                                        })
+                                    }
 
                                 }, { Log.d("login failed", "error......${error(applicationContext)}") },
                                 hashMapOf(
@@ -551,6 +545,7 @@ class Board_profile : AppCompatActivity() {
                             )
                             val queue = Volley.newRequestQueue(this)
                             queue.add(requestScrapBoard)
+
                         }
                     }
 
@@ -565,6 +560,7 @@ class Board_profile : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(requestScrapNum)
+
 
     }
 
@@ -581,12 +577,15 @@ class Board_profile : AppCompatActivity() {
         val urlLike = "http://seonho.dothome.co.kr/BoardProfileLikeNum.php"
         val urlBoard = "http://seonho.dothome.co.kr/BoardProfileLike.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
-        Log.d("-0123", "kiki")
 
-        val requestScrapNum = Board_Request(
+        var newItems: MutableMap<Int, BoardItem> = HashMap()
+        var index = 0
+
+        val requestLikeNum = Board_Request(
             Request.Method.POST,
             urlLike,
             { responseLikeNum ->
+                Log.d("183123", responseLikeNum)
                 if(responseLikeNum != "Like Profile Fetch Fail"){
                     val jsonArrayLikeNum = JSONArray(responseLikeNum)
 
@@ -596,7 +595,7 @@ class Board_profile : AppCompatActivity() {
                     val noItemText = findViewById<TextView>(R.id.no_myitem)
                     if (jsonArrayLikeNum.length() == 0) {
                         noItemText.visibility = View.VISIBLE
-                        noItemText.text = "좋아요한 게시물이 없습니다."
+                        noItemText.text = "댓글 단 게시물이 없습니다."
                         noItemText.bringToFront()
 
                         adapter = BoardListAdapter(items)
@@ -604,27 +603,28 @@ class Board_profile : AppCompatActivity() {
                     } else {
                         noItemText.visibility = View.GONE
 
-                        Log.d("9091233", jsonArrayLikeNum.length().toString())
-
                         for (i in jsonArrayLikeNum.length() - 1 downTo 0) {
-                            val item = jsonArrayLikeNum.getJSONObject(i)
+                            val itemNum = jsonArrayLikeNum.getJSONObject(i)
 
-                            val post_num = item.getInt("post_num")
-                            val count = item.getInt("count")
+                            val post_num = itemNum.getInt("post_num")
+                            val count = itemNum.getInt("count")
 
+                            //여기까진 정상
                             Log.d("099123", "$post_num ,, $boardSelect")
 
-                            val requestScrapBoard = Board_Request(
+                            items.clear()
+                            all_items.clear()
+
+
+                            //여기서 request 보낼때 순서 뒤죽박죽....
+                            val requestLikeBoard = Board_Request(
                                 Request.Method.POST,
                                 urlBoard,
                                 { responseLikeBoard ->
-                                    Log.d("099123", responseLikeBoard)
                                     val jsonArrayLikeBoard = JSONArray(responseLikeBoard)
+                                    Log.d("099123!", jsonArrayLikeBoard.toString())
 
-                                    items.clear()
-                                    all_items.clear()
-
-                                    for (i in jsonArrayLikeBoard.length()-1  downTo  0) {
+                                    for (i in 0 until  jsonArrayLikeBoard.length()) {
                                         val item = jsonArrayLikeBoard.getJSONObject(i)
 
                                         val num = item.getInt("num")
@@ -636,82 +636,85 @@ class Board_profile : AppCompatActivity() {
                                         var comment = item.getInt("comment")
                                         var bookmark = item.getInt("bookmark")
 
+                                        Log.d("099123", title)
+
                                         val simpleTime = timeDiff(board_time)
 
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
-
                                         if(i >= jsonArrayLikeBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
                                             itemIndex.add(num) //앞에다가 추가.
                                         }
-
+                                        newItems[index++] = boardItem
                                         all_items.add(boardItem)
-                                    }
 
-                                    var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BoardItem>()
-                                    new_items.addAll(items)
-                                    adapter = BoardListAdapter(new_items)
-                                    boardRecyclerView_profile.adapter = adapter
-                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                                        val sortedMap: MutableMap<Int, BoardItem> = LinkedHashMap()
+                                        newItems.entries.sortedBy { it.key }.forEach { sortedMap[it.key] = it.value }
 
 
-                                    var detailId : String = ""
-                                    var detailTitle : String = ""
-                                    var detailContent : String = ""
-                                    var detailTime : String = ""
-                                    var detailImg : String = ""
+                                        for(i in 0 until all_items.size)
+                                            Log.d("fjkladsf", all_items[i].title)
+                                        var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
+                                        adapter = BoardListAdapter(all_items)
+                                        boardRecyclerView_profile.adapter = adapter
+                                        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                        boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
-                                    //게시판 상세
-                                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-                                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                                            val request = Login_Request(
-                                                Request.Method.POST,
-                                                urlDetail,
-                                                { response ->
-                                                    if(response!="Detail Info Error"){
-                                                        val jsonArray = JSONArray(response)
-                                                        items.clear()
-                                                        for (i in jsonArray.length()-1  downTo  0) {
-                                                            val item = jsonArray.getJSONObject(i)
+                                        var detailId : String = ""
+                                        var detailTitle : String = ""
+                                        var detailContent : String = ""
+                                        var detailTime : String = ""
+                                        var detailImg : String = ""
 
-                                                            detailId = item.getString("id")
-                                                            detailTitle = item.getString("title")
-                                                            detailContent = item.getString("content")
-                                                            detailTime = item.getString("time")
-                                                            detailImg = item.getString("image")
+                                        //게시판 상세
+                                        adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                                            override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                                                val request = Login_Request(
+                                                    Request.Method.POST,
+                                                    urlDetail,
+                                                    { response ->
+                                                        if(response!="Detail Info Error"){
+                                                            val jsonArray = JSONArray(response)
+                                                            items.clear()
+                                                            for (i in jsonArray.length()-1  downTo  0) {
+                                                                val item = jsonArray.getJSONObject(i)
 
-                                                            val intent = Intent(applicationContext, BoardDetail::class.java)
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                                            intent.putExtra("board", board)
-                                                            intent.putExtra("num", data.num)
-                                                            intent.putExtra("id", id)
-                                                            intent.putExtra("writerId", detailId)
-                                                            intent.putExtra("title", detailTitle)
-                                                            intent.putExtra("content", detailContent)
-                                                            intent.putExtra("time", detailTime)
-                                                            intent.putExtra("image", detailImg)
-                                                            intent.putExtra("userType", userType)
-                                                            intent.putExtra("userDept", userDept)
-                                                            startActivity(intent)
+                                                                detailId = item.getString("id")
+                                                                detailTitle = item.getString("title")
+                                                                detailContent = item.getString("content")
+                                                                detailTime = item.getString("time")
+                                                                detailImg = item.getString("image")
+
+                                                                val intent = Intent(applicationContext, BoardDetail::class.java)
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                                                intent.putExtra("board", boardSelect)
+                                                                intent.putExtra("num", data.num)
+                                                                intent.putExtra("id", id)
+                                                                intent.putExtra("writerId", detailId)
+                                                                intent.putExtra("title", detailTitle)
+                                                                intent.putExtra("content", detailContent)
+                                                                intent.putExtra("time", detailTime)
+                                                                intent.putExtra("image", detailImg)
+                                                                intent.putExtra("userType", userType)
+                                                                intent.putExtra("userDept", userDept)
+                                                                startActivity(intent)
+                                                            }
+
+
                                                         }
 
-
-                                                    }
-
-                                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                                                hashMapOf(
-                                                    "board" to boardSelect,
-                                                    "post_num" to post_num.toString()
+                                                    }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                                    hashMapOf(
+                                                        "board" to boardSelect,
+                                                        "post_num" to data.num.toString()
+                                                    )
                                                 )
-                                            )
-                                            val queue = Volley.newRequestQueue(applicationContext)
-                                            queue.add(request)
-                                        }
+                                                val queue = Volley.newRequestQueue(applicationContext)
+                                                queue.add(request)
+                                            }
 
-                                    })
-
+                                        })
+                                    }
 
                                 }, { Log.d("login failed", "error......${error(applicationContext)}") },
                                 hashMapOf(
@@ -720,7 +723,8 @@ class Board_profile : AppCompatActivity() {
                                 )
                             )
                             val queue = Volley.newRequestQueue(this)
-                            queue.add(requestScrapBoard)
+                            queue.add(requestLikeBoard)
+
                         }
                     }
 
@@ -734,7 +738,7 @@ class Board_profile : AppCompatActivity() {
             )
         )
         val queue = Volley.newRequestQueue(this)
-        queue.add(requestScrapNum)
+        queue.add(requestLikeNum)
 
     }
 
@@ -752,13 +756,15 @@ class Board_profile : AppCompatActivity() {
         val urlComment = "http://seonho.dothome.co.kr/BoardProfileCommentNum.php"
         val urlBoard = "http://seonho.dothome.co.kr/BoardProfileComment.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
-        Log.d("-0123", "kiki")
 
-        val requestScrapNum = Board_Request(
+        var newItems: MutableMap<Int, BoardItem> = HashMap()
+        var index = 0
+
+        val requestCommentNum = Board_Request(
             Request.Method.POST,
             urlComment,
             { responseCommentNum ->
-                Log.d("resss?", responseCommentNum)
+                Log.d("183123", responseCommentNum)
                 if(responseCommentNum != "Comment Profile Fetch Fail"){
                     val jsonArrayCommentNum = JSONArray(responseCommentNum)
 
@@ -768,7 +774,7 @@ class Board_profile : AppCompatActivity() {
                     val noItemText = findViewById<TextView>(R.id.no_myitem)
                     if (jsonArrayCommentNum.length() == 0) {
                         noItemText.visibility = View.VISIBLE
-                        noItemText.text = "댓글 쓴 게시물이 없습니다."
+                        noItemText.text = "댓글 단 게시물이 없습니다."
                         noItemText.bringToFront()
 
                         adapter = BoardListAdapter(items)
@@ -776,28 +782,29 @@ class Board_profile : AppCompatActivity() {
                     } else {
                         noItemText.visibility = View.GONE
 
-                        Log.d("9091233", jsonArrayCommentNum.length().toString())
-
                         for (i in jsonArrayCommentNum.length() - 1 downTo 0) {
-                            val item = jsonArrayCommentNum.getJSONObject(i)
+                            val itemNum = jsonArrayCommentNum.getJSONObject(i)
 
-                            val post_num = item.getInt("post_num")
-                            val count = item.getInt("count")
+                            val post_num = itemNum.getInt("post_num")
+                            val count = itemNum.getInt("count")
 
+                            //여기까진 정상
                             Log.d("099123", "$post_num ,, $boardSelect")
 
-                            val requestScrapBoard = Board_Request(
+                            items.clear()
+                            all_items.clear()
+
+
+                            //여기서 request 보낼때 순서 뒤죽박죽....
+                            val requestCommentBoard = Board_Request(
                                 Request.Method.POST,
                                 urlBoard,
-                                { responseScrapBoard ->
-                                    Log.d("099123", responseScrapBoard)
-                                    val jsonArrayScrapBoard = JSONArray(responseScrapBoard)
+                                { responseCommentBoard ->
+                                    val jsonArrayCommentBoard = JSONArray(responseCommentBoard)
+                                    Log.d("099123!", jsonArrayCommentBoard.toString())
 
-                                    items.clear()
-                                    all_items.clear()
-
-                                    for (i in jsonArrayScrapBoard.length()-1  downTo  0) {
-                                        val item = jsonArrayScrapBoard.getJSONObject(i)
+                                    for (i in 0 until  jsonArrayCommentBoard.length()) {
+                                        val item = jsonArrayCommentBoard.getJSONObject(i)
 
                                         val num = item.getInt("num")
                                         val title = item.getString("title")
@@ -808,82 +815,85 @@ class Board_profile : AppCompatActivity() {
                                         var comment = item.getInt("comment")
                                         var bookmark = item.getInt("bookmark")
 
+                                        Log.d("099123", title)
+
                                         val simpleTime = timeDiff(board_time)
 
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
-
-                                        if(i >= jsonArrayScrapBoard.length() - item_count*scroll_count){
+                                        if(i >= jsonArrayCommentBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
                                             itemIndex.add(num) //앞에다가 추가.
                                         }
+                                        newItems[index++] = boardItem
                                         all_items.add(boardItem)
-                                    }
 
-                                    var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BoardItem>()
-                                    new_items.addAll(items)
+                                        val sortedMap: MutableMap<Int, BoardItem> = LinkedHashMap()
+                                        newItems.entries.sortedBy { it.key }.forEach { sortedMap[it.key] = it.value }
 
-                                    Log.d("item??", new_items.size.toString())
-                                    adapter = BoardListAdapter(new_items)
-                                    boardRecyclerView_profile.adapter = adapter
-                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
-                                    var detailId : String = ""
-                                    var detailTitle : String = ""
-                                    var detailContent : String = ""
-                                    var detailTime : String = ""
-                                    var detailImg : String = ""
+                                        for(i in 0 until all_items.size)
+                                            Log.d("fjkladsf", all_items[i].title)
+                                        var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
+                                        adapter = BoardListAdapter(all_items)
+                                        boardRecyclerView_profile.adapter = adapter
+                                        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                        boardRecyclerView_profile.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
-                                    //게시판 상세
-                                    adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
-                                        override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-                                            val request = Login_Request(
-                                                Request.Method.POST,
-                                                urlDetail,
-                                                { response ->
-                                                    if(response!="Detail Info Error"){
-                                                        val jsonArray = JSONArray(response)
-                                                        items.clear()
-                                                        for (i in jsonArray.length()-1  downTo  0) {
-                                                            val item = jsonArray.getJSONObject(i)
+                                        var detailId : String = ""
+                                        var detailTitle : String = ""
+                                        var detailContent : String = ""
+                                        var detailTime : String = ""
+                                        var detailImg : String = ""
 
-                                                            detailId = item.getString("id")
-                                                            detailTitle = item.getString("title")
-                                                            detailContent = item.getString("content")
-                                                            detailTime = item.getString("time")
-                                                            detailImg = item.getString("image")
+                                        //게시판 상세
+                                        adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                                            override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+                                                val request = Login_Request(
+                                                    Request.Method.POST,
+                                                    urlDetail,
+                                                    { response ->
+                                                        if(response!="Detail Info Error"){
+                                                            val jsonArray = JSONArray(response)
+                                                            items.clear()
+                                                            for (i in jsonArray.length()-1  downTo  0) {
+                                                                val item = jsonArray.getJSONObject(i)
 
-                                                            val intent = Intent(applicationContext, BoardDetail::class.java)
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                                            intent.putExtra("board", board)
-                                                            intent.putExtra("num", data.num)
-                                                            intent.putExtra("id", id)
-                                                            intent.putExtra("writerId", detailId)
-                                                            intent.putExtra("title", detailTitle)
-                                                            intent.putExtra("content", detailContent)
-                                                            intent.putExtra("time", detailTime)
-                                                            intent.putExtra("image", detailImg)
-                                                            intent.putExtra("userType", userType)
-                                                            intent.putExtra("userDept", userDept)
-                                                            startActivity(intent)
+                                                                detailId = item.getString("id")
+                                                                detailTitle = item.getString("title")
+                                                                detailContent = item.getString("content")
+                                                                detailTime = item.getString("time")
+                                                                detailImg = item.getString("image")
+
+                                                                val intent = Intent(applicationContext, BoardDetail::class.java)
+                                                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                                                intent.putExtra("board", boardSelect)
+                                                                intent.putExtra("num", data.num)
+                                                                intent.putExtra("id", id)
+                                                                intent.putExtra("writerId", detailId)
+                                                                intent.putExtra("title", detailTitle)
+                                                                intent.putExtra("content", detailContent)
+                                                                intent.putExtra("time", detailTime)
+                                                                intent.putExtra("image", detailImg)
+                                                                intent.putExtra("userType", userType)
+                                                                intent.putExtra("userDept", userDept)
+                                                                startActivity(intent)
+                                                            }
+
+
                                                         }
 
-
-                                                    }
-
-                                                }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                                                hashMapOf(
-                                                    "board" to boardSelect,
-                                                    "post_num" to post_num.toString()
+                                                    }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                                                    hashMapOf(
+                                                        "board" to boardSelect,
+                                                        "post_num" to data.num.toString()
+                                                    )
                                                 )
-                                            )
-                                            val queue = Volley.newRequestQueue(applicationContext)
-                                            queue.add(request)
-                                        }
+                                                val queue = Volley.newRequestQueue(applicationContext)
+                                                queue.add(request)
+                                            }
 
-                                    })
-
+                                        })
+                                    }
 
                                 }, { Log.d("login failed", "error......${error(applicationContext)}") },
                                 hashMapOf(
@@ -892,7 +902,8 @@ class Board_profile : AppCompatActivity() {
                                 )
                             )
                             val queue = Volley.newRequestQueue(this)
-                            queue.add(requestScrapBoard)
+                            queue.add(requestCommentBoard)
+
                         }
                     }
 
@@ -906,9 +917,7 @@ class Board_profile : AppCompatActivity() {
             )
         )
         val queue = Volley.newRequestQueue(this)
-        queue.add(requestScrapNum)
-
-
+        queue.add(requestCommentNum)
 
     }
 

@@ -1211,6 +1211,12 @@ class BoardDetail : AppCompatActivity() {
         val post_num = intent?.getIntExtra("num", 0).toString()
 
         val urlDelete = "http://seonho.dothome.co.kr/postDelete.php"
+        val deleteHeart = "http://seonho.dothome.co.kr/heartDeleteOnPost.php"
+        val deleteComment = "http://seonho.dothome.co.kr/commentDeleteOnPost.php"
+        val deleteComment2 = "http://seonho.dothome.co.kr/comment2DeleteOnPost.php"
+        val deleteScrap = "http://seonho.dothome.co.kr/scrapDeleteOnPost.php"
+        val deleteCommentHeart = "http://seonho.dothome.co.kr/deleteCommentHeartDeleteOnPost.php"
+        val deleteCommentHeart2 = "http://seonho.dothome.co.kr/deleteComment2HeartDeleteOnPost.php"
 
         val request = Login_Request(
             Request.Method.POST,
@@ -1222,6 +1228,122 @@ class BoardDetail : AppCompatActivity() {
                         String.format("게시물이 삭제되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    //관련 하트 지우기
+                    val requestDeleteHeart = Login_Request(
+                        Request.Method.POST,
+                        deleteHeart,
+                        { responseHeart ->
+                            if (!responseHeart.equals("update fail")) {
+
+                            } else {
+
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    val queue = Volley.newRequestQueue(this)
+                    queue.add(requestDeleteHeart)
+
+                    //관련 댓글 지우기
+                    val requestDeleteComment = Login_Request(
+                        Request.Method.POST,
+                        deleteComment,
+                        { responseComment ->
+                            if (!responseComment.equals("update fail")) {
+
+                            } else {
+
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    queue.add(requestDeleteComment)
+
+                    //관련 대댓글 지우기
+                    val requestDeleteComment2 = Login_Request(
+                        Request.Method.POST,
+                        deleteComment2,
+                        { responseComment2 ->
+                            if (!responseComment2.equals("update fail")) {
+
+                            } else {
+
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    queue.add(requestDeleteComment2)
+
+                    //관련 북마크 삭제
+                    val requestDeleteScrap = Login_Request(
+                        Request.Method.POST,
+                        deleteScrap,
+                        { responseScrap ->
+                            if (!responseScrap.equals("update fail")) {
+
+                            } else {
+
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    queue.add(requestDeleteScrap)
+
+                    //관련 댓글 좋아요 삭제
+                    val requestDeleteCommentHeart = Login_Request(
+                        Request.Method.POST,
+                        deleteCommentHeart,
+                        { responseCommentHeart ->
+                            if (!responseCommentHeart.equals("update fail")) {
+
+                            } else {
+
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    queue.add(requestDeleteCommentHeart)
+
+                    //관련 대댓글 좋아요 삭제
+                    val requestDeleteCommentHeart2 = Login_Request(
+                        Request.Method.POST,
+                        deleteCommentHeart2,
+                        { responseCommentHeart2 ->
+                            if (!responseCommentHeart2.equals("update fail")) {
+
+                            } else {
+
+                            }
+                        }, { Log.d("lion heart Failed", "error......${error(applicationContext)}") },
+
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    queue.add(requestDeleteCommentHeart2)
+
 
                     var intent = Intent(applicationContext, Board::class.java)
                     intent.putExtra("id", id)
@@ -1599,6 +1721,7 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
+
 
     fun UpdateGrade() {
         val medalurl = "http://seonho.dothome.co.kr/Grade.php"

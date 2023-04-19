@@ -91,6 +91,9 @@
         <activity
             android:name=".BusinessProfileActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".Business_bookmark__profile"
+            android:screenOrientation="portrait" />
 
         <uses-library
             android:name="org.apache.http.params"

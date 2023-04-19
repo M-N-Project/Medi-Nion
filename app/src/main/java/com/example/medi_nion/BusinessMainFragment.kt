@@ -285,8 +285,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                             val image1 = item.getString("image1")
                             val image2 = item.getString("image2")
                             val image3 = item.getString("image3")
-                            val image4 = item.getString("image4")
-                            val image5 = item.getString("image5")
+
 
                             val urlProfile = "http://seonho.dothome.co.kr/BusinessProfile.php"
 
