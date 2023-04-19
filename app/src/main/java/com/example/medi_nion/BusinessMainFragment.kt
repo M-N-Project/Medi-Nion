@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -25,6 +26,7 @@ import com.example.medi_nion.databinding.BusinessBoardRecomBinding
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.business_hot.*
+import org.bytedeco.javacpp.opencv_core.finish
 import org.json.JSONArray
 
 
@@ -43,14 +45,23 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     var imgAdapters = HashMap<Int, BusinessPostImgRecyclerAdapter>()
     var imgItems = ArrayList<BusinessPostImgItem>()
 
-
-
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var myFragment: Fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
        val view =  inflater.inflate(R.layout.business_home, container, false)
+
+        myFragment = this
+
+//        swipeRefreshLayout = view.findViewById(R.id.business_refresh_layout)
+//        swipeRefreshLayout.setOnRefreshListener {
+//            fragmentManager?.beginTransaction()?.detach(myFragment)?.attach(fragment)?.commit()
+//            swipeRefreshLayout.isRefreshing = false
+//        }
+
         BusinessBoardRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardRecyclerView)
         BusinessSubRecycler = view.findViewById<RecyclerView>(R.id.BusinessSubRecycler)
 
@@ -98,6 +109,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         var ft: FragmentTransaction = fragmentManager.beginTransaction()
         ft.detach(fragment).attach(fragment).commit()
     }
+
 
     ////////////////// 인기 채널 가져오는 fetch 함수 //////////////////////////////////////////////////////
     fun fetchHotProfile() {

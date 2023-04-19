@@ -5,7 +5,7 @@
         android:bottomRightRadius="20dp"
         android:topLeftRadius="20dp"
         android:topRightRadius="20dp" />
-    <stroke android:width="2px" android:color="#86C9C6" />
+    <stroke android:width="5px" android:color="#86C9C6" />
     <padding android:left="1px" android:top="1px"
         android:right="1px" android:bottom="1px" />
 </shape>
