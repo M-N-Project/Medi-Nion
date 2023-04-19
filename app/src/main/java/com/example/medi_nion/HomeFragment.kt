@@ -1,6 +1,8 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Outline
 import android.net.Uri
@@ -38,6 +40,7 @@ var qnaItems = java.util.ArrayList<qnaNewItem>()
 
 class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 프레그먼트(게시판 구분은 추후에)
 
+    private lateinit var activity : Activity
     private lateinit var id: String
     private lateinit var nickname: String
     private lateinit var userType: String
@@ -83,6 +86,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             return PagerViewHolder(view)
         }
 
+
         override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
             val safePosition = holder.bindingAdapterPosition
             holder.bind(qnaItem[4 - safePosition])
@@ -109,6 +113,14 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         fetchHotPost()
         fetchNewBusi()
         fetchHotProfile()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if(context is Activity){
+            activity = context as Activity
+        }
     }
 
 
@@ -709,7 +721,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                 "userDept" to userDept
                             )
                         )
-                        val queue = Volley.newRequestQueue(context)
+                        val queue = Volley.newRequestQueue(activity?.applicationContext)
                         queue.add(deptrequest)
 
                     }, { Log.d("hot fetch failed", "error......${activity?.applicationContext}") },
@@ -729,7 +741,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 "userDept" to userDept
             )
         )
-        val queue = Volley.newRequestQueue(context)
+        val queue = Volley.newRequestQueue(activity?.applicationContext)
         queue.add(basicrequest)
 
     }
@@ -811,49 +823,52 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             urlBusiNew,
             { response ->
                 Log.d("비즈니스새소식새소식새소식", response)
-                val jsonArray = JSONArray(response)
-                newBusiItems.clear()
-                for (i in jsonArray.length() - 1 downTo 0) {
-                    val item = jsonArray.getJSONObject(i)
-                    val chanName = item.getString("channel_name")
-                    val writerId = item.getString("id")
-                    val title = item.getString("title")
-                    val content = item.getString("content")
+                if(response != "No NewBusi"){
+                    val jsonArray = JSONArray(response)
+                    newBusiItems.clear()
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
+                        val chanName = item.getString("channel_name")
+                        val writerId = item.getString("id")
+                        val title = item.getString("title")
+                        val content = item.getString("content")
 
-                    val newItem = HomeNewRecyclerItem(chanName, writerId, title, content)
-                    newBusiItems.add(newItem)
+                        val newItem = HomeNewRecyclerItem(chanName, writerId, title, content)
+                        newBusiItems.add(newItem)
+                    }
+
+                    // RecyclerView.Adapter<ViewHolder>()
+                    val adapter2 = HomeNewRecyclerAdapter(newBusiItems)
+                    homeBusiNew.adapter = adapter2
+                    // ViewPager의 Paging 방향은 Horizontal
+                    homeBusiNew.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                    var detailId: String = ""
+                    var detailTitle: String = ""
+                    var detailContent: String = ""
+                    var detailTime: String = ""
+                    var detailImg: String = ""
+
+
+                    //게시판 상세
+                    adapter2.setOnItemClickListener(object : HomeNewRecyclerAdapter.OnItemClickListener {
+                        override fun onItemClick(v: View, data: HomeNewRecyclerItem, pos: Int) {
+                            val intent =
+                                Intent(
+                                    context,
+                                    BusinessProfileActivity::class.java
+                                )
+                            var appUser = arguments?.getString("id").toString()
+                            intent.putExtra("appUser", appUser)
+                            intent.putExtra(
+                                "channel_name",
+                                data.chanName
+                            )
+                            startActivity(intent)
+                        }
+                    })
                 }
 
-                // RecyclerView.Adapter<ViewHolder>()
-                val adapter2 = HomeNewRecyclerAdapter(newBusiItems)
-                homeBusiNew.adapter = adapter2
-                // ViewPager의 Paging 방향은 Horizontal
-                homeBusiNew.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-                var detailId: String = ""
-                var detailTitle: String = ""
-                var detailContent: String = ""
-                var detailTime: String = ""
-                var detailImg: String = ""
-
-
-                //게시판 상세
-                adapter2.setOnItemClickListener(object : HomeNewRecyclerAdapter.OnItemClickListener {
-                    override fun onItemClick(v: View, data: HomeNewRecyclerItem, pos: Int) {
-                        val intent =
-                            Intent(
-                                context,
-                                BusinessProfileActivity::class.java
-                            )
-                        var appUser = arguments?.getString("id").toString()
-                        intent.putExtra("appUser", appUser)
-                        intent.putExtra(
-                            "channel_name",
-                            data.chanName
-                        )
-                        startActivity(intent)
-                    }
-                })
             }, { Log.d("login failed", "error......${activity?.applicationContext}") },
             hashMapOf(
                 "id" to appUser
@@ -1060,7 +1075,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         },
                         hashMapOf()
                     )
-                    val queue = Volley.newRequestQueue(context)
+                    val queue = Volley.newRequestQueue(activity?.applicationContext)
                     queue.add(request)
                 }
             },

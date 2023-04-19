@@ -64,6 +64,11 @@ class BusinessPostImgRecyclerAdapter(private val items: ArrayList<BusinessPostIm
             val pos = absoluteAdapterPosition
             postImg.setOnClickListener {
                 listener?.onImgClick(itemView,item,pos)
+
+                //이미지 띄우기.
+                Log.d("hi", item.imageUrl)
+                val myCustomDialog = MyCustomDialog(view.context, item.imageUrl)
+                myCustomDialog.show()
             }
 
         }
