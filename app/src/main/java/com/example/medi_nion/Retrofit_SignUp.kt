@@ -4,10 +4,11 @@ package com.example.medi_nion
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.*
 import android.graphics.ImageDecoder.ImageInfo
 import android.graphics.Rect
@@ -17,6 +18,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -24,27 +26,23 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.example.medi_nion.Retrofit2_Dataclass.Data_SignUp_Request
-import com.example.medi_nion.Retrofit2_Interface.SignUp_Request
-import com.google.gson.GsonBuilder
 import com.googlecode.tesseract.android.TessBaseAPI
-import com.googlecode.tesseract.android.TessBaseAPI.VAR_CHAR_WHITELIST
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import org.bytedeco.javacpp.tesseract.OEM_LSTM_ONLY
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.*
 import java.lang.reflect.Type
 import java.util.regex.Pattern
@@ -65,6 +63,7 @@ class Retrofit_SignUp : AppCompatActivity() {
     lateinit var idImgView: ImageView
     var photoUri: Uri? = null
     lateinit var bitmap: Bitmap
+    var image : String = "null"
 
     lateinit var tess: TessBaseAPI //Tesseract API 객체 생성
     var dataPath: String = "" //데이터 경로 변수 선언
@@ -76,6 +75,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         OpenCVLoader.initDebug()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("WrongThread", "MissingInflatedId", "LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -223,6 +223,10 @@ class Retrofit_SignUp : AppCompatActivity() {
         var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText)
         var passwdCheck_warning = findViewById<TextView>(R.id.passwdCheck_warning)
 
+        var identity_editText = findViewById<EditText>(R.id.identity_editText)
+        var identity = findViewById<TextView>(R.id.text_result)
+        var identity_check = ""
+
         //닉네임 중복 여부 및 정규식 확인
         val nickname_queue = Volley.newRequestQueue(this)
         Handler(Looper.getMainLooper()).postDelayed({
@@ -340,38 +344,88 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         //비밀번호 확인 먼저 입력하고 비밀번호 입력하면 동일하지 않게 뜬다.... -> 고치기
         //비밀번호 정규식 확인 -> 숫자, 문자, 특수문자 중 2가지 포함(8~15자)
-        passwd_editText.setOnClickListener {
-            passwd_warning.visibility = View.VISIBLE
+        Handler(Looper.getMainLooper()).postDelayed({
+            passwd_editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    passwd_warning.visibility = View.VISIBLE
+                }
 
-            val passwdInput = passwd_editText.text
-            if (!Pattern.matches(
-                    "^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,15}\$",
-                    passwdInput
-                )
-            ) {
-                passwd_warning.setTextColor(Color.RED);
-                passwd_warning.text = "비밀번호 형식이 올바르지 않습니다.\n(숫자, 문자, 특수문자 중 2가지 포함(8~15자))"
-            } else {
-                passwd_warning.setTextColor(Color.parseColor("#85D6A4"))
-                passwd_warning.text = "올바른 비밀번호입니다."
-            }
-
-        }
+                @SuppressLint("SuspiciousIndentation")
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val passwd_editText =
+                        findViewById<EditText>(R.id.passwd_editText).text.toString()
+                    val passwdInput = passwd_editText
+                    if (!Pattern.matches(
+                            "^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,15}\$",
+                            passwdInput
+                        )
+                    ) {
+                        passwd_warning.setTextColor(Color.RED);
+                        passwd_warning.text = "비밀번호 형식이 올바르지 않습니다.\n(숫자, 문자, 특수문자 중 2가지 포함(8~15자))"
+                    } else {
+                        passwd_warning.setTextColor(Color.BLUE)
+                        passwd_warning.text = "올바른 비밀번호입니다."
+                    }
+                }
+                override fun afterTextChanged(s: Editable?) {
+                    nickname_warning.visibility = View.VISIBLE
+                }
+            })
+        }, 2000)
 
         //비밀번호 정확성 확인
-        passwdCheck_editText.setOnClickListener {
-            passwdCheck_warning.visibility = View.VISIBLE
+        Handler(Looper.getMainLooper()).postDelayed({
+            passwdCheck_editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    passwdCheck_warning.visibility = View.VISIBLE
+                }
 
-            val passwdInput = passwd_editText.text.toString()
-            val passwdCheckInput = passwdCheck_editText.text.toString()
-            if (!passwdCheckInput.equals(passwdInput)) {
-                passwdCheck_warning.setTextColor(Color.RED);
-                passwdCheck_warning.text = "비밀번호가 동일하지 않습니다."
-            } else {
-                passwdCheck_warning.setTextColor(Color.parseColor("#85D6A4"));
-                passwdCheck_warning.text = "올바른 비밀번호입니다."
-            }
-        }
+                @SuppressLint("SuspiciousIndentation")
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val passwdCheck_editText =
+                        findViewById<EditText>(R.id.passwdCheck_editText)
+
+                    val passwdInput = passwd_editText.text.toString()
+                    val passwdCheckInput = passwdCheck_editText.text.toString()
+
+                    if (passwdCheckInput != passwdInput) {
+                        passwdCheck_warning.setTextColor(Color.RED)
+                        passwdCheck_warning.text = "비밀번호가 동일하지 않습니다."
+                    } else {
+                        passwdCheck_warning.setTextColor(Color.BLUE)
+                        passwdCheck_warning.text = "올바른 비밀번호입니다."
+                    }
+                }
+                override fun afterTextChanged(s: Editable?) {
+                    passwdCheck_warning.visibility = View.VISIBLE
+                }
+            })
+        }, 2000)
+
+//        passwdCheck_editText.setOnClickListener {
+//            Log.d("passwd", "1")
+//            passwdCheck_warning.visibility = View.VISIBLE
+//
+//            val passwdInput = passwd_editText.text.toString()
+//            val passwdCheckInput = passwdCheck_editText.text.toString()
+//            if (passwdCheckInput != passwdInput) {
+//                passwdCheck_warning.setTextColor(Color.RED)
+//                passwdCheck_warning.text = "비밀번호가 동일하지 않습니다."
+//            } else {
+//                passwdCheck_warning.setTextColor(Color.BLUE)
+//                passwdCheck_warning.text = "올바른 비밀번호입니다."
+//            }
+//        }
 
 
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
@@ -381,6 +435,8 @@ class Retrofit_SignUp : AppCompatActivity() {
                 TextUtils.isEmpty(id_editText.text.toString()) ||
                 TextUtils.isEmpty(passwd_editText.text.toString()) ||
                 TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
+                TextUtils.isEmpty(passwdCheck_editText.text.toString())||
+                TextUtils.isEmpty(identity.text.toString())||
                 (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
             ) {
 
@@ -399,9 +455,8 @@ class Retrofit_SignUp : AppCompatActivity() {
                 }
 
             } else {
-                val url_SignUP = "http://seonho.dothome.co.kr/SignUP.php"
 
-                signUPRequest(url_SignUP)
+                signUPRequest()
 
                 setContentView(R.layout.signup_done)
 
@@ -449,6 +504,7 @@ class Retrofit_SignUp : AppCompatActivity() {
                 idImgView.colorFilter = filter
                 idImgView.setImageURI(photoUri)
 
+
                 doOCR()
 //                if (!OpenCVLoader.initDebug()) {
 //                    Log.d(
@@ -476,6 +532,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun doOCR() {
         try {
             bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -673,6 +730,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 //        }
 //    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun printOCRResult(src: Mat) {
         with(TessBaseAPI()) {
             val result = findViewById<TextView>(R.id.text_result)
@@ -699,16 +757,16 @@ class Retrofit_SignUp : AppCompatActivity() {
             //val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
             val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
             pageSegMode = ocrEngineMode
-            val tessdataDir = File("$filesDir/tesseracts/tessdata/")
-            val engTrainedData = File(tessdataDir, "eng.trained")
-            val korTrainedData = File(tessdataDir, "kor.trained")
+            val tessdataDir = File("$filesDir/tessdata/")
+            val engTrainedData = File(tessdataDir, "eng.traineddata")
+            val korTrainedData = File(tessdataDir, "kor.traineddata")
             if (engTrainedData.exists() && korTrainedData.exists()) {
                 val lang = "kor+eng"
                 setVariable(
                     TessBaseAPI.VAR_CHAR_WHITELIST,
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 )
-                init(filesDir.absolutePath + "/tesseracts", lang)
+                init(filesDir.absolutePath + "/tessdata/", lang)
             } else {
                 Log.e("printOCRResult", "Trained data files are missing")
             }
@@ -717,27 +775,47 @@ class Retrofit_SignUp : AppCompatActivity() {
             //setImage(src)
             //recognize(null)
             setImage(bitmap)
+            bitmap = resize(bitmap)!!
+            image = BitMapToString(bitmap)
             result.text = utF8Text
+
             Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
         }
     }
 
 
-
-
-
-
-
     //db 연동 시작
-    private fun signUPRequest(url: String) {
-        var basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
-        var corpUserBtn = findViewById<RadioButton>(R.id.corpUser_RadioBtn)
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun signUPRequest() {
+        val basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
+        val corpUserBtn = findViewById<RadioButton>(R.id.corpUser_RadioBtn)
 
-        var nickname_editText = findViewById<EditText>(R.id.nickname_editText).text.toString()
-        var id_editText = findViewById<EditText>(R.id.id_editText).text.toString()
-        var passwd_editText = findViewById<EditText>(R.id.passwd_editText).text.toString()
-        var passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
-        var userMedal = 0
+        val nickname = findViewById<EditText>(R.id.nickname_editText).text.toString()
+        val id = findViewById<EditText>(R.id.id_editText).text.toString()
+        val passwd = findViewById<EditText>(R.id.passwd_editText).text.toString()
+        val passwdCheck_editText = findViewById<EditText>(R.id.passwdCheck_editText).text.toString()
+        val userMedal = 0
+        val userGrade = 0
+        val identity = findViewById<EditText>(R.id.identity_editText).text.toString()
+        var identity_opencv = ""
+        val identity_before = findViewById<TextView>(R.id.text_result).text.toString()
+        var identity_check = ""
+        var identity1 = ""
+        var identity2 = ""
+        var idimgView = findViewById<ImageView>(R.id.idImgView)
+        var identity_image1 = ""
+        var identity_image2 = ""
+
+
+        identity_opencv = identity_before.replace("\n", "")
+        identity_opencv = identity_opencv.replace(" ", "")
+        identity1 = identity_opencv.substring(0, identity_opencv.length/2+1)
+        identity2 = identity_opencv.substring(identity_opencv.length/2+1, identity_opencv.length)
+        identity_check = identity_opencv.contains(identity).toString()
+        identity_image1 = image.substring(0,image.length/2+1)
+        identity_image2 = image.substring(image.length/2+1,image.length)
+
+        Log.d("identity", "$identity, $identity_opencv, $identity_check")
 
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
@@ -752,89 +830,162 @@ class Retrofit_SignUp : AppCompatActivity() {
             userDept = "기타"
         }
 
+        //POST 방식으로 db에 데이터 전송
+        //Volley
 
-        val gson = GsonBuilder().setLenient().create()
-        val uri = "http://seonho.dothome.co.kr/"
+        val url = "http://seonho.dothome.co.kr/SignUP.php"
 
-        val retrofit = createOkHttpClient()?.let {
-            Retrofit.Builder()
-                .baseUrl(uri)
-                .addConverterFactory(nullOnEmptyConverterFactory)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(it)
-                .build()
-        }
+        val request = SignUP_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                Log.d("REPSON", response.toString())
+                //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
+                if (passwd == passwdCheck_editText) {
+                    if (!response.equals("SignUP fail")) {
 
-        val server = retrofit?.create(SignUp_Request::class.java)
+                        Log.d("SignUP", "SUCCESS")
 
-        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText, id_editText, passwd_editText, userMedal)
-
-        if (basicUserBtn.isChecked) {
-            if (call != null) {
-                call.clone()
-                    ?.enqueue(object :
-                        Callback<Data_SignUp_Request> {
-                        override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-                            t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
-                            Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<Data_SignUp_Request>,
-                            response: Response<Data_SignUp_Request>
-                        ) {
-                            //if (!response.equals("SignUP fail")) {
-                            Log.d("retrofit1 success", response.toString())
-                            Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                            //}
-                        }
-
-                    })
+                        Toast.makeText(
+                            baseContext,
+                            String.format("가입을 환영합니다. 로그인 해주세요."),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "비밀번호를 다시 확인해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            { Log.d("failed", "error......${error(applicationContext)}") },
+            if(basicUserBtn.isChecked) {
+                hashMapOf(
+                    "id" to id,
+                    "passwd" to passwd,
+                    "nickname" to nickname,
+                    "userType" to basicUserBtn.text.toString(),
+                    "userDept" to userDept,
+                    "identity" to identity,
+                    "identity_opencv1" to identity1,
+                    "identity_opencv2" to identity2,
+                    "identity_check" to identity_check,
+                    "identity_image1" to identity_image1,
+                    "identity_image2" to identity_image2
+                )
+            } else {
+                hashMapOf(
+                    "id" to id,
+                    "passwd" to passwd,
+                    "nickname" to nickname,
+                    "userType" to corpUserBtn.text.toString(),
+                    "userDept" to corpUserBtn.text.toString(),
+                    "identity" to identity,
+                    "identity_opencv1" to identity1,
+                    "identity_opencv2" to identity2,
+                    "identity_check" to identity_check,
+                    "identity_image1" to identity_image1,
+                    "identity_image2" to identity_image2
+                )
             }
-        }
-        else
-        {
-            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
-                id_editText, passwd_editText, userMedal)
-                ?.enqueue(object:
-                    Callback<Data_SignUp_Request> {
-                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
-                        Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
 
-                    override fun onResponse(
-                        call: Call<Data_SignUp_Request>,
-                        response: Response<Data_SignUp_Request>
-                    ) {
-                        Log.d("retrofit2 success", response.toString())
-                        Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                })
-        }
+        )
+        request.retryPolicy = DefaultRetryPolicy(
+            0,
+            -1,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
     }
     //db 연동 끝
 
-    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
-        override fun responseBodyConverter(
-            type: Type,
-            annotations: Array<Annotation>,
-            retrofit: Retrofit
-        ): Converter<ResponseBody, *> {
-            val delegate: Converter<ResponseBody, *> =
-                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
-            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
-        }
-    }
+    //retrofit
+    //        val gson = GsonBuilder().setLenient().create()
+//        val uri = "http://seonho.dothome.co.kr/"
+//
+//        val retrofit = createOkHttpClient()?.let {
+//            Retrofit.Builder()
+//                .baseUrl(uri)
+//                .addConverterFactory(nullOnEmptyConverterFactory)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .client(it)
+//                .build()
+//        }
+//
+//        val server = retrofit?.create(SignUp_Request::class.java)
+//
+//        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText,
+//            id_editText, passwd_editText, userMedal, identity_editText)
+//
+//        if (basicUserBtn.isChecked) {
+//            if (call != null) {
+//                call.clone()
+//                    ?.enqueue(object :
+//                        Callback<Data_SignUp_Request> {
+//                        override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+//                            t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
+//                            Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+//                        }
+//
+//                        override fun onResponse(
+//                            call: Call<Data_SignUp_Request>,
+//                            response: Response<Data_SignUp_Request>
+//                        ) {
+//                            //if (!response.equals("SignUP fail")) {
+//                            Log.d("retrofit1 success", response.toString())
+//                            Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT).show()
+////                            Log.d("IDENTITY", image)
+//                        }
+//
+//                    })
+//            }
+//        }
+//        else
+//        {
+//            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
+//                id_editText, passwd_editText, userMedal, identity_editText)
+//                ?.enqueue(object:
+//                    Callback<Data_SignUp_Request> {
+//                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
+//                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
+//                        Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+//                    }
+//
+//                    override fun onResponse(
+//                        call: Call<Data_SignUp_Request>,
+//                        response: Response<Data_SignUp_Request>
+//                    ) {
+//                        Log.d("retrofit2 success", response.toString())
+//                        Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT)
+//                            .show()
+//                        Log.d("IDENTITY12", identity_opencv)
+//                    }
+//                })
+//        }
+//    }
 
-    private fun createOkHttpClient(): OkHttpClient? {
-        val builder = OkHttpClient.Builder()
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
-        builder.addInterceptor(interceptor)
-        return builder.build()
-    }
+//    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
+//        override fun responseBodyConverter(
+//            type: Type,
+//            annotations: Array<Annotation>,
+//            retrofit: Retrofit
+//        ): Converter<ResponseBody, *> {
+//            val delegate: Converter<ResponseBody, *> =
+//                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
+//            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
+//        }
+//    }
+//
+//    private fun createOkHttpClient(): OkHttpClient? {
+//        val builder = OkHttpClient.Builder()
+//        val interceptor = HttpLoggingInterceptor()
+//        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+//        builder.addInterceptor(interceptor)
+//        return builder.build()
+//    }
 
     private fun copyFile(lang: String) {
         try {
@@ -960,6 +1111,35 @@ class Retrofit_SignUp : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun BitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
+        val arr = baos.toByteArray()
+        val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
+//        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
+//        val image: ByteArray? = Base64.encode(arr,0)
+//        val image: String = getEncoder(arr)
+        var temp = ""
+        try {
+            //temp = URLEncoder.encode(image, "utf-8")
+        } catch (e: Exception) {
+            Log.e("exception", e.toString())
+        }
+        return base64Image
+    }
+
+    private fun resize(bitmap: Bitmap): Bitmap? {
+        var bitmap: Bitmap? = bitmap
+        val config: Configuration = Resources.getSystem().configuration
+        var bitmap_width : Int? = bitmap?.width
+        var bitmap_height : Int? = bitmap?.height
+
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
+        Log.d("please", "$bitmap_height, $bitmap_width")
+        return bitmap
     }
 
 }

@@ -159,6 +159,28 @@
         android:text=""
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/identity_textView"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="주민등록번호 확인"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/identity_editText"
+        android:layout_width="326dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:ems="5"
+        android:hint="예시) 123456-1234567"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColor="#676767" />
+
     <Button
         android:id="@+id/id_verify_btn"
         android:layout_width="match_parent"
