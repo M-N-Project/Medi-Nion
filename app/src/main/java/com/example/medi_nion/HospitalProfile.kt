@@ -3,8 +3,13 @@ package com.example.medi_nion
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.example.medi_nion.databinding.HospitalProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -20,6 +25,8 @@ class HospitalProfile : AppCompatActivity() {
 
         initViewPager()
     }
+
+
 
     private fun initViewPager() { //병원 프로필 액티비티 속 병원정보, 채용정보, 병원리뷰 프레그먼트 연결, viewpage2 adapter로
         //ViewPager2 Adapter 셋팅
@@ -47,4 +54,5 @@ class HospitalProfile : AppCompatActivity() {
             }
         }.attach()
     }
+
 }

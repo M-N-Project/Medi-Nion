@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import kotlinx.android.synthetic.main.business_create_home1.view.*
 import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
@@ -525,6 +526,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 createBusinessChan_btn1.adapter = adapter2
                 // ViewPager의 Paging 방향은 Horizontal
                 createBusinessChan_btn1.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                //중첩 ViewPager이므로 스크롤 가능하게하기
+                //createBusinessChan_btn1.isNestedScrollingEnabled = true
 
                 var detailId: String = ""
                 var detailTitle: String = ""

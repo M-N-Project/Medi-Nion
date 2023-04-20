@@ -6,11 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/big_ad_viewPager2"
+    <com.example.medi_nion.NestedScrollableHost
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/big_ad_viewPager2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </com.example.medi_nion.NestedScrollableHost>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
