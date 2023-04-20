@@ -108,6 +108,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
+
+        <meta-data
+            android:name="saramin_api_key"
+            android:value="jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" />
+
     </application>
 
 </manifest>
