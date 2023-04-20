@@ -2,13 +2,19 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
 import java.util.*
 
@@ -125,6 +131,55 @@ class Calendar_Add : AppCompatActivity() {
     private fun setColor(@ColorInt color: Int) {
         val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
         color_picker.backgroundTintList = ColorStateList.valueOf(color)
+    }
+
+    private fun CalendarRequest() {
+        val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
+
+        val request = Upload_Request(
+            Request.Method.POST,
+            postUrl,
+            { response ->
+                if (!response.equals("calendar fail")) {
+                    Toast.makeText(
+                        baseContext,
+                        String.format("일정이 등록되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    var intent = Intent(applicationContext, CalendarFragment::class.java)
+
+
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                    startActivity(intent)
+
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "게시물 업로드가 실패했습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            { Log.d("failed", "error......${error(applicationContext)}") },
+            mutableMapOf(
+//                "id" to id,
+//                "schedule_name" to board_select,
+//                "schedule_date" to userType,
+//                "schedule_start" to userDept,
+//                "schedule_end" to postTitle,
+//                "schedule_color" to postContent,
+//                "isDone" to img1
+            )
+        )
+        request.retryPolicy = DefaultRetryPolicy(
+            0,
+            -1,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
     }
 
 }
