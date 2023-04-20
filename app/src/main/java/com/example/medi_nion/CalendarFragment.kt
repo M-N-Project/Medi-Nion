@@ -1,7 +1,9 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
@@ -12,12 +14,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
+import kotlinx.android.synthetic.main.board_home.*
+import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,26 +67,25 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             if(makeEventRadiogroup.visibility == View.VISIBLE)
                 makeEventRadiogroup.visibility = View.GONE
             else makeEventRadiogroup.visibility = View.VISIBLE
-            
+
+            makeEventScheduleRadioBtn.bringToFront()
+            makeEventButtonRadioBtn.bringToFront()
+
             //새로운 일정 만들기
             makeEventScheduleRadioBtn.setOnClickListener{
-                
+                Log.d("90182312", "click")
             }
             //커스터마이징 일정 버튼 만들기
             makeEventButtonRadioBtn.setOnClickListener{
-
+                Log.d("90182312", "click")
             }
-
         }
-
         return view
-
     }
 
     //오늘 날짜의 디자인 변경
     inner class TodayDecorator : DayViewDecorator {
         private var date = CalendarDay.today()
-
 
         override fun shouldDecorate(day: CalendarDay?): Boolean {
             return day?.equals(date)!!
@@ -131,6 +137,47 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         }
         override fun decorate(view: DayViewFacade?) {
             view?.addSpan(object: ForegroundColorSpan(Color.RED){})
+        }
+    }
+
+    private fun fetchEvents(){
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun fetchData() {
+            // url to post our data
+            val id = arguments?.getString("id")
+
+            val urlBoard = "http://seonho.dothome.co.kr/Events.php"
+
+            val request = Board_Request(
+                Request.Method.POST,
+                urlBoard,
+                { response ->
+                    val jsonArray = JSONArray(response)
+                    items.clear()
+
+                    for (i in jsonArray.length()-1  downTo  0) {
+
+                    }
+//                    var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+//                    var new_items = ArrayList<BoardItem>()
+//                    new_items.addAll(items)
+//                    adapter = BoardListAdapter(new_items)
+//                    boardRecyclerView.adapter = adapter
+//                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+//                    boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+
+
+                }, { Log.d("login failed",
+                    "error......${context?.let { it1 -> error(it1) }}") },
+                hashMapOf(
+                    "id" to id.toString()
+                )
+            )
+
+            val queue = Volley.newRequestQueue(context)
+            queue.add(request)
+
         }
     }
 }
