@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -23,15 +22,12 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
-import com.prolificinteractive.materialcalendarview.format.TitleFormatter
-import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
-import java.text.SimpleDateFormat
 import java.util.*
 
 
 class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,)
-    private lateinit var CalendarRecyclerView : RecyclerView
+    private lateinit var calendarRecyclerView : RecyclerView
     var items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
 
@@ -42,8 +38,13 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.calendar, container, false)
 
-        CalendarRecyclerView = view.findViewById(R.id.calendarRecyclerView)
-        CalendarRecyclerView.adapter = adapter
+
+        calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView)
+        adapter = CalendarRecyclerAdapter(items)
+        calendarRecyclerView.adapter = adapter
+
+        fetchEvents(CalendarDay.today())
+
         //CalendarDay.today()를 가지고와서 오늘 날짜에 맞는 일정 가져와서 adapter 붙여주고 시작하기.
 
         val calendar = view.findViewById<MaterialCalendarView>(R.id.calendarView)
@@ -108,6 +109,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         ) {
 
             Log.d("hihiDate", date.toString())
+            fetchEvents(date)
 
         }
 
@@ -142,45 +144,72 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         }
     }
 
-    private fun fetchEvents(){
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun fetchData() {
-            // url to post our data
-            val id = arguments?.getString("id")
+    private fun fetchEvents(day : CalendarDay){
+        // url to post our data
+        val id = arguments?.getString("id").toString()
 
-            val urlBoard = "http://seonho.dothome.co.kr/Events.php"
+        val urlBoard = "http://seonho.dothome.co.kr/Events.php"
 
-            val request = Board_Request(
-                Request.Method.POST,
-                urlBoard,
-                { response ->
+        val year = day.toString().substring(12,16)
+        var month = day.toString().substring(17,19)
+        var date = ""
+        if(month.substring(1,2) == "-"){
+            month = "0${(day.toString().substring(17,18)).toInt() + 1}"
+            date = day.toString().substring(19,21)
+
+            if(date.substring(1,2) == "}")
+                date = "0${day.toString().substring(19,20)}"
+        }
+        else{
+            month = (month.toInt()+1).toString()
+            date = day.toString().substring(20,22)
+
+            if(date.substring(1,2) == "}")
+                date = "0${day.toString().substring(20, 21)}"
+        }
+
+
+        Log.d("stringdate", "$id , $year , $month, $date")
+
+        val presentDate = "$year-$month-$date"
+
+        val request = Board_Request(
+            Request.Method.POST,
+            urlBoard,
+            { response ->
+                Log.d("responae", response)
+                if(response != "Event fetch Fail"){
                     val jsonArray = JSONArray(response)
                     items.clear()
 
-                    for (i in jsonArray.length()-1  downTo  0) {
+                    for (i in 0  until  jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
 
+                        val schedule_name = item.getString("schedule_name")
+                        val schedule_start = item.getString("schedule_start")
+                        val schedule_end = item.getString("schedule_end")
+                        val isDone = item.getString("isDone")
+
+                        val CalendarItem = CalendarItem(id, schedule_name, schedule_start, schedule_end, "#85AFD6", if(isDone == "0") false else true)
+                        items.add(CalendarItem)
                     }
-//                    var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-//                    var new_items = ArrayList<BoardItem>()
-//                    new_items.addAll(items)
-//                    adapter = BoardListAdapter(new_items)
-//                    boardRecyclerView.adapter = adapter
-//                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-//                    boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                    adapter = CalendarRecyclerAdapter(items)
+                    calendarRecyclerView.adapter = adapter
+                }
 
 
-
-                }, { Log.d("login failed",
-                    "error......${context?.let { it1 -> error(it1) }}") },
-                hashMapOf(
-                    "id" to id.toString()
-                )
+            }, { Log.d("login failed",
+                "error......${context?.let { it1 -> error(it1) }}") },
+            hashMapOf(
+                "id" to id,
+                "date" to presentDate
             )
+        )
 
-            val queue = Volley.newRequestQueue(context)
-            queue.add(request)
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
 
-        }
+
     }
 }
 

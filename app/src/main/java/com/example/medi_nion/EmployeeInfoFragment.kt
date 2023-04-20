@@ -18,7 +18,7 @@ private const val saraminApiEndpoint = "/job-search"
 private const val saraminApiKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway"
 
 class EmployeeInfoFragment : Fragment() {
-    private var _binding: EmployeeInfoBinding? = null
+    private var _binding: EmployeeInfoBinding?   = null
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
@@ -48,19 +48,30 @@ class EmployeeInfoFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e("Saramin API", "Failed to execute request", e)
             }
-
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                     val responseBody = response.body?.string()
+                    Log.d("Saramin API", "Response body: $responseBody")
                     val jsonObject = JSONObject(responseBody)
-
-                    // Parse JSON data and update UI components as needed
-                    binding.textView2.text = jsonObject.getJSONArray("jobs").getJSONObject(0).getString("position")
+                    val jobsArray = jsonObject.optJSONArray("jobs")
+                    if (jobsArray != null && jobsArray.length() > 0) {
+                        val jobObject = jobsArray.optJSONObject(0)
+                        val position = jobObject?.optString("position")
+                       //if (position != null) {
+                            // Update UI component with position value from the main thread
+                            activity?.runOnUiThread {
+                                binding.textView3.setText(position)
+                            }
+                        //}
+                    }
                 }
             }
-        })
-    }
 
+
+        })
+
+
+    }
 }
