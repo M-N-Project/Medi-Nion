@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
@@ -63,7 +65,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             
             //새로운 일정 만들기
             makeEventScheduleRadioBtn.setOnClickListener{
-                
+                val intent = Intent(context, Schedule_Add::class.java)
+                startActivity(intent)
             }
             //커스터마이징 일정 버튼 만들기
             makeEventButtonRadioBtn.setOnClickListener{
