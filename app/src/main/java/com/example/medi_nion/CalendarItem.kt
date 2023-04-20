@@ -6,8 +6,9 @@ import android.widget.ImageView
 
 class CalendarItem(
     val id : String,
-    val title : String,
-    val time : String,
+    val schedule_name : String,
+    val schedule_start : String,
+    val schedule_end : String,
     val color : String,
     val isDone : Boolean
     ) {

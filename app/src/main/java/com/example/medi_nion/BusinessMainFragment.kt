@@ -70,8 +70,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         return view
     }
 
-    var appUser = ""
-
     var num = 0 //비즈니스 채널 번호
     var writerId = ""
     var channel_name = ""
