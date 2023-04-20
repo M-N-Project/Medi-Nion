@@ -1,30 +1,17 @@
 package com.example.medi_nion
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Outline
-import android.media.Image
-import android.os.Build
-import android.util.Base64
-import android.util.Log
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.android.volley.Request
-import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_board_item.view.*
 
 class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
     RecyclerView.Adapter<CalendarRecyclerAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-
+        fun onEventClick(v:View, data: CalendarItem, pos:Int)
     }
 
     private var listener: OnItemClickListener? = null
@@ -49,9 +36,27 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
     }
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val calendarLinear = v.findViewById<LinearLayout>(R.id.linearLayout_calendar)
+        val color = v.findViewById<ImageView>(R.id.color)
+        val schedule_name = v.findViewById<TextView>(R.id.titleName)
+        val schedule_time = v.findViewById<TextView>(R.id.time)
+        val isDone = v.findViewById<CheckBox>(R.id.calendarCheckBox)
         fun bind(item: CalendarItem) {
             //뒤는 item class 변수명을 입력하면 된다,,,
 
+            schedule_name.text = item.schedule_name
+
+            val startTime = item.schedule_start.substring(0,5)
+            val endTime = item.schedule_end.substring(0,5)
+            schedule_time.text = "$startTime ~ $endTime"
+
+            color.setColorFilter(Color.parseColor(item.color))
+
+            isDone.isChecked = item.isDone
+
+            calendarLinear.setOnClickListener{
+//                listener?.onEventClick(itemView,item,pos)
+            }
 
         }
     }

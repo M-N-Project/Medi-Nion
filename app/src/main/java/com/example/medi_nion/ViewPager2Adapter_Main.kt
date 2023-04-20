@@ -40,7 +40,13 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 menuFragment.arguments = bundle
                 return menuFragment
             }
-            2 -> CalendarFragment()
+            2 -> {
+                val calendarMainFragment = CalendarFragment()
+                val bundle = Bundle()
+                bundle.putString("id", id)
+                calendarMainFragment.arguments = bundle
+                return calendarMainFragment
+            }
             3 -> {
                 val businessMainFragment = BusinessMainFragment()
                 val bundle = Bundle()
