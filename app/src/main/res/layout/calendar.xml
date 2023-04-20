@@ -13,7 +13,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:mcv_selectionColor="#85D6A4"
-        app:mcv_showOtherDates="all" />
+        app:mcv_showOtherDates="all"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 <!--        app:mcv_selectionMode="range"/>-->
 
     <ScrollView
@@ -28,6 +30,7 @@
             android:id="@+id/calendarRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/calendar_item"/>
     </ScrollView>
 
