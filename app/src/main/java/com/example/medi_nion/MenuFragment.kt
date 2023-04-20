@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
@@ -562,7 +561,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         }
 
         scheduleBtn.setOnClickListener {
-            val scheduleFragment = ScheduleFragment()
+            val scheduleFragment = CalendarFragment()
             fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, scheduleFragment)?.commit()
         }
 

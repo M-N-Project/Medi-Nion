@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mcv_selectionColor="#85D6A4"
+        app:mcv_showOtherDates="all" />
+<!--        app:mcv_selectionMode="range"/>-->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeEvent"
+        android:layout_width="50dp"
+        android:layout_height="81dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="35dp"
+        android:backgroundTint="#8BE0C4"
+        android:clickable="true"
+        app:maxImageSize="25dp"
+        android:elevation="8dp"
+        android:src="@drawable/plus"
+        app:borderWidth="0dp"
+        app:fabCustomSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@null"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <RadioGroup
+        android:id="@+id/select_RadioGroup_MakeEvent"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/selector_radio_button_group"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/makeEvent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <RadioButton
+            android:id="@+id/schedule_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_top"
+            android:button="@null"
+            android:text="새로운 일정 만들기"
+            android:textAlignment="center" />
+
+
+        <RadioButton
+            android:id="@+id/customBtn_RadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/selector_radio_button_bottom"
+            android:button="@null"
+            android:text="일정 버튼 만들기"
+            android:textAlignment="center" />
+
+    </RadioGroup>
+
+    <ScrollView
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calendarRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/calendar_item"/>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
