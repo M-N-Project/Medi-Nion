@@ -2,18 +2,26 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import dev.sasikanth.colorsheet.ColorSheet
 import java.util.*
 
-class Schedule_Add : AppCompatActivity() {
+class Calendar_Add : AppCompatActivity() {
+    private var selectedColor: Int = ColorSheet.NO_COLOR
+    companion object {
+        private const val COLOR_SELECTED = "selectedColor"
+    }
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.schedule_add)
+        setContentView(R.layout.calendar_add)
 
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
         val start_result = findViewById<TextView>(R.id.start_result)
@@ -21,6 +29,8 @@ class Schedule_Add : AppCompatActivity() {
         val day_night1 = findViewById<TextView>(R.id.day_night1)
         val day_night2 = findViewById<TextView>(R.id.day_night2)
         val end = findViewById<LinearLayout>(R.id.end_time_linear)
+
+        val color = findViewById<Button>(R.id.schedule_color_imageView)
 
         val calender = Calendar.getInstance()
         var startString = ""
@@ -92,6 +102,29 @@ class Schedule_Add : AppCompatActivity() {
             dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog1.show()
         }
+
+        color.setOnClickListener {
+            setupColorSheet()
+        }
+    }
+
+    private fun setupColorSheet() {
+        val colors = resources.getIntArray(R.array.colors)
+        ColorSheet().cornerRadius(8)
+            //colorPicker 설정
+            .colorPicker(
+                colors = colors,
+                selectedColor = selectedColor,
+                listener = { color ->
+                    selectedColor = color
+                    setColor(selectedColor)
+                })
+            .show(supportFragmentManager)
+    }
+
+    private fun setColor(@ColorInt color: Int) {
+        val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
+        color_picker.backgroundTintList = ColorStateList.valueOf(color)
     }
 
 }

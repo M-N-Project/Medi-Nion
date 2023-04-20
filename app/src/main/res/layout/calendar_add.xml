@@ -141,13 +141,15 @@
                 android:gravity="center"
                 android:text="색상"
                 android:textSize="20sp"/>
-            <ImageView
-                android:id="@+id/imageView2"
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/schedule_color_imageView"
                 android:layout_width="25dp"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="13dp"
-                android:layout_marginLeft="310dp"
-                app:srcCompat="@drawable/schedule_color" />
+                android:layout_marginLeft="300dp"
+                android:backgroundTint="#ABA7A7"
+                android:background="@drawable/calendar_color"/>
 
         </LinearLayout>
 
