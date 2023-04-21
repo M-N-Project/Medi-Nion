@@ -38,7 +38,10 @@ android {
     //새로고침
 }
 
+
 dependencies {
+    implementation "dev.sasikanth:colorsheet:1.0.1"
+
     implementation 'com.android.volley:volley:1.2.1'
 
 
