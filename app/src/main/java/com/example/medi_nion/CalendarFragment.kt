@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
@@ -53,6 +52,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         val makeEventScheduleRadioBtn= view.findViewById<RadioButton>(R.id.schedule_RadioBtn)
         val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
+        val id = arguments?.getString("id").toString()
+
         calendar.setSelectedDate(CalendarDay.today())
         calendar.apply {
             //캘린더 오늘 날짜 -> 원 색상 변경, 글씨 크기 변경
@@ -75,7 +76,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
             //새로운 일정 만들기
             makeEventScheduleRadioBtn.setOnClickListener{
-                val intent = Intent(context, Schedule_Add::class.java)
+                val intent = Intent(context, Calendar_Add::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("date", CalendarDay.today().toString())
                 startActivity(intent)
             }
             //커스터마이징 일정 버튼 만들기
