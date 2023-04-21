@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
@@ -148,6 +149,8 @@ class Calendar_Add : AppCompatActivity() {
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
+        val spinner = findViewById<Spinner>(R.id.alarm_spinner)
+        var alarm = spinner.selectedItem.toString()
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo).text.toString()
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
@@ -189,6 +192,7 @@ class Calendar_Add : AppCompatActivity() {
                 "schedule_start" to start_result,
                 "schedule_end" to end_result,
                 "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
+                "schedule_alarm" to alarm,
                 "schedule_memo" to schedule_memo,
                 "isDone" to "0"
             )

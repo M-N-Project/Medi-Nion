@@ -179,21 +179,35 @@
                 android:text="알람"
                 android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/schedule_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:layout_marginTop="15dp"
-                android:text="없음"
-                android:textSize="16sp"/>
+<!--            <TextView-->
+<!--                android:id="@+id/schedule_alarm"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:text="설정 안함"-->
+<!--                android:textSize="16sp"/>-->
 
             <Spinner
                 android:id="@+id/alarm_spinner"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_width="130dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
                 android:layout_weight="0"
-                android:layout_marginTop="15dp" />
+                android:spinnerMode="dropdown"
+                android:ems="5"
+                android:entries="@array/times"
+                />
+
+<!--            <Spinner-->
+<!--                android:id="@+id/alarm_spinner"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:spinnerMode="dropdown"-->
+<!--                android:ems="1"-->
+<!--                android:entries="@array/times"/>-->
 
         </LinearLayout>
 
