@@ -63,7 +63,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         calendar.setOnDateChangedListener(MyDaySelected())
         DateFormatTitleFormatter()
 
-        
+
         //스케줄 만들기
         makeEventBtn.setOnClickListener{
             if(makeEventRadiogroup.visibility == View.VISIBLE)
@@ -83,6 +83,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 Log.d("90182312", "click")
             }
         }
+
         return view
     }
 
@@ -168,16 +169,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 date = "0${day.toString().substring(20, 21)}"
         }
 
-
-        Log.d("stringdate", "$id , $year , $month, $date")
-
         val presentDate = "$year-$month-$date"
 
         val request = Board_Request(
             Request.Method.POST,
             urlBoard,
             { response ->
-                Log.d("responae", response)
                 if(response != "Event fetch Fail"){
                     val jsonArray = JSONArray(response)
                     items.clear()
@@ -195,6 +192,15 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                     }
                     adapter = CalendarRecyclerAdapter(items)
                     calendarRecyclerView.adapter = adapter
+
+                    adapter.setOnItemClickListener(object :
+                        CalendarRecyclerAdapter.OnItemClickListener {
+                        override fun onEventClick(v: View, data: CalendarItem, pos: Int) {
+                            //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
+                            showProfileDialog(data.schedule_name)
+                        }
+
+                    })
                 }
 
 
@@ -210,6 +216,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         queue.add(request)
 
 
+    }
+
+    private fun showProfileDialog(schedule_name : String) {
+        CalendarDialog(requireContext(), schedule_name ).show()
     }
 }
 

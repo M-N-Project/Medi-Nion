@@ -25,7 +25,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
 
     override fun onBindViewHolder(holder: CalendarRecyclerAdapter.ViewHolder, position: Int) {
         val safePosition = holder.absoluteAdapterPosition
-        holder.bind(items[position])
+        holder.bind(items[position], position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
@@ -41,7 +41,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
         val schedule_name = v.findViewById<TextView>(R.id.titleName)
         val schedule_time = v.findViewById<TextView>(R.id.time)
         val isDone = v.findViewById<CheckBox>(R.id.calendarCheckBox)
-        fun bind(item: CalendarItem) {
+        fun bind(item: CalendarItem, pos : Int) {
             //뒤는 item class 변수명을 입력하면 된다,,,
 
             schedule_name.text = item.schedule_name
@@ -55,7 +55,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
             isDone.isChecked = item.isDone
 
             calendarLinear.setOnClickListener{
-//                listener?.onEventClick(itemView,item,pos)
+                listener?.onEventClick(itemView,item,pos)
             }
 
         }
