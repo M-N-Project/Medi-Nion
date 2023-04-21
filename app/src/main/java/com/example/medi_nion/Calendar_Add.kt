@@ -6,16 +6,14 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
+import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import java.util.*
 
 class Calendar_Add : AppCompatActivity() {
@@ -29,12 +27,17 @@ class Calendar_Add : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.calendar_add)
 
+        val id = intent?.getStringExtra("id")
+        val date = intent?.getStringExtra("date")
+        Log.d("ID", id.toString())
+
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
         val start_result = findViewById<TextView>(R.id.start_result)
         val end_result = findViewById<TextView>(R.id.end_result)
         val day_night1 = findViewById<TextView>(R.id.day_night1)
         val day_night2 = findViewById<TextView>(R.id.day_night2)
         val end = findViewById<LinearLayout>(R.id.end_time_linear)
+        val schedule_btn = findViewById<Button>(R.id.schedule_btn)
 
         val color = findViewById<Button>(R.id.schedule_color_imageView)
 
@@ -112,6 +115,10 @@ class Calendar_Add : AppCompatActivity() {
         color.setOnClickListener {
             setupColorSheet()
         }
+
+        schedule_btn.setOnClickListener {
+            CalendarRequest()
+        }
     }
 
     private fun setupColorSheet() {
@@ -131,27 +138,40 @@ class Calendar_Add : AppCompatActivity() {
     private fun setColor(@ColorInt color: Int) {
         val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
         color_picker.backgroundTintList = ColorStateList.valueOf(color)
+        Log.d("COLOE", ColorSheetUtils.colorToHex(color))
     }
 
     private fun CalendarRequest() {
+        val id = intent?.getStringExtra("id").toString()
+        var date = intent?.getStringExtra("date").toString()
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
+        val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
+        var start_result = findViewById<TextView>(R.id.start_result).text.toString()
+        var end_result = findViewById<TextView>(R.id.end_result).text.toString()
+        val schedule_memo = findViewById<EditText>(R.id.schedule_memo).text.toString()
+        start_result = start_result.replace(" ", "")
+        end_result = end_result.replace(" ", "")
+
+        date = date.substring(12 until 21)
 
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
             { response ->
-                if (!response.equals("calendar fail")) {
+                Log.d("CDCD", response.toString())
+                if (!response.equals("schedule fail")) {
                     Toast.makeText(
                         baseContext,
                         String.format("일정이 등록되었습니다."),
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    var intent = Intent(applicationContext, CalendarFragment::class.java)
+                    val calendarfragment = CalendarFragment()
+                    val bundle = Bundle()
+                    bundle.putString("id", id)
+                    bundle.putString("date", date)
+                    calendarfragment.arguments = bundle
 
-
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                    startActivity(intent)
 
                 } else {
                     Toast.makeText(
@@ -163,13 +183,14 @@ class Calendar_Add : AppCompatActivity() {
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
             mutableMapOf(
-//                "id" to id,
-//                "schedule_name" to board_select,
-//                "schedule_date" to userType,
-//                "schedule_start" to userDept,
-//                "schedule_end" to postTitle,
-//                "schedule_color" to postContent,
-//                "isDone" to img1
+                "id" to id,
+                "schedule_name" to schedule_title,
+                "schedule_date" to date,
+                "schedule_start" to start_result,
+                "schedule_end" to end_result,
+                "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
+                "schedule_memo" to schedule_memo,
+                "isDone" to "0"
             )
         )
         request.retryPolicy = DefaultRetryPolicy(
