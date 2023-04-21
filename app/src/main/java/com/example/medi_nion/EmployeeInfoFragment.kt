@@ -54,24 +54,31 @@ class EmployeeInfoFragment : Fragment() {
 
                     val responseBody = response.body?.string()
                     Log.d("Saramin API", "Response body: $responseBody")
+
                     val jsonObject = JSONObject(responseBody)
+                    jsonObject.put("access-key", "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway")
+                    jsonObject.put("keyword", "의료")
+                    Log.d("qwerqwerqwer", "$jsonObject")
+
                     val jobsArray = jsonObject.optJSONArray("jobs")
+                    Log.d("qazqaz", "$jobsArray")
                     if (jobsArray != null && jobsArray.length() > 0) {
                         val jobObject = jobsArray.optJSONObject(0)
+                        Log.d("Saramin API1", "$jobsArray")
                         val position = jobObject?.optString("position")
-                       //if (position != null) {
+                        if (position != null) {
                             // Update UI component with position value from the main thread
                             activity?.runOnUiThread {
                                 binding.textView3.setText(position)
                             }
-                        //}
+                        } else {
+                            Log.d("Saramin API1", "$jobsArray")
+                        }
+                    } else {
+                        Log.d("Saramin API1", "jobsArray is null or empty")
                     }
                 }
             }
-
-
         })
-
-
     }
 }
