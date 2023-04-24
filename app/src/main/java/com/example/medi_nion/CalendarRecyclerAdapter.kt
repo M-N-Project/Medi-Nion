@@ -1,10 +1,12 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,8 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.calendar_item.view.*
 
 
@@ -63,13 +67,45 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
             val drawable = ContextCompat.getDrawable(this.itemView.context, R.drawable.calendar_color_oval)
 //            drawable?.setTint(Color.parseColor(item.color))
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(item.color), BlendMode.SRC_ATOP)
+                drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(item.schedule_color), BlendMode.SRC_ATOP)
             } else {
-                drawable!!.setColorFilter(Color.parseColor(item.color), PorterDuff.Mode.SRC_ATOP)
+                drawable!!.setColorFilter(Color.parseColor(item.schedule_color), PorterDuff.Mode.SRC_ATOP)
             }
             color.background = drawable
 
-            isDone.isChecked = item.isDone
+            Log.d("91027312", "${isDone.isChecked}// ${item.schedule_isDone}")
+            isDone.isChecked = item.schedule_isDone
+
+            isDone.setOnCheckedChangeListener{ _ , isChecked ->
+                val updateScheduleDoneUrl = "http://seonho.dothome.co.kr/updateCalendarDone.php"
+
+                val request = Upload_Request(
+                    Request.Method.POST,
+                    updateScheduleDoneUrl,
+                    { response ->
+                        Log.d("CDCD", response.toString())
+                        if (!response.equals("schedule update fail")) {
+
+
+                        } else {
+
+                        }
+                    },
+                    { Log.d("failed", "error......${error(this.itemView.context)}") },
+                    mutableMapOf(
+                        "id" to item.id,
+                        "schedule_name" to item.schedule_name,
+                        "schedule_date" to item.schedule_date,
+                        "schedule_start" to item.schedule_start,
+                        "isDone" to isDone.isChecked.toString()
+                    )
+                )
+
+
+                val queue = Volley.newRequestQueue(this.itemView.context)
+                queue.add(request)
+            }
+
 
             calendarLinear.setOnClickListener{
                 listener?.onEventClick(itemView,item,pos)
