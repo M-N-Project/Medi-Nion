@@ -134,14 +134,18 @@ class Calendar_Add : AppCompatActivity() {
                 listener = { color ->
                     selectedColor = color
                     setColor(selectedColor)
+
                 })
             .show(supportFragmentManager)
+        Log.d("018321",selectedColor.toString())
+
     }
 
     private fun setColor(@ColorInt color: Int) {
         val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
         color_picker.backgroundTintList = ColorStateList.valueOf(color)
-        Log.d("COLOE", ColorSheetUtils.colorToHex(color))
+
+        Log.d("COLOE", color.toString())
     }
 
     private fun CalendarRequest() {

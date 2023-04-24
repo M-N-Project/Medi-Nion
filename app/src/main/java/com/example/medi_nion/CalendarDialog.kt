@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 
 class CalendarDialog : Dialog {
     var schedule_item : CalendarItem
@@ -34,7 +35,7 @@ class CalendarDialog : Dialog {
 
         editText_scheduleName.setText(schedule_item.schedule_name)
 
-        schedule_color_view.setColorFilter(Color.parseColor(schedule_item.color))
+        schedule_color_view.setColorFilter(schedule_item.color)
 
         schedule_alarm.setText(schedule_item.alarm)
 
