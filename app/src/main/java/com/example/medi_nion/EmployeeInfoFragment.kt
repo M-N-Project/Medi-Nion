@@ -26,7 +26,7 @@ class EmployeeInfoFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway2023" // 발급받은 accessKey"
+        val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" // 발급받은 accessKey"
         val text = URLEncoder.encode("http://seonho.dothome.co.kr/EmployeeInfo.php", "UTF-8")
         val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=$accessKey&keyword=$text"
 
@@ -37,28 +37,31 @@ class EmployeeInfoFragment : Fragment() {
     private inner class ApiTask : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg urls: String?): String {
-            val url = URL(urls[0])
-            val con = url.openConnection() as HttpURLConnection
+            val url = urls[0] ?: throw IllegalArgumentException("Url must not be null")
+
+            val con = URL(url).openConnection() as HttpURLConnection
             con.requestMethod = "GET"
             con.setRequestProperty("Accept", "application/json")
 
             val responseCode = con.responseCode
 
-            val br: BufferedReader = if (responseCode == 200) { // 정상 호출
+            val br = if (responseCode == 200) {
                 BufferedReader(InputStreamReader(con.inputStream))
-            } else {  // 에러 발생
+            } else {
                 BufferedReader(InputStreamReader(con.errorStream))
-            }
+            } ?: throw IllegalStateException("BufferedReader must not be null")
 
-            var inputLine: String
             val response = StringBuffer()
+            var inputLine: String?
             while (br.readLine().also { inputLine = it } != null) {
                 response.append(inputLine)
             }
+
             br.close()
 
             return response.toString()
         }
+
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
