@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.schedule_add.*
+//import kotlinx.android.synthetic.main.schedule_add.*
 
 class CalendarDialog : Dialog {
     var schedule_name : String = ""

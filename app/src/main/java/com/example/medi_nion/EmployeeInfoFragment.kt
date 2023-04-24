@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.medi_nion.databinding.EmployeeInfoBinding
+import com.google.gson.JsonObject
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -69,7 +70,7 @@ class EmployeeInfoFragment : Fragment() {
                         if (position != null) {
                             // Update UI component with position value from the main thread
                             activity?.runOnUiThread {
-                                binding.textView3.setText(position)
+                                binding.textView3.text = position
                             }
                         } else {
                             Log.d("Saramin API1", "$jobsArray")
