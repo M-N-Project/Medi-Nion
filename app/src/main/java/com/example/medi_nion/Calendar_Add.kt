@@ -1,26 +1,38 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
+import android.app.*
+import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.app.NotificationCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
+import org.json.JSONArray
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Calendar_Add : AppCompatActivity() {
     private var selectedColor: Int = ColorSheet.NO_COLOR
+    private var NOTIFICATION_ID = "medinion"
+    private var NOTIFICATION_NAME = "calendar alarm"
+    private val alarmManager: AlarmManager? = null
+    private val mCalender: GregorianCalendar? = null
+
+    private val notificationManager: NotificationManager? = null
+    var builder: NotificationCompat.Builder? = null
+
     companion object {
         private const val COLOR_SELECTED = "selectedColor"
     }
@@ -34,6 +46,7 @@ class Calendar_Add : AppCompatActivity() {
         val date = intent?.getStringExtra("date")
         Log.d("ID", id.toString())
 
+        val schedule_title = findViewById<EditText>(R.id.schedule_title)
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
         val start_result = findViewById<TextView>(R.id.start_result)
         val end_result = findViewById<TextView>(R.id.end_result)
@@ -47,6 +60,17 @@ class Calendar_Add : AppCompatActivity() {
         val calender = Calendar.getInstance()
         var startString = ""
         var endString = ""
+
+        //채널 생성
+        val notificationManager: NotificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val IMPORTANCE: Int = NotificationManager.IMPORTANCE_HIGH
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(NOTIFICATION_ID, NOTIFICATION_NAME, IMPORTANCE)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+//        CalendarAlarmRequest()
 
         start.setOnClickListener {
             val dialog = TimePickerDialog(
@@ -120,7 +144,13 @@ class Calendar_Add : AppCompatActivity() {
         }
 
         schedule_btn.setOnClickListener {
-            CalendarRequest()
+            if(TextUtils.isEmpty(schedule_title.text.toString())) {
+                Toast.makeText(applicationContext,
+                    "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                CalendarRequest()
+            }
         }
     }
 
@@ -144,7 +174,14 @@ class Calendar_Add : AppCompatActivity() {
         Log.d("COLOE", ColorSheetUtils.colorToHex(color))
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun CalendarRequest() {
+        val receiverIntent: Intent = Intent(
+            this@Calendar_Add,
+            AlarmRecevier::class.java
+        )
+        val pendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this@Calendar_Add, 0, receiverIntent, FLAG_MUTABLE)
         val id = intent?.getStringExtra("id").toString()
         var day = intent?.getStringExtra("day").toString()
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
@@ -180,6 +217,22 @@ class Calendar_Add : AppCompatActivity() {
         Log.d("dsa", "$id , $year , $month, $date")
 
         val presentDate = "$year-$month-$date"
+        val alarm_setting = "$presentDate $end_result"
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        var datetime: Date? = null
+
+        val calendar = Calendar.getInstance()
+        try {
+            datetime = dateFormat.parse(alarm_setting)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        calendar.time = datetime
+
+        Log.d("datetititme", datetime.toString())
+
+        alarmManager?.set(AlarmManager.RTC, calendar.timeInMillis,pendingIntent);
 
         val request = Upload_Request(
             Request.Method.POST,
@@ -193,16 +246,10 @@ class Calendar_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val calendarfragment = CalendarFragment()
-                    val manager : FragmentManager = supportFragmentManager
-                    val transaction : FragmentTransaction = manager.beginTransaction()
-                    val bundle = Bundle()
-                    bundle.putString("id", id)
-                    bundle.putString("presentDate", presentDate)
-                    calendarfragment.arguments = bundle
-//                    transaction.replace(R.id.calendar_add_layout, calendarfragment).commit()
-
-
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("presentDate", presentDate)
+                    startActivity(intent)
 
                 } else {
                     Toast.makeText(
@@ -232,6 +279,70 @@ class Calendar_Add : AppCompatActivity() {
         )
 
         val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    private fun CalendarAlarmRequest() {
+        val url = "http://seonho.dothome.co.kr/schedule_alarm.php"
+        val notificationManager: NotificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        var id = intent?.getStringExtra("id").toString()
+        var day = intent?.getStringExtra("day").toString()
+        val year = day.toString().substring(12,16)
+        var month = day.toString().substring(17,19)
+        var date = ""
+        if(month.substring(1,2) == "-"){
+            month = "0${(day.toString().substring(17,18)).toInt() + 1}"
+            date = day.toString().substring(19,21)
+
+            if(date.substring(1,2) == "}")
+                date = "0${day.toString().substring(19,20)}"
+        }
+        else{
+            month = (month.toInt()+1).toString()
+            date = day.toString().substring(20,22)
+
+            if(date.substring(1,2) == "}")
+                date = "0${day.toString().substring(20, 21)}"
+        }
+
+        Log.d("dsa", "$id , $year , $month, $date")
+
+        val presentDate = "$year-$month-$date"
+
+        val request = Board_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                val jsonArray = JSONArray(response)
+
+                for (i in jsonArray.length() - 1 downTo 0) {
+                    val item = jsonArray.getJSONObject(i)
+                    id = item.getString("id")
+                    val schedule_name = item.getString("schedule_name")
+                    val schedule_start = item.getString("schedule_start")
+                    val schedule_end = item.getString("schedule_end")
+                    val schedule_alarm = item.getString("schedule_alarm")
+                    val schedule_date = item.getString("schedule_date")
+                    Log.d("alarmamrmrm", "$schedule_name, $schedule_start, $schedule_end, $schedule_alarm, $schedule_date")
+
+                    if(presentDate == schedule_date) {
+                        val builder: NotificationCompat.Builder =
+                            NotificationCompat.Builder(this, NOTIFICATION_ID)
+                                .setContentTitle("[Medi_Nion] 캘린더 일정 알람") //타이틀 TEXT
+                                .setContentText("인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정") //세부내용 TEXT
+                                .setSmallIcon(R.drawable.logo) //필수 (안해주면 에러)
+                        notificationManager.notify(0, builder.build())
+                    }
+
+                }
+            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                hashMapOf(
+                "id" to id,
+                "schedule_date" to presentDate
+                )
+            )
+        val queue = Volley.newRequestQueue(applicationContext)
         queue.add(request)
     }
 

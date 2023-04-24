@@ -13,6 +13,7 @@
         tools:ignore="ScopedStorage" /> <!-- 저장소 쓰기 권한 -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- 계정 목록 권한 -->
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -96,6 +97,13 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Calendar_Add"
             android:screenOrientation="portrait" />
+        <receiver android:name=".AlarmRecevier"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <uses-library
             android:name="org.apache.http.params"
