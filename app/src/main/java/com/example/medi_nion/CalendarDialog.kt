@@ -1,14 +1,3 @@
-package com.example.medi_nion
-
-import android.app.Dialog
-import android.content.Context
-import android.graphics.Color
-import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.ColorInt
 
 class CalendarDialog : Dialog {
     var schedule_item : CalendarItem

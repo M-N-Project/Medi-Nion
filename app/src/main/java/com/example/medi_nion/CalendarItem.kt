@@ -6,13 +6,14 @@ import android.widget.ImageView
 
 class CalendarItem(
     val id : String,
-    val schedule_name : String,
-    val schedule_start : String,
-    val schedule_end : String,
-    val color : String,
-    val alarm : String,
-    val memo : String,
-    val isDone : Boolean
+    var schedule_name : String,
+    var schedule_date : String,
+    var schedule_start : String,
+    var schedule_end : String,
+    var schedule_color : String,
+    var schedule_alarm : String,
+    var schedule_memo : String,
+    var schedule_isDone : Boolean
     ) {
 
 }
