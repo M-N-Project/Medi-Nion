@@ -51,8 +51,9 @@ class AlarmReceiver : BroadcastReceiver() {
             PendingIntent.getActivity(context,requestCode,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        val notification = builder.setContentTitle(title)
-            .setContentText("SCHEDULE MANAGER")
+        val notification = builder
+            .setContentTitle("[medinion] $title")
+            .setContentText("오늘의 일정을 확인하세요!")
             .setSmallIcon(R.drawable.logo)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

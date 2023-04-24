@@ -24,14 +24,9 @@ import java.util.*
 
 class Calendar_Add : AppCompatActivity() {
     private var selectedColor: Int = ColorSheet.NO_COLOR
-    private var NOTIFICATION_ID = "medinion"
-    private var NOTIFICATION_NAME = "calendar alarm"
-    private val alarmManager: AlarmManager? = null
-    private val mCalender: GregorianCalendar? = null
     private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
     private val alarmCode = random.random()
 
-    private val notificationManager: NotificationManager? = null
     var builder: NotificationCompat.Builder? = null
 
     companion object {
@@ -62,17 +57,6 @@ class Calendar_Add : AppCompatActivity() {
         val calender = Calendar.getInstance()
         var startString = ""
         var endString = ""
-
-        //채널 생성
-        val notificationManager: NotificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val IMPORTANCE: Int = NotificationManager.IMPORTANCE_HIGH
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(NOTIFICATION_ID, NOTIFICATION_NAME, IMPORTANCE)
-            notificationManager.createNotificationChannel(channel)
-        }
-
-//        CalendarAlarmRequest()
 
         start.setOnClickListener {
             val dialog = TimePickerDialog(
@@ -224,28 +208,30 @@ class Calendar_Add : AppCompatActivity() {
         Log.d("dsa", "$id , $year , $month, $date")
 
         val presentDate = "$year-$month-$date"
-        val alarm_setting = "$presentDate $end_result"
 
-        Log.d("DFDFS", alarm_setting)
+        var alarm_hour = end_result.substring(0, 2).toInt()
+        var alarm_minute = end_result.substring(3, 5)
 
-        //날짜 포맷을 바꿔주는 소스코드
-//        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-//        var datetime: Date? = null
-//        try {
-//            datetime = dateFormat.parse(alarm_setting)
-//        } catch (e: ParseException) {
-//            e.printStackTrace()
-//        }
-//
-//        val calendar = Calendar.getInstance()
-//        if (datetime != null) {
-//            calendar.time = datetime
-//        }
-//
-//        Log.d("timeitme", datetime.toString())
-//        alarmManager?.set(AlarmManager.RTC, calendar.timeInMillis, pendingIntent);
+        if (alarm.equals("1시간 전")) {
+            alarm_hour -= 1
+        } else if (alarm.equals("2시간 전")) {
+            alarm_hour -= 2
+        } else if (alarm.equals("3시간 전")) {
+            alarm_hour -= 3
+        } else {
+            alarm_hour -= 6
+        }
 
-        setAlarm(alarm_setting, alarmCode, schedule_title)
+        if (alarm_minute == "0")
+            alarm_minute = "00"
+
+        val alarm_setting = "$presentDate $alarm_hour:$alarm_minute"
+
+        Log.d("DFDFS", "$alarm_hour, $alarm_minute")
+        Log.d("alarm_setting", alarm_setting)
+        if(!alarm.equals("설정 안함")) {
+            setAlarm(alarm_setting, alarmCode, schedule_title)
+        }
 
         val request = Upload_Request(
             Request.Method.POST,
@@ -292,70 +278,6 @@ class Calendar_Add : AppCompatActivity() {
         )
 
         val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-    }
-
-    private fun CalendarAlarmRequest() {
-        val url = "http://seonho.dothome.co.kr/schedule_alarm.php"
-        val notificationManager: NotificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        var id = intent?.getStringExtra("id").toString()
-        var day = intent?.getStringExtra("day").toString()
-        val year = day.toString().substring(12,16)
-        var month = day.toString().substring(17,19)
-        var date = ""
-        if(month.substring(1,2) == "-"){
-            month = "0${(day.toString().substring(17,18)).toInt() + 1}"
-            date = day.toString().substring(19,21)
-
-            if(date.substring(1,2) == "}")
-                date = "0${day.toString().substring(19,20)}"
-        }
-        else{
-            month = (month.toInt()+1).toString()
-            date = day.toString().substring(20,22)
-
-            if(date.substring(1,2) == "}")
-                date = "0${day.toString().substring(20, 21)}"
-        }
-
-        Log.d("dsa", "$id , $year , $month, $date")
-
-        val presentDate = "$year-$month-$date"
-
-        val request = Board_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                val jsonArray = JSONArray(response)
-
-                for (i in jsonArray.length() - 1 downTo 0) {
-                    val item = jsonArray.getJSONObject(i)
-                    id = item.getString("id")
-                    val schedule_name = item.getString("schedule_name")
-                    val schedule_start = item.getString("schedule_start")
-                    val schedule_end = item.getString("schedule_end")
-                    val schedule_alarm = item.getString("schedule_alarm")
-                    val schedule_date = item.getString("schedule_date")
-                    Log.d("alarmamrmrm", "$schedule_name, $schedule_start, $schedule_end, $schedule_alarm, $schedule_date")
-
-                    if(presentDate == schedule_date) {
-                        val builder: NotificationCompat.Builder =
-                            NotificationCompat.Builder(this, NOTIFICATION_ID)
-                                .setContentTitle("[Medi_Nion] 캘린더 일정 알람") //타이틀 TEXT
-                                .setContentText("인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정") //세부내용 TEXT
-                                .setSmallIcon(R.drawable.logo) //필수 (안해주면 에러)
-                        notificationManager.notify(0, builder.build())
-                    }
-
-                }
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                hashMapOf(
-                "id" to id,
-                "schedule_date" to presentDate
-                )
-            )
-        val queue = Volley.newRequestQueue(applicationContext)
         queue.add(request)
     }
 
