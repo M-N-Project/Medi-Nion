@@ -2,20 +2,22 @@ package com.example.medi_nion
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorInt
 
 class CalendarDialog : Dialog {
-    var schedule_name : String = ""
+    var schedule_item : CalendarItem
 
     constructor(
         context: Context,
-        schedule_name : String
+        schedule_item : CalendarItem
     ) : super(context) {
-        this.schedule_name = schedule_name
+        this.schedule_item = schedule_item
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +33,13 @@ class CalendarDialog : Dialog {
         val schedule_alarm = findViewById<TextView>(R.id.schedule_alarm)
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo)
 
-        editText_scheduleName.setText(this.schedule_name)
+        editText_scheduleName.setText(schedule_item.schedule_name)
+
+//        schedule_color_view.setColorFilter(schedule_item.color)
+
+        schedule_alarm.setText(schedule_item.alarm)
+
+        schedule_memo.setText(schedule_item.memo)
 
     }
 }

@@ -1,30 +1,39 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
+import android.app.*
+import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.core.app.NotificationCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
+import org.json.JSONArray
 import java.util.*
 
 class Calendar_Add : AppCompatActivity() {
     private var selectedColor: Int = ColorSheet.NO_COLOR
+    private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
+    private val alarmCode = random.random()
+
+    var builder: NotificationCompat.Builder? = null
+
     companion object {
         private const val COLOR_SELECTED = "selectedColor"
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +43,7 @@ class Calendar_Add : AppCompatActivity() {
         val date = intent?.getStringExtra("date")
         Log.d("ID", id.toString())
 
+        val schedule_title = findViewById<EditText>(R.id.schedule_title)
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
         val start_result = findViewById<TextView>(R.id.start_result)
         val end_result = findViewById<TextView>(R.id.end_result)
@@ -120,7 +130,13 @@ class Calendar_Add : AppCompatActivity() {
         }
 
         schedule_btn.setOnClickListener {
-            CalendarRequest()
+            if(TextUtils.isEmpty(schedule_title.text.toString())) {
+                Toast.makeText(applicationContext,
+                    "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                CalendarRequest()
+            }
         }
     }
 
@@ -134,17 +150,29 @@ class Calendar_Add : AppCompatActivity() {
                 listener = { color ->
                     selectedColor = color
                     setColor(selectedColor)
+
                 })
             .show(supportFragmentManager)
+        Log.d("018321",selectedColor.toString())
+
     }
 
     private fun setColor(@ColorInt color: Int) {
         val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
         color_picker.backgroundTintList = ColorStateList.valueOf(color)
-        Log.d("COLOE", ColorSheetUtils.colorToHex(color))
+
+        Log.d("COLOE", color.toString())
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("SimpleDateFormat")
     private fun CalendarRequest() {
+        val receiverIntent: Intent = Intent(
+            this@Calendar_Add,
+            AlarmReceiver::class.java
+        )
+        val pendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this@Calendar_Add, 0, receiverIntent, FLAG_MUTABLE)
         val id = intent?.getStringExtra("id").toString()
         var day = intent?.getStringExtra("day").toString()
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
@@ -181,6 +209,30 @@ class Calendar_Add : AppCompatActivity() {
 
         val presentDate = "$year-$month-$date"
 
+        var alarm_hour = end_result.substring(0, 2).toInt()
+        var alarm_minute = end_result.substring(3, 5)
+
+        if (alarm.equals("1시간 전")) {
+            alarm_hour -= 1
+        } else if (alarm.equals("2시간 전")) {
+            alarm_hour -= 2
+        } else if (alarm.equals("3시간 전")) {
+            alarm_hour -= 3
+        } else {
+            alarm_hour -= 6
+        }
+
+        if (alarm_minute == "0")
+            alarm_minute = "00"
+
+        val alarm_setting = "$presentDate $alarm_hour:$alarm_minute"
+
+        Log.d("DFDFS", "$alarm_hour, $alarm_minute")
+        Log.d("alarm_setting", alarm_setting)
+        if(!alarm.equals("설정 안함")) {
+            setAlarm(alarm_setting, alarmCode, schedule_title)
+        }
+
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
@@ -193,16 +245,10 @@ class Calendar_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val calendarfragment = CalendarFragment()
-                    val manager : FragmentManager = supportFragmentManager
-                    val transaction : FragmentTransaction = manager.beginTransaction()
-                    val bundle = Bundle()
-                    bundle.putString("id", id)
-                    bundle.putString("presentDate", presentDate)
-                    calendarfragment.arguments = bundle
-//                    transaction.replace(R.id.calendar_add_layout, calendarfragment).commit()
-
-
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("presentDate", presentDate)
+                    startActivity(intent)
 
                 } else {
                     Toast.makeText(
@@ -233,6 +279,11 @@ class Calendar_Add : AppCompatActivity() {
 
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm(time: String, alarm_code: Int, content: String){
+        AlarmFunctions(applicationContext).callAlarm(time, alarmCode, content)
     }
 
 }

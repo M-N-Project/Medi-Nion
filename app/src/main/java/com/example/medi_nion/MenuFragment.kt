@@ -579,7 +579,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     fun userTypeDeptCheck(isType:Boolean, boardType:String) : Boolean{
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
-
         return if(isType) {
             // 직종별 게시판. userType 검사
             boardType == userType
