@@ -10,6 +10,8 @@ class CalendarItem(
     val schedule_start : String,
     val schedule_end : String,
     val color : String,
+    val alarm : String,
+    val memo : String,
     val isDone : Boolean
     ) {
 
