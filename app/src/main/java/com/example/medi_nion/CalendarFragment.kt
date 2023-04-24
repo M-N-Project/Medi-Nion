@@ -112,7 +112,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             selected: Boolean
         ) {
 
-            Log.d("hihiDate", date.toString())
             fetchEvents(date)
 
         }
@@ -178,6 +177,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             Request.Method.POST,
             urlBoard,
             { response ->
+                Log.d("Resss" , response)
                 if(response != "Event fetch Fail"){
                     val jsonArray = JSONArray(response)
                     items.clear()
@@ -188,9 +188,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val schedule_name = item.getString("schedule_name")
                         val schedule_start = item.getString("schedule_start")
                         val schedule_end = item.getString("schedule_end")
+                        val schedule_color = item.getString("schedule_color")
+                        val schedule_alarm = item.getString("schedule_alarm")
+                        val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, schedule_start, schedule_end, "#85AFD6", if(isDone == "0") false else true)
+                        val CalendarItem = CalendarItem(id, schedule_name, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_memo,  if(isDone == "0") false else true)
                         items.add(CalendarItem)
                     }
                     adapter = CalendarRecyclerAdapter(items)
@@ -200,7 +203,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         CalendarRecyclerAdapter.OnItemClickListener {
                         override fun onEventClick(v: View, data: CalendarItem, pos: Int) {
                             //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
-                            showProfileDialog(data.schedule_name)
+                            showProfileDialog(data)
                         }
 
                     })
@@ -221,8 +224,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
     }
 
-    private fun showProfileDialog(schedule_name : String) {
-        CalendarDialog(requireContext(), schedule_name ).show()
+    private fun showProfileDialog(schedule_item : CalendarItem) {
+        CalendarDialog(requireContext(), schedule_item ).show()
     }
 }
 

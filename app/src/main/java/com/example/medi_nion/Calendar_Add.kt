@@ -175,7 +175,6 @@ class Calendar_Add : AppCompatActivity() {
                     bundle.putString("date", date)
                     calendarfragment.arguments = bundle
 
-
                 } else {
                     Toast.makeText(
                         applicationContext,
