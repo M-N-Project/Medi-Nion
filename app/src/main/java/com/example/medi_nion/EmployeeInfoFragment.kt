@@ -1,85 +1,70 @@
 package com.example.medi_nion
 
+import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.example.medi_nion.databinding.EmployeeInfoBinding
-import com.google.gson.JsonObject
-import okhttp3.*
-import org.json.JSONObject
-import java.io.IOException
-
-
-// Define constants for Saramin API
-private const val saraminApiBaseUrl = "https://oapi.saramin.co.kr"
-private const val saraminApiEndpoint = "/job-search"
-private const val saraminApiKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway"
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 
 class EmployeeInfoFragment : Fragment() {
-    private var _binding: EmployeeInfoBinding?   = null
-    private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
-        _binding = EmployeeInfoBinding.inflate(inflater, container, false)
-        return binding.root
+    private lateinit var textView: TextView
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.employee_info, container, false)
+        textView = view.findViewById(R.id.textView3)
+        return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Make API call and update UI components here
-        makeSaraminApiCall()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway2023" // 발급받은 accessKey"
+        val text = URLEncoder.encode("http://seonho.dothome.co.kr/EmployeeInfo.php", "UTF-8")
+        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=$accessKey&keyword=$text"
+
+        val apiTask = ApiTask()
+        apiTask.execute(apiURL)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    private inner class ApiTask : AsyncTask<String, Void, String>() {
 
-    private fun makeSaraminApiCall() {
-        val client = OkHttpClient()
+        override fun doInBackground(vararg urls: String?): String {
+            val url = URL(urls[0])
+            val con = url.openConnection() as HttpURLConnection
+            con.requestMethod = "GET"
+            con.setRequestProperty("Accept", "application/json")
 
-        val request = Request.Builder()
-            .url("$saraminApiBaseUrl$saraminApiEndpoint?keywords=Android&count=10&access-key=$saraminApiKey") //수정하지 말기
-            .build()
+            val responseCode = con.responseCode
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("Saramin API", "Failed to execute request", e)
+            val br: BufferedReader = if (responseCode == 200) { // 정상 호출
+                BufferedReader(InputStreamReader(con.inputStream))
+            } else {  // 에러 발생
+                BufferedReader(InputStreamReader(con.errorStream))
             }
-            override fun onResponse(call: Call, response: Response) {
-                response.use {
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                    val responseBody = response.body?.string()
-                    Log.d("Saramin API", "Response body: $responseBody")
-
-                    val jsonObject = JSONObject(responseBody)
-                    jsonObject.put("access-key", "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway")
-                    jsonObject.put("keyword", "의료")
-                    Log.d("qwerqwerqwer", "$jsonObject")
-
-                    val jobsArray = jsonObject.optJSONArray("jobs")
-                    Log.d("qazqaz", "$jobsArray")
-                    if (jobsArray != null && jobsArray.length() > 0) {
-                        val jobObject = jobsArray.optJSONObject(0)
-                        Log.d("Saramin API1", "$jobsArray")
-                        val position = jobObject?.optString("position")
-                        if (position != null) {
-                            // Update UI component with position value from the main thread
-                            activity?.runOnUiThread {
-                                binding.textView3.text = position
-                            }
-                        } else {
-                            Log.d("Saramin API1", "$jobsArray")
-                        }
-                    } else {
-                        Log.d("Saramin API1", "jobsArray is null or empty")
-                    }
-                }
+            var inputLine: String
+            val response = StringBuffer()
+            while (br.readLine().also { inputLine = it } != null) {
+                response.append(inputLine)
             }
-        })
+            br.close()
+
+            return response.toString()
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+
+            textView.text = result
+        }
     }
 }
+
