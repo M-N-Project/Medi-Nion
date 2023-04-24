@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -144,7 +146,7 @@ class Calendar_Add : AppCompatActivity() {
 
     private fun CalendarRequest() {
         val id = intent?.getStringExtra("id").toString()
-        var date = intent?.getStringExtra("date").toString()
+        var day = intent?.getStringExtra("day").toString()
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
@@ -155,7 +157,29 @@ class Calendar_Add : AppCompatActivity() {
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
 
-        date = date.substring(12 until 21)
+//        date = date.substring(12 until 21)
+
+        val year = day.toString().substring(12,16)
+        var month = day.toString().substring(17,19)
+        var date = ""
+        if(month.substring(1,2) == "-"){
+            month = "0${(day.toString().substring(17,18)).toInt() + 1}"
+            date = day.toString().substring(19,21)
+
+            if(date.substring(1,2) == "}")
+                date = "0${day.toString().substring(19,20)}"
+        }
+        else{
+            month = (month.toInt()+1).toString()
+            date = day.toString().substring(20,22)
+
+            if(date.substring(1,2) == "}")
+                date = "0${day.toString().substring(20, 21)}"
+        }
+
+        Log.d("dsa", "$id , $year , $month, $date")
+
+        val presentDate = "$year-$month-$date"
 
         val request = Upload_Request(
             Request.Method.POST,
@@ -170,10 +194,14 @@ class Calendar_Add : AppCompatActivity() {
                     ).show()
 
                     val calendarfragment = CalendarFragment()
+                    val manager : FragmentManager = supportFragmentManager
+                    val transaction : FragmentTransaction = manager.beginTransaction()
                     val bundle = Bundle()
                     bundle.putString("id", id)
-                    bundle.putString("date", date)
+                    bundle.putString("presentDate", presentDate)
                     calendarfragment.arguments = bundle
+//                    transaction.replace(R.id.calendar_add_layout, calendarfragment).commit()
+
 
 
                 } else {
@@ -188,7 +216,7 @@ class Calendar_Add : AppCompatActivity() {
             mutableMapOf(
                 "id" to id,
                 "schedule_name" to schedule_title,
-                "schedule_date" to date,
+                "schedule_date" to presentDate,
                 "schedule_start" to start_result,
                 "schedule_end" to end_result,
                 "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
