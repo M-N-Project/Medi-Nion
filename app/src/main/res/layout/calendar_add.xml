@@ -150,7 +150,7 @@
                 android:layout_height="22dp"
                 android:layout_marginTop="13dp"
                 android:layout_marginStart="280dp"
-                android:backgroundTint="#ABA7A7"
+                android:backgroundTint="#BADFD2"
                 android:background="@drawable/calendar_color"/>
 
         </LinearLayout>

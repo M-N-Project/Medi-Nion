@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.*
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.android.volley.DefaultRetryPolicy
@@ -19,8 +20,6 @@ import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import org.json.JSONArray
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 class Calendar_Add : AppCompatActivity() {
@@ -29,6 +28,8 @@ class Calendar_Add : AppCompatActivity() {
     private var NOTIFICATION_NAME = "calendar alarm"
     private val alarmManager: AlarmManager? = null
     private val mCalender: GregorianCalendar? = null
+    private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
+    private val alarmCode = random.random()
 
     private val notificationManager: NotificationManager? = null
     var builder: NotificationCompat.Builder? = null
@@ -37,6 +38,7 @@ class Calendar_Add : AppCompatActivity() {
         private const val COLOR_SELECTED = "selectedColor"
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,11 +180,12 @@ class Calendar_Add : AppCompatActivity() {
         Log.d("COLOE", color.toString())
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SimpleDateFormat")
     private fun CalendarRequest() {
         val receiverIntent: Intent = Intent(
             this@Calendar_Add,
-            AlarmRecevier::class.java
+            AlarmReceiver::class.java
         )
         val pendingIntent: PendingIntent =
             PendingIntent.getBroadcast(this@Calendar_Add, 0, receiverIntent, FLAG_MUTABLE)
@@ -223,20 +226,26 @@ class Calendar_Add : AppCompatActivity() {
         val presentDate = "$year-$month-$date"
         val alarm_setting = "$presentDate $end_result"
 
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        var datetime: Date? = null
+        Log.d("DFDFS", alarm_setting)
 
-        val calendar = Calendar.getInstance()
-        try {
-            datetime = dateFormat.parse(alarm_setting)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        calendar.time = datetime
+        //날짜 포맷을 바꿔주는 소스코드
+//        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+//        var datetime: Date? = null
+//        try {
+//            datetime = dateFormat.parse(alarm_setting)
+//        } catch (e: ParseException) {
+//            e.printStackTrace()
+//        }
+//
+//        val calendar = Calendar.getInstance()
+//        if (datetime != null) {
+//            calendar.time = datetime
+//        }
+//
+//        Log.d("timeitme", datetime.toString())
+//        alarmManager?.set(AlarmManager.RTC, calendar.timeInMillis, pendingIntent);
 
-        Log.d("datetititme", datetime.toString())
-
-        alarmManager?.set(AlarmManager.RTC, calendar.timeInMillis,pendingIntent);
+        setAlarm(alarm_setting, alarmCode, schedule_title)
 
         val request = Upload_Request(
             Request.Method.POST,
@@ -348,6 +357,11 @@ class Calendar_Add : AppCompatActivity() {
             )
         val queue = Volley.newRequestQueue(applicationContext)
         queue.add(request)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm(time: String, alarm_code: Int, content: String){
+        AlarmFunctions(applicationContext).callAlarm(time, alarmCode, content)
     }
 
 }

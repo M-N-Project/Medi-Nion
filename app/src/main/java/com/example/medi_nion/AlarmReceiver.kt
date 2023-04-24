@@ -3,7 +3,6 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import androidx.core.app.NotificationCompat
-
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,47 +12,52 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log
+import androidx.annotation.RequiresApi
 
-class AlarmRecevier : BroadcastReceiver() {
-    var manager: NotificationManager? = null
-    var builder: NotificationCompat.Builder? = null
-    companion object {
-        //오레오 이상은 반드시 채널을 설정해줘야 Notification이 작동함
-        private const val CHANNEL_ID = "medinion"
-        private const val CHANNEL_NAME = "calendar alarm"
+class AlarmReceiver : BroadcastReceiver() {
+    private lateinit var manager: NotificationManager
+    private lateinit var builder: NotificationCompat.Builder
+
+    //오레오 이상은 반드시 채널을 설정해줘야 Notification 작동함
+    companion object{
+        const val CHANNEL_ID = "medinion"
+        const val CHANNEL_NAME = "schedule alarm"
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UnspecifiedImmutableFlag")
-    override fun onReceive(context: Context, intent: Intent) {
-        val am: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        builder = null
-        manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            manager!!.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
-                )
+    override fun onReceive(context: Context?, intent: Intent?) {
+        manager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        //NotificationChannel 인스턴스를 createNotificationChannel()에 전달하여 앱 알림 채널을 시스템에 등록
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
             )
-            builder = NotificationCompat.Builder(context, CHANNEL_ID)
-        } else {
-            builder = NotificationCompat.Builder(context)
+        )
+
+        builder = NotificationCompat.Builder(context, CHANNEL_ID)
+
+        val intent2 = Intent(context, CalendarFragment::class.java)
+        val requestCode = intent?.extras!!.getInt("alarm_rqCode")
+        val title = intent.extras!!.getString("content")
+
+        val pendingIntent = if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.S){
+            PendingIntent.getActivity(context,requestCode,intent2,PendingIntent.FLAG_IMMUTABLE); //Activity를 시작하는 인텐트 생성
+        }else {
+            PendingIntent.getActivity(context,requestCode,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        //알림창 클릭 시 activity 화면 부름
-        val intent2 = Intent(context, MainActivity::class.java)
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(context, 101, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notification = builder.setContentTitle(title)
+            .setContentText("SCHEDULE MANAGER")
+            .setSmallIcon(R.drawable.logo)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
 
-        //알림창 제목
-        builder!!.setContentTitle("캘린더 알람")
-        //알림창 아이콘
-        builder!!.setSmallIcon(R.drawable.ic_launcher_background)
-        //알림창 터치시 자동 삭제
-        builder!!.setAutoCancel(true)
-        builder!!.setContentIntent(pendingIntent)
-        val notification: Notification = builder!!.build()
-        manager!!.notify(1, notification)
+        manager.notify(1, notification)
     }
-
 }

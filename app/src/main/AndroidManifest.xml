@@ -34,6 +34,13 @@
             android:name=".BusinessProfileService"
             android:enabled="true"
             android:exported="true" />
+        <receiver android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".Login"
@@ -97,13 +104,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Calendar_Add"
             android:screenOrientation="portrait" />
-        <receiver android:name=".AlarmRecevier"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+
 
         <uses-library
             android:name="org.apache.http.params"

@@ -35,7 +35,7 @@ class CalendarDialog : Dialog {
 
         editText_scheduleName.setText(schedule_item.schedule_name)
 
-        schedule_color_view.setColorFilter(schedule_item.color)
+//        schedule_color_view.setColorFilter(schedule_item.color)
 
         schedule_alarm.setText(schedule_item.alarm)
 
