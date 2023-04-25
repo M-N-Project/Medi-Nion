@@ -26,12 +26,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="날짜"
+                android:textColor="#000000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/deleteScheduleBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/delete_schedule"
+                android:backgroundTint="#B8B8B8" />
+
             <ImageView
                 android:id="@+id/doneBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:padding="10dp"
                 android:layout_gravity="right"
+                android:foregroundGravity="right"
+                android:padding="10dp"
                 app:srcCompat="@drawable/done" />
 
         </LinearLayout>
