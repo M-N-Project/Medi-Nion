@@ -138,6 +138,7 @@
             </LinearLayout>
         </LinearLayout>
 
+
         <View
             android:id="@+id/view2"
             android:layout_width="420dp"
@@ -148,7 +149,6 @@
             app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout11" />
-
 
         <EditText
             android:id="@+id/business_Content"

@@ -3,34 +3,49 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.*
 import android.app.PendingIntent.FLAG_MUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
-import org.json.JSONArray
 import java.util.*
+
 
 class Calendar_Add : AppCompatActivity() {
     private var selectedColor: Int = ColorSheet.NO_COLOR
     private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
     private val alarmCode = random.random()
+    private lateinit var manager: NotificationManager
+    private lateinit var builder: NotificationCompat.Builder
+    lateinit var notificationPermission: ActivityResultLauncher<String>
 
-    var builder: NotificationCompat.Builder? = null
+//    var builder: NotificationCompat.Builder? = null
 
     companion object {
         private const val COLOR_SELECTED = "selectedColor"
+        private const val ALARM_REQUEST_CODE = 1000
+        const val CHANNEL_ID = "medinion"
+        const val CHANNEL_NAME = "schedule alarm"
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -42,6 +57,10 @@ class Calendar_Add : AppCompatActivity() {
         val id = intent?.getStringExtra("id")
         val date = intent?.getStringExtra("date")
         Log.d("ID", id.toString())
+
+        val fragment = CalendarFragment()
+//        viewModel = fragment.viewModel = // Set the ViewModel for the Fragment
+        Log.d("iviosidf_add", CalendarFragment.viewModel.toString())
 
         val schedule_title = findViewById<EditText>(R.id.schedule_title)
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
@@ -57,6 +76,36 @@ class Calendar_Add : AppCompatActivity() {
         val calender = Calendar.getInstance()
         var startString = ""
         var endString = ""
+
+        val notificationPermissionCheck = ContextCompat.checkSelfPermission(
+            this@Calendar_Add,
+            android.Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (notificationPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                10000
+            )
+        } else { //권한이 있는 경우
+            Log.d("0-09123","notinoti")
+        }
+
+        notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Log.d("ontintno", "notinoti")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notification()
+                }
+            } else {
+                Toast.makeText(baseContext, "권한을 승인해야 일정 알림을 받을 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+            Log.d("create", "Channel")
+        }
 
         start.setOnClickListener {
             val dialog = TimePickerDialog(
@@ -129,6 +178,7 @@ class Calendar_Add : AppCompatActivity() {
             setupColorSheet()
         }
 
+
         schedule_btn.setOnClickListener {
             if(TextUtils.isEmpty(schedule_title.text.toString())) {
                 Toast.makeText(applicationContext,
@@ -138,6 +188,11 @@ class Calendar_Add : AppCompatActivity() {
                 CalendarRequest()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun notification() {
+        notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
     private fun setupColorSheet() {
@@ -150,7 +205,6 @@ class Calendar_Add : AppCompatActivity() {
                 listener = { color ->
                     selectedColor = color
                     setColor(selectedColor)
-
                 })
             .show(supportFragmentManager)
         Log.d("018321",selectedColor.toString())
@@ -165,14 +219,15 @@ class Calendar_Add : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "UnspecifiedImmutableFlag")
     private fun CalendarRequest() {
         val receiverIntent: Intent = Intent(
             this@Calendar_Add,
             AlarmReceiver::class.java
         )
         val pendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this@Calendar_Add, 0, receiverIntent, FLAG_MUTABLE)
+            PendingIntent.getBroadcast(this@Calendar_Add, ALARM_REQUEST_CODE, receiverIntent, FLAG_MUTABLE)
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val id = intent?.getStringExtra("id").toString()
         var day = intent?.getStringExtra("day").toString()
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
@@ -209,8 +264,8 @@ class Calendar_Add : AppCompatActivity() {
 
         val presentDate = "$year-$month-$date"
 
-        var alarm_hour = end_result.substring(0, 2).toInt()
-        var alarm_minute = end_result.substring(3, 5)
+        var alarm_hour = start_result.substring(0, 2).toInt()
+        var alarm_minute = start_result.substring(3, 5)
 
         if (alarm.equals("1시간 전")) {
             alarm_hour -= 1
@@ -229,6 +284,7 @@ class Calendar_Add : AppCompatActivity() {
 
         Log.d("DFDFS", "$alarm_hour, $alarm_minute")
         Log.d("alarm_setting", alarm_setting)
+
         if(!alarm.equals("설정 안함")) {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
@@ -245,10 +301,10 @@ class Calendar_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("presentDate", presentDate)
-                    startActivity(intent)
+                    val item = CalendarItem(id, schedule_title ,presentDate,start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm,schedule_memo, false)
+                    CalendarFragment.viewModel.addItemLiveList(item)
+
+                    this.finish()
 
                 } else {
                     Toast.makeText(
@@ -259,17 +315,31 @@ class Calendar_Add : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            mutableMapOf(
-                "id" to id,
-                "schedule_name" to schedule_title,
-                "schedule_date" to presentDate,
-                "schedule_start" to start_result,
-                "schedule_end" to end_result,
-                "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
-                "schedule_alarm" to alarm,
-                "schedule_memo" to schedule_memo,
-                "isDone" to "0"
-            )
+            if (ColorSheetUtils.colorToHex(selectedColor) == "#FFFFFF") {
+                mutableMapOf(
+                    "id" to id,
+                    "schedule_name" to schedule_title,
+                    "schedule_date" to presentDate,
+                    "schedule_start" to start_result,
+                    "schedule_end" to end_result,
+                    "schedule_color" to "#BADFD2",
+                    "schedule_alarm" to alarm,
+                    "schedule_memo" to schedule_memo,
+                    "isDone" to "0"
+                )
+            } else {
+                mutableMapOf(
+                    "id" to id,
+                    "schedule_name" to schedule_title,
+                    "schedule_date" to presentDate,
+                    "schedule_start" to start_result,
+                    "schedule_end" to end_result,
+                    "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
+                    "schedule_alarm" to alarm,
+                    "schedule_memo" to schedule_memo,
+                    "isDone" to "0"
+                )
+            }
         )
         request.retryPolicy = DefaultRetryPolicy(
             0,
@@ -286,4 +356,18 @@ class Calendar_Add : AppCompatActivity() {
         AlarmFunctions(applicationContext).callAlarm(time, alarmCode, content)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createNotificationChannel() {
+        manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        //NotificationChannel 인스턴스를 createNotificationChannel()에 전달하여 앱 알림 채널을 시스템에 등록
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        )
+
+    }
 }

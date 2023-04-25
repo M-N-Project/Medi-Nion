@@ -1,32 +1,46 @@
 package com.example.medi_nion
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 
-
 private var backPressedTime: Long = 0
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener { //mainactivity, 여기서는 프레그먼트 제어를 담당
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+    //mainactivity, 여기서는 프레그먼트 제어를 담당
 
     //OnNavigationItemSelectedListener
     private lateinit var viewPager2: ViewPager2
     lateinit var binding: ActivityMainBinding
+
+
+
 
 //    private var id: String? = null
 //    private var nickname: String? = null
@@ -35,8 +49,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 //    private var passwd: String? = null
 //    private var userMedal: Int = 0
 
-    private var NOTIFICATION_ID = "medinion"
-    private var NOTIFICATION_NAME = "인증 알림"
+    companion object {
+        private var NOTIFICATION_ID = "medinion"
+        private var NOTIFICATION_NAME = "인증 알림"
+        private val ALARM_REQUEST_CODE = 1001
+    }
+    private lateinit var manager: NotificationManager
+    private lateinit var builder: NotificationCompat.Builder
+    lateinit var notificationPermission: ActivityResultLauncher<String>
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
@@ -53,22 +73,47 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         infomap.put("passwd", intent.getStringExtra("passwd").toString())
         infomap.put("userMedal", intent.getIntExtra("userMedal", 0).toString())
 
+        val notificationPermissionCheck = ContextCompat.checkSelfPermission(
+            this@MainActivity,
+            android.Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (notificationPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                10000
+            )
+        } else { //권한이 있는 경우
+            Log.d("0-09123","notinoti")
+        }
+
+        notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Log.d("ontintno", "notinoti")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notification()
+                }
+            } else {
+                Toast.makeText(baseContext, "권한을 승인해야 일정 알림을 받을 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            NotificationRequest()
+        }
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
-        //채널 생성
-        val notificationManager: NotificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val IMPORTANCE: Int = NotificationManager.IMPORTANCE_HIGH
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(NOTIFICATION_ID, NOTIFICATION_NAME, IMPORTANCE)
-            notificationManager.createNotificationChannel(channel)
-        }
 
-        NotificationRequest()
+        val tabLayout: BottomNavigationView  = findViewById(R.id.bottomNavigationView)
 
-        linearLayout.isUserInputEnabled = true //false시 스크롤 막힘
+        binding.linearLayout.isUserInputEnabled = true //false시 스크롤 막힘
+
 
         //여기서 linearLayout은 ViewPager2, id바꿀시 혹시 에러날까봐 냅둠
         binding.linearLayout.adapter = ViewPagerAdapter2_Main(this, infomap)
@@ -84,7 +129,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         )
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+
     }
+
+
+
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
@@ -98,29 +148,33 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         when(item.itemId) {
             R.id.homeFragment -> {
-                binding.linearLayout.currentItem = 0
+                binding.linearLayout.setCurrentItem(0, false)
                 return true
             }
             R.id.menuFragment -> {
-                binding.linearLayout.currentItem = 1
+                binding.linearLayout.setCurrentItem(1, false)
                 return true
             }
             R.id.scheduleFragment -> {
-                binding.linearLayout.currentItem = 2
+                binding.linearLayout.setCurrentItem(2, false)
                 return true
             }
             R.id.businessFragment -> {
-                binding.linearLayout.currentItem = 3
+                binding.linearLayout.setCurrentItem(3, false)
                 return true
             }
             R.id.profileFragment -> {
-                binding.linearLayout.currentItem = 4
+                binding.linearLayout.setCurrentItem(4, false)
                 return true
             }
             else -> {
                 return false
             }
+
+
         }
+
+
     }
 
     override fun onBackPressed() {
@@ -151,7 +205,23 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun notification() {
+        notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
     fun NotificationRequest() {
+        val receiverIntent: Intent = Intent(
+            this@MainActivity,
+            AlarmReceiver::class.java
+        )
+        val pendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this@MainActivity,
+                ALARM_REQUEST_CODE, receiverIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val url = "http://seonho.dothome.co.kr/notification.php"
 
         var Userid = intent?.getStringExtra("id").toString() //요청한 사람의 아이디
@@ -176,12 +246,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     Log.d("NOTIFICATION", "$id, $identity_check")
 
                     if (id == Userid) {
-                        val builder: NotificationCompat.Builder =
-                            NotificationCompat.Builder(this@MainActivity, NOTIFICATION_ID)
-                                .setContentTitle("[Medi_Nion] 사용자 인증 알림") //타이틀 TEXT
-                                .setContentText("인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정") //세부내용 TEXT
-                                .setSmallIcon(R.drawable.logo) //필수 (안해주면 에러)
-                        notificationManager.notify(0, builder.build())
+                        setAlarm(ALARM_REQUEST_CODE, "인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정")
                     }
                 }
 
@@ -194,5 +259,25 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm(alarm_code: Int, content: String){
+        AlarmFunctions_opencv(applicationContext).callAlarm(alarm_code, content)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createNotificationChannel() {
+        manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        //NotificationChannel 인스턴스를 createNotificationChannel()에 전달하여 앱 알림 채널을 시스템에 등록
+        manager.createNotificationChannel(
+            NotificationChannel(
+                NOTIFICATION_ID,
+                NOTIFICATION_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        )
+
     }
 }

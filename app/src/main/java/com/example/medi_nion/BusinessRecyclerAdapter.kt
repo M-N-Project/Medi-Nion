@@ -3,7 +3,6 @@ package com.example.medi_nion
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Outline
-import android.media.Image
 import android.os.Build
 import android.util.Base64
 import android.util.Log
@@ -15,9 +14,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.android.volley.Request
-import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.business_board_item.view.*
 
 class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
@@ -67,7 +63,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
             setViewMore(view.content, view.viewMore)
 
             view.titleName.text = item.channel_name
-            view.time.text = item.time
+            view.deadline.text = item.time
             view.content.text = item.content
             bookmark.isChecked = item.isBookm
             heart.isChecked = item.isHeart

@@ -1,6 +1,5 @@
 package com.example.medi_nion
 
-import android.annotation.SuppressLint
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
@@ -16,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.calendar_item.view.*
 
 
 class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
@@ -52,7 +50,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
         val calendarLinear = v.findViewById<LinearLayout>(R.id.linearLayout_calendar)
         val color = v.findViewById<ImageView>(R.id.color)
         val schedule_name = v.findViewById<TextView>(R.id.titleName)
-        val schedule_time = v.findViewById<TextView>(R.id.time)
+        val schedule_time = v.findViewById<TextView>(R.id.deadline)
         val isDone = v.findViewById<CheckBox>(R.id.calendarCheckBox)
         @RequiresApi(Build.VERSION_CODES.Q)
         fun bind(item: CalendarItem, pos : Int) {
@@ -73,7 +71,6 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
             }
             color.background = drawable
 
-            Log.d("91027312", "${isDone.isChecked}// ${item.schedule_isDone}")
             isDone.isChecked = item.schedule_isDone
 
             isDone.setOnCheckedChangeListener{ _ , isChecked ->
@@ -97,7 +94,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
                         "schedule_name" to item.schedule_name,
                         "schedule_date" to item.schedule_date,
                         "schedule_start" to item.schedule_start,
-                        "isDone" to isDone.isChecked.toString()
+                        "isDone" to isChecked.toString()
                     )
                 )
 
