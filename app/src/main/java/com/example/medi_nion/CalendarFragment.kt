@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -45,9 +46,14 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private lateinit var calendarRecyclerView : RecyclerView
     private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
-    private val viewModel: CalendarViewModel by viewModels()
+
     private var oldTitle : String = ""
+    private var oldStartTime : String = ""
     private var selectedColor: Int = ColorSheet.NO_COLOR
+
+    companion object {
+        var viewModel: CalendarViewModel  = CalendarViewModel()
+    }
 
 
     override fun onCreateView(
@@ -63,7 +69,15 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         adapter = CalendarRecyclerAdapter(items)
         calendarRecyclerView.adapter = adapter
 
+        viewModel = ViewModelProvider(requireActivity()).get(CalendarViewModel::class.java)
+
         viewModel.itemList.observe(viewLifecycleOwner, {
+            try {
+                Thread.sleep(2000)
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
+
             fetchEvents(CalendarDay.today())
         })
 
@@ -204,7 +218,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             Request.Method.POST,
             urlBoard,
             { response ->
-                Log.d("Resss" , response)
+                Log.d("j2132",response)
                 if(response != "Event fetch Fail"){
                     val jsonArray = JSONArray(response)
                     items.clear()
@@ -233,6 +247,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         @SuppressLint("MissingInflatedId")
                         override fun onEventClick(v: View, data: CalendarItem, pos: Int) {
                             oldTitle = data.schedule_name
+                            oldStartTime = data.schedule_start
                             //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
                             val bottomSheetView = layoutInflater.inflate(R.layout.calendar_dialog, null)
                             val bottomSheetDialog = BottomSheetDialog(requireContext())
@@ -244,22 +259,20 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                             Log.d("823123","${data.schedule_start} // ${data.schedule_end}")
 
+
                             val day_night1 = bottomSheetView.findViewById<TextView>(R.id.start_day_night)
                             val start = bottomSheetView.findViewById<LinearLayout>(R.id.start_time_linear)
                             val start_result = bottomSheetView.findViewById<TextView>(R.id.start_time)
                             var startString = ""
-                            start_result.text = start_result.text.toString().replace(" ", "")
 
-                            Log.d("start..", "${start_result.text}")
+                            start_result.text = data.schedule_start.replace(" ", "")
+
                             var start_min = start_result.text.substring(0,2)
                             var start_sec = start_result.text.substring(3,5)
                             Log.d("start..", "${start_min}, ${start_sec}")
                             day_night1.setText("오전") //스케줄 시작 오전/오후
                             start_result.setText("${start_min}   :   ${start_sec}") //스케줄 시작 시간
-                            if(start_min.toInt() > 12){
-                                day_night1.setText("오후") //스케줄 시작 오전/오후
-                                start_result.setText("${start_min.toInt() - 12}   :   ${start_sec}") //스케줄 시작 시간
-                            }
+                            Log.d("start..", start_result.text.toString())
 
                             start.setOnClickListener {
                                 val dialog = TimePickerDialog(
@@ -285,11 +298,15 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                             }
                                         }
                                         start_result.setText(startString)
+                                        start_result.text = start_result.text.toString().replace(" ", "")
+                                        data.schedule_start = start_result.text.toString()
+                                        start_result.setText(startString)
                                     },
                                     0,
                                     0,
                                     false
                                 )
+
                                 dialog.setTitle("시작 시간")
                                 dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
                                 dialog.show()
@@ -299,16 +316,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             val end = bottomSheetView.findViewById<LinearLayout>(R.id.end_time_linear)
                             val end_result = bottomSheetView.findViewById<TextView>(R.id.end_time)
                             var endString = ""
-                            end_result.text = end_result.text.toString().replace(" ", "")
+                            end_result.text = data.schedule_end.replace(" ", "")
 
                             var end_min = end_result.text.substring(0,2)
                             var end_sec = end_result.text.substring(3,5)
                             day_night2.setText("오전") //스케줄 시작 오전/오후
                             end_result.setText("${end_min}   :   ${end_sec}") //스케줄 시작 시간
-                            if(end_min.toInt() > 12){
-                                day_night2.setText("오후") //스케줄 시작 오전/오후
-                                end_result.setText("${end_min.toInt() - 12}   :   ${end_sec}") //스케줄 시작 시간
-                            }
 
                             end.setOnClickListener {
                                 val dialog1 = TimePickerDialog(
@@ -333,11 +346,15 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                             }
                                         }
                                         end_result.text = endString
+                                        end_result.text = end_result.text.toString().replace(" ", "")
+                                        data.schedule_start = end_result.text.toString()
+                                        end_result.text = endString
                                     },
                                     0,
                                     0,
                                     false
                                 )
+
                                 dialog1.setTitle("종료 시간")
                                 dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
                                 dialog1.show()
@@ -377,8 +394,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 hideKeyboard()
                                 val schedule_title_2 = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                                 val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
-                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
-                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
+//                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
+//                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
                                 if(TextUtils.isEmpty(schedule_title_2.text.toString())) {
                                     Toast.makeText(requireContext(),
                                         "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -386,10 +403,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 else {
                                     data.schedule_name = schedule_title_2.text.toString()
 
-                                    start_result = start_result.replace(" ", "")
-                                    end_result = end_result.replace(" ", "")
+                                    start_result.text = start_result.text.toString().replace(" ", "")
+                                    end_result.text = end_result.text.toString().replace(" ", "")
 
-//        date = date.substring(12 until 21)
 
                                     val year = day.toString().substring(12,16)
                                     var month = day.toString().substring(17,19)
@@ -465,7 +481,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
         val updateScheduleUrl = "http://seonho.dothome.co.kr/updateCalendar.php"
 
-        Log.d("-=123", "${oldTitle}, ${item.schedule_name}, ${item.schedule_date} , ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
+        Log.d("-=123", "${id} , ${oldTitle}, ${oldStartTime},${item.schedule_name}, ${item.schedule_date} , ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
         val request = Upload_Request(
             Request.Method.POST,
             updateScheduleUrl,
@@ -482,6 +498,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             mutableMapOf(
                 "id" to id,
                 "oldTitle" to oldTitle,
+                "oldStartTime" to oldStartTime,
                 "schedule_name" to item.schedule_name,
                 "schedule_date" to item.schedule_date,
                 "schedule_start" to item.schedule_start,

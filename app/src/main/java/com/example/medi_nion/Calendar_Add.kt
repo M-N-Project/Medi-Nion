@@ -13,6 +13,8 @@ import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -27,6 +29,7 @@ class Calendar_Add : AppCompatActivity() {
     private var selectedColor: Int = ColorSheet.NO_COLOR
     private var NOTIFICATION_ID = "medinion"
     private var NOTIFICATION_NAME = "calendar alarm"
+    var viewModel: CalendarViewModel = CalendarViewModel()
     private val alarmManager: AlarmManager? = null
     private val mCalender: GregorianCalendar? = null
 
@@ -45,6 +48,10 @@ class Calendar_Add : AppCompatActivity() {
         val id = intent?.getStringExtra("id")
         val date = intent?.getStringExtra("date")
         Log.d("ID", id.toString())
+
+        val fragment = CalendarFragment()
+//        viewModel = fragment.viewModel = // Set the ViewModel for the Fragment
+        Log.d("iviosidf_add", CalendarFragment.viewModel.toString())
 
         val schedule_title = findViewById<EditText>(R.id.schedule_title)
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
@@ -250,14 +257,10 @@ class Calendar_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra("id", id)
-                    intent.putExtra("presentDate", presentDate)
-                    startActivity(intent)
+                    val item = CalendarItem(id, schedule_title ,presentDate,start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm,schedule_memo, false)
+                    CalendarFragment.viewModel.addItemLiveList(item)
 
-//                    val item = CalendarItem(id, schedule_title, presentDate, start_result, end_result,  ColorSheetUtils.colorToHex(selectedColor), alarm, schedule_memo, false )
-//                    viewModel.addItemList(item)
-//                    this.finish()
+                    this.finish()
 
                 } else {
                     Toast.makeText(
@@ -274,7 +277,7 @@ class Calendar_Add : AppCompatActivity() {
                 "schedule_date" to presentDate,
                 "schedule_start" to start_result,
                 "schedule_end" to end_result,
-                "schedule_color" to if(ColorSheetUtils.colorToHex(selectedColor)=="#FFFFFF") "#508BE0C4" else ColorSheetUtils.colorToHex(selectedColor) ,
+                "schedule_color" to if(ColorSheetUtils.colorToHex(selectedColor)=="#FFFFFF") "#508BE0C4" else ColorSheetUtils.colorToHex(selectedColor),
                 "schedule_alarm" to alarm,
                 "schedule_memo" to schedule_memo,
                 "isDone" to "0"

@@ -31,7 +31,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
             }
             1 -> {
                 val menuFragment = MenuFragment()
-                val bundle = Bundle()
+                    val bundle = Bundle()
                 bundle.putString("id", id)
                 bundle.putString("nickname", nickname)
                 bundle.putString("userType", userType)

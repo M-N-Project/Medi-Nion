@@ -22,6 +22,11 @@ class CalendarViewModel : ViewModel() {
         items.add(item)
     }
 
+    fun addItemLiveList(item : CalendarItem){
+        items.add(item)
+        _itemList.value = items
+    }
+
     fun editItemList(item : CalendarItem){
         _itemList.value = items
     }
