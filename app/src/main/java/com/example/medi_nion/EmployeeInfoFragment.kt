@@ -72,8 +72,6 @@ class EmployeeInfoFragment : Fragment() {
                             val school = position.getJSONObject("required-education-level").getString("name")
                             val deadline = item.getLong("expiration-timestamp")
 
-                            Log.d("임플로이인포제이슨", "$url \n $company \n $title \n $loca \n $experience \n $school \n $deadline")
-
                             val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadline)
                             items.add(infoItem)
                         }
