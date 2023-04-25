@@ -1,3 +1,11 @@
+import android.app.Dialog
+import android.content.Context
+import android.os.Bundle
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import com.example.medi_nion.CalendarItem
+import com.example.medi_nion.R
 
 class CalendarDialog : Dialog {
     var schedule_item : CalendarItem
@@ -26,9 +34,9 @@ class CalendarDialog : Dialog {
 
 //        schedule_color_view.setColorFilter(schedule_item.color)
 
-        schedule_alarm.setText(schedule_item.alarm)
+        schedule_alarm.setText(schedule_item.schedule_alarm)
 
-        schedule_memo.setText(schedule_item.memo)
+        schedule_memo.setText(schedule_item.schedule_memo)
 
     }
 }
