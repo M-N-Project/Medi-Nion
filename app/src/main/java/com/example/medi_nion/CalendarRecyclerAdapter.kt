@@ -71,7 +71,6 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
             }
             color.background = drawable
 
-            Log.d("91027312", "${isDone.isChecked}// ${item.schedule_isDone}")
             isDone.isChecked = item.schedule_isDone
 
             isDone.setOnCheckedChangeListener{ _ , isChecked ->
@@ -95,7 +94,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
                         "schedule_name" to item.schedule_name,
                         "schedule_date" to item.schedule_date,
                         "schedule_start" to item.schedule_start,
-                        "isDone" to isDone.isChecked.toString()
+                        "isDone" to isChecked.toString()
                     )
                 )
 
