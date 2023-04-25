@@ -362,7 +362,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             alarmSpinner.setSelection(colorList.indexOf(data.schedule_alarm))
                             bottomSheetView.findViewById<EditText>(R.id.schedule_memo).setText(data.schedule_memo) //스케줄 메모
 
-                            val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
+                            val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.calendarCheckBox)
                             doneBtn.setOnClickListener {
                                 hideKeyboard()
                                 val schedule_title_2 = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)

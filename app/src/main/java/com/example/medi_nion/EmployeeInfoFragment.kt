@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
 import java.net.URLEncoder
 
 class EmployeeInfoFragment : Fragment() {
@@ -27,8 +27,9 @@ class EmployeeInfoFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" // 발급받은 accessKey"
-        val text = URLEncoder.encode("http://seonho.dothome.co.kr/EmployeeInfo.php", "UTF-8")
-        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=$accessKey&keyword=$text"
+        val text = URLEncoder.encode("", "UTF-8")  //http://seonho.dothome.co.kr/EmployeeInfo.php
+        //val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=$accessKey&keyword=$text"
+        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&bbs_gb=0&job_type=&job_mid_cd=6"
 
         val apiTask = ApiTask()
         apiTask.execute(apiURL)
@@ -39,27 +40,21 @@ class EmployeeInfoFragment : Fragment() {
         override fun doInBackground(vararg urls: String?): String {
             val url = urls[0] ?: throw IllegalArgumentException("Url must not be null")
 
-            val con = URL(url).openConnection() as HttpURLConnection
-            con.requestMethod = "GET"
-            con.setRequestProperty("Accept", "application/json")
+            val request = Request.Builder()
+                .url(url)
+                .addHeader("Accept", "application/json") //응답방식 선택 json, xml
+                .build()
 
-            val responseCode = con.responseCode
+            val client = OkHttpClient()
 
-            val br = if (responseCode == 200) {
-                BufferedReader(InputStreamReader(con.inputStream))
-            } else {
-                BufferedReader(InputStreamReader(con.errorStream))
-            } ?: throw IllegalStateException("BufferedReader must not be null")
+            try {
+                val response = client.newCall(request).execute()
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-            val response = StringBuffer()
-            var inputLine: String?
-            while (br.readLine().also { inputLine = it } != null) {
-                response.append(inputLine)
+                return response.body?.string() ?: throw IOException("Response body must not be null")
+            } catch (e: IOException) {
+                throw e
             }
-
-            br.close()
-
-            return response.toString()
         }
 
 
@@ -70,4 +65,3 @@ class EmployeeInfoFragment : Fragment() {
         }
     }
 }
-
