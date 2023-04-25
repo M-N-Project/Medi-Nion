@@ -21,10 +21,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.example.medi_nion.databinding.ActivityMainBinding
+import com.example.medi_nion.databinding.CalendarBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.*
@@ -39,11 +43,12 @@ import java.util.*
 
 class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
     private lateinit var calendarRecyclerView : RecyclerView
-    var items = ArrayList<CalendarItem>()
+    private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
-
+    private val viewModel: CalendarViewModel by viewModels()
     private var oldTitle : String = ""
     private var selectedColor: Int = ColorSheet.NO_COLOR
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,12 +57,16 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.calendar, container, false)
 
+        fetchEvents(CalendarDay.today())
 
         calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView)
         adapter = CalendarRecyclerAdapter(items)
         calendarRecyclerView.adapter = adapter
 
-        fetchEvents(CalendarDay.today())
+        viewModel.itemList.observe(viewLifecycleOwner, {
+            fetchEvents(CalendarDay.today())
+        })
+
 
         //CalendarDay.today()를 가지고와서 오늘 날짜에 맞는 일정 가져와서 adapter 붙여주고 시작하기.
 
@@ -214,6 +223,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                         val CalendarItem = CalendarItem(id, schedule_name, schedule_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_memo,  if(isDone == "0") false else true)
                         items.add(CalendarItem)
+                        viewModel.addItemList(CalendarItem)
                     }
                     adapter = CalendarRecyclerAdapter(items)
                     calendarRecyclerView.adapter = adapter
@@ -404,6 +414,14 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                     data.schedule_alarm = alarmSpinner.selectedItem.toString()
                                     data.schedule_memo = schedule_memo_2.text.toString()
                                     CalendarRequest(data)
+
+                                    viewModel.editItemList(data)
+
+                                    Toast.makeText(
+                                        requireContext(),
+                                        String.format("스케줄 수정이 완료되었습니다."),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
 

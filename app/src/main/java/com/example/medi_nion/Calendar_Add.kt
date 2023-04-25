@@ -255,6 +255,10 @@ class Calendar_Add : AppCompatActivity() {
                     intent.putExtra("presentDate", presentDate)
                     startActivity(intent)
 
+//                    val item = CalendarItem(id, schedule_title, presentDate, start_result, end_result,  ColorSheetUtils.colorToHex(selectedColor), alarm, schedule_memo, false )
+//                    viewModel.addItemList(item)
+//                    this.finish()
+
                 } else {
                     Toast.makeText(
                         applicationContext,
@@ -270,7 +274,7 @@ class Calendar_Add : AppCompatActivity() {
                 "schedule_date" to presentDate,
                 "schedule_start" to start_result,
                 "schedule_end" to end_result,
-                "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
+                "schedule_color" to if(ColorSheetUtils.colorToHex(selectedColor)=="#FFFFFF") "#508BE0C4" else ColorSheetUtils.colorToHex(selectedColor) ,
                 "schedule_alarm" to alarm,
                 "schedule_memo" to schedule_memo,
                 "isDone" to "0"
