@@ -1,5 +1,7 @@
 package com.example.medi_nion
 
+import android.content.Intent
+import android.net.Uri
 import kotlinx.coroutines.*
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.employee_info.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,14 +21,16 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.net.URLEncoder
+import java.util.ArrayList
 
 class EmployeeInfoFragment : Fragment() {
 
     private lateinit var textView: TextView
 
+    private var items = ArrayList<EmployeeRecyItem>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.employee_info, container, false)
-        textView = view.findViewById(R.id.textView3)
         return view
     }
 
@@ -43,6 +48,7 @@ class EmployeeInfoFragment : Fragment() {
                 val responseBody = response?.body?.string()
                 withContext(Dispatchers.Main) {
                     responseBody?.let {
+                        items.clear()
                         val jsonObj: JSONObject = JSONObject(responseBody)
                         val jobsList:JSONObject = jsonObj.get("jobs") as JSONObject
                         val jobList:JSONArray = jobsList.get("job") as JSONArray
@@ -61,18 +67,30 @@ class EmployeeInfoFragment : Fragment() {
                             val company = item.getJSONObject("company").getJSONObject("detail").getString("name")
                             val position = item.getJSONObject("position")
                             val title = position.getString("title")
-                            val loca = position.getString("location")
+                            val loca = position.getJSONObject("location").getString("name")
                             val experience = position.getJSONObject("experience-level").getString("name")
                             val school = position.getJSONObject("required-education-level").getString("name")
-                            val deadline = item.getString("expiration-timestamp")
+                            val deadline = item.getLong("expiration-timestamp")
 
                             Log.d("임플로이인포제이슨", "$url \n $company \n $title \n $loca \n $experience \n $school \n $deadline")
+
+                            val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadline)
+                            items.add(infoItem)
                         }
+                        val adapter = EmployeeRecyAdapter(items)
+                        employee_recycler.adapter = adapter
+
+                        adapter.setOnItemClickListener(object:EmployeeRecyAdapter.OnItemClickListener {
+                            override fun onItemClick(v: View, data: EmployeeRecyItem, pos: Int) {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.url))
+                                startActivity(intent)
+                            }
+                        })
                     }
                 }
             } catch (e: IOException) {
                 withContext(Dispatchers.Main) {
-                    textView.text = "Error occurred: ${e.message}"
+                    //textView.text = "Error occurred: ${e.message}"
                 }
             }
         }
