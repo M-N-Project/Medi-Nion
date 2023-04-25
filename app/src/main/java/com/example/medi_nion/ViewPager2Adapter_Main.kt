@@ -17,6 +17,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
 
 
     override fun createFragment(position: Int): Fragment {
+
         return when (position) {
             0 -> {
                 val homeFragment = HomeFragment()
@@ -68,4 +69,6 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
             }
         }
     }
+
+
 }

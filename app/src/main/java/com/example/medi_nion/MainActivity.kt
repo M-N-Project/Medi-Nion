@@ -20,21 +20,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 
 private var backPressedTime: Long = 0
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener { //mainactivity, 여기서는 프레그먼트 제어를 담당
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+    //mainactivity, 여기서는 프레그먼트 제어를 담당
 
     //OnNavigationItemSelectedListener
     private lateinit var viewPager2: ViewPager2
     lateinit var binding: ActivityMainBinding
+
+
+
 
 //    private var id: String? = null
 //    private var nickname: String? = null
@@ -104,7 +110,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
 
-        linearLayout.isUserInputEnabled = true //false시 스크롤 막힘
+        val tabLayout: BottomNavigationView  = findViewById(R.id.bottomNavigationView)
+
+        binding.linearLayout.isUserInputEnabled = true //false시 스크롤 막힘
+
 
         //여기서 linearLayout은 ViewPager2, id바꿀시 혹시 에러날까봐 냅둠
         binding.linearLayout.adapter = ViewPagerAdapter2_Main(this, infomap)
@@ -120,7 +129,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         )
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+
     }
+
+
+
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         //supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
@@ -134,29 +148,33 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         when(item.itemId) {
             R.id.homeFragment -> {
-                binding.linearLayout.currentItem = 0
+                binding.linearLayout.setCurrentItem(0, false)
                 return true
             }
             R.id.menuFragment -> {
-                binding.linearLayout.currentItem = 1
+                binding.linearLayout.setCurrentItem(1, false)
                 return true
             }
             R.id.scheduleFragment -> {
-                binding.linearLayout.currentItem = 2
+                binding.linearLayout.setCurrentItem(2, false)
                 return true
             }
             R.id.businessFragment -> {
-                binding.linearLayout.currentItem = 3
+                binding.linearLayout.setCurrentItem(3, false)
                 return true
             }
             R.id.profileFragment -> {
-                binding.linearLayout.currentItem = 4
+                binding.linearLayout.setCurrentItem(4, false)
                 return true
             }
             else -> {
                 return false
             }
+
+
         }
+
+
     }
 
     override fun onBackPressed() {
