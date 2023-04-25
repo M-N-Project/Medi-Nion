@@ -35,7 +35,7 @@ class AlarmService: Service() {
         val pendingIntent = PendingIntent.getActivity(
             this, ALARM_REQUEST_CODE, Intent(
                 this,
-                Calendar_Add::class.java
+                CalendarFragment::class.java
             ), FLAG_MUTABLE
         )
 
