@@ -6,16 +6,21 @@ import android.app.PendingIntent.FLAG_MUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -30,6 +35,7 @@ class Calendar_Add : AppCompatActivity() {
     private val alarmCode = random.random()
     private lateinit var manager: NotificationManager
     private lateinit var builder: NotificationCompat.Builder
+    lateinit var notificationPermission: ActivityResultLauncher<String>
 
 //    var builder: NotificationCompat.Builder? = null
 
@@ -64,6 +70,31 @@ class Calendar_Add : AppCompatActivity() {
         val calender = Calendar.getInstance()
         var startString = ""
         var endString = ""
+
+        val notificationPermissionCheck = ContextCompat.checkSelfPermission(
+            this@Calendar_Add,
+            android.Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (notificationPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                10000
+            )
+        } else { //권한이 있는 경우
+            Log.d("0-09123","notinoti")
+        }
+
+        notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Log.d("ontintno", "notinoti")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notification()
+                }
+            } else {
+                Toast.makeText(baseContext, "권한을 승인해야 일정 알림을 받을 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
@@ -141,6 +172,7 @@ class Calendar_Add : AppCompatActivity() {
             setupColorSheet()
         }
 
+
         schedule_btn.setOnClickListener {
             if(TextUtils.isEmpty(schedule_title.text.toString())) {
                 Toast.makeText(applicationContext,
@@ -150,6 +182,11 @@ class Calendar_Add : AppCompatActivity() {
                 CalendarRequest()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun notification() {
+        notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
     private fun setupColorSheet() {
