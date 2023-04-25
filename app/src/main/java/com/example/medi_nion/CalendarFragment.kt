@@ -1,8 +1,6 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -21,24 +19,19 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.example.medi_nion.databinding.ActivityMainBinding
-import com.example.medi_nion.databinding.CalendarBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import org.json.JSONArray
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -46,6 +39,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private lateinit var calendarRecyclerView : RecyclerView
     private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
+    var currentDate : CalendarDay = CalendarDay.today()
 
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
@@ -63,7 +57,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.calendar, container, false)
 
-        fetchEvents(CalendarDay.today())
+        fetchEvents(currentDate)
 
         calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView)
         adapter = CalendarRecyclerAdapter(items)
@@ -73,12 +67,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
         viewModel.itemList.observe(viewLifecycleOwner, {
             try {
-                Thread.sleep(2000)
+                Thread.sleep(1000)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
 
-            fetchEvents(CalendarDay.today())
+            fetchEvents(currentDate)
         })
 
 
@@ -124,8 +118,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 Log.d("90182312", "click")
             }
         }
-        
-        
+
 
         return view
     }
@@ -151,7 +144,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             date: CalendarDay,
             selected: Boolean
         ) {
-
+            currentDate = date
             fetchEvents(date)
 
         }
@@ -252,6 +245,14 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             val bottomSheetView = layoutInflater.inflate(R.layout.calendar_dialog, null)
                             val bottomSheetDialog = BottomSheetDialog(requireContext())
                             bottomSheetDialog.setContentView(bottomSheetView)
+
+                            val deleteScheduleBtn = bottomSheetView.findViewById<ImageView>(R.id.deleteScheduleBtn)
+                            deleteScheduleBtn.setOnClickListener{
+                                deleteSchedule(data)
+                            }
+
+                            val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
+                            dialog_date.text = data.schedule_date
 
                             val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                             schedule_title.setText(data.schedule_name) //스케줄 이름
@@ -446,6 +447,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         }
 
                     })
+
+                    val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+                    itemTouchHelper.attachToRecyclerView(calendarRecyclerView)
                 }
 
 
@@ -463,6 +467,67 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
     }
 
+    var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback =
+        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if (direction == ItemTouchHelper.RIGHT) {
+                    // Swiped to the right
+                } else {
+                    val position = viewHolder.adapterPosition
+                    viewHolder.itemView.setBackgroundColor(Color.parseColor("#000000"))
+                    items.removeAt(position)
+
+                    val item = items.get(position)
+
+                    //db에서 삭제.
+                    deleteSchedule(item)
+
+
+                    adapter.notifyItemRemoved(position)
+                }
+
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                RecyclerViewSwipeDecorator.Builder(
+                    c, recyclerView, viewHolder,
+                    dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(Color.RED)
+                    .addSwipeLeftActionIcon(R.drawable.delete_schedule)
+                    .addSwipeLeftLabel("삭제")
+                    .setSwipeLeftLabelColor(Color.WHITE)
+                    .create()
+                    .decorate()
+
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+            }
+
+        }
+
     private fun hideKeyboard() {
         if (activity != null && requireActivity().currentFocus != null) {
             // 프래그먼트기 때문에 getActivity() 사용
@@ -473,6 +538,34 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
+    }
+
+    private fun deleteSchedule(item : CalendarItem){
+        val deleteSchedule = "http://seonho.dothome.co.kr/deleteSchedule.php"
+
+        val request = Upload_Request(
+            Request.Method.POST,
+            deleteSchedule,
+            { response ->
+                Log.d("CDCD", response.toString())
+                if (!response.equals("schedule update fail")) {
+
+
+                } else {
+
+                }
+            },
+            { Log.d("failed", "error......${error(requireContext())}") },
+            mutableMapOf(
+                "id" to item.id,
+                "schedule_name" to item.schedule_name,
+                "schedule_date" to item.schedule_date,
+                "schedule_start" to item.schedule_start
+            )
+        )
+
+        val queue = Volley.newRequestQueue(requireContext())
+        queue.add(request)
     }
 
     @SuppressLint("SimpleDateFormat")

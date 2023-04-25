@@ -89,6 +89,7 @@ dependencies {
 
     //캘린더
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
-    
+
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 
 }
