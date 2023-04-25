@@ -1,12 +1,15 @@
 package com.example.medi_nion
 
-import android.os.AsyncTask
+import kotlinx.coroutines.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -23,45 +26,39 @@ class EmployeeInfoFragment : Fragment() {
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    @OptIn(DelicateCoroutinesApi::class)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" // 발급받은 accessKey"
-        val text = URLEncoder.encode("", "UTF-8")  //http://seonho.dothome.co.kr/EmployeeInfo.php
-        //val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=$accessKey&keyword=$text"
-        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&bbs_gb=0&job_type=&job_mid_cd=6"
+        val text = URLEncoder.encode("", "UTF-8")
+        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&job_mid_cd=6"
 
-        val apiTask = ApiTask()
-        apiTask.execute(apiURL)
-    }
-
-    private inner class ApiTask : AsyncTask<String, Void, String>() {
-
-        override fun doInBackground(vararg urls: String?): String {
-            val url = urls[0] ?: throw IllegalArgumentException("Url must not be null")
-
-            val request = Request.Builder()
-                .url(url)
-                .addHeader("Accept", "application/json") //응답방식 선택 json, xml
-                .build()
-
-            val client = OkHttpClient()
-
+        GlobalScope.launch {
             try {
-                val response = client.newCall(request).execute()
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-                return response.body?.string() ?: throw IOException("Response body must not be null")
+                val response = getResponseFromApi(apiURL)
+                val responseBody = response?.body?.string()
+                withContext(Dispatchers.Main) {
+                    responseBody?.let {
+                        textView.text = it
+                    }
+                }
             } catch (e: IOException) {
-                throw e
+                withContext(Dispatchers.Main) {
+                    textView.text = "Error occurred: ${e.message}"
+                }
             }
         }
+    }
 
+    private suspend fun getResponseFromApi(apiUrl: String): Response? {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(apiUrl)
+            .build()
 
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-
-            textView.text = result
+        return withContext(Dispatchers.IO) {
+            client.newCall(request).execute()
         }
     }
 }

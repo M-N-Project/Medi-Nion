@@ -85,6 +85,7 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.6'
 
     implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
 
     //캘린더
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
