@@ -13,13 +13,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 
-class AlarmService: Service() {
+class AlarmService_opencv: Service() {
     //여기서 백그라운드로 실행해야되는데 ,,,,,,,,,,,,,,,,,,,,,,,,,,, 우짜지 ?
 
     companion object {
-        const val CHANNEL_ID = "medinion"
-        const val CHANNEL_NAME = "schedule alarm"
-        private const val ALARM_REQUEST_CODE = 1000
+        private var NOTIFICATION_ID = "medinion"
+        private var NOTIFICATION_NAME = "인증 알림"
+        private val ALARM_REQUEST_CODE = 1001
     }
 
     override fun onCreate() {
@@ -29,24 +29,20 @@ class AlarmService: Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("onStartConmmet", "dfds")
-        Intent(this, Calendar_Add::class.java).flags =
+        Intent(this, MainActivity::class.java).flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val pendingIntent = PendingIntent.getActivity(
             this, ALARM_REQUEST_CODE, Intent(
                 this,
-                Calendar_Add::class.java
+                MainActivity::class.java
             ), FLAG_MUTABLE
         )
 
-//        val requestCode = intent?.extras!!.getInt("alarm_rqCode")
-//        val title = intent.extras!!.getString("content")
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("[medinion] 캘린더 알람")
-            .setContentText("오늘의 일정을 확인하세요!")
-            .setSmallIcon(R.drawable.logo)
-            .setAutoCancel(true)
+        val notification = NotificationCompat.Builder(this@AlarmService_opencv, NOTIFICATION_ID)
+            .setContentTitle("[Medi_Nion] 사용자 인증 알림") //타이틀 TEXT
+            .setContentText("인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정") //세부내용 TEXT
+            .setSmallIcon(R.drawable.logo) //필수 (안해주면 에러)
             .setContentIntent(pendingIntent)
             .build()
 
