@@ -151,11 +151,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 binding.linearLayout.setCurrentItem(0, false) //bottomnNavigation 클릭시엔 스와이프되지 않게하기
                 return true
             }
-            R.id.menuFragment -> {
+            R.id.scheduleFragment -> {
                 binding.linearLayout.setCurrentItem(1, false)
                 return true
             }
-            R.id.scheduleFragment -> {
+            R.id.menuFragment -> {
                 binding.linearLayout.setCurrentItem(2, false)
                 return true
             }

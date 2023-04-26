@@ -31,6 +31,13 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 return homeFragment
             }
             1 -> {
+                val calendarMainFragment = CalendarFragment()
+                val bundle = Bundle()
+                bundle.putString("id", id)
+                calendarMainFragment.arguments = bundle
+                return calendarMainFragment
+            }
+            2 -> {
                 val menuFragment = MenuFragment()
                     val bundle = Bundle()
                 bundle.putString("id", id)
@@ -41,13 +48,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 menuFragment.arguments = bundle
                 return menuFragment
             }
-            2 -> {
-                val calendarMainFragment = CalendarFragment()
-                val bundle = Bundle()
-                bundle.putString("id", id)
-                calendarMainFragment.arguments = bundle
-                return calendarMainFragment
-            }
+
             3 -> {
                 val businessMainFragment = BusinessMainFragment()
                 val bundle = Bundle()
