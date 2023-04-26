@@ -69,14 +69,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/active"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/employee_active" />
-
-
         </LinearLayout>
 
 

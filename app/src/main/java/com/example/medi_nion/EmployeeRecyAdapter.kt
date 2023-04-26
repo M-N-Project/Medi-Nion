@@ -1,9 +1,12 @@
 package com.example.medi_nion
 
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -52,8 +55,20 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
             experienceView.text = item.experience
             schoolView.text = item.school
             companyView.text = item.company
-            val date = item.deadline.split("T")[0]
-            deadlineView.text = "마감 일시 : "+date.split("-")[1]+"/"+date.split("-")[2]
+            if(item.deadlineType == 1) {
+                val date = item.deadline.split("T")[0]
+                deadlineView.text = "마감 일시 : " + date.split("-")[1] + "/" + date.split("-")[2]
+                deadlineView.setTextColor(Color.RED)
+            }
+            else if (item.deadlineType ==2 ){
+                deadlineView.text = "채용시 마감"
+            }
+            else if (item.deadlineType== 3){
+                deadlineView.text = "상시 모집"
+            }
+            else if (item.deadlineType == 4){
+                deadlineView.text = "수시 모집"
+            }
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION) {
@@ -61,17 +76,6 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
                     listener?.onItemClick(itemView, item, pos)
                 }
             }
-        }
-
-        fun Millis(postTime : Long) : String {
-            // YY-MM-DD HH:MM:SS
-
-            //val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd, hh:mm:ss")
-            //val date = LocalDateTime.parse(dateString, formatter)
-
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
-            val date1: String = simpleDateFormat.format(Date(postTime))
-            return date1
         }
     }
 }
