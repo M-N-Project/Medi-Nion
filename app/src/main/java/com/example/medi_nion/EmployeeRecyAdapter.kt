@@ -53,7 +53,8 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
             experienceView.text = item.experience
             schoolView.text = item.school
             companyView.text = item.company
-            deadlineView.text = Millis(item.deadline)
+            val date = item.deadline.split("T")[0]
+            deadlineView.text = "마감 일시 : "+date.split("-")[1]+"/"+date.split("-")[2]
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION) {
