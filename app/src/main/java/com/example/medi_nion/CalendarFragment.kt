@@ -114,7 +114,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             makeEventScheduleRadioBtn.setOnClickListener{
                 val intent = Intent(context, Calendar_Add::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("day", CalendarDay.today().toString())
+                intent.putExtra("day", currentDate)
                 startActivity(intent)
             }
             //히스토리 일정 버튼 만들기
