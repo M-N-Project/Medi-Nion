@@ -4,24 +4,54 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.media.Image
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
-import kotlinx.android.synthetic.main.profile_password_reset.*
 import org.json.JSONArray
-import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 
 class ProfileFragment : Fragment(R.layout.profile) {
     private var mBinding: ProfileBinding? = null
     private var isChan: Boolean = false
+
+    lateinit var cameraPermission: ActivityResultLauncher<String>
+    lateinit var storagePermission: ActivityResultLauncher<String>
+    lateinit var cameraLauncher: ActivityResultLauncher<Uri>
+
+    var photoUri: Uri? = null
+    var image : String = "null"
+    lateinit var bitmap: Bitmap
 
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
     private val binding get() = mBinding!!
@@ -48,11 +78,32 @@ class ProfileFragment : Fragment(R.layout.profile) {
         Log.d("profileFragment", "userDept: $userDept")
         Log.d("profileFragment", "userGrade: $userGrade")
 
-        
+        var identity_img = view?.findViewById<ImageView>(R.id.identity_imageView)
+        var identity_warningImage = view?.findViewById<ImageView>(R.id.identity_warning)
+
+        cameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Log.d("01503", "oepn Cmaera")
+                openCamera()
+            } else {
+                Toast.makeText(context, "권한을 승인해야 카메라를 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+            identity_img?.setImageURI(photoUri)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                bitmap = photoUri?.let { it1 -> ImageuriToBitmap(it1) }!!
+                image = BitMapToString(bitmap)
+            }
+            Log.d("phto", "uri")
+        }
+
         binding.textViewNickname.text = nickname
         binding.textViewDept.text = userDept
         binding.textViewJob.text = userType
         fetchGrade()
+        fetchIdentity()
 
         //나의 활동 
         binding.item1.setOnClickListener{
@@ -418,6 +469,187 @@ class ProfileFragment : Fragment(R.layout.profile) {
         )
         val queue = Volley.newRequestQueue(context)
         queue.add(request)
+    }
+
+    fun fetchIdentity() {
+        val id = arguments?.getString("id").toString()
+        val url = "http://seonho.dothome.co.kr/profile_identity.php"
+        val identity_warning_img = binding.identityWarning
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                val jsonArray = JSONArray(response)
+
+                for (i in 0 until jsonArray.length()) {
+
+                    val item = jsonArray.getJSONObject(i)
+
+                    val id = item.getString("id")
+                    val identity_check = item.getString("identity_check")
+                    Log.d("identititi", "$id, $identity_check")
+
+                    when(identity_check) {
+                        "false" -> {
+                            identity_warning_img.setOnClickListener {
+                                if(hasPermission(activity, android.Manifest.permission.CAMERA)) {
+                                    openCamera()
+                                    Log.d("123456", "789")
+                                    updateIdentity()
+                                } else {
+                                    setViews()
+                                    Log.d("789", "789")
+                                }
+                            }
+                        }
+                        else -> {
+                            identity_warning_img.setImageResource(R.drawable.identity_check)
+                            identity_warning_img.setOnClickListener {
+                                Toast.makeText(context, "신분증이 인증되었습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            Log.d("identity", "true")
+                        }
+                    }
+
+                }
+            }, { Log.d("identity Failed", "error......${error(this)}") },
+            hashMapOf(
+                "id" to id
+            )
+        )
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
+    }
+
+    fun updateIdentity() {
+        val id = arguments?.getString("id").toString()
+        val updateidentityurl = "http://seonho.dothome.co.kr/identity_update.php"
+        var img1 : String = ""
+        var img2 : String = ""
+
+        if(image != "null"){
+            img1 = image.substring(0,image.length/2+1)
+            img2 = image.substring(image.length/2+1,image.length)
+        }
+
+        val request = Login_Request(
+            Request.Method.POST,
+            updateidentityurl,
+            { response ->
+                Log.d("idendkd", response.toString())
+                if(!response.equals("updateIdentity fail")) {
+                    Toast.makeText(context, "신분증을 분석합니다. 최대 3일 소요됩니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "신분증을 다시 촬영해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            },
+            {
+                Log.d(
+                    "Indentity update failed",
+                    "error......${context?.let { it1 -> error(it1) }}"
+                )
+            },
+            hashMapOf(
+                "id" to id,
+                "identity_image1" to img1,
+                "identity_image2" to img2
+            )
+        )
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
+
+    }
+
+    fun hasPermission(context: FragmentActivity?, permission: String): Boolean {
+        val cameraPermissionCheck = context?.let { it1 ->
+            ContextCompat.checkSelfPermission(
+                it1,
+                android.Manifest.permission.CAMERA
+            )
+        }
+        return if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            Log.d("LDF", "DLF")
+            requestPermissions(
+                arrayOf(android.Manifest.permission.CAMERA),
+                1000
+            )
+            false
+        } else { //권한이 있는 경우
+            Log.d("dsfs","dfs")
+            true
+        }
+    }
+
+    //카메라 권한 요청
+    fun setViews() {
+        binding.identityWarning.setOnClickListener {
+            cameraPermission.launch(android.Manifest.permission.CAMERA)
+        }
+    }
+
+    private fun openCamera() {
+        Log.d("123", "456")
+
+        val photoFile = File.createTempFile(
+            "IMG_",
+            ".jpg",
+            context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        )
+        photoUri = context?.let {
+            FileProvider.getUriForFile(
+                it, "${context?.packageName}.provider", photoFile
+            )
+        }
+        cameraLauncher.launch(photoUri)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun ImageuriToBitmap(photouri: Uri): Bitmap {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            bitmap = context?.let {
+                ImageDecoder.createSource(
+                    it.contentResolver,
+                    photoUri!!
+                )
+            }?.let { ImageDecoder.decodeBitmap(it) }!!
+            } else {
+                MediaStore.Images.Media.getBitmap(context?.contentResolver, photoUri)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return bitmap
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun BitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
+        val arr = baos.toByteArray()
+        val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
+//        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
+//        val image: ByteArray? = Base64.encode(arr,0)
+//        val image: String = getEncoder(arr)
+        var temp = ""
+        try {
+            //temp = URLEncoder.encode(image, "utf-8")
+        } catch (e: Exception) {
+            Log.e("exception", e.toString())
+        }
+        return base64Image
+    }
+
+    private fun resize(bitmap: Bitmap): Bitmap? {
+        var bitmap: Bitmap? = bitmap
+        val config: Configuration = Resources.getSystem().configuration
+        var bitmap_width : Int? = bitmap?.width
+        var bitmap_height : Int? = bitmap?.height
+
+        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
+        Log.d("please", "$bitmap_height, $bitmap_width")
+        return bitmap
     }
 }
 

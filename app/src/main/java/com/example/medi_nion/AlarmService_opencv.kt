@@ -35,7 +35,7 @@ class AlarmService_opencv: Service() {
         val pendingIntent = PendingIntent.getActivity(
             this, ALARM_REQUEST_CODE, Intent(
                 this,
-                MainActivity::class.java
+                Login::class.java
             ), FLAG_MUTABLE
         )
 
