@@ -68,7 +68,7 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
             //val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd, hh:mm:ss")
             //val date = LocalDateTime.parse(dateString, formatter)
 
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
             val date1: String = simpleDateFormat.format(Date(postTime))
             return date1
         }
