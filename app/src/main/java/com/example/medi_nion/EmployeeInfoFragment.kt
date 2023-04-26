@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.employee_info.*
+import kotlinx.android.synthetic.main.employee_item.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,7 +40,7 @@ class EmployeeInfoFragment : Fragment() {
 
         val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" // 발급받은 accessKey"
         val text = URLEncoder.encode("", "UTF-8")
-        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&bbs_gb=0&job_type=&edu_lv=&fields=expiration-date&job_mid_cd=6"
+        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&fields=expiration-date&count=110&job_mid_cd=6"
 
         GlobalScope.launch {
             try {
@@ -63,13 +64,14 @@ class EmployeeInfoFragment : Fragment() {
                             val item = jobList.getJSONObject(i)
 
                             val url = item.getString("url")
-                            val company = item.getJSONObject("company").getJSONObject("detail").getString("name")
+                            val company = item.getJSONObject("company").getJSONObject("detail").optString("name")
                             val position = item.getJSONObject("position")
                             val title = position.getString("title")
-                            val loca = position.getJSONObject("location").getString("name")
-                            val experience = position.getJSONObject("experience-level").getString("name")
-                            val school = position.getJSONObject("required-education-level").getString("name")
-                            val deadline = item.getString("expiration-date")
+                            val loca = position.getJSONObject("location").optString("name")
+                            val experience = position.getJSONObject("experience-level").optString("name")
+                            val school = position.getJSONObject("required-education-level").optString("name")
+                            val deadline = item.optString("expiration-date")
+                            val active = item.optInt("active")
 
                             val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadline)
                             items.add(infoItem)

@@ -7,6 +7,6 @@ class EmployeeRecyItem(
     val loca: String,
     val experience: String,
     val school: String,
-    val deadline: String
-) {
+    val deadline: String, )
+{
 }

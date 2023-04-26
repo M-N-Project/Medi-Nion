@@ -1,6 +1,7 @@
 package com.example.medi_nion
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.calendar_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,7 +46,6 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
         private val schoolView = itemView.findViewById<TextView>(R.id.school)
         private val companyView = itemView.findViewById<TextView>(R.id.company)
         private val deadlineView = itemView.findViewById<TextView>(R.id.deadline)
-        //private val activeView = itemView.findViewById<ImageView>(R.id.)
         private val linear = itemView.findViewById<LinearLayout>(R.id.recycler_linear)
 
         fun bind(item: EmployeeRecyItem) {
@@ -55,6 +56,9 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
             companyView.text = item.company
             val date = item.deadline.split("T")[0]
             deadlineView.text = "마감 일시 : "+date.split("-")[1]+"/"+date.split("-")[2]
+
+
+
 
             val pos = absoluteAdapterPosition
             if(pos!= RecyclerView.NO_POSITION) {
