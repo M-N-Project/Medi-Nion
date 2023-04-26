@@ -3,6 +3,7 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.*
 import android.os.Build
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +33,7 @@ import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormat
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import okhttp3.internal.notify
 import org.json.JSONArray
 import java.util.*
 
@@ -81,6 +84,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         val calendar = view.findViewById<MaterialCalendarView>(R.id.calendarView)
         val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
         val makeEventRadiogroup = view.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
+        makeEventRadiogroup.visibility = View.GONE
         val makeEventScheduleRadioBtn= view.findViewById<RadioButton>(R.id.schedule_RadioBtn)
         val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
@@ -113,9 +117,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 intent.putExtra("day", CalendarDay.today().toString())
                 startActivity(intent)
             }
-            //커스터마이징 일정 버튼 만들기
+            //히스토리 일정 버튼 만들기
             makeEventButtonRadioBtn.setOnClickListener{
-                Log.d("90182312", "click")
+                val intent = Intent(context, Calendar_History_Add::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("day", CalendarDay.today().toString())
+                startActivity(intent)
             }
         }
 
@@ -248,7 +255,22 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                             val deleteScheduleBtn = bottomSheetView.findViewById<ImageView>(R.id.deleteScheduleBtn)
                             deleteScheduleBtn.setOnClickListener{
-                                deleteSchedule(data)
+                                //삭제하시겠습니까??
+                                val builder = AlertDialog.Builder(requireContext())
+                                builder.setTitle("일정 삭제")
+                                    .setMessage("일정을 삭제하시겠습니까?")
+                                    .setPositiveButton("삭제",
+                                        DialogInterface.OnClickListener { dialog, id ->
+                                            deleteSchedule(data)
+                                        })
+                                    .setNegativeButton("취소",
+                                        DialogInterface.OnClickListener { dialog, id ->
+
+                                        })
+
+                                // 다이얼로그를 띄워주기
+                                builder.show()
+
                             }
 
                             val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
@@ -256,10 +278,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                             val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                             schedule_title.setText(data.schedule_name) //스케줄 이름
-
-
-                            Log.d("823123","${data.schedule_start} // ${data.schedule_end}")
-
 
                             val day_night1 = bottomSheetView.findViewById<TextView>(R.id.start_day_night)
                             val start = bottomSheetView.findViewById<LinearLayout>(R.id.start_time_linear)
@@ -390,7 +408,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             alarmSpinner.setSelection(colorList.indexOf(data.schedule_alarm))
                             bottomSheetView.findViewById<EditText>(R.id.schedule_memo).setText(data.schedule_memo) //스케줄 메모
 
-                            val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.calendarCheckBox)
+                            val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
                             doneBtn.setOnClickListener {
                                 hideKeyboard()
                                 val schedule_title_2 = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
@@ -466,7 +484,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
 
     }
-
+    private var isSwipingCanceled = false
     var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback =
         object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
@@ -483,15 +501,34 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 } else {
                     val position = viewHolder.adapterPosition
                     viewHolder.itemView.setBackgroundColor(Color.parseColor("#000000"))
-                    items.removeAt(position)
 
-                    val item = items.get(position)
+                    //삭제하시겠습니까??
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("일정 삭제")
+                        .setMessage("일정을 삭제하시겠습니까?")
+                        .setPositiveButton("삭제",
+                            DialogInterface.OnClickListener { dialog, id ->
 
-                    //db에서 삭제.
-                    deleteSchedule(item)
+                                val item = items.get(position)
+                                items.removeAt(position)
 
+                                //db에서 삭제.
+                                deleteSchedule(item)
 
-                    adapter.notifyItemRemoved(position)
+                                var adapter = CalendarRecyclerAdapter(items)
+//                                adapter.notifyItemRemoved(position)
+                            })
+                        .setNegativeButton("취소",
+                            DialogInterface.OnClickListener { dialog, id ->
+                                isSwipingCanceled = true
+                                viewHolder.itemView.setBackgroundColor(0)
+
+                                adapter.notifyItemChanged(viewHolder.adapterPosition)
+                            })
+
+                    // 다이얼로그를 띄워주기
+                    builder.show()
+
                 }
 
             }
@@ -505,15 +542,28 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                RecyclerViewSwipeDecorator.Builder(
-                    c, recyclerView, viewHolder,
-                    dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(Color.RED)
-                    .addSwipeLeftActionIcon(R.drawable.delete_schedule)
-                    .addSwipeLeftLabel("삭제")
-                    .setSwipeLeftLabelColor(Color.WHITE)
-                    .create()
-                    .decorate()
+                if (!isSwipingCanceled) {
+                    RecyclerViewSwipeDecorator.Builder(
+                        c, recyclerView, viewHolder,
+                        dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(Color.RED)
+                        .addSwipeLeftActionIcon(R.drawable.delete_schedule)
+                        .addSwipeLeftLabel("삭제")
+                        .setSwipeLeftLabelColor(Color.WHITE)
+                        .create()
+                        .decorate()
+                }
+                if (isSwipingCanceled) {
+                    RecyclerViewSwipeDecorator.Builder(
+                        c, recyclerView, viewHolder,
+                        dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(0)
+                        .setSwipeLeftLabelColor(Color.BLACK)
+                        .create()
+                        .decorate()
+
+                    isSwipingCanceled = false
+                }
 
                 super.onChildDraw(
                     c,

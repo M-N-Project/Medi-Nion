@@ -3,17 +3,15 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.*
 import android.app.PendingIntent.FLAG_MUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,30 +20,24 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
-import org.json.JSONArray
 import java.util.*
 
 
-class Calendar_Add : AppCompatActivity() {
+class Calendar_History_Add : AppCompatActivity() {
     private var selectedColor: Int = ColorSheet.NO_COLOR
     private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
     private val alarmCode = random.random()
     private lateinit var manager: NotificationManager
     private lateinit var builder: NotificationCompat.Builder
     lateinit var notificationPermission: ActivityResultLauncher<String>
-
-    //히스토리 스피너에 들어갈 요소들
-    private lateinit var calendarHistoryView : RecyclerView
-    private val items = ArrayList<CalendarItem>()
-    private val similarItems = ArrayList<CalendarItem>()
-    var adapter = CalendarHistoryAdapter(items)
 
 //    var builder: NotificationCompat.Builder? = null
 
@@ -60,18 +52,11 @@ class Calendar_Add : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.calendar_add)
+        setContentView(R.layout.calendar_history_add)
 
         val id = intent?.getStringExtra("id")
         val date = intent?.getStringExtra("date")
         Log.d("ID", id.toString())
-
-        var calendarHistoryScrollView = findViewById<ScrollView>(R.id.calendarHistoryScrollView)
-        calendarHistoryView = findViewById(R.id.calendarHistoryRecyclerView)
-        calendarHistoryScrollView.bringToFront()
-        calendarHistoryView.bringToFront()
-        adapter = CalendarHistoryAdapter(items)
-        calendarHistoryView.adapter = adapter
 
         val fragment = CalendarFragment()
 //        viewModel = fragment.viewModel = // Set the ViewModel for the Fragment
@@ -85,152 +70,15 @@ class Calendar_Add : AppCompatActivity() {
         val day_night2 = findViewById<TextView>(R.id.day_night2)
         val end = findViewById<LinearLayout>(R.id.end_time_linear)
         val schedule_btn = findViewById<Button>(R.id.schedule_btn)
-        val color = findViewById<Button>(R.id.schedule_color_imageView)
-        val alarm = findViewById<Spinner>(R.id.alarm_spinner)
-        val schedule_memo = findViewById<EditText>(R.id.schedule_memo)
 
+        val color = findViewById<Button>(R.id.schedule_color_imageView)
+
+        val calender = Calendar.getInstance()
         var startString = ""
         var endString = ""
 
-        fetchCalendarHistory()
-
-//        historySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//                start_result.setText("00   :   00")
-//                end_result.setText("00   :   00")
-//                //alarm 설정
-//
-//                val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                    drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor("#BADFD2"), BlendMode.SRC_ATOP)
-//                } else {
-//                    drawable!!.setColorFilter(Color.parseColor("#BADFD2"), PorterDuff.Mode.SRC_ATOP)
-//                }
-//                color.background = drawable
-//
-//                schedule_memo.setText("")
-//
-//                historySpinner.visibility = View.GONE
-//            }
-//
-//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                Log.d("0-9132", "selected")
-//                val selScheduleItem = spinnerHashMap[historySpinner.selectedItem]
-//
-//                if(selScheduleItem != null){
-//                    start_result.setText(selScheduleItem.schedule_start)
-//                    end_result.setText(selScheduleItem.schedule_end)
-//                    //alarm 설정
-//
-//                    val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
-////            drawable?.setTint(Color.parseColor(item.color))
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                        drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(selScheduleItem.schedule_color), BlendMode.SRC_ATOP)
-//                    } else {
-//                        drawable!!.setColorFilter(Color.parseColor(selScheduleItem.schedule_color), PorterDuff.Mode.SRC_ATOP)
-//                    }
-//                    color.background = drawable
-//
-//                    schedule_memo.setText(selScheduleItem.schedule_memo)
-//                }
-//
-//            }
-//
-//        }
-
-
-        //사용자가 스케줄 이름 입력하면 그거에 맞는 히스토리 스피너 요소들 뜨게끔 하기 위해
-        schedule_title.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                similarItems.clear()
-
-                if(s != null && s.length>0) {
-
-                    for (i in 0 until items.size) {
-                        Log.d("haha", items[i].schedule_name)
-                        if (items[i].schedule_name.substring(0, s.length) == s.toString()) {
-                            Log.d("haha2", items[i].schedule_name)
-
-                            if (!similarItems.contains(items[i])) {
-                                Log.d("haha3", items[i].schedule_name)
-
-                                similarItems.add(items[i])
-                                adapter = CalendarHistoryAdapter(similarItems)
-                                calendarHistoryView.adapter = adapter
-                                Log.d("haha3-2", similarItems.size.toString())
-
-                            }
-                        }
-                    }
-                }
-            }
-
-
-//                if(s != null && s.length>0){
-//                    for(i in 0 until items.size){
-//                        val charSequence: CharSequence = items[i].schedule_name as CharSequence
-//                        for(j in 0 until charSequence.length){
-//                            //한글이면
-//                            if(charSequence[j].isKorean){
-//                                var CharList = charSequence[j].separationKorean()
-//
-//                                // [ㅎ, ㅚ, null] 중에 포함되면 더해주기
-////                                if(CharList.first.toString()==s.toString()
-////                                    || CharList.second.toString()==s.toString()
-////                                    || CharList.third.toString()==s.toString()){
-////                                    if(!similarSpinnerItems.contains(spinnerItems[i]))
-////                                        similarSpinnerItems.add(spinnerItems[i])
-////                                }
-//                                if(items[i].schedule_name.substring(0,s.length) == s.toString()){
-//                                    if(!similarItems.contains(items[i])){
-//                                        similarItems.add(items[i])
-//                                        adapter = CalendarHistoryAdapter(similarItems)
-//                                        calendarHistoryView.adapter = adapter
-//                                    }
-//                                }
-//                                else {
-//                                    if(similarItems.contains(items[i])){
-//                                        similarItems.remove(items[i])
-//                                        adapter = CalendarHistoryAdapter(similarItems)
-//                                        calendarHistoryView.adapter = adapter
-//                                    }
-//                                }
-//
-//                            }
-//                            //한글이 아니면
-//                            else{
-//                                if((items[i].schedule_name.substring(0,s.length)).contains(s)){
-//                                    if(!similarItems.contains(items[i])){
-//                                        similarItems.add(items[i])
-//                                        adapter = CalendarHistoryAdapter(similarItems)
-//                                        calendarHistoryView.adapter = adapter
-//                                    }
-//                                }
-//                                else{
-//                                    if(similarItems.contains(items[i])){
-//                                        similarItems.remove(items[i])
-//                                        adapter = CalendarHistoryAdapter(similarItems)
-//                                        calendarHistoryView.adapter = adapter
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//
-//                    }
-//                }
-
-
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-        })
-
         val notificationPermissionCheck = ContextCompat.checkSelfPermission(
-            this@Calendar_Add,
+            this@Calendar_History_Add,
             android.Manifest.permission.POST_NOTIFICATIONS
         )
         if (notificationPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
@@ -324,7 +172,6 @@ class Calendar_Add : AppCompatActivity() {
             dialog1.setTitle("종료 시간")
             dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog1.show()
-            Log.d("iowfds", endString)
         }
 
         color.setOnClickListener {
@@ -346,66 +193,6 @@ class Calendar_Add : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun notification() {
         notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-    }
-
-    private fun fetchCalendarHistory(){
-        val id = intent?.getStringExtra("id").toString()
-        //스피너에 들어갈 item list 가져오기 (request)
-        val historyUrl = "http://seonho.dothome.co.kr/CalendarHistory.php"
-        val request = Upload_Request(
-            Request.Method.POST,
-            historyUrl,
-            { response ->
-                Log.d("CDCD", response.toString())
-                if (!response.equals("History fetch Fail")) {
-                    val jsonArray = JSONArray(response)
-                    items.clear()
-
-                    for (i in 0  until  jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
-
-                        val schedule_name = item.getString("schedule_name")
-                        val schedule_start = item.getString("schedule_start")
-                        val schedule_end = item.getString("schedule_end")
-                        val schedule_color = item.getString("schedule_color")
-                        val schedule_alarm = item.getString("schedule_alarm")
-                        val schedule_memo = item.getString("schedule_memo")
-
-                        val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_memo, false)
-                        items.add(CalendarItem)
-                    }
-
-                    adapter = CalendarHistoryAdapter(items)
-                    calendarHistoryView.adapter = adapter
-
-                    adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
-                        override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
-                            Log.d("clickkk", "clikckck")
-                        }
-                    })
-
-
-                } else {
-                    Toast.makeText(
-                        applicationContext,
-                        "게시물 업로드가 실패했습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            },
-            { Log.d("failed", "error......${error(applicationContext)}") },
-                mutableMapOf(
-                    "id" to id
-                )
-        )
-        request.retryPolicy = DefaultRetryPolicy(
-            0,
-            -1,
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        )
-
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
     }
 
     private fun setupColorSheet() {
@@ -431,30 +218,19 @@ class Calendar_Add : AppCompatActivity() {
         Log.d("COLOE", color.toString())
     }
 
-    fun Char.separationKorean(): Triple<Char?, Char?, Char?> {
-        return when {
-                isKoreanWord -> Triple(KOREAN_INITIAL_LIST.getOrNull(initialOf),
-                KOREAN_NEUTRALITY_LIST.getOrNull(neutralityOf),
-                KOREAN_SUPPORT_LIST.getOrNull(supportOf))
-            isConsonant -> Triple(this, null, null)
-            isVowel -> Triple(null, this, null)
-            else -> Triple(null, null, null)
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SimpleDateFormat", "UnspecifiedImmutableFlag")
     private fun CalendarRequest() {
         val receiverIntent: Intent = Intent(
-            this@Calendar_Add,
+            this@Calendar_History_Add,
             AlarmReceiver::class.java
         )
         val pendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this@Calendar_Add, ALARM_REQUEST_CODE, receiverIntent, FLAG_MUTABLE)
+            PendingIntent.getBroadcast(this@Calendar_History_Add, ALARM_REQUEST_CODE, receiverIntent, FLAG_MUTABLE)
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val id = intent?.getStringExtra("id").toString()
         var day = intent?.getStringExtra("day").toString()
-        val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
+        val postUrl = "http://seonho.dothome.co.kr/createCalendarHistory.php"
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
@@ -543,25 +319,21 @@ class Calendar_Add : AppCompatActivity() {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
-                    "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
                     "schedule_alarm" to alarm,
-                    "schedule_memo" to schedule_memo,
-                    "isDone" to "0"
+                    "schedule_memo" to schedule_memo
                 )
             } else {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
-                    "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
-                    "schedule_memo" to schedule_memo,
-                    "isDone" to "0"
+                    "schedule_memo" to schedule_memo
                 )
             }
         )
