@@ -4,13 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import kotlinx.coroutines.*
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.employee_info.*
-import kotlinx.android.synthetic.main.employee_item.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,16 +64,16 @@ class EmployeeInfoFragment : Fragment() {
                             val item = jobList.getJSONObject(i)
 
                             val url = item.getString("url")
-                            val company = item.getJSONObject("company").getJSONObject("detail").optString("name")
+                            val company = item.getJSONObject("company").getJSONObject("detail").getString("name")
                             val position = item.getJSONObject("position")
                             val title = position.getString("title")
                             val loca = position.getJSONObject("location").optString("name")
-                            val experience = position.getJSONObject("experience-level").optString("name")
-                            val school = position.getJSONObject("required-education-level").optString("name")
+                            val experience = position.getJSONObject("experience-level").getString("name")
+                            val school = position.getJSONObject("required-education-level").getString("name")
+                            val deadlineType = item.getJSONObject("close-type").optInt("code")
                             val deadline = item.optString("expiration-date")
-                            val active = item.optInt("active")
 
-                            val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadline)
+                            val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadlineType, deadline)
                             items.add(infoItem)
                         }
                         val adapter = EmployeeRecyAdapter(items)
