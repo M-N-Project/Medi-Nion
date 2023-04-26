@@ -71,8 +71,9 @@ class EmployeeInfoFragment : Fragment() {
                             val experience = position.getJSONObject("experience-level").getString("name")
                             val school = position.getJSONObject("required-education-level").getString("name")
                             val deadline = item.getLong("expiration-timestamp")
+                            val active = item.getBoolean("active")
 
-                            val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadline)
+                            val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadline, active)
                             items.add(infoItem)
                         }
                         val adapter = EmployeeRecyAdapter(items)

@@ -44,6 +44,7 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
         private val schoolView = itemView.findViewById<TextView>(R.id.school)
         private val companyView = itemView.findViewById<TextView>(R.id.company)
         private val deadlineView = itemView.findViewById<TextView>(R.id.deadline)
+        //private val activeView = itemView.findViewById<ImageView>(R.id.)
         private val linear = itemView.findViewById<LinearLayout>(R.id.recycler_linear)
 
         fun bind(item: EmployeeRecyItem) {

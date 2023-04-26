@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         when(item.itemId) {
             R.id.homeFragment -> {
-                binding.linearLayout.setCurrentItem(0, false)
+                binding.linearLayout.setCurrentItem(0, false) //bottomnNavigation 클릭시엔 스와이프되지 않게하기
                 return true
             }
             R.id.menuFragment -> {
