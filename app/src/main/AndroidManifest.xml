@@ -124,10 +124,14 @@
         <activity
             android:name=".Business_bookmark__profile"
             android:screenOrientation="portrait" />
+
+
         <activity android:name=".Calendar_Add"
             android:screenOrientation="portrait" />
         <activity android:name=".MedicalNews"
             android:screenOrientation="portrait"/>
+        <activity android:name=".Calendar_History_Add"
+            android:screenOrientation="portrait" />
 
 
         <uses-library
