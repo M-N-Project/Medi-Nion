@@ -114,7 +114,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             makeEventScheduleRadioBtn.setOnClickListener{
                 val intent = Intent(context, Calendar_Add::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("day", currentDate)
+                intent.putExtra("day", currentDate.toString())
                 startActivity(intent)
             }
             //히스토리 일정 버튼 만들기
@@ -404,8 +404,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
 
                             val alarmSpinner = bottomSheetView.findViewById<Spinner>(R.id.alarm_spinner)
-                            val colorList: Array<String> = resources.getStringArray(R.array.times)
-                            alarmSpinner.setSelection(colorList.indexOf(data.schedule_alarm))
+                            val alarmList: Array<String> = resources.getStringArray(R.array.times)
+                            alarmSpinner.setSelection(alarmList.indexOf(data.schedule_alarm))
+
+
                             bottomSheetView.findViewById<EditText>(R.id.schedule_memo).setText(data.schedule_memo) //스케줄 메모
 
                             val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
@@ -515,8 +517,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 //db에서 삭제.
                                 deleteSchedule(item)
 
-                                var adapter = CalendarRecyclerAdapter(items)
-//                                adapter.notifyItemRemoved(position)
+//                                adapter = CalendarRecyclerAdapter(items)
+//                                calendarRecyclerView.adapter = adapter
                             })
                         .setNegativeButton("취소",
                             DialogInterface.OnClickListener { dialog, id ->
@@ -600,6 +602,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 Log.d("CDCD", response.toString())
                 if (!response.equals("schedule update fail")) {
 
+                    adapter = CalendarRecyclerAdapter(items)
+                    calendarRecyclerView.adapter = adapter
 
                 } else {
 

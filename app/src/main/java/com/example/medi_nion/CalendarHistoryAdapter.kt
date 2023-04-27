@@ -1,5 +1,9 @@
 package com.example.medi_nion
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -36,14 +41,23 @@ class CalendarHistoryAdapter(private val items: ArrayList<CalendarItem>) :
             ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
             .inflate(R.layout.calendar_history_item, parent, false)
+        Log.d("haha??", "haha~~")
         return ViewHolder(inflatedView)
     }
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val historyName = v.findViewById<CheckBox>(R.id.history_name)
+        val historyName = v.findViewById<TextView>(R.id.history_name)
         val linearLayout = v.findViewById<LinearLayout>(R.id.linearLayout_history)
         @RequiresApi(Build.VERSION_CODES.Q)
         fun bind(item: CalendarItem, pos : Int) {
+            val drawable = ContextCompat.getDrawable(this.itemView.context, R.drawable.history_button_round)
+//            drawable?.setTint(Color.parseColor(item.color))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(item.schedule_color), BlendMode.SRC_ATOP)
+            } else {
+                drawable!!.setColorFilter(Color.parseColor(item.schedule_color), PorterDuff.Mode.SRC_ATOP)
+            }
+            linearLayout.background = drawable
 
             historyName.setText(item.schedule_name)
 
