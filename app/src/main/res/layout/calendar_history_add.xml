@@ -2,91 +2,46 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calendar_add_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:behavior_hideable="true"
-    app:behavior_draggable="true"
-    android:padding = "2dp"
-    android:backgroundTint="#BADFD2"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/calendar_dialog_border"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/dateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="날짜"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-            <ImageView
-                android:id="@+id/deleteScheduleBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/delete_schedule"
-                android:backgroundTint="#B8B8B8" />
-
-            <ImageView
-                android:id="@+id/doneBtn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
-                android:foregroundGravity="right"
-                android:padding="10dp"
-                app:srcCompat="@drawable/done" />
-
-        </LinearLayout>
-
         <EditText
-            android:id="@+id/editText_scheduleName"
+            android:id="@+id/schedule_title"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="#ffffff"
-            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:ems="1"
             android:hint="일정 이름"
+            android:textSize="16sp"
             android:inputType="textPersonName"
             tools:ignore="TouchTargetSizeCheck"
             tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="16dp" />
+            tools:layout_editor_absoluteY="16dp"
+            android:background="#ffffff"/>
 
         <View
             android:id="@+id/view"
             android:layout_width="387dp"
             android:layout_height="1dp"
-            android:layout_marginLeft="11dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="20dp"
             android:background="#8085AFD6" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -98,24 +53,24 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/start_day_night"
+                    android:id="@+id/day_night1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="오전"
-                    android:textSize="15sp" />
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/start_time"
+                    android:id="@+id/start_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_weight="2"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:text="00   :   00"
-                    android:textSize="15sp" />
+                    android:textSize="16sp"/>
 
             </LinearLayout>
 
@@ -123,18 +78,18 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="~" />
+                    android:text="~  " />
             </LinearLayout>
 
             <LinearLayout
@@ -146,22 +101,22 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/end_day_night"
+                    android:id="@+id/day_night2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:textSize="16sp"
                     android:gravity="center"
-                    android:text="오전"
-                    android:textSize="15sp" />
+                    android:text="오전" />
 
                 <TextView
-                    android:id="@+id/end_time"
+                    android:id="@+id/end_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:gravity="center"
                     android:text="00   :   00"
-                    android:textSize="15sp" />
+                    android:textSize="16sp"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -169,34 +124,34 @@
             android:id="@+id/view2"
             android:layout_width="387dp"
             android:layout_height="1dp"
-            android:layout_marginLeft="11dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="20dp"
             android:background="#8085AFD6" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/schedule_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
                 android:gravity="center"
                 android:text="색상"
-                android:textSize="15sp" />
+                android:textSize="16sp"/>
 
-            <ImageView
-                android:id="@+id/schedule_color_view"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginLeft="220dp"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/schedule_color_imageView"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="13dp"
-                app:srcCompat="@drawable/calendar_color_oval" />
+                android:layout_marginStart="280dp"
+                android:backgroundTint="#BADFD2"
+                android:background="@drawable/calendar_color"/>
 
         </LinearLayout>
 
@@ -204,26 +159,34 @@
             android:id="@+id/view3"
             android:layout_width="387dp"
             android:layout_height="1dp"
-            android:layout_marginLeft="11dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="20dp"
             android:background="#8085AFD6" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/schedule_alarm_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
                 android:layout_marginTop="15dp"
-                android:layout_weight="2"
+                android:layout_marginStart="15dp"
                 android:text="알람"
-                android:textSize="15sp" />
+                android:textSize="16sp"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/schedule_alarm"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:text="설정 안함"-->
+<!--                android:textSize="16sp"/>-->
 
             <Spinner
                 android:id="@+id/alarm_spinner"
@@ -235,51 +198,68 @@
                 android:ems="5"
                 android:entries="@array/times"
                 />
+
+<!--            <Spinner-->
+<!--                android:id="@+id/alarm_spinner"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:spinnerMode="dropdown"-->
+<!--                android:ems="1"-->
+<!--                android:entries="@array/times"/>-->
+
         </LinearLayout>
 
         <View
             android:id="@+id/view4"
             android:layout_width="387dp"
             android:layout_height="1dp"
-            android:layout_marginLeft="11dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="20dp"
             android:background="#8085AFD6" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/schedule_memo_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
                 android:layout_weight="2"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:text="메모"
-                android:textSize="15sp" />
+                android:textSize="16sp"/>
 
             <EditText
                 android:id="@+id/schedule_memo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="17dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="300dp"
                 android:layout_weight="0"
-                android:background="#ffffff"
-                android:ems="10"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="17dp"
                 android:gravity="top"
+                android:ems="10"
                 android:hint="메모를 작성해주세요."
-                android:textSize="13sp" />
+                android:background="#ffffff"
+                android:textSize="16sp"/>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/schedule_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="60dp"
+            android:text="등록"
+            android:textColor="@color/white"/>
 
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

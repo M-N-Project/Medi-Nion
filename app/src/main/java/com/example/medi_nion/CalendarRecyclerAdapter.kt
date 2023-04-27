@@ -103,7 +103,6 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
                 queue.add(request)
             }
 
-
             calendarLinear.setOnClickListener{
                 listener?.onEventClick(itemView,item,pos)
             }
