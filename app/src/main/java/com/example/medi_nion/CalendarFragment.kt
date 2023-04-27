@@ -112,6 +112,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
             //새로운 일정 만들기
             makeEventScheduleRadioBtn.setOnClickListener{
+                makeEventRadiogroup.visibility = View.GONE
+                makeEventScheduleRadioBtn.isChecked = false
                 val intent = Intent(context, Calendar_Add::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("day", currentDate.toString())
@@ -119,6 +121,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             }
             //히스토리 일정 버튼 만들기
             makeEventButtonRadioBtn.setOnClickListener{
+                makeEventRadiogroup.visibility = View.GONE
+                makeEventButtonRadioBtn.isChecked = false
                 val intent = Intent(context, Calendar_History_Add::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("day", CalendarDay.today().toString())
