@@ -640,16 +640,5 @@ class ProfileFragment : Fragment(R.layout.profile) {
         }
         return base64Image
     }
-
-    private fun resize(bitmap: Bitmap): Bitmap? {
-        var bitmap: Bitmap? = bitmap
-        val config: Configuration = Resources.getSystem().configuration
-        var bitmap_width : Int? = bitmap?.width
-        var bitmap_height : Int? = bitmap?.height
-
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
-        Log.d("please", "$bitmap_height, $bitmap_width")
-        return bitmap
-    }
 }
 
