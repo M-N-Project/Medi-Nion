@@ -92,4 +92,9 @@ dependencies {
 
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 
+    //Jsoup
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
 }

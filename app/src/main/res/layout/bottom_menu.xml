@@ -621,7 +621,7 @@
                     android:textSize="16dp" />
 
                 <android.widget.Button
-                    android:id="@+id/menu_news"
+                    android:id="@+id/medi_news"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
