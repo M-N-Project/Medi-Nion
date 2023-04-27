@@ -34,9 +34,9 @@
                 tools:layout_editor_absoluteY="16dp"
                 android:background="#ffffff"/>
 
-            <HorizontalScrollView
+            <ScrollView
                 android:id="@+id/calendarHistoryScrollView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -46,11 +46,10 @@
                     android:id="@+id/calendarHistoryRecyclerView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/calendar_history_item" />
-            </HorizontalScrollView>
+            </ScrollView>
 
     <!--        <Spinner-->
     <!--            android:id="@+id/schedule_history_spinner"-->

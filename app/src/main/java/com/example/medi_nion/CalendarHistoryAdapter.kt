@@ -65,6 +65,7 @@ class CalendarHistoryAdapter(private val items: ArrayList<CalendarItem>) :
                 listener?.onHistoryClick(itemView,item,pos)
             }
 
+
         }
     }
 }

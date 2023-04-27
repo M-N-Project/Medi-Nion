@@ -72,7 +72,7 @@ class Calendar_Add : AppCompatActivity() {
         val id = intent?.getStringExtra("id")
         Log.d("ID", id.toString())
 
-        var calendarHistoryScrollView = findViewById<HorizontalScrollView>(R.id.calendarHistoryScrollView)
+        var calendarHistoryScrollView = findViewById<ScrollView>(R.id.calendarHistoryScrollView)
         calendarHistoryView = findViewById(R.id.calendarHistoryRecyclerView)
         calendarHistoryView.adapter = adapter
 
@@ -109,16 +109,9 @@ class Calendar_Add : AppCompatActivity() {
                 Log.d("haha", items.size.toString())
                 if(s != null && s.length>0) {
                     for (i in 0 until items.size) {
-                        Log.d("haha++_+", items.size.toString())
-                        Log.d("haha++_+2", s.length.toString())
-                        Log.d("haha++_+3", s.toString())
-                        Log.d("haha", items[i].schedule_name)
                         if(items[i].schedule_name.length >= s.length) {
                             if (items[i].schedule_name.substring(0, s.length) == s.toString()) {
-                                Log.d("haha2", items[i].schedule_name)
-
                                 if (!similarItems.contains(items[i])) {
-                                    Log.d("haha3", items[i].schedule_name)
                                     calendarHistoryScrollView.visibility = View.VISIBLE
                                     similarItems.add(items[i])
                                     var adapter = CalendarHistoryAdapter(similarItems)
@@ -126,7 +119,6 @@ class Calendar_Add : AppCompatActivity() {
 
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
-                                            Log.d("0-9132", data.schedule_color)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
@@ -364,9 +356,9 @@ class Calendar_Add : AppCompatActivity() {
                         val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_memo, false)
                         items.add(CalendarItem)
                     }
+
                     var adapter = CalendarHistoryAdapter(items)
                     calendarHistoryView.adapter = adapter
-
 
                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
