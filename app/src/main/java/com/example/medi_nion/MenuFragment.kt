@@ -494,6 +494,13 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         }
 
 
+        academyBtn.setOnClickListener{
+            activity?.let{
+                val intent = Intent(context, MedicalSeminar::class.java)
+                startActivity(intent)
+            }
+        }
+
         employeeInfoBtn.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
                 val intent = Intent(context, HospitalProfile::class.java)
@@ -573,7 +580,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         }
 
 
-        manageBusinessBtn.setOnClickListener { //비즈니스 관리(프로필수정, 글쓰기 화면으로 이동)
+        manageBusinessBtn.setOnClickListener { //비즈니스 (bottom_menu 의 비즈니스와 같은 버튼)
             val businessFragment = BusinessMainFragment()
             var bundle = Bundle()
             bundle.putString("id",id)
