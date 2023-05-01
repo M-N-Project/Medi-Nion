@@ -86,7 +86,8 @@ class Calendar_Add : AppCompatActivity() {
         val end = findViewById<LinearLayout>(R.id.end_time_linear)
         val schedule_btn = findViewById<Button>(R.id.schedule_btn)
         val color = findViewById<Button>(R.id.schedule_color_imageView)
-        val alarm = findViewById<Spinner>(R.id.alarm_spinner)
+        val spinner = findViewById<Spinner>(R.id.alarm_spinner)
+        var alarm = spinner.selectedItem.toString()
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo)
 
         var startString = ""
@@ -120,11 +121,19 @@ class Calendar_Add : AppCompatActivity() {
 
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
+                                            Log.d("DFSDFD", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
-                                            //alarm 설정
+
+                                            when (data.schedule_alarm) {
+                                                "1시간 전" -> spinner.setSelection(1)
+                                                "2시간 전" -> spinner.setSelection(2)
+                                                "3시간 전" -> spinner.setSelection(3)
+                                                "6시간 전" -> spinner.setSelection(4)
+                                                else -> spinner.setSelection(0)
+                                            }
 
                                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -222,11 +231,19 @@ class Calendar_Add : AppCompatActivity() {
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                                             Log.d("0-9132", data.schedule_name)
+                                            Log.d("DFSDFD", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
-                                            //alarm 설정
+
+                                            when (data.schedule_alarm) {
+                                                "1시간 전" -> spinner.setSelection(1)
+                                                "2시간 전" -> spinner.setSelection(2)
+                                                "3시간 전" -> spinner.setSelection(3)
+                                                "6시간 전" -> spinner.setSelection(4)
+                                                else -> spinner.setSelection(0)
+                                            }
 
                                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -322,11 +339,19 @@ class Calendar_Add : AppCompatActivity() {
                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                             Log.d("0-9132", data.schedule_name)
+                            Log.d("DFSDFD", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
-                            //alarm 설정
+
+                            when (data.schedule_alarm) {
+                                "1시간 전" -> spinner.setSelection(1)
+                                "2시간 전" -> spinner.setSelection(2)
+                                "3시간 전" -> spinner.setSelection(3)
+                                "6시간 전" -> spinner.setSelection(4)
+                                else -> spinner.setSelection(0)
+                            }
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -618,12 +643,22 @@ class Calendar_Add : AppCompatActivity() {
                         }
 
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
+                            val spinner = findViewById<Spinner>(R.id.alarm_spinner)
+                            var alarm = spinner.selectedItem.toString()
                             Log.d("0-9132", data.schedule_name)
+                            Log.d("DFSDFD123", data.schedule_alarm)
+                            Log.d("456456", alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
-                            //alarm 설정
+                            when (data.schedule_alarm) {
+                                "1시간 전" -> spinner.setSelection(1)
+                                "2시간 전" -> spinner.setSelection(2)
+                                "3시간 전" -> spinner.setSelection(3)
+                                "6시간 전" -> spinner.setSelection(4)
+                                else -> spinner.setSelection(0)
+                            }
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
