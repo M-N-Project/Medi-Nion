@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chatmessage_item_linear"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="140dp"
     android:layout_margin="0dp"
     android:layout_marginBottom="0dp"
     android:orientation="vertical"
@@ -10,14 +10,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="130dp"
         android:layout_margin="0dp"
         android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/news_img"
             android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_height="140dp"
             android:layout_gravity="center"
             android:src="@drawable/bottom_business_icon" />
 
@@ -39,12 +39,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:text="기사제목"
-                    android:ems="1"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:ems="1"
+                    android:maxLines="2"
+                    android:text="기사제목"
                     android:textColor="@color/color2"
-                    android:textSize="24dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
 
