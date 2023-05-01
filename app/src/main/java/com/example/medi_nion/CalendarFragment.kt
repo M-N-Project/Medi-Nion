@@ -32,7 +32,7 @@ import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import org.json.JSONArray
 import java.util.*
 
