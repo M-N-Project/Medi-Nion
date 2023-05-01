@@ -6,48 +6,59 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.medical_news_recycler.*
+import kotlinx.coroutines.DelicateCoroutinesApi
 import org.jsoup.Jsoup
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MedicalNews : AppCompatActivity() {
 
     val items : ArrayList<MediInfo> = arrayListOf()
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.medical_news_recycler)
         Log.d("haha1", "sd")
-        Thread(Runnable {
-            val url = "https://www.medicaltimes.com/Main/News/List.html?SectionTop=important"
-            var base_url = "https://www.medicaltimes.com/Main/News/List.html?SectionTop=important"
-            val doc = Jsoup.connect(url).get()
+        // Create a thread pool with a fixed number of threads
+        val threadPool = Executors.newFixedThreadPool(4)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val url = " https://www.medicaltimes.com/Main/News/List.html?SectionTop=important/index.nhn"
+            var base_url = "https://www.medicaltimes.com/Main/News/List.html?SectionTop=important/"
+
+            val doc = Jsoup.connect(url)
+                .timeout(5000) // Set a timeout value (in milliseconds)
+                .get()
+
             val today = doc.select("div.newsList_wrap article.newsList_cont")
             val title = doc.title()
-            Log.d("haha2", today.size.toString())
+            println("haha2: ${today.size}")
+
+            val items = mutableListOf<MediInfo>()
+
             today.forEach { item ->
                 val item_link = base_url + item.select("a").attr("href")
                 val item_title = item.select("h4.headLine").text()
                 val item_img = item.select("img").attr("src")
-                val item_contnent = item.select("div.list_txt").text()
+                val item_content = item.select("div.list_txt").text()
                 val item_time = item.select("span.newsList_cont_date").text()
 
-//                println(item_link)
-//                println(item_title)
-//                println(item_thumb)
-//                println(item_summary)
-                Log.d("haha3", "sd")
-                //arrayList 리스트에 추가해 준다.
-                items.add(MediInfo(item_link, item_title, item_img, item_contnent, item_time))
+                println("haha3: $item_link")
+
+                items.add(MediInfo(item_link, item_title, item_img, item_content, item_time))
             }
 
-            this@MedicalNews.runOnUiThread(java.lang.Runnable {
-                //println(doc)
-                //어답터 연결하기
-                medicalRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-                val adapter = MedicalNewsAdapter(items, this)
+            launch(Dispatchers.Main) {
+                medicalRecyclerview.layoutManager = LinearLayoutManager(this@MedicalNews, RecyclerView.VERTICAL, false)
+                val adapter = MedicalNewsAdapter(items as ArrayList<MediInfo>, this@MedicalNews)
                 medicalRecyclerview.adapter = adapter
-                Log.d("haha4", items.size.toString())
-            })
-        }).start()
+                println("haha4: ${items.size}")
+            }
+        }.start()
     }
     data class MediInfo (
         val siteUrl: String,

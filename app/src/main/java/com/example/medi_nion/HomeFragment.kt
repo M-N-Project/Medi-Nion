@@ -393,6 +393,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         medi_news.setOnClickListener {
             //의료뉴스 이동
+            activity?.let {
+                val intent = Intent(context, MedicalNews::class.java)
+                startActivity(intent)
+            }
         }
 
         ////////////////////// hot 게시물 클릭 이벤트 ///////////////////////////////
