@@ -794,7 +794,7 @@ class Calendar_Add : AppCompatActivity() {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
         Log.d("018321",ColorSheetUtils.colorToHex(selectedColor))
-        Log.d("018321",colorStr.toString())
+        Log.d("018324561",colorStr.toString())
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
@@ -821,7 +821,7 @@ class Calendar_Add : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            if (colorStr == "#FFFFFF") {
+            if (ColorSheetUtils.colorToHex(selectedColor) == "#FFFFFF") {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
@@ -840,7 +840,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
-                    "schedule_color" to colorStr,
+                    "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
