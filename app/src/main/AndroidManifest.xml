@@ -146,6 +146,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Calendar_History_Add"
             android:screenOrientation="portrait" />
+        <activity android:name=".MedicalSeminar"
+            android:screenOrientation="portrait"/>
 
 
         <uses-library

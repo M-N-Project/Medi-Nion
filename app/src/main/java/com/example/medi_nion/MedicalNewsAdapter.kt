@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.medi_nion.MedicalNews
-import kotlinx.android.synthetic.main.business_writing_img_item.view.*
 import kotlinx.android.synthetic.main.medical_news_item.view.*
 
 class MedicalNewsAdapter(val items: ArrayList<MedicalNews.MediInfo>, context: Context) : RecyclerView.Adapter<MedicalNewsAdapter.ViewHolder>() {

@@ -493,6 +493,12 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
+        academyBtn.setOnClickListener { //학회 및 세미나로 이동
+            activity?.let {
+                val intent = Intent(context, MedicalSeminar::class.java)
+                startActivity(intent)
+            }
+        }
 
         academyBtn.setOnClickListener{
             activity?.let{

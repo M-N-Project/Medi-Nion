@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.medical_news_recycler.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import org.jsoup.Jsoup
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
