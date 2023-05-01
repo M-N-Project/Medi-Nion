@@ -1,7 +1,13 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -15,8 +21,13 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -41,11 +52,54 @@ class BoardDetail : AppCompatActivity() {
     var commentHeartFlag = "false"
     var comment2HeartFlag = "false"
 
+    private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
+    private val alarmCode = random.random()
+    private lateinit var manager: NotificationManager
+    private lateinit var builder: NotificationCompat.Builder
+    lateinit var notificationPermission: ActivityResultLauncher<String>
+
+    companion object{
+        private const val ALARM_REQUEST_CODE = 1000
+        const val CHANNEL_ID = "medinion"
+        const val CHANNEL_NAME = "comment alarm"
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
+
+        //댓글 알림 권한
+        val notificationPermissionCheck = ContextCompat.checkSelfPermission(
+            this@BoardDetail,
+            android.Manifest.permission.POST_NOTIFICATIONS
+        )
+        if (notificationPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                10000
+            )
+        } else { //권한이 있는 경우
+            Log.d("0-09123","notinoti")
+        }
+
+        notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Log.d("comment_noti", "notinoti")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notification()
+                }
+            } else {
+                Toast.makeText(baseContext, "권한을 승인해야 댓글 알림을 받을 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+            Log.d("create", "Channel")
+        }
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
         refresh_layout.setOnRefreshListener {
@@ -217,6 +271,11 @@ class BoardDetail : AppCompatActivity() {
         }
     }
 
+    //댓글 알림
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun notification() {
+        notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+    }
 
 //fetch 함수들 ====================================================================================================================
     // emdal fetch ---------------------------------------------------------------------------
@@ -1473,13 +1532,27 @@ class BoardDetail : AppCompatActivity() {
     // 댓글 request ------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest(comment_num : Int) {
+        val receiverIntent: Intent = Intent(
+            this@BoardDetail,
+            AlarmReceiver_comment::class.java
+        )
+        val pendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this@BoardDetail,
+                BoardDetail.ALARM_REQUEST_CODE, receiverIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
         var id = intent?.getStringExtra("id").toString()
+        var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
         var board = intent?.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+        val urlNotification = "http://seonho.dothome.co.kr/notification_comment.php"
+        val urlNotification_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -1523,6 +1596,61 @@ class BoardDetail : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
+                    val request_noti = Login_Request(
+                        Request.Method.POST,
+                        urlNotification,
+                        { response_noti ->
+                                val jsonArray = JSONArray(response_noti)
+
+                                for (i in 0 until jsonArray.length()) {
+
+                                    val item = jsonArray.getJSONObject(i)
+
+                                    val notification_id = item.getString("id")   //게시판 쓴 사람
+                                    val notification_num = item.getString("num")  //board 테이블의 num
+
+                                    Log.d("ididididididiidid", "$id, $notification_id, $writerId")
+
+                                    if (id == writerId && notification_id == writerId) {
+                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+                                        val request_noti = Login_Request(
+                                            Request.Method.POST,
+                                            urlNotification_select,
+                                            { response_noti ->
+                                                val jsonArray = JSONArray(response_noti)
+
+                                                for (i in 0 until jsonArray.length()) {
+
+                                                    val item = jsonArray.getJSONObject(i)
+
+                                                    val notification_comment_id = item.getString("id")  //댓글 쓴 사람 아이디
+                                                    Log.d("board_alarm2313", "$notification_comment_id, $notification_id, $id, $writerId")
+                                                    if (notification_comment_id != writerId) {
+                                                        Log.d("board_alarm1", "$notification_comment_id, $notification_id, $id, $writerId")
+                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")   //이게 안돼요 ,,,, 으아가아ㅏ아아앙ㄱ
+                                                    }
+                                                }
+
+                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+                                            hashMapOf(
+                                                "id" to id
+                                            )
+                                        )
+                                        val queue_noti = Volley.newRequestQueue(this)
+                                        queue_noti.add(request_noti)
+
+                                    }
+                                }
+
+                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+                        hashMapOf(
+                            "board" to board,
+                            "post_num" to post_num
+                        )
+                    )
+                    val queue_noti = Volley.newRequestQueue(this)
+                    queue_noti.add(request_noti)
+
                     UpdateGrade()
 
                     Log.d(
@@ -1553,6 +1681,25 @@ class BoardDetail : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm(time: String, alarm_code: Int, content: String){
+        AlarmFunctions_comment(applicationContext).callAlarm(time, alarmCode, content)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createNotificationChannel() {
+        manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        //NotificationChannel 인스턴스를 createNotificationChannel()에 전달하여 앱 알림 채널을 시스템에 등록
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        )
     }
 
     //대댓글 request-------------------------------------------------------------------------------------
