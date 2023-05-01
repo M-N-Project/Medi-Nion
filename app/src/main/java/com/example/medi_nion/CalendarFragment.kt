@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -35,6 +36,9 @@ import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import okhttp3.internal.notify
 import org.json.JSONArray
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
 import java.util.*
 
 
@@ -53,6 +57,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -116,7 +121,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 makeEventScheduleRadioBtn.isChecked = false
                 val intent = Intent(context, Calendar_Add::class.java)
                 intent.putExtra("id", id)
-                intent.putExtra("day", currentDate.toString())
+
+                val week = currentDate.date.toString().substring(0,3)
+                intent.putExtra("day", "${currentDate.toString()}/$week")
                 startActivity(intent)
             }
             //히스토리 일정 버튼 만들기
@@ -196,27 +203,34 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         // url to post our data
         val id = arguments?.getString("id").toString()
 
-        val urlBoard = "http://seonho.dothome.co.kr/Events.php"
+        val urlBoard = "http://seonho.dothome.co.kr/Events2.php"
 
         val year = day.toString().substring(12,16)
         var month = day.toString().substring(17,19)
         var date = ""
+        var week = day.date.toString().substring(0,3)
         if(month.substring(1,2) == "-"){
             month = "0${(day.toString().substring(17,18)).toInt() + 1}"
             date = day.toString().substring(19,21)
 
             if(date.substring(1,2) == "}")
                 date = "0${day.toString().substring(19,20)}"
+
+
         }
         else{
             month = (month.toInt()+1).toString()
             date = day.toString().substring(20,22)
 
+
             if(date.substring(1,2) == "}")
                 date = "0${day.toString().substring(20, 21)}"
+
         }
 
-        val presentDate = "$year-$month-$date"
+        val presentDate = "$year-$month-$date-$week"
+
+
 
         val request = Board_Request(
             Request.Method.POST,
@@ -236,6 +250,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
                         val schedule_alarm = item.getString("schedule_alarm")
+                        val schedule_repeat = item.getString("schedule_repeat")
                         val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone")
 
@@ -394,16 +409,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             color.background = drawable
 
                             color.setOnClickListener {
-                                setupColorSheet()
-
                                 val color =  bottomSheetView.findViewById<ImageView>(R.id.schedule_color_view)
-                                val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color_oval)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                    drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
-                                } else {
-                                    drawable!!.setColorFilter(Color.parseColor(data.schedule_color), PorterDuff.Mode.SRC_ATOP)
-                                }
-                                color.background = drawable
+                                setupColorSheet(data, color)
+
                             }
 
 
@@ -481,7 +489,11 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 "error......${context?.let { it1 -> error(it1) }}") },
             hashMapOf(
                 "id" to id,
-                "date" to presentDate
+                "day" to presentDate,
+                "year" to year,
+                "month" to month,
+                "date" to date,
+                "week" to week
             )
         )
 
@@ -666,7 +678,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         queue.add(request)
     }
 
-    private fun setupColorSheet() {
+    private fun setupColorSheet(data : CalendarItem, colorView : ImageView) {
         val colors = resources.getIntArray(R.array.colors)
         ColorSheet().cornerRadius(8)
             //colorPicker 설정
@@ -676,9 +688,16 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 listener = { color ->
                     selectedColor = color
 
+                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color_oval)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor( ColorSheetUtils.colorToHex(selectedColor)), BlendMode.SRC_ATOP)
+                    } else {
+                        drawable!!.setColorFilter(Color.parseColor( ColorSheetUtils.colorToHex(selectedColor)), PorterDuff.Mode.SRC_ATOP)
+                    }
+                    colorView.background = drawable
+
                 })
             .show(parentFragmentManager)
-        Log.d("018321",selectedColor.toString())
 
     }
 

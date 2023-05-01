@@ -8,6 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -174,10 +178,13 @@ class Calendar_History_Add : AppCompatActivity() {
             dialog1.show()
         }
 
-        color.setOnClickListener {
-            setupColorSheet()
-        }
 
+        // 스케줄 색상
+        color.setOnClickListener {
+            val color =  findViewById<Button>(R.id.schedule_color_imageView)
+            setupColorSheet(color)
+
+        }
 
         schedule_btn.setOnClickListener {
             if(TextUtils.isEmpty(schedule_title.text.toString())) {
@@ -195,7 +202,7 @@ class Calendar_History_Add : AppCompatActivity() {
         notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
-    private fun setupColorSheet() {
+    private fun setupColorSheet(colorView : Button) {
         val colors = resources.getIntArray(R.array.colors)
         ColorSheet().cornerRadius(8)
             //colorPicker 설정
@@ -204,13 +211,20 @@ class Calendar_History_Add : AppCompatActivity() {
                 selectedColor = selectedColor,
                 listener = { color ->
                     selectedColor = color
-                    setColor(selectedColor)
+                    val selColor = ColorSheetUtils.colorToHex(selectedColor)
+
+                    val drawable = ContextCompat.getDrawable(this, R.drawable.calendar_color_oval)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(selColor), BlendMode.SRC_ATOP)
+                    } else {
+                        drawable!!.setColorFilter(Color.parseColor(selColor), PorterDuff.Mode.SRC_ATOP)
+                    }
+                    colorView.background = drawable
+
                 })
             .show(supportFragmentManager)
-        Log.d("018321",selectedColor.toString())
 
     }
-
     private fun setColor(@ColorInt color: Int) {
         val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
         color_picker.backgroundTintList = ColorStateList.valueOf(color)
