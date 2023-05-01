@@ -88,6 +88,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
 
     //캘린더
+    //gkgl
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
 
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
