@@ -387,7 +387,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                             // 스케줄 색상
                             val color =  bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
-                            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color_oval)
+                            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
                             } else {
@@ -399,7 +399,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 setupColorSheet()
 
                                 val color =  bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
-                                val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color_oval)
+                                val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                     drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
                                 } else {
