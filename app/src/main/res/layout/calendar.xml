@@ -102,7 +102,7 @@
             android:layout_marginRight="2dp"
             android:background="@drawable/selector_radio_button_bottom"
             android:button="@null"
-            android:text="일정 히스토리 만들기"
+            android:text="자주 사용할 일정 만들기"
             android:textAlignment="center" />
 
     </RadioGroup>
