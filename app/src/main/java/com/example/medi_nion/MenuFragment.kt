@@ -500,13 +500,6 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
-        academyBtn.setOnClickListener{
-            activity?.let{
-                val intent = Intent(context, MedicalSeminar::class.java)
-                startActivity(intent)
-            }
-        }
-
         employeeInfoBtn.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
                 val intent = Intent(context, HospitalProfile::class.java)
