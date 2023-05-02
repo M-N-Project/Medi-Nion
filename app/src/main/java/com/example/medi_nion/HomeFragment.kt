@@ -163,6 +163,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val employee_info = view.findViewById<TextView>(R.id.home_boardList7)
         val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
 
+        val business_nickname = view.findViewById<TextView>(R.id.home_business_nickname)
+
         var currentPosition = 0
         var big_currentPosition = 0
 
@@ -174,6 +176,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         userType = arguments?.getString("userType").toString()
         userDept = arguments?.getString("userDept").toString()
         userMedal = arguments?.getInt("userMedal").toString()
+
+        business_nickname.text = nickname
 
 //        arguments?.let {
 //            id = it.getString("id", "")

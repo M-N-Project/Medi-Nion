@@ -53,6 +53,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 val businessMainFragment = BusinessMainFragment()
                 val bundle = Bundle()
                 bundle.putString("id", id)
+                bundle.putString("nickname", nickname)
                 businessMainFragment.arguments = bundle
                 return businessMainFragment
             }
