@@ -3,6 +3,7 @@ package com.example.medi_nion
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,16 @@ class MedicalSeminarAdapter(val items: ArrayList<MedicalSeminar.MediSeminar>, co
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.view.textView_title?.text = items[position].seminar_title // Title
-        holder.view.textView_date.text = items[position].seminar_time_date // Time date
+        holder.view.ms_title?.text = items[position].seminar_title // Title
+        holder.view.ms_time.text = items[position].seminar_time_date // Time date
+        holder.view.ms_loca.text = items[position].seminar_location // Location
+
+        if(items[position].seminar_time_date.equals("")) {
+            holder.view.ms_time.visibility = View.GONE
+        }
+        if(items[position].seminar_location.equals("")){
+            holder.view.ms_loca.visibility = View.GONE
+        }
 
         holder.itemView.setOnClickListener {
             val openUrl = Intent(Intent.ACTION_VIEW)

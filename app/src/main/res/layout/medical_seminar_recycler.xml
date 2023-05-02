@@ -25,7 +25,7 @@
             <LinearLayout
                 android:id="@+id/ms_kimes"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/home_qna_detail"
                 android:orientation="horizontal"
@@ -33,7 +33,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -56,7 +56,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:orientation="vertical">
 
@@ -83,36 +83,38 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/asan_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="10"
-                        android:text="서울아산" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
-                    <ImageButton
-                        android:id="@+id/asan_gotoBtn"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/asan_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="10"
+                            android:text="서울아산" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/asanRecycler"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        app:srcCompat="@drawable/arrow_resize" />
+                        android:overScrollMode="never"
+                        android:nestedScrollingEnabled="false"
+                        tools:listitem="@layout/medical_seminar_item" />
+
                 </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/medical_seminar_item"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ms_samsung"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/home_qna_detail"
                 android:orientation="vertical"
@@ -120,7 +122,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
@@ -131,26 +133,21 @@
                         android:layout_weight="10"
                         android:text="서울 삼성" />
 
-                    <ImageButton
-                        android:id="@+id/samsung_gotoBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        app:srcCompat="@drawable/arrow_resize" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/samsungRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/medical_seminar_item"/>
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    tools:listitem="@layout/medical_seminar_item" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ms_daehan"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/home_qna_detail"
                 android:orientation="vertical"
@@ -167,29 +164,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
-                        android:text="대한의료정보학회"
-                        />
+                        android:text="대한의료정보학회" />
 
-                    <ImageButton
-                        android:id="@+id/daehan_gotoBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        app:srcCompat="@drawable/arrow_resize" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/daehanRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/medical_seminar_item"/>
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    tools:listitem="@layout/medical_seminar_item" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ms_khidi"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/home_qna_detail"
                 android:orientation="vertical"
@@ -208,19 +199,14 @@
                         android:layout_weight="10"
                         android:text="한국보건산업진흥원" />
 
-                    <ImageButton
-                        android:id="@+id/khidi_gotoBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#00FFFFFF"
-                        app:srcCompat="@drawable/arrow_resize" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/khidiRecycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/medical_seminar_item"/>
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    tools:listitem="@layout/medical_seminar_item" />
 
             </LinearLayout>
 

@@ -4,38 +4,36 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/ms_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="임상 현장 응급 초음파 교육_성인" />
+    <TextView
+        android:id="@+id/ms_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="임상 현장 응급 초음파 교육_성인" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+    <TextView
+        android:id="@+id/ms_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="일시 : 2023.07.29(토) 09:00~13:00"
+        android:textColor="#9C9C9C"
+        android:textSize="10sp" />
 
-            <TextView
-                android:id="@+id/ms_loca"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="장소 : 계명대학교 동산 병원"
-                android:textSize="10sp" />
+    <TextView
+        android:id="@+id/ms_loca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="장소 : 계명대학교 동산 병원"
+        android:textColor="#9C9C9C"
+        android:textSize="10sp" />
 
-            <TextView
-                android:id="@+id/ms_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="일시 : 2023.07.29(토) 09:00~13:00"
-                android:textSize="10sp" />
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="20dp"
-                android:background="#289C9C9C" />
-        </LinearLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#289C9C9C" />
 </LinearLayout>
