@@ -42,17 +42,17 @@ class AlarmFunctions_hot(private val context: Context){
         //API 23(android 6.0) 이상(해당 api 레벨부터 도즈모드 도입으로 setExact 사용 시 알람이 울리지 않음)
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
-
-    fun cancelAlarm(viewModel: ViewModel, alarm_code: Int) {
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver_hot::class.java)
-
-        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_IMMUTABLE)
-        }else{
-            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-
-        alarmManager.cancel(pendingIntent)
-    }
+//
+//    fun cancelAlarm(viewModel: ViewModel, alarm_code: Int) {
+//        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val intent = Intent(context, AlarmReceiver_hot::class.java)
+//
+//        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+//            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_IMMUTABLE)
+//        }else{
+//            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_UPDATE_CURRENT)
+//        }
+//
+//        alarmManager.cancel(pendingIntent)
+//    }
 }

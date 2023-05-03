@@ -18,6 +18,7 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -33,10 +34,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.DayViewFacade
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import kotlinx.android.synthetic.main.calendar_add.*
 import org.json.JSONArray
+import java.time.ZoneId
 import java.util.*
 
 
@@ -532,7 +536,9 @@ class Calendar_Add : AppCompatActivity() {
         }
 
         color.setOnClickListener {
-            setupColorSheet()
+            val color =  findViewById<Button>(R.id.schedule_color_imageView)
+            setupColorSheet(color)
+
         }
 
 
@@ -560,7 +566,6 @@ class Calendar_Add : AppCompatActivity() {
             Request.Method.POST,
             historyUrl,
             { response ->
-                Log.d("CDCD", response.toString())
                 if (!response.equals("History fetch Fail")) {
                     val jsonArray = JSONArray(response)
                     items.clear()
@@ -573,6 +578,7 @@ class Calendar_Add : AppCompatActivity() {
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
                         val schedule_alarm = item.getString("schedule_alarm")
+//                        val schedule_repeat = item.getString("schedule_repeat")
                         val schedule_memo = item.getString("schedule_memo")
 
                         val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_memo, false)
@@ -698,7 +704,7 @@ class Calendar_Add : AppCompatActivity() {
         queue.add(request)
     }
 
-    private fun setupColorSheet() {
+    private fun setupColorSheet(colorView : Button) {
         val colors = resources.getIntArray(R.array.colors)
         ColorSheet().cornerRadius(8)
             //colorPicker 설정
@@ -707,11 +713,18 @@ class Calendar_Add : AppCompatActivity() {
                 selectedColor = selectedColor,
                 listener = { color ->
                     selectedColor = color
-                    setColor(selectedColor)
+                    val selColor = ColorSheetUtils.colorToHex(selectedColor)
+
+                    val drawable = ContextCompat.getDrawable(this, R.drawable.calendar_color_oval)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(selColor), BlendMode.SRC_ATOP)
+                    } else {
+                        drawable!!.setColorFilter(Color.parseColor(selColor), PorterDuff.Mode.SRC_ATOP)
+                    }
+                    colorView.background = drawable
+
                 })
             .show(supportFragmentManager)
-        Log.d("018321",selectedColor.toString())
-        colorStr = ColorSheetUtils.colorToHex(selectedColor)
 
     }
 
@@ -738,8 +751,10 @@ class Calendar_Add : AppCompatActivity() {
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
-        val spinner = findViewById<Spinner>(R.id.alarm_spinner)
-        var alarm = spinner.selectedItem.toString()
+        val alarm_spinner = findViewById<Spinner>(R.id.alarm_spinner)
+        var alarm = alarm_spinner.selectedItem.toString()
+        val repeat_spinner = findViewById<Spinner>(R.id.repeat_spinner)
+        var repeat = repeat_spinner.selectedItem.toString()
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo).text.toString()
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
@@ -747,27 +762,42 @@ class Calendar_Add : AppCompatActivity() {
 //        date = date.substring(12 until 21)
 
         Log.d("dayyy", day.toString())
+
         val year = day.toString().substring(12,16)
         var month = day.toString().substring(17,19)
         var date = ""
+        var week = ""
         if(month.substring(1,2) == "-"){
             month = "0${(day.toString().substring(17,18)).toInt() + 1}"
             date = day.toString().substring(19,21)
 
-            if(date.substring(1,2) == "}")
+            if(date.substring(1,2) == "}"){
                 date = "0${day.toString().substring(19,20)}"
+                week = day.toString().substring(22,25)
+            }
+            else{
+                week = day.toString().substring(23,26)
+            }
+
         }
         else{
             month = (month.toInt()+1).toString()
             date = day.toString().substring(20,22)
 
-            if(date.substring(1,2) == "}")
+
+            if(date.substring(1,2) == "}"){
                 date = "0${day.toString().substring(20, 21)}"
+                week = day.toString().substring(23,26)
+            }
+            else{
+                week = day.toString().substring(24,27)
+            }
+
         }
 
-        Log.d("dsa", "$id , $year , $month, $date")
+        Log.d("dsa", "$id , $year , $month, $date, $week")
 
-        val presentDate = "$year-$month-$date"
+        val presentDate = "$year-$month-$date-$week"
 
         var alarm_hour = start_result.substring(0, 2).toInt()
         var alarm_minute = start_result.substring(3, 5)
@@ -830,6 +860,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
                     "schedule_alarm" to alarm,
+                    "schedule_repeat" to repeat,
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
                 )
@@ -842,6 +873,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
+                    "schedule_repeat" to repeat,
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
                 )

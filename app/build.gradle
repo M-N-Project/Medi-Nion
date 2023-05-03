@@ -35,6 +35,7 @@ android {
         viewBinding true
         dataBinding = true
     }
+
     //새로고침
 }
 
@@ -90,11 +91,17 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
 
-    //캘린더
-    //gkgl
+    //월간 캘린더 - calendar
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
 
+    //주간 캘린더 - TimeTable
+    implementation 'com.github.tlaabs:TimetableView:1.0.3-fx1'
+    implementation 'com.github.islandparadise14:Mintable:1.5.1'
+
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
+
+
+
 
     //Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'

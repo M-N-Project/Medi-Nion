@@ -180,7 +180,7 @@ class Agreement : AppCompatActivity() { //mainactivity, 여기서는 프레그�
                         "(시행일) 본 약관은 2018년 8월 1일부터 시행됩니다. 개정된 약관의 적용일자 이전 이용자 또는 회원은 개정된 이용약관의 적용을 받습니다.\n" +
                         "\t\t\t\t\t\t\t\t")
                 .setPositiveButton("동의",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _ , _  ->
                         agreeBtn1.isChecked = true
                     })
 
@@ -240,7 +240,7 @@ class Agreement : AppCompatActivity() { //mainactivity, 여기서는 프레그�
                         "      · 개인정보 보유 및 이용 기간 : 행정자치부에서는 이미 보유하고 있는 개인정보이기 때문에 별도로 저장하지 않음\n" +
                         "\t\t\t\t\t\t\t\t")
                 .setPositiveButton("동의",
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _ , _  ->
                         agreeBtn2.isChecked = true
                     })
 
@@ -295,7 +295,7 @@ class Agreement : AppCompatActivity() { //mainactivity, 여기서는 프레그�
                 builder.setTitle("필수 약관 동의")
                     .setMessage("필수 약관을 모두 동의해주세요.")
                     .setPositiveButton("확인",
-                        DialogInterface.OnClickListener { dialog, id ->
+                        DialogInterface.OnClickListener { _ , _ ->
 
                         })
 
@@ -307,12 +307,12 @@ class Agreement : AppCompatActivity() { //mainactivity, 여기서는 프레그�
                 builder.setTitle("선택 약관에 동의하지 않으셨습니다.")
                     .setMessage("메디니언 사용 시 제약이 있을 수 있습니다. \n 그대로 진행하시겠습니까?")
                     .setPositiveButton("확인",
-                        DialogInterface.OnClickListener { dialog, id ->
+                        DialogInterface.OnClickListener { _ , _  ->
                             var newIntent : Intent = Intent(this, Retrofit_SignUp::class.java);
                             startActivity(newIntent);
                         })
                     .setNegativeButton("취소",
-                DialogInterface.OnClickListener { dialog, id ->
+                DialogInterface.OnClickListener { _ , _  ->
                 })
 
                 // 다이얼로그를 띄워주기

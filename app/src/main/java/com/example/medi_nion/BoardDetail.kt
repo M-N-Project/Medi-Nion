@@ -326,8 +326,6 @@ class BoardDetail : AppCompatActivity() {
         val Like_Btn = findViewById<CheckBox>(R.id.imageView_like2)
         val Like_count = findViewById<TextView>(R.id.textView_likecount2)
 
-        val jsonArray: JSONArray
-
         val request = Login_Request(
             Request.Method.POST,
             url,
@@ -570,7 +568,6 @@ class BoardDetail : AppCompatActivity() {
                                                                     }
 
                                                                     if(commentDetailItemsMap[comment_num]!=null){
-                                                                        var commentDetailAdapter = CommentDetailListAdapter(commentDetailItemsMap[comment_num]!!)
                                                                         commentDetailAdapterMap[comment_num] = CommentDetailListAdapter(commentDetailItemsMap[comment_num]!!)
                                                                         commentDetailAdapterMap[comment_num]?.setOnItemClickListener(
                                                                             object :
@@ -1459,7 +1456,6 @@ class BoardDetail : AppCompatActivity() {
                                 // medal ---------------------------------------------------------------------------
                                 val medalurl = "http://seonho.dothome.co.kr/Medal.php"
                                 var writerid = intent.getStringExtra("writerId").toString()
-                                val medalImage = findViewById<ImageView>(R.id.medal)
 
                                 val request = Login_Request(
                                     Request.Method.POST,
@@ -1536,12 +1532,12 @@ class BoardDetail : AppCompatActivity() {
             this@BoardDetail,
             AlarmReceiver_comment::class.java
         )
-        val pendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this@BoardDetail,
-                BoardDetail.ALARM_REQUEST_CODE, receiverIntent,
-                PendingIntent.FLAG_MUTABLE
-            )
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val pendingIntent: PendingIntent =
+//            PendingIntent.getBroadcast(this@BoardDetail,
+//                BoardDetail.ALARM_REQUEST_CODE, receiverIntent,
+//                PendingIntent.FLAG_MUTABLE
+//            )
+//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         var id = intent?.getStringExtra("id").toString()
         var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
@@ -1607,7 +1603,7 @@ class BoardDetail : AppCompatActivity() {
                                     val item = jsonArray.getJSONObject(i)
 
                                     val notification_id = item.getString("id")   //게시판 쓴 사람
-                                    val notification_num = item.getString("num")  //board 테이블의 num
+//                                    val notification_num = item.getString("num")  //board 테이블의 num
 
                                     Log.d("ididididididiidid", "$id, $notification_id, $writerId")
 

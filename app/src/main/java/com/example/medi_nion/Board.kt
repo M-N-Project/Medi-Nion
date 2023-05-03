@@ -82,8 +82,7 @@ class Board : AppCompatActivity() {
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         writingFAB.setOnClickListener {
-            var board :String = ""
-            board = intent.getStringExtra("board").toString()
+            var board = intent.getStringExtra("board").toString()
             val intent = Intent(applicationContext, BoardWrite::class.java)
             intent.putExtra("id", id)
             intent.putExtra("nickname", nickname)
@@ -176,14 +175,10 @@ class Board : AppCompatActivity() {
         // url to post our data
         var id = intent.getStringExtra("id")
         var nickname = intent.getStringExtra("nickname")
-        var board :String = ""
-        board = intent.getStringExtra("board").toString()
-        var userType :String = ""
-        userType = intent.getStringExtra("userType").toString()
-        var userDept :String = ""
-        userDept = intent.getStringExtra("userDept").toString()
-        var userMedal : Int = 0
-        userMedal = intent.getIntExtra("userMedal", 0)
+        var board = intent.getStringExtra("board").toString()
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
+        var userMedal = intent.getIntExtra("userMedal", 0)
         val urlBoard = "http://seonho.dothome.co.kr/Board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
