@@ -392,6 +392,38 @@
                 android:layout_marginRight="20dp"
                 android:background="#8BE0C4" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/home_business_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:text="nickname"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
+                    app:layout_constraintTop_toTopOf="@+id/detail_box_hot" />
+
+                <TextView
+                    android:id="@+id/home_business_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="10dp"
+                    android:text="님을 위한 비즈니스 추천 채널"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/detail_box_hot"
+                    app:layout_constraintTop_toTopOf="@+id/detail_box_hot" />
+            </LinearLayout>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/BusinessSubRecycler"

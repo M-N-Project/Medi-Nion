@@ -583,6 +583,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             val businessFragment = BusinessMainFragment()
             var bundle = Bundle()
             bundle.putString("id",id)
+            bundle.putString("nickname", nickname)
             businessFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
             fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, businessFragment)?.commit()
         }

@@ -53,7 +53,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     ): View? {
         // Inflate the layout for this fragment
        val view =  inflater.inflate(R.layout.business_home, container, false)
-
         myFragment = this
 
 //        swipeRefreshLayout = view.findViewById(R.id.business_refresh_layout)
@@ -112,8 +111,13 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     ////////////////// 인기 채널 가져오는 fetch 함수 //////////////////////////////////////////////////////
     fun fetchHotProfile() {
         var appUser = arguments?.getString("id").toString()
+        var nickname = arguments?.getString("nickname").toString()
+        val business_nickname = view?.findViewById<TextView>(R.id.subChan_nickname_title)
         val urlHotProfile = "http://seonho.dothome.co.kr/Business_profileHot_list.php"
         val urlRandProfile = "http://seonho.dothome.co.kr/Business_profileNew_list.php"
+
+        business_nickname?.text = nickname
+
         val request = Board_Request(
             Request.Method.POST,
             urlHotProfile,
