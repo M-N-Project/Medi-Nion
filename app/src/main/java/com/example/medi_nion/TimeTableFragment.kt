@@ -47,7 +47,7 @@ import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
-    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri")
+    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri","Sat", "Sun")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
 
@@ -64,7 +64,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
         table.updateSchedules(scheduleList)
 
-        table.baseSetting(30, 40, 60) //default (20, 30, 50)
+        table.baseSetting(30, 20, 60) //default (20, 30, 50)
         table.isFullWidth(true)
         table.isTwentyFourHourClock(true)
 

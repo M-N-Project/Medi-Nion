@@ -256,7 +256,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, schedule_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_memo,  if(isDone == "0") false else true)
+                        val CalendarItem = CalendarItem(id, schedule_name, schedule_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
                         items.add(CalendarItem)
                         viewModel.addItemList(CalendarItem)
                     }
@@ -428,6 +428,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             val alarmList: Array<String> = resources.getStringArray(R.array.times)
                             alarmSpinner.setSelection(alarmList.indexOf(data.schedule_alarm))
 
+                            val repeatSpinner = bottomSheetView.findViewById<Spinner>(R.id.repeat_spinner)
+                            val repeatList: Array<String> = resources.getStringArray(R.array.repeat)
+                            repeatSpinner.setSelection(repeatList.indexOf(data.schedule_repeat))
 
                             bottomSheetView.findViewById<EditText>(R.id.schedule_memo).setText(data.schedule_memo) //스케줄 메모
 
@@ -475,6 +478,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                         ColorSheetUtils.colorToHex(selectedColor)
 
                                     data.schedule_alarm = alarmSpinner.selectedItem.toString()
+                                    data.schedule_repeat = repeatSpinner.selectedItem.toString()
                                     data.schedule_memo = schedule_memo_2.text.toString()
                                     CalendarRequest(data)
 
@@ -682,6 +686,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 "schedule_end" to item.schedule_end,
                 "schedule_color" to item.schedule_color,
                 "schedule_alarm" to item.schedule_alarm,
+                "schedule_repeat" to item.schedule_repeat,
                 "schedule_memo" to item.schedule_memo,
                 "isDone" to item.schedule_isDone.toString()
             )

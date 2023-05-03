@@ -248,8 +248,10 @@ class Calendar_History_Add : AppCompatActivity() {
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
-        val spinner = findViewById<Spinner>(R.id.alarm_spinner)
-        var alarm = spinner.selectedItem.toString()
+        val alarm_spinner = findViewById<Spinner>(R.id.alarm_spinner)
+        var alarm = alarm_spinner.selectedItem.toString()
+        val repeat_spinner = findViewById<Spinner>(R.id.repeat_spinner)
+        var repeat = repeat_spinner.selectedItem.toString()
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo).text.toString()
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
@@ -315,7 +317,7 @@ class Calendar_History_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val item = CalendarItem(id, schedule_title ,presentDate,start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm,schedule_memo, false)
+                    val item = CalendarItem(id, schedule_title ,presentDate,start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
                     CalendarFragment.viewModel.addItemLiveList(item)
 
                     this.finish()
@@ -333,21 +335,27 @@ class Calendar_History_Add : AppCompatActivity() {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
+                    "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
                     "schedule_alarm" to alarm,
-                    "schedule_memo" to schedule_memo
+                    "schedule_repeat" to repeat,
+                    "schedule_memo" to schedule_memo,
+                    "isDone" to "0"
                 )
             } else {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
+                    "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
-                    "schedule_memo" to schedule_memo
+                    "schedule_repeat" to repeat,
+                    "schedule_memo" to schedule_memo,
+                    "isDone" to "0"
                 )
             }
         )

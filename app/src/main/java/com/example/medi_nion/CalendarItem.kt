@@ -12,6 +12,7 @@ class CalendarItem(
     var schedule_end : String,
     var schedule_color : String,
     var schedule_alarm : String,
+    var schedule_repeat : String,
     var schedule_memo : String,
     var schedule_isDone : Boolean
     ) {
