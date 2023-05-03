@@ -6,10 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.example.medi_nion.databinding.HospitalProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,8 +28,8 @@ class HospitalProfile : AppCompatActivity() {
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = ViewPager2Adapter(this)
         viewPager2Adatper.addFragment(EmployeeInfoFragment())
-        viewPager2Adatper.addFragment(HospitalInfoFragment())
-        viewPager2Adatper.addFragment(HospitalReviewFragment())
+//        viewPager2Adatper.addFragment(HospitalInfoFragment())
+//        viewPager2Adatper.addFragment(HospitalReviewFragment())
 
         //Adapter 연결
         binding.vpViewpagerMain.apply {
@@ -46,13 +42,13 @@ class HospitalProfile : AppCompatActivity() {
             })
         }
         //ViewPager, TabLayout 연결
-        TabLayoutMediator(binding.tlNavigationView, binding.vpViewpagerMain) { tab, position ->
-            when (position) {
-                0 -> tab.text = "채용 정보"
-                1 -> tab.text = "병원 정보"
-                2 -> tab.text = "리뷰"
-            }
-        }.attach()
+//        TabLayoutMediator(binding.tlNavigationView, binding.vpViewpagerMain) { tab, position ->
+//            when (position) {
+//                0 -> tab.text = "채용 정보"
+//                1 -> tab.text = "병원 정보"
+//                2 -> tab.text = "리뷰"
+//            }
+//        }.attach()
     }
 
 }

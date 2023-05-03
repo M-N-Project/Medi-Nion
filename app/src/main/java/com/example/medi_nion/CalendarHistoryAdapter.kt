@@ -49,7 +49,7 @@ class CalendarHistoryAdapter(private val items: ArrayList<CalendarItem>) :
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val historyName = v.findViewById<TextView>(R.id.history_name)
-        val linearLayout = v.findViewById<LinearLayout>(R.id.linearLayout_history)
+        val linearLayout = v.findViewById<LinearLayout>(R.id.linearLayout_em)
         @RequiresApi(Build.VERSION_CODES.Q)
         fun bind(item: CalendarItem, pos : Int) {
             val drawable = ContextCompat.getDrawable(this.itemView.context, R.drawable.history_button_round)
