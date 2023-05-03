@@ -39,9 +39,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var viewPager2: ViewPager2
     lateinit var binding: ActivityMainBinding
 
-
-
-
 //    private var id: String? = null
 //    private var nickname: String? = null
 //    private var userType: String? = null

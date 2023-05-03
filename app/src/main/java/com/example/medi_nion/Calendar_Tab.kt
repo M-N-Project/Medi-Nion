@@ -34,7 +34,9 @@ class Calendar_Tab: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val pagerAdapter = ViewPagerAdapter_Calendar(requireActivity())
+        val infomap = HashMap<String, String>()
+        infomap.put("id", arguments?.getString("id").toString())
+        val pagerAdapter = ViewPagerAdapter_Calendar(requireActivity(), infomap)
         pagerAdapter.addFragment(CalendarFragment())
         pagerAdapter.addFragment(TimeTableFragment())
 
@@ -51,7 +53,6 @@ class Calendar_Tab: Fragment() {
                 0 -> tab.text = "월간 일정"
                 else -> tab.text = "주간 일정"
             }
-//            tab.text = "Tab ${position+1}"
         }.attach()
     }
 }
