@@ -53,13 +53,6 @@ class EmployeeInfoFragment : Fragment() {
                         val jobsList:JSONObject = jsonObj.get("jobs") as JSONObject
                         val jobList:JSONArray = jobsList.get("job") as JSONArray
 
-                        /*job {
-                            url, company-detail-name,
-                            position-title, location, experience-level, required-education-level,
-                            expiration-timestamp
-                        }
-                        url, company, title, loca, experience, school, deadline*/
-
                         for (i in 0 until jobList.length()) {
                             val item = jobList.getJSONObject(i)
 

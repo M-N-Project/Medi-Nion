@@ -20,6 +20,8 @@ class CalendarHistoryAdapter(private val items: ArrayList<CalendarItem>) :
 
     interface OnItemClickListener {
         fun onHistoryClick(v:View, data: CalendarItem, pos:Int)
+        fun onHistoryLongClick(v: View, data: CalendarItem, pos: Int) : Boolean
+        fun onItemDelete(v: View, data:CalendarItem, pos:Int)
     }
 
     private var listener: OnItemClickListener? = null
@@ -64,6 +66,12 @@ class CalendarHistoryAdapter(private val items: ArrayList<CalendarItem>) :
             linearLayout.setOnClickListener{
                 listener?.onHistoryClick(itemView,item,pos)
             }
+
+            linearLayout.setOnLongClickListener(View.OnLongClickListener {
+                listener?.onHistoryLongClick(itemView,item,pos)
+                Log.d("click", pos.toString() + " : Long click!")
+                return@OnLongClickListener true
+            })
 
 
         }

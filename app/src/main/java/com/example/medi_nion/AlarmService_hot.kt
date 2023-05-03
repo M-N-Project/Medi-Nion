@@ -13,13 +13,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
 
-class AlarmService_opencv: Service() {
+class AlarmService_hot: Service() {
     //여기서 백그라운드로 실행해야되는데 ,,,,,,,,,,,,,,,,,,,,,,,,,,, 우짜지 ?
 
     companion object {
-        private var NOTIFICATION_ID = "medinion"
-        private var NOTIFICATION_NAME = "인증 알림"
-        private val ALARM_REQUEST_CODE = 1001
+        const val CHANNEL_ID = "medinion"
+        const val CHANNEL_NAME = "hot alarm"
+        private const val ALARM_REQUEST_CODE = 1000
     }
 
     override fun onCreate() {
@@ -29,7 +29,7 @@ class AlarmService_opencv: Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("onStartConmmet", "dfds")
-        Intent(this, MainActivity::class.java).flags =
+        Intent(this, HomeFragment::class.java).flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val pendingIntent = PendingIntent.getActivity(
@@ -39,10 +39,11 @@ class AlarmService_opencv: Service() {
             ), FLAG_MUTABLE
         )
 
-        val notification = NotificationCompat.Builder(this@AlarmService_opencv, NOTIFICATION_ID)
-            .setContentTitle("[Medi_Nion] 사용자 인증 알림") //타이틀 TEXT
-            .setContentText("인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정") //세부내용 TEXT
-            .setSmallIcon(R.drawable.logo) //필수 (안해주면 에러)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("[medinion] HOT 게시물 알림")
+            .setContentText("어제의 HOT했던 게시물을 확인해보세요!")
+            .setSmallIcon(R.drawable.logo)
+            .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
 

@@ -96,7 +96,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
         academyBtn = view.findViewById(R.id.menu7)
         employeeInfoBtn = view.findViewById(R.id.menu8)
-        medicalNewsBtn = view.findViewById(R.id.menu_news)
+        medicalNewsBtn = view.findViewById(R.id.medi_news)
         manageBusinessBtn = view.findViewById(R.id.menu_buss)
         scheduleBtn = view.findViewById(R.id.menu_schedule)
 
@@ -493,10 +493,23 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
             }
         }
 
+        academyBtn.setOnClickListener { //학회 및 세미나로 이동
+            activity?.let {
+                val intent = Intent(context, MedicalSeminar::class.java)
+                startActivity(intent)
+            }
+        }
 
         employeeInfoBtn.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let{
                 val intent = Intent(context, HospitalProfile::class.java)
+                startActivity(intent)
+            }
+        }
+
+        medicalNewsBtn.setOnClickListener {  //의료뉴스로 이동
+            activity?.let {
+                val intent = Intent(context, MedicalNews::class.java)
                 startActivity(intent)
             }
         }
@@ -566,7 +579,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
         }
 
 
-        manageBusinessBtn.setOnClickListener { //비즈니스 관리(프로필수정, 글쓰기 화면으로 이동)
+        manageBusinessBtn.setOnClickListener { //비즈니스 (bottom_menu 의 비즈니스와 같은 버튼)
             val businessFragment = BusinessMainFragment()
             var bundle = Bundle()
             bundle.putString("id",id)

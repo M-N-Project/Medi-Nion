@@ -29,6 +29,7 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediNion"
+        tools:replace="android:theme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <service
@@ -56,12 +57,40 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".AlarmReceiver_comment"
+            android:enabled="true"
+            android:directBootAware="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".AlarmReceiver_hot"
+            android:enabled="true"
+            android:directBootAware="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name = ".AlarmService"
             android:exported="false"/>
 
         <service
             android:name = ".AlarmService_opencv"
+            android:exported="false"/>
+
+        <service
+            android:name = ".AlarmService_comment"
+            android:exported="false"/>
+
+        <service
+            android:name = ".AlarmService_hot"
             android:exported="false"/>
 
         <activity
@@ -128,8 +157,12 @@
 
         <activity android:name=".Calendar_Add"
             android:screenOrientation="portrait" />
+        <activity android:name=".MedicalNews"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Calendar_History_Add"
             android:screenOrientation="portrait" />
+        <activity android:name=".MedicalSeminar"
+            android:screenOrientation="portrait"/>
 
 
         <uses-library

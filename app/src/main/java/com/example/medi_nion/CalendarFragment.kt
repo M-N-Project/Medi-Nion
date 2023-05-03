@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -34,7 +36,6 @@ import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormat
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
-import okhttp3.internal.notify
 import org.json.JSONArray
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -43,6 +44,7 @@ import java.util.*
 
 
 class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
+    private var selectedColor: Int = ColorSheet.NO_COLOR
     private lateinit var calendarRecyclerView : RecyclerView
     private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
@@ -50,10 +52,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
-    private var selectedColor: Int = ColorSheet.NO_COLOR
 
     companion object {
         var viewModel: CalendarViewModel  = CalendarViewModel()
+        private const val COLOR_SELECTED = "selectedColor"
     }
 
 
@@ -399,7 +401,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             }
 
                             // 스케줄 색상
-                            val color =  bottomSheetView.findViewById<ImageView>(R.id.schedule_color_view)
+                            val color =  bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
                             val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color_oval)
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
@@ -459,7 +461,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                     }
 
                                     Log.d("-=123", "${oldTitle}, ${data.schedule_name}, ${data.schedule_date} , ${data.schedule_start} , ${data.schedule_end}, ${data.schedule_color}, ${data.schedule_alarm}, ${data.schedule_memo}, ${data.schedule_isDone}")
-                                    data.schedule_color = ColorSheetUtils.colorToHex(selectedColor)
+
+                                    if(data.schedule_color == "#FFFFFF")
+                                        data.schedule_color = "#BADFD2"
+                                    else
+                                        ColorSheetUtils.colorToHex(selectedColor)
+
                                     data.schedule_alarm = alarmSpinner.selectedItem.toString()
                                     data.schedule_memo = schedule_memo_2.text.toString()
                                     CalendarRequest(data)
@@ -687,18 +694,17 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 selectedColor = selectedColor,
                 listener = { color ->
                     selectedColor = color
-
-                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color_oval)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor( ColorSheetUtils.colorToHex(selectedColor)), BlendMode.SRC_ATOP)
-                    } else {
-                        drawable!!.setColorFilter(Color.parseColor( ColorSheetUtils.colorToHex(selectedColor)), PorterDuff.Mode.SRC_ATOP)
-                    }
-                    colorView.background = drawable
-
+                    setColor(selectedColor)
                 })
             .show(parentFragmentManager)
 
+    }
+
+    private fun setColor(@ColorInt color: Int) {
+        val color_picker = view?.findViewById<Button>(R.id.schedule_color_view)
+        color_picker?.backgroundTintList = ColorStateList.valueOf(color)
+
+        Log.d("COLOE", color.toString())
     }
 
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
@@ -89,7 +90,8 @@ class Calendar_Add : AppCompatActivity() {
         val end = findViewById<LinearLayout>(R.id.end_time_linear)
         val schedule_btn = findViewById<Button>(R.id.schedule_btn)
         val color = findViewById<Button>(R.id.schedule_color_imageView)
-        val alarm = findViewById<Spinner>(R.id.alarm_spinner)
+        val spinner = findViewById<Spinner>(R.id.alarm_spinner)
+        var alarm = spinner.selectedItem.toString()
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo)
 
         var startString = ""
@@ -123,11 +125,19 @@ class Calendar_Add : AppCompatActivity() {
 
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
+                                            Log.d("DFSDFD", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
-                                            //alarm 설정
+
+                                            when (data.schedule_alarm) {
+                                                "1시간 전" -> spinner.setSelection(1)
+                                                "2시간 전" -> spinner.setSelection(2)
+                                                "3시간 전" -> spinner.setSelection(3)
+                                                "6시간 전" -> spinner.setSelection(4)
+                                                else -> spinner.setSelection(0)
+                                            }
 
                                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -141,8 +151,74 @@ class Calendar_Add : AppCompatActivity() {
 
                                             schedule_memo.setText(data.schedule_memo)
                                         }
-                                    })
 
+                                        override fun onHistoryLongClick(
+                                            v: View,
+                                            data: CalendarItem,
+                                            pos: Int
+                                        ): Boolean {
+                                            val builder = AlertDialog.Builder(this@Calendar_Add)
+                                            builder.setTitle("경고")
+                                                .setMessage("히스토리 일정을 삭제하시겠습니까?")
+                                                .setPositiveButton("확인"
+                                                ) { dialogInterface, i ->
+                                                    onItemDelete(v, data, pos)
+                                                    fetchCalendarHistory()
+                                                }
+                                                .setNegativeButton("취소",
+                                                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                                                    })
+                                            builder.show()
+                                            return true
+                                        }
+
+                                        override fun onItemDelete(
+                                            v: View,
+                                            data: CalendarItem,
+                                            pos: Int
+                                        ) {
+                                            val id = intent.getStringExtra("id").toString()
+                                            val schedule_title = data.schedule_name
+                                            val url = "http://seonho.dothome.co.kr/schedule_delete.php"
+                                            val request = Login_Request(
+                                                Request.Method.POST,
+                                                url,
+                                                { response ->
+                                                    Log.d("response", response)
+                                                    if (response != "Delete Schedule fail") {
+                                                        Log.d("DFD", "$id, $schedule_title")
+                                                        Toast.makeText(
+                                                            applicationContext,
+                                                            String.format("히스토리 일정을 삭제하였습니다."),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+
+                                                        fetchCalendarHistory()
+
+                                                    } else {
+                                                        Toast.makeText(
+                                                            applicationContext,
+                                                            String.format("히스토리 일정을 삭제할 수 없습니다.\n다시 시도해주세요."),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                },
+                                                {
+                                                    Log.d(
+                                                        "failed",
+                                                        "error......${error(applicationContext)}"
+                                                    )
+                                                },
+                                                hashMapOf(
+                                                    "id" to id,
+                                                    "schedule_title" to schedule_title
+                                                )
+                                            )
+                                            val queue = Volley.newRequestQueue(this@Calendar_Add)
+                                            queue.add(request)
+                                        }
+                                    })
                                 }
                             }
 
@@ -159,11 +235,19 @@ class Calendar_Add : AppCompatActivity() {
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                                             Log.d("0-9132", data.schedule_name)
+                                            Log.d("DFSDFD", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
-                                            //alarm 설정
+
+                                            when (data.schedule_alarm) {
+                                                "1시간 전" -> spinner.setSelection(1)
+                                                "2시간 전" -> spinner.setSelection(2)
+                                                "3시간 전" -> spinner.setSelection(3)
+                                                "6시간 전" -> spinner.setSelection(4)
+                                                else -> spinner.setSelection(0)
+                                            }
 
                                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -176,6 +260,73 @@ class Calendar_Add : AppCompatActivity() {
                                             colorStr = data.schedule_color
 
                                             schedule_memo.setText(data.schedule_memo)
+                                        }
+
+                                        override fun onHistoryLongClick(
+                                            v: View,
+                                            data: CalendarItem,
+                                            pos: Int
+                                        ): Boolean {
+                                            val builder = AlertDialog.Builder(this@Calendar_Add)
+                                            builder.setTitle("경고")
+                                                .setMessage("히스토리 일정을 삭제하시겠습니까?")
+                                                .setPositiveButton("확인"
+                                                ) { dialogInterface, i ->
+                                                    onItemDelete(v, data, pos)
+                                                    fetchCalendarHistory()
+                                                }
+                                                .setNegativeButton("취소",
+                                                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                                                    })
+                                            builder.show()
+                                            return true
+                                        }
+
+                                        override fun onItemDelete(
+                                            v: View,
+                                            data: CalendarItem,
+                                            pos: Int
+                                        ) {
+                                            val id = intent.getStringExtra("id").toString()
+                                            val schedule_title = data.schedule_name
+                                            val url = "http://seonho.dothome.co.kr/schedule_delete.php"
+                                            val request = Login_Request(
+                                                Request.Method.POST,
+                                                url,
+                                                { response ->
+                                                    Log.d("response", response)
+                                                    if (response != "Delete Schedule fail") {
+                                                        Log.d("DFD", "$id, $schedule_title")
+                                                        Toast.makeText(
+                                                            applicationContext,
+                                                            String.format("히스토리 일정을 삭제하였습니다."),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+
+                                                        fetchCalendarHistory()
+
+                                                    } else {
+                                                        Toast.makeText(
+                                                            applicationContext,
+                                                            String.format("히스토리 일정을 삭제할 수 없습니다.\n다시 시도해주세요."),
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                },
+                                                {
+                                                    Log.d(
+                                                        "failed",
+                                                        "error......${error(applicationContext)}"
+                                                    )
+                                                },
+                                                hashMapOf(
+                                                    "id" to id,
+                                                    "schedule_title" to schedule_title
+                                                )
+                                            )
+                                            val queue = Volley.newRequestQueue(this@Calendar_Add)
+                                            queue.add(request)
                                         }
                                     })
 
@@ -192,11 +343,19 @@ class Calendar_Add : AppCompatActivity() {
                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                             Log.d("0-9132", data.schedule_name)
+                            Log.d("DFSDFD", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
-                            //alarm 설정
+
+                            when (data.schedule_alarm) {
+                                "1시간 전" -> spinner.setSelection(1)
+                                "2시간 전" -> spinner.setSelection(2)
+                                "3시간 전" -> spinner.setSelection(3)
+                                "6시간 전" -> spinner.setSelection(4)
+                                else -> spinner.setSelection(0)
+                            }
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -209,6 +368,69 @@ class Calendar_Add : AppCompatActivity() {
                             colorStr = data.schedule_color
 
                             schedule_memo.setText(data.schedule_memo)
+                        }
+
+                        override fun onHistoryLongClick(
+                            v: View,
+                            data: CalendarItem,
+                            pos: Int
+                        ): Boolean {
+                            val builder = AlertDialog.Builder(this@Calendar_Add)
+                            builder.setTitle("경고")
+                                .setMessage("히스토리 일정을 삭제하시겠습니까?")
+                                .setPositiveButton("확인"
+                                ) { dialogInterface, i ->
+                                    onItemDelete(v, data, pos)
+                                    fetchCalendarHistory()
+                                }
+                                .setNegativeButton("취소",
+                                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                                    })
+                            builder.show()
+                            return true
+                        }
+
+                        override fun onItemDelete(v: View, data: CalendarItem, pos: Int) {
+                            val id = intent.getStringExtra("id").toString()
+                            val schedule_title = data.schedule_name
+                            val url = "http://seonho.dothome.co.kr/schedule_delete.php"
+                            val request = Login_Request(
+                                Request.Method.POST,
+                                url,
+                                { response ->
+                                    Log.d("response", response)
+                                    if (response != "Delete Schedule fail") {
+                                        Log.d("DFD", "$id, $schedule_title")
+                                        Toast.makeText(
+                                            applicationContext,
+                                            String.format("히스토리 일정을 삭제하였습니다."),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        fetchCalendarHistory()
+
+                                    } else {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            String.format("히스토리 일정을 삭제할 수 없습니다.\n다시 시도해주세요."),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                },
+                                {
+                                    Log.d(
+                                        "failed",
+                                        "error......${error(applicationContext)}"
+                                    )
+                                },
+                                hashMapOf(
+                                    "id" to id,
+                                    "schedule_title" to schedule_title
+                                )
+                            )
+                            val queue = Volley.newRequestQueue(this@Calendar_Add)
+                            queue.add(request)
                         }
                     })
                 }
@@ -366,14 +588,83 @@ class Calendar_Add : AppCompatActivity() {
                     var adapter = CalendarHistoryAdapter(items)
                     calendarHistoryView.adapter = adapter
 
-                    adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
+                    adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener {
+                        override fun onHistoryLongClick(v: View, data: CalendarItem, pos: Int) : Boolean {
+                            val builder = AlertDialog.Builder(this@Calendar_Add)
+                            builder.setTitle("경고")
+                                .setMessage("히스토리 일정을 삭제하시겠습니까?")
+                                .setPositiveButton("확인"
+                                ) { dialogInterface, i ->
+                                    onItemDelete(v, data, pos)
+                                    fetchCalendarHistory()
+                                }
+                                .setNegativeButton("취소",
+                                    DialogInterface.OnClickListener { dialogInterface, i ->
+
+                                    })
+                            builder.show()
+                            return true
+                        }
+
+                        override fun onItemDelete(v: View, data: CalendarItem, pos: Int) {
+                            val id = intent.getStringExtra("id").toString()
+                            val schedule_title = data.schedule_name
+                            val url = "http://seonho.dothome.co.kr/schedule_delete.php"
+                            val request = Login_Request(
+                                Request.Method.POST,
+                                url,
+                                { response ->
+                                    Log.d("response", response)
+                                    if (response != "Delete Schedule fail") {
+                                        Log.d("DFD", "$id, $schedule_title")
+                                        Toast.makeText(
+                                            applicationContext,
+                                            String.format("히스토리 일정을 삭제하였습니다."),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        fetchCalendarHistory()
+
+                                    } else {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            String.format("히스토리 일정을 삭제할 수 없습니다.\n다시 시도해주세요."),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                },
+                                {
+                                    Log.d(
+                                        "failed",
+                                        "error......${error(applicationContext)}"
+                                    )
+                                },
+                                hashMapOf(
+                                    "id" to id,
+                                    "schedule_title" to schedule_title
+                                )
+                            )
+                            val queue = Volley.newRequestQueue(this@Calendar_Add)
+                            queue.add(request)
+                        }
+
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
+                            val spinner = findViewById<Spinner>(R.id.alarm_spinner)
+                            var alarm = spinner.selectedItem.toString()
                             Log.d("0-9132", data.schedule_name)
+                            Log.d("DFSDFD123", data.schedule_alarm)
+                            Log.d("456456", alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
-                            //alarm 설정
+                            when (data.schedule_alarm) {
+                                "1시간 전" -> spinner.setSelection(1)
+                                "2시간 전" -> spinner.setSelection(2)
+                                "3시간 전" -> spinner.setSelection(3)
+                                "6시간 전" -> spinner.setSelection(4)
+                                else -> spinner.setSelection(0)
+                            }
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -387,8 +678,8 @@ class Calendar_Add : AppCompatActivity() {
 
                             schedule_memo.setText(data.schedule_memo)
                         }
-                    })
 
+                    })
 
                 } else {
                     Toast.makeText(
@@ -533,6 +824,7 @@ class Calendar_Add : AppCompatActivity() {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
         Log.d("018321",ColorSheetUtils.colorToHex(selectedColor))
+        Log.d("018324561",colorStr.toString())
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,

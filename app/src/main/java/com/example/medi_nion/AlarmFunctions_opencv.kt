@@ -36,17 +36,6 @@ class AlarmFunctions_opencv(private val context: Context){
             PendingIntent.getBroadcast(context,alarm_code,receiverIntent,PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-//        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-//        var datetime = Date()
-//        try {
-//            datetime = dateFormat.parse(time) as Date
-//        } catch (e: ParseException) {
-//            e.printStackTrace()
-//        }
-//
-//        val calendar = Calendar.getInstance()
-//        calendar.time = datetime
-
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, 14)
@@ -56,16 +45,16 @@ class AlarmFunctions_opencv(private val context: Context){
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
-    fun cancelAlarm(viewModel: ViewModel, alarm_code: Int) {
-        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver_opencv::class.java)
-
-        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_IMMUTABLE)
-        }else{
-            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-
-        alarmManager.cancel(pendingIntent)
-    }
+//    fun cancelAlarm(viewModel: ViewModel, alarm_code: Int) {
+//        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val intent = Intent(context, AlarmReceiver_opencv::class.java)
+//
+//        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+//            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_IMMUTABLE)
+//        }else{
+//            PendingIntent.getBroadcast(context,alarm_code,intent,PendingIntent.FLAG_UPDATE_CURRENT)
+//        }
+//
+//        alarmManager.cancel(pendingIntent)
+//    }
 }

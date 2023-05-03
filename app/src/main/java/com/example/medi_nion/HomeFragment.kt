@@ -1,9 +1,11 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.*
 import android.content.Context
+import android.content.Context.ALARM_SERVICE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Outline
 import android.net.Uri
 import android.os.Build
@@ -22,6 +24,12 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import android.view.*
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +48,19 @@ class qnaNewItem(val num: Int, val title: String, val content: String) {
 var qnaItems = java.util.ArrayList<qnaNewItem>()
 
 class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 프레그먼트(게시판 구분은 추후에)
+
+    private val random = (1..100000) // 1~100000 범위에서 알람코드 랜덤으로 생성
+    private val alarmCode = random.random()
+    private lateinit var manager: NotificationManager
+    private lateinit var builder: NotificationCompat.Builder
+    lateinit var notificationPermission: ActivityResultLauncher<String>
+
+    companion object {
+        private const val COLOR_SELECTED = "selectedColor"
+        private const val ALARM_REQUEST_CODE = 1000
+        const val CHANNEL_ID = "medinion"
+        const val CHANNEL_NAME = "schedule alarm"
+    }
 
     private lateinit var activity : Activity
     private lateinit var id: String
@@ -106,6 +127,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onStart() {
         id = arguments?.getString("id").toString()
         Log.d("idididiidid   Home", id)
@@ -160,6 +182,37 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 //            userMedal = it.getInt("userMedal", 0).toString()
 //            nickname = it.getString("nickname", "").toString()
 //        }
+
+        val notificationPermissionCheck = context?.let {
+            ContextCompat.checkSelfPermission(
+                it,
+                android.Manifest.permission.POST_NOTIFICATIONS
+            )
+        }
+        if (notificationPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            requestPermissions(
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                10000
+            )
+        } else { //권한이 있는 경우
+            Log.d("0-09123","hot notinoti")
+        }
+
+        notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Log.d("ontintno", "hot notinoti")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notification()
+                }
+            } else {
+                Toast.makeText(context, "권한을 승인해야 HOT 게시물 알림을 받을 수 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+            Log.d("create", "Channel")
+        }
 
         val detector = GestureDetector(context, object : GestureDetector.OnGestureListener {
             override fun onDown(p0: MotionEvent): Boolean {
@@ -331,6 +384,13 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             //학회 및 세미나 정보로 이동
         }
 
+        acadamy_info.setOnClickListener{ // 학회 및 세미나 정보로 이동
+            activity?.let {
+                val intent = Intent(context, MedicalSeminar::class.java)
+                startActivity(intent)
+            }
+        }
+
         employee_info.setOnClickListener { //병원 프로필 및 채용 정보로 이동함
             activity?.let {
                 val intent = Intent(context, HospitalProfile::class.java)
@@ -340,6 +400,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         medi_news.setOnClickListener {
             //의료뉴스 이동
+            activity?.let {
+                val intent = Intent(context, MedicalNews::class.java)
+                startActivity(intent)
+            }
         }
 
         ////////////////////// hot 게시물 클릭 이벤트 ///////////////////////////////
@@ -469,6 +533,11 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
 */
         return view
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun notification() {
+        notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
     private fun getAdImage(): ArrayList<Int> {
@@ -616,6 +685,16 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     ///////////////////////// hot 게시물 가져오는 fetch 함수 ///////////////////////////////
     private fun fetchHotPost() {
         val urlhotpost = "http://seonho.dothome.co.kr/Hot_post_list.php"
+        val receiverIntent: Intent = Intent(
+            context,
+            AlarmReceiver_hot::class.java
+        )
+        val pendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(context,
+                ALARM_REQUEST_CODE, receiverIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+        val alarmManager = this.getActivity()?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val id = arguments?.getString("id").toString()
         var nickname = arguments?.getString("nickname").toString()
@@ -1118,5 +1197,25 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             iv.clipToOutline = true
         }
         return iv
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setAlarm(alarm_code: Int, content: String){
+        context?.let { AlarmFunctions_hot(it).callAlarm(alarmCode, content) }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createNotificationChannel() {
+        manager = this.getActivity()?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        //NotificationChannel 인스턴스를 createNotificationChannel()에 전달하여 앱 알림 채널을 시스템에 등록
+        manager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+        )
+
     }
 }
