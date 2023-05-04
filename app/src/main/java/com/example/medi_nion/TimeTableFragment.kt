@@ -138,14 +138,16 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                         val isDone = item.getString("isDone").toBoolean()
 
                         val CalendarItem = ScheduleEntity(
-                            id.toInt(),
+                            id,
                             schedule_name,
-                            schedule_memo,
-                            schedule_date.toInt(),
+                            schedule_date,
                             schedule_start,
                             schedule_end,
                             schedule_color,
-                            schedule_color
+                            schedule_alarm,
+                            schedule_repeat,
+                            schedule_memo,
+                            isDone
                         )
 
                         table?.initTable(day)
