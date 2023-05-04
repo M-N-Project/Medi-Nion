@@ -69,13 +69,13 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
         val schedule = ScheduleEntity(
             id, //originId
-            "Database", //scheduleName
-            "IT Building 301", //roomInfo
-            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
-            "20:30", //startTime format: "HH:mm"
-            "#73fcae68", //endTime  format: "HH:mm"
-            "설정 안함", //backgroundColor (optional)
-            "설정 안함", //textcolor (optional)
+            "Database",
+            "IT Building 301",
+            "18:20",
+            "20:30",
+            "#73fcae68",
+            "설정 안함",
+            "설정 안함",
         "",
             false
         )
