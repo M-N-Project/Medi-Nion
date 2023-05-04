@@ -68,45 +68,22 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         table.isTwentyFourHourClock(true)
 
         val schedule = ScheduleEntity(
-            "id",
-            "IT Building 301",
-            "2023-05-04-Thu",
-            "18:20",
-            "20:30",
-            "#BADFD2",
-            "설정 안함",
-            "설정 안함",
+            id, //originId
+            "Database", //scheduleName
+            "2023-05-01-Tue", //roomInfo
+            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
+            "20:30", //startTime format: "HH:mm"
+            "#73fcae68", //endTime  format: "HH:mm"
+            "설정 안함", //backgroundColor (optional)
+            "설정 안함", //textcolor (optional)
         "",
             false
         )
 
-//
-//        val schedule2 = ScheduleEntity(
-//            32, //originId
-//            "Database", //scheduleName
-//            "IT Building 301", //roomInfo
-//            ScheduleDay.MONDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-//            "13:20", //startTime format: "HH:mm"
-//            "19:30", //endTime  format: "HH:mm"
-//            "#73fcae68", //backgroundColor (optional)
-//            "#000000" //textcolor (optional)
-//        )
-//
-//        val schedule3 = ScheduleEntity(
-//            32, //originId
-//            "Database", //scheduleName
-//            "IT Building 301", //roomInfo
-//            ScheduleDay.WEDNESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-//            "10:20", //startTime format: "HH:mm"
-//            "14:30", //endTime  format: "HH:mm"
-//            "#73fcae68", //backgroundColor (optional)
-//            "#000000" //textcolor (optional)
-//        )
-
         scheduleList.add(schedule)
-//        scheduleList.add(schedule2)
-//        scheduleList.add(schedule3)
         table.updateSchedules(scheduleList)
+
+
 
         return view
     }
