@@ -1,15 +1,13 @@
 package com.example.medi_nion
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,9 +69,14 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
             }
 
             val pos = absoluteAdapterPosition
-            if(pos!= RecyclerView.NO_POSITION) {
-                linear.setOnClickListener{
-                    listener?.onItemClick(itemView, item, pos)
+            if (pos != RecyclerView.NO_POSITION) {
+                linear.setOnClickListener {
+                    if (pos < itemList.size) {
+                        listener?.onItemClick(itemView, item, pos)
+                    } else {
+                        val context: Context = itemView.context
+                        Toast.makeText(context, "필터링된 채용정보가 없습니다", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

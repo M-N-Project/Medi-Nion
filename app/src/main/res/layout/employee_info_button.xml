@@ -160,7 +160,7 @@
             android:layout_marginBottom="2dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="신장내과"
+            android:text="비뇨기과"
             android:textColor="#3C3C3C"
             android:textSize="14sp" />
     </LinearLayout>

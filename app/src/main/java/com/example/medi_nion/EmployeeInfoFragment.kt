@@ -55,6 +55,52 @@ class EmployeeInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&fields=expiration-date&count=110&job_mid_cd=6"
+        GlobalScope.launch {
+            try {
+                val response = getResponseFromApi(apiURL)
+                val responseBody = response?.body?.string()
+                withContext(Dispatchers.Main) {
+                    responseBody?.let {
+                        items.clear()
+                        val jsonObj: JSONObject = JSONObject(responseBody)
+                        val jobsList:JSONObject = jsonObj.get("jobs") as JSONObject
+                        val jobList:JSONArray = jobsList.get("job") as JSONArray
+
+                        for (i in 0 until jobList.length()) {
+                            val item = jobList.getJSONObject(i)
+
+                            val url = item.getString("url")
+                            val company = item.getJSONObject("company").getJSONObject("detail").getString("name")
+                            val position = item.getJSONObject("position")
+                            val title = position.getString("title")
+                            val loca = position.getJSONObject("location").optString("name")
+                            val experience = position.getJSONObject("experience-level").getString("name")
+                            val school = position.getJSONObject("required-education-level").getString("name")
+                            val deadlineType = item.getJSONObject("close-type").optInt("code")
+                            val deadline = item.optString("expiration-date")
+
+                            val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadlineType, deadline)
+                            items.add(infoItem)
+                        }
+                        val adapter = EmployeeRecyAdapter(items)
+                        employee_recycler.adapter = adapter
+
+                        adapter.setOnItemClickListener(object:EmployeeRecyAdapter.OnItemClickListener {
+                            override fun onItemClick(v: View, data: EmployeeRecyItem, pos: Int) {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.url))
+                                startActivity(intent)
+                            }
+                        })
+                    }
+                }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    //textView.text = "Error occurred: ${e.message}"
+                }
+            }
+        }
+
 
 //        val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" // 발급받은 accessKey"
 //        val text = URLEncoder.encode("", "UTF-8")
@@ -175,8 +221,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name3.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "감염내과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=552"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -224,8 +270,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name4.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "산부인과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=561"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -273,8 +319,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name5.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "소아과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=563"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -322,8 +368,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name6.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "비뇨기과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=572"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -371,8 +417,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name7.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "정신과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=575"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -420,8 +466,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name8.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "감염내과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=552"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -470,8 +516,8 @@ class EmployeeInfoFragment : Fragment() {
 
 
         name9.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "핵의학과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=583"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -519,8 +565,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name10.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "이비인후과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=573"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -568,8 +614,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name11.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "마취통증의학과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=558"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -617,8 +663,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name12.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "구강내과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=553"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -666,8 +712,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name13.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "구강외과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=554"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -715,8 +761,8 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name14.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=576"
+            Toast.makeText(context, "신장내과 선택", Toast.LENGTH_SHORT).show()
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=567"
             GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
@@ -764,10 +810,11 @@ class EmployeeInfoFragment : Fragment() {
         }
 
         name15.setOnClickListener {
-            Toast.makeText(context, "정형외과 선택", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "외과 선택", Toast.LENGTH_SHORT).show()
             val apiURL =
-                "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=572"
-            GlobalScope.launch {
+                "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&fields=expiration-date&job_mid_cd=6&job_cd=572"
+
+                GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
                     val responseBody = response?.body?.string()
