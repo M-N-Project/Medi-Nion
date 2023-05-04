@@ -17,18 +17,18 @@ class ViewPagerAdapter_Calendar(fragment: FragmentActivity, infomap: HashMap<Str
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> {
-                val calendarFragment = CalendarFragment()
-                val bundle = Bundle()
-                bundle.putString("id", id)
-                calendarFragment.arguments = bundle
-                return calendarFragment
-            }
-            else -> {
                 val timeTableFragment = TimeTableFragment()   //TabLayout으로 ,, ?
                 val bundle = Bundle()
                 bundle.putString("id", id)
                 timeTableFragment.arguments = bundle
                 return timeTableFragment
+            }
+            else -> {
+                val calendarFragment = CalendarFragment()
+                val bundle = Bundle()
+                bundle.putString("id", id)
+                calendarFragment.arguments = bundle
+                return calendarFragment
             }
         }
     }
