@@ -232,8 +232,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
         val presentDate = "$year-$month-$date-$week"
 
-
-
         val request = Board_Request(
             Request.Method.POST,
             urlBoard,

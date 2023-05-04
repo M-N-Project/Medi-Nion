@@ -1,6 +1,7 @@
 package com.example.medi_nion
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -17,7 +18,7 @@ class ViewPagerAdapter_Calendar(fragment: FragmentActivity, infomap: HashMap<Str
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> {
-                val timeTableFragment = TimeTableFragment()   //TabLayout으로 ,, ?
+                val timeTableFragment = TimeTableFragment()
                 val bundle = Bundle()
                 bundle.putString("id", id)
                 timeTableFragment.arguments = bundle

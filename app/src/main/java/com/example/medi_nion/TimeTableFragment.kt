@@ -1,49 +1,21 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.annotation.ColorInt
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.islandparadise14.mintable.MinTimeTableView
-import com.islandparadise14.mintable.model.ScheduleDay
 import com.islandparadise14.mintable.model.ScheduleEntity
-import com.prolificinteractive.materialcalendarview.*
-import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
-import dev.sasikanth.colorsheet.ColorSheet
-import dev.sasikanth.colorsheet.utils.ColorSheetUtils
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import org.json.JSONArray
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
-import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
@@ -58,52 +30,44 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.time_table, container, false)
-
         val table = view.findViewById<MinTimeTableView>(R.id.table)
         table.initTable(day)
-//        table.updateSchedules(scheduleList)
 
         table.baseSetting(30, 20, 60) //default (20, 30, 50)
         table.isFullWidth(true)
         table.isTwentyFourHourClock(true)
 
-        val schedule = ScheduleEntity(
-            id, //originId
-            "Database", //scheduleName
-            "2023-05-01-Tue", //roomInfo
-            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
-            "20:30", //startTime format: "HH:mm"
-            "#73fcae68", //endTime  format: "HH:mm"
-            "설정 안함", //backgroundColor (optional)
-            "설정 안함", //textcolor (optional)
-        "",
-            false
-        )
-
-        scheduleList.add(schedule)
-        table.updateSchedules(scheduleList)
-
-
+        fetchEvent(view)
 
         return view
     }
 
-    fun fetchEvent() {
+    override fun onPause() {
+        super.onPause()
+        getFragmentManager()?.let { refreshFragment(this, it) }
+    }
+
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.detach(fragment)
+    }
+
+    @SuppressLint("UseRequireInsteadOfGet")
+    fun fetchEvent(view: View) {
         val id = arguments?.getString("id").toString()
-        val table = view?.findViewById<MinTimeTableView>(R.id.table)
-        val url = "http://seonho.dothome.co.kr/Events2.php"
+        val table = view.findViewById<MinTimeTableView>(R.id.table)
+        val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
+
         val request = Board_Request(
             Request.Method.POST,
             url,
             { response ->
-                Log.d("j2132",response)
+                Log.d("ㅇㄹㅇㄴ", response)
                 if(response != "Event fetch Fail") {
                     val jsonArray = JSONArray(response)
-
                     for (i in 0 until jsonArray.length()) {
                         val item = jsonArray.getJSONObject(i)
 
-                        val id = item.getString("id")
                         val schedule_name = item.getString("schedule_name")
                         val schedule_date = item.getString("schedule_date")
                         val schedule_start = item.getString("schedule_start")
@@ -114,7 +78,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                         val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone").toBoolean()
 
-                        val CalendarItem = ScheduleEntity(
+                        val schedule = ScheduleEntity(
                             id,
                             schedule_name,
                             schedule_date,
@@ -127,19 +91,22 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                             isDone
                         )
 
-                        table?.initTable(day)
-                        scheduleList.add(CalendarItem)
-                        table?.updateSchedules(scheduleList)
+                        scheduleList.add(schedule)
+                        Log.d("SCHE", scheduleList.toString())
+                        table.updateSchedules(scheduleList)
+
+                        val ft = fragmentManager!!.beginTransaction()
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            ft.setReorderingAllowed(false)
+                        }
+                        Log.d("SDFDF", "SDF6")
+                        ft.detach(this).attach(this).commit()
+
                     }
                 }
             }, { Log.d("login failed", "error......${error(this)}") },
             hashMapOf(
                 "id" to id
-//                "day" to presentDate,
-//                "year" to year,
-//                "month" to month,
-//                "date" to date,
-//                "week" to week
             )
         )
         val queue = Volley.newRequestQueue(context)
