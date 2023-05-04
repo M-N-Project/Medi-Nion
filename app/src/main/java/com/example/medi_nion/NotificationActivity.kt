@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.*
 import android.util.Log
@@ -35,29 +36,28 @@ class NotificationActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.notificationview)
 
-        refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
+        swipe_refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
         items.clear()
         all_items.clear()
 
-        notification_recyclerView.setLayoutManager(notification_recyclerView.layoutManager)
+        notification_recyclerView.layoutManager = notification_recyclerView.layoutManager
 
         val id = intent.getStringExtra("id")
         val nickname = intent.getStringExtra("nickname")
-
 
         notification_recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if(scrollFlag==false){
                     if (!notification_recyclerView.canScrollVertically(-1)) { //맨 위
-                        refresh_layout.setOnRefreshListener { //새로고침
+                        swipe_refresh_layout.setOnRefreshListener { //새로고침
                             try {
                                 val intent = intent
                                 finish() //현재 액티비티 종료 실시
                                 overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
                                 startActivity(intent) //현재 액티비티 재실행 실시
                                 overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                                refresh_layout.isRefreshing = false //새로고침 없애기
+                                swipe_refresh_layout.isRefreshing = false //새로고침 없애기
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -114,24 +114,24 @@ class NotificationActivity: AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNoti() {
-        // url to post our data
-        var id = intent.getStringExtra("id").toString()
-        var nickname = intent.getStringExtra("nickname").toString()
-        val urlBoard = "http://seonho.dothome.co.kr/Board.php"
-        val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+        val id = intent.getStringExtra("id").toString()
+        val nickname = intent.getStringExtra("nickname").toString()
+        val url = "http://seonho.dothome.co.kr/notification_fetch.php"
         val request = Board_Request(
             Request.Method.POST,
-            urlBoard,
+            url,
             { response ->
                 val jsonArray = JSONArray(response)
+                Log.d("444", response.toString())
                 items.clear()
                 all_items.clear()
 
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
-                    val title = item.getString("title")
-                    val content = item.getString("content")
-                    val time = item.getString("time")
+
+                    val title = item.getString("notification_title")
+                    val content = item.getString("notification_content")
+                    val time = item.getString("notification_time")
 
                     val simpleTime = timeDiff(time)
 
@@ -144,17 +144,13 @@ class NotificationActivity: AppCompatActivity() {
                     all_items.add(notificationItem)
                 }
 
-                var recyclerViewState = notification_recyclerView.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<NotificationItem>()
+                val recyclerViewState = notification_recyclerView.layoutManager?.onSaveInstanceState()
+                val new_items = ArrayList<NotificationItem>()
                 new_items.addAll(items)
                 adapter = NotificationListAdapter(new_items)
                 notification_recyclerView.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 notification_recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-
-                var detailTitle : String = ""
-                var detailContent : String = ""
-                var detailTime : String = ""
 
                 //알람 누르면
                 adapter.setOnItemClickListener(object : NotificationListAdapter.OnItemClickListener {
@@ -165,7 +161,7 @@ class NotificationActivity: AppCompatActivity() {
                        startActivity(intent)
                     }
                 })
-            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+            }, { Log.d("fetch failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "id" to id
             )
@@ -174,10 +170,11 @@ class NotificationActivity: AppCompatActivity() {
         queue.add(request)
     }
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     fun Millis(postTime : String) : Long {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val date1: Date = simpleDateFormat.parse(postTime)
+        val date1: Date = simpleDateFormat.parse(postTime) as Date
         return date1.time
     }
 
