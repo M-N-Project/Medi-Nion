@@ -50,8 +50,8 @@ class Calendar_Tab: Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when(position) {
-                0 -> tab.text = "월간 일정"
-                else -> tab.text = "주간 일정"
+                0 -> tab.text = "주간 일정"
+                else -> tab.text = "월간 일정"
             }
         }.attach()
     }

@@ -75,7 +75,12 @@ class Calendar_Add : AppCompatActivity() {
         setContentView(R.layout.calendar_add)
 
         val id = intent?.getStringExtra("id")
-        Log.d("ID", id.toString())
+        val flag = intent.getStringExtra("flag")
+
+        if(flag == "timetable") {
+            findViewById<LinearLayout>(R.id.repeatLinearLayout).visibility = View.GONE
+            findViewById<View>(R.id.view5).visibility = View.GONE
+        }
 
         var calendarHistoryScrollView = findViewById<ScrollView>(R.id.calendarHistoryScrollView)
         calendarHistoryView = findViewById(R.id.calendarHistoryRecyclerView)
@@ -566,6 +571,7 @@ class Calendar_Add : AppCompatActivity() {
             Request.Method.POST,
             historyUrl,
             { response ->
+                Log.d("09182312", response)
                 if (!response.equals("History fetch Fail")) {
                     val jsonArray = JSONArray(response)
                     items.clear()
@@ -747,6 +753,7 @@ class Calendar_Add : AppCompatActivity() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val id = intent?.getStringExtra("id").toString()
         var day = intent.getStringExtra("day").toString()
+        val flag = intent.getStringExtra("flag")
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
@@ -860,7 +867,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
                     "schedule_alarm" to alarm,
-                    "schedule_repeat" to repeat,
+                    "schedule_repeat" to if(flag=="calendar") repeat else "매주",
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
                 )
@@ -873,7 +880,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
-                    "schedule_repeat" to repeat,
+                    "schedule_repeat" to if(flag=="calendar") repeat else "매주",
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
                 )
