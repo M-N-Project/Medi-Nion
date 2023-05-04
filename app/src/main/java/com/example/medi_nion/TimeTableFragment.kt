@@ -70,7 +70,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val schedule = ScheduleEntity(
             id, //originId
             "Database", //scheduleName
-            "IT Building 301", //roomInfo
+            "2023-05-01-Tue", //roomInfo
             "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
             "20:30", //startTime format: "HH:mm"
             "#73fcae68", //endTime  format: "HH:mm"
@@ -79,33 +79,10 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         "",
             false
         )
-//
-//        val schedule2 = ScheduleEntity(
-//            32, //originId
-//            "Database", //scheduleName
-//            "IT Building 301", //roomInfo
-//            ScheduleDay.MONDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-//            "13:20", //startTime format: "HH:mm"
-//            "19:30", //endTime  format: "HH:mm"
-//            "#73fcae68", //backgroundColor (optional)
-//            "#000000" //textcolor (optional)
-//        )
-//
-//        val schedule3 = ScheduleEntity(
-//            32, //originId
-//            "Database", //scheduleName
-//            "IT Building 301", //roomInfo
-//            ScheduleDay.WEDNESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-//            "10:20", //startTime format: "HH:mm"
-//            "14:30", //endTime  format: "HH:mm"
-//            "#73fcae68", //backgroundColor (optional)
-//            "#000000" //textcolor (optional)
-//        )
 
         scheduleList.add(schedule)
-//        scheduleList.add(schedule2)
-//        scheduleList.add(schedule3)
         table.updateSchedules(scheduleList)
+
 
 
         return view
