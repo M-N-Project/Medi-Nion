@@ -167,6 +167,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".SearchActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".NotificationActivity"
+            android:screenOrientation="portrait"/>
 
 
         <uses-library

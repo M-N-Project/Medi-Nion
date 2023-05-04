@@ -22,12 +22,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.comment_comment_detail.*
+import kotlinx.android.synthetic.main.notification_item.*
 import org.json.JSONArray
 
 private var backPressedTime: Long = 0
@@ -190,6 +194,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar items
+        var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
+
         when(item.itemId){
             R.id.search -> {
                 val intent = Intent(this, SearchActivity::class.java)
@@ -197,7 +204,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.alarm -> {
-                Log.d("Alarm", "?")
+                val intent = Intent(this, NotificationActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                startActivity(intent)
                 return true
             }
             else -> {return super.onOptionsItemSelected(item)}
@@ -246,10 +256,33 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
                     if (id == Userid) {
                         setAlarm(ALARM_REQUEST_CODE, "인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정")
+
+                        val notification_title = "[Medi_Nion] 사용자 인증 알림"
+                        val notification_content = "인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정"
+                        val notiurl = "http://seonho.dothome.co.kr/notification_insert.php"
+                        val request = Upload_Request(
+                            Request.Method.POST,
+                            notiurl,
+                            { response ->
+                                Log.d("NOTIDNOD", response.toString())
+                            },
+                            { Log.d("failed", "error......${error(applicationContext)}") },
+                            mutableMapOf(
+                                "id" to id,
+                                "notification_title" to notification_title,
+                                "notification_content" to notification_content
+                            )
+                        )
+                        request.retryPolicy = DefaultRetryPolicy(
+                            0,
+                            -1,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                        )
+
+                        val queue = Volley.newRequestQueue(this)
+                        queue.add(request)
                     }
                 }
-
-
             }, { Log.d("notification Failed", "error......${error(applicationContext)}") },
             hashMapOf(
                 "id" to Userid,
