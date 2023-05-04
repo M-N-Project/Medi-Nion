@@ -50,7 +50,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
     private var v: View? = null
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,22 +67,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         table.isTwentyFourHourClock(true)
 
         fetchEvent(v!!)
-//        val schedule = ScheduleEntity(
-//            id, //originId
-//            "Database", //scheduleName
-//            "2023-05-01-Mon", //roomInfo
-//            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
-//            "20:30", //startTime format: "HH:mm"
-//            "#73fcae68", //endTime  format: "HH:mm"
-//            "설정 안함", //backgroundColor (optional)
-//            "설정 안함", //textcolor (optional)
-//        "",
-//            false
-//        )
-//
-//        scheduleList.add(schedule)
-//        table.updateSchedules(scheduleList)
-
 
         val makeEventBtn = v!!.findViewById<FloatingActionButton>(R.id.makeEvent)
         val makeEventRadiogroup = v!!.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
