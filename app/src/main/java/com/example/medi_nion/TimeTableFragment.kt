@@ -47,9 +47,9 @@ import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
-    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri","Sat", "Sun")
+    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
-
+    val id = arguments?.getString("id").toString()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -61,56 +61,90 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
         val table = view.findViewById<MinTimeTableView>(R.id.table)
         table.initTable(day)
-
-        table.updateSchedules(scheduleList)
+//        table.updateSchedules(scheduleList)
 
         table.baseSetting(30, 20, 60) //default (20, 30, 50)
         table.isFullWidth(true)
         table.isTwentyFourHourClock(true)
 
         val schedule = ScheduleEntity(
-            32, //originId
+            id, //originId
             "Database", //scheduleName
-            "IT Building 301", //roomInfo
-            ScheduleDay.TUESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-            "18:20", //startTime format: "HH:mm"
-            "20:30", //endTime  format: "HH:mm"
-            "#73fcae68", //backgroundColor (optional)
-            "#000000" //textcolor (optional)
-        )
-
-        val schedule2 = ScheduleEntity(
-            32, //originId
-            "Database", //scheduleName
-            "IT Building 301", //roomInfo
-            ScheduleDay.MONDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-            "13:20", //startTime format: "HH:mm"
-            "19:30", //endTime  format: "HH:mm"
-            "#73fcae68", //backgroundColor (optional)
-            "#000000" //textcolor (optional)
-        )
-
-        val schedule3 = ScheduleEntity(
-            32, //originId
-            "Database", //scheduleName
-            "IT Building 301", //roomInfo
-            ScheduleDay.WEDNESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-            "10:20", //startTime format: "HH:mm"
-            "14:30", //endTime  format: "HH:mm"
-            "#73fcae68", //backgroundColor (optional)
-            "#000000" //textcolor (optional)
+            "2023-05-01-Tue", //roomInfo
+            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
+            "20:30", //startTime format: "HH:mm"
+            "#73fcae68", //endTime  format: "HH:mm"
+            "설정 안함", //backgroundColor (optional)
+            "설정 안함", //textcolor (optional)
+        "",
+            false
         )
 
         scheduleList.add(schedule)
-        scheduleList.add(schedule2)
-        scheduleList.add(schedule3)
         table.updateSchedules(scheduleList)
+
 
 
         return view
     }
 
+    fun fetchEvent() {
+        val id = arguments?.getString("id").toString()
+        val table = view?.findViewById<MinTimeTableView>(R.id.table)
+        val url = "http://seonho.dothome.co.kr/Events2.php"
+        val request = Board_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                Log.d("j2132",response)
+                if(response != "Event fetch Fail") {
+                    val jsonArray = JSONArray(response)
 
+                    for (i in 0 until jsonArray.length()) {
+                        val item = jsonArray.getJSONObject(i)
+
+                        val id = item.getString("id")
+                        val schedule_name = item.getString("schedule_name")
+                        val schedule_date = item.getString("schedule_date")
+                        val schedule_start = item.getString("schedule_start")
+                        val schedule_end = item.getString("schedule_end")
+                        val schedule_color = item.getString("schedule_color")
+                        val schedule_alarm = item.getString("schedule_alarm")
+                        val schedule_repeat = item.getString("schedule_repeat")
+                        val schedule_memo = item.getString("schedule_memo")
+                        val isDone = item.getString("isDone").toBoolean()
+
+                        val CalendarItem = ScheduleEntity(
+                            id,
+                            schedule_name,
+                            schedule_date,
+                            schedule_start,
+                            schedule_end,
+                            schedule_color,
+                            schedule_alarm,
+                            schedule_repeat,
+                            schedule_memo,
+                            isDone
+                        )
+
+                        table?.initTable(day)
+                        scheduleList.add(CalendarItem)
+                        table?.updateSchedules(scheduleList)
+                    }
+                }
+            }, { Log.d("login failed", "error......${error(this)}") },
+            hashMapOf(
+                "id" to id
+//                "day" to presentDate,
+//                "year" to year,
+//                "month" to month,
+//                "date" to date,
+//                "week" to week
+            )
+        )
+        val queue = Volley.newRequestQueue(context)
+        queue.add(request)
+    }
 }
 
 
