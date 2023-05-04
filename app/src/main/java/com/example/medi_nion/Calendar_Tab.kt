@@ -35,7 +35,8 @@ class Calendar_Tab: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         val infomap = HashMap<String, String>()
-        infomap.put("id", arguments?.getString("id").toString())
+        infomap["id"] = arguments?.getString("id").toString()
+
         val pagerAdapter = ViewPagerAdapter_Calendar(requireActivity(), infomap)
         pagerAdapter.addFragment(CalendarFragment())
         pagerAdapter.addFragment(TimeTableFragment())

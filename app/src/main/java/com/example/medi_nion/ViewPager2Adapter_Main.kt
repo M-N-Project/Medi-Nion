@@ -1,6 +1,7 @@
 package com.example.medi_nion
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -14,6 +15,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
     private val userDept = infomap["userDept"]
     private val passwd = infomap["passwd"]
     private val userMedal = infomap["userMedal"]?.toInt()
+    private val week = infomap["week"]
 
 
     override fun createFragment(position: Int): Fragment {
@@ -31,7 +33,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 return homeFragment
             }
             1 -> {
-                val calendarMainFragment = Calendar_Tab()   //TabLayout으로 ,, ?
+                val calendarMainFragment = Calendar_Tab()
                 val bundle = Bundle()
                 bundle.putString("id", id)
                 calendarMainFragment.arguments = bundle

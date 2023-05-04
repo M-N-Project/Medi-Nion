@@ -578,10 +578,10 @@ class Calendar_Add : AppCompatActivity() {
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
                         val schedule_alarm = item.getString("schedule_alarm")
-                        val schedule_repeat = item.getString("schedule_repeat")
+//                        val schedule_repeat = item.getString("schedule_repeat")
                         val schedule_memo = item.getString("schedule_memo")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo, false)
+                        val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, "", schedule_memo, false)
                         items.add(CalendarItem)
                     }
 
