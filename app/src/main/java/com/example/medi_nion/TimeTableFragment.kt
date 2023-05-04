@@ -48,6 +48,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
 
+    private var v: View? = null
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -57,16 +59,15 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         // Inflate the layout for this fragment
         val id = arguments?.getString("id").toString()
 
-        val view =  inflater.inflate(R.layout.time_table, container, false)
-        val table = view.findViewById<MinTimeTableView>(R.id.table)
+        v =  inflater.inflate(R.layout.time_table, container, false)
+        val table = v!!.findViewById<MinTimeTableView>(R.id.table)
         table.initTable(weekDay)
-//        table.updateSchedules(scheduleList)
 
         table.baseSetting(30, 20, 60) //default (20, 30, 50)
         table.isFullWidth(true)
         table.isTwentyFourHourClock(true)
 
-        fetchEvent(view)
+        fetchEvent(v!!)
 //        val schedule = ScheduleEntity(
 //            id, //originId
 //            "Database", //scheduleName
@@ -84,11 +85,11 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 //        table.updateSchedules(scheduleList)
 
 
-        val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
-        val makeEventRadiogroup = view.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
+        val makeEventBtn = v!!.findViewById<FloatingActionButton>(R.id.makeEvent)
+        val makeEventRadiogroup = v!!.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
         makeEventRadiogroup.visibility = View.GONE
-        val makeEventScheduleRadioBtn= view.findViewById<RadioButton>(R.id.schedule_RadioBtn)
-        val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
+        val makeEventScheduleRadioBtn= v!!.findViewById<RadioButton>(R.id.schedule_RadioBtn)
+        val makeEventButtonRadioBtn = v!!.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
         //스케줄 만들기
         makeEventBtn.setOnClickListener{
@@ -136,7 +137,12 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
             }
         }
 
-        return view
+        return v
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchEvent(v!!)
     }
 
     override fun onPause() {
@@ -150,9 +156,9 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
-    fun fetchEvent(view: View) {
+    fun fetchEvent(v: View) {
         val id = arguments?.getString("id").toString()
-        val table = view.findViewById<MinTimeTableView>(R.id.table)
+        val table = v.findViewById<MinTimeTableView>(R.id.table)
         val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
 
         val request = Board_Request(
