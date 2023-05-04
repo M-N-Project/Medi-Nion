@@ -142,6 +142,7 @@ class SearchActivity : AppCompatActivity() {
                 var detailTime : String = ""
                 var detailImg : String = ""
                 var detailCommentCnt : String = ""
+                //var detailCommentComment : String = ""
 
                 //게시판 상세
                 adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {

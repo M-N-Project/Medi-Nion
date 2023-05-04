@@ -26,8 +26,8 @@ class MedicalNews : AppCompatActivity() {
         val threadPool = Executors.newFixedThreadPool(4)
 
         GlobalScope.launch(Dispatchers.IO) {
-            val url = " https://www.medicaltimes.com/Main/News/List.html?SectionTop=important/index.nhn"
-            var base_url = "https://www.medicaltimes.com/Main/News/List.html?SectionTop=important/"
+            val url = "https://www.medicaltimes.com/Main/News/List.html?SectionTop=important/"
+            var base_url = "https://www.medicaltimes.com"
 
             val doc = Jsoup.connect(url)
                 .timeout(5000) // Set a timeout value (in milliseconds)
