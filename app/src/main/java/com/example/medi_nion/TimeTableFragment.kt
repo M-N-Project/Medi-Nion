@@ -68,17 +68,18 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         table.isTwentyFourHourClock(true)
 
         val schedule = ScheduleEntity(
-            id, //originId
-            "Database",
+            "id",
             "IT Building 301",
+            "2023-05-04-Thu",
             "18:20",
             "20:30",
-            "#73fcae68",
+            "#BADFD2",
             "설정 안함",
             "설정 안함",
         "",
             false
         )
+
 //
 //        val schedule2 = ScheduleEntity(
 //            32, //originId
@@ -107,12 +108,17 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 //        scheduleList.add(schedule3)
         table.updateSchedules(scheduleList)
 
-
         return view
     }
 
     fun fetchEvent() {
         val id = arguments?.getString("id").toString()
+        val presentDate = arguments?.getString("presentDate").toString()
+        val year = arguments?.getString("year").toString()
+        val month = arguments?.getString("month").toString()
+        val date = arguments?.getString("date").toString()
+        val week = arguments?.getString("week").toString()
+
         val table = view?.findViewById<MinTimeTableView>(R.id.table)
         val url = "http://seonho.dothome.co.kr/Events2.php"
         val request = Board_Request(
@@ -157,12 +163,12 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 }
             }, { Log.d("login failed", "error......${error(this)}") },
             hashMapOf(
-                "id" to id
-//                "day" to presentDate,
-//                "year" to year,
-//                "month" to month,
-//                "date" to date,
-//                "week" to week
+                "id" to id,
+                "day" to presentDate,
+                "year" to year,
+                "month" to month,
+                "date" to date,
+                "week" to week
             )
         )
         val queue = Volley.newRequestQueue(context)
