@@ -47,9 +47,9 @@ import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
-    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri","Sat", "Sun")
+    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
-
+    val id = arguments?.getString("id").toString()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -69,46 +69,50 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         table.isTwentyFourHourClock(true)
 
         val schedule = ScheduleEntity(
-            32, //originId
+            id, //originId
             "Database", //scheduleName
             "IT Building 301", //roomInfo
-            ScheduleDay.TUESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-            "18:20", //startTime format: "HH:mm"
-            "20:30", //endTime  format: "HH:mm"
-            "#73fcae68", //backgroundColor (optional)
-            "#000000" //textcolor (optional)
+            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
+            "20:30", //startTime format: "HH:mm"
+            "#73fcae68", //endTime  format: "HH:mm"
+            "설정 안함", //backgroundColor (optional)
+            "설정 안함", //textcolor (optional)
+        "",
+            false
         )
-
-        val schedule2 = ScheduleEntity(
-            32, //originId
-            "Database", //scheduleName
-            "IT Building 301", //roomInfo
-            ScheduleDay.MONDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-            "13:20", //startTime format: "HH:mm"
-            "19:30", //endTime  format: "HH:mm"
-            "#73fcae68", //backgroundColor (optional)
-            "#000000" //textcolor (optional)
-        )
-
-        val schedule3 = ScheduleEntity(
-            32, //originId
-            "Database", //scheduleName
-            "IT Building 301", //roomInfo
-            ScheduleDay.WEDNESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-            "10:20", //startTime format: "HH:mm"
-            "14:30", //endTime  format: "HH:mm"
-            "#73fcae68", //backgroundColor (optional)
-            "#000000" //textcolor (optional)
-        )
+//
+//        val schedule2 = ScheduleEntity(
+//            32, //originId
+//            "Database", //scheduleName
+//            "IT Building 301", //roomInfo
+//            ScheduleDay.MONDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
+//            "13:20", //startTime format: "HH:mm"
+//            "19:30", //endTime  format: "HH:mm"
+//            "#73fcae68", //backgroundColor (optional)
+//            "#000000" //textcolor (optional)
+//        )
+//
+//        val schedule3 = ScheduleEntity(
+//            32, //originId
+//            "Database", //scheduleName
+//            "IT Building 301", //roomInfo
+//            ScheduleDay.WEDNESDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
+//            "10:20", //startTime format: "HH:mm"
+//            "14:30", //endTime  format: "HH:mm"
+//            "#73fcae68", //backgroundColor (optional)
+//            "#000000" //textcolor (optional)
+//        )
 
         scheduleList.add(schedule)
-        scheduleList.add(schedule2)
-        scheduleList.add(schedule3)
+//        scheduleList.add(schedule2)
+//        scheduleList.add(schedule3)
         table.updateSchedules(scheduleList)
 
 
         return view
     }
+
+
 
 
 }

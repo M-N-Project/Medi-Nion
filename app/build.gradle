@@ -36,8 +36,15 @@ android {
         dataBinding = true
     }
 
+
+//    repositories {
+//        flatDir {
+//            dirs 'libs'
+//        }
+//    }
     //새로고침
 }
+
 
 
 dependencies {
@@ -95,11 +102,12 @@ dependencies {
     implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
 
     //주간 캘린더 - TimeTable
-    implementation 'com.github.tlaabs:TimetableView:1.0.3-fx1'
-    implementation 'com.github.islandparadise14:Mintable:1.5.1'
+//    implementation 'com.github.tlaabs:TimetableView:1.0.3-fx1'
+//    implementation 'com.github.islandparadise14:Mintable:1.5.1'
 
     implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 
+    implementation files('libs/app-debug.aar')
 
 
 
