@@ -125,7 +125,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 intent.putExtra("id", id)
 
                 val week = currentDate.date.toString().substring(0,3)
+                Log.d("018323", currentDate.toString())
                 intent.putExtra("day", "${currentDate.toString()}/$week")
+                intent.putExtra("flag", "calendar")
                 startActivity(intent)
             }
             //히스토리 일정 버튼 만들기

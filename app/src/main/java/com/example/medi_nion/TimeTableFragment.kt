@@ -3,11 +3,17 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
+import androidx.annotation.ColorInt
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -15,13 +21,22 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleEntity
+import com.prolificinteractive.materialcalendarview.*
+import dev.sasikanth.colorsheet.ColorSheet
+import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import org.json.JSONArray
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
-    private val day = arrayOf("Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun")
+    private val weekDay = arrayOf("Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
-    val id = arguments?.getString("id").toString()
+
+    private var selectedColor: Int = ColorSheet.NO_COLOR
+    private var oldTitle : String = ""
+    private var oldStartTime : String = ""
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -29,15 +44,332 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val id = arguments?.getString("id").toString()
+
         val view =  inflater.inflate(R.layout.time_table, container, false)
         val table = view.findViewById<MinTimeTableView>(R.id.table)
-        table.initTable(day)
+        table.initTable(weekDay)
+//        table.updateSchedules(scheduleList)
 
         table.baseSetting(30, 20, 60) //default (20, 30, 50)
         table.isFullWidth(true)
         table.isTwentyFourHourClock(true)
 
         fetchEvent(view)
+//        val schedule = ScheduleEntity(
+//            id, //originId
+//            "Database", //scheduleName
+//            "2023-05-01-Mon", //roomInfo
+//            "18:20", //ScheduleDay object (MONDAY ~ SUNDAY)
+//            "20:30", //startTime format: "HH:mm"
+//            "#73fcae68", //endTime  format: "HH:mm"
+//            "설정 안함", //backgroundColor (optional)
+//            "설정 안함", //textcolor (optional)
+//        "",
+//            false
+//        )
+//
+//        scheduleList.add(schedule)
+//        table.updateSchedules(scheduleList)
+
+        //일정 클릭시 클릭이벤트
+        schedule.setOnClickListener {
+            oldTitle = schedule.schedule_name
+            oldStartTime = schedule.schedule_start
+            //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
+            val bottomSheetView = layoutInflater.inflate(R.layout.calendar_dialog, null)
+            val bottomSheetDialog = BottomSheetDialog(requireContext())
+            bottomSheetDialog.setContentView(bottomSheetView)
+
+            val deleteScheduleBtn = bottomSheetView.findViewById<ImageView>(R.id.deleteScheduleBtn)
+            deleteScheduleBtn.setOnClickListener {
+                //삭제하시겠습니까??
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("일정 삭제")
+                    .setMessage("일정을 삭제하시겠습니까?")
+                    .setPositiveButton("삭제",
+                        DialogInterface.OnClickListener { dialog, id ->
+//                            var item = CalendarItem(schedule.id, schedule.schedule_name, schedule.schedule_date, schedule.schedule_start, schedule.schedule_end, schedule.schedule_color, schedule.schedule_alarm, schedule.schedule_repeat, schedule.schedule_memo, schedule.schedule_isDone)
+                            deleteSchedule(schedule)
+                        })
+                    .setNegativeButton("취소",
+                        DialogInterface.OnClickListener { dialog, id ->
+
+                        })
+
+                // 다이얼로그를 띄워주기
+                builder.show()
+
+            }
+
+            val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
+            dialog_date.text = schedule.schedule_date
+
+            val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
+            schedule_title.setText(schedule.schedule_name) //스케줄 이름
+
+            val day_night1 = bottomSheetView.findViewById<TextView>(R.id.start_day_night)
+            val start = bottomSheetView.findViewById<LinearLayout>(R.id.start_time_linear)
+            val start_result = bottomSheetView.findViewById<TextView>(R.id.start_time)
+            var startString = ""
+
+            start_result.text = schedule.schedule_start.replace(" ", "")
+
+            var start_min = start_result.text.substring(0, 2)
+            var start_sec = start_result.text.substring(3, 5)
+            Log.d("start..", "${start_min}, ${start_sec}")
+            day_night1.setText("오전") //스케줄 시작 오전/오후
+            start_result.setText("${start_min}   :   ${start_sec}") //스케줄 시작 시간
+            Log.d("start..", start_result.text.toString())
+
+            start.setOnClickListener {
+                val dialog = TimePickerDialog(
+                    requireContext(),
+                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+                    { view, HourOfDay, Minutes ->
+                        if (HourOfDay >= 12)
+                            day_night1.text = "오후"
+                        else
+                            day_night1.text = "오전"
+
+                        if (HourOfDay >= 10) {
+                            if (Minutes >= 10) {
+                                startString = "${HourOfDay}   :   ${Minutes}"
+                            } else {
+                                startString = "${HourOfDay}   :   0${Minutes}"
+                            }
+                        } else {
+                            if (Minutes >= 10) {
+                                startString = "0${HourOfDay}   :   ${Minutes}"
+                            } else {
+                                startString = "0${HourOfDay}   :   0${Minutes}"
+                            }
+                        }
+                        start_result.setText(startString)
+                        start_result.text = start_result.text.toString().replace(" ", "")
+                        schedule.schedule_start = start_result.text.toString()
+                        start_result.setText(startString)
+                    },
+                    0,
+                    0,
+                    false
+                )
+
+                dialog.setTitle("시작 시간")
+                dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                dialog.show()
+            }
+
+            val day_night2 = bottomSheetView.findViewById<TextView>(R.id.end_day_night)
+            val end = bottomSheetView.findViewById<LinearLayout>(R.id.end_time_linear)
+            val end_result = bottomSheetView.findViewById<TextView>(R.id.end_time)
+            var endString = ""
+            end_result.text = schedule.schedule_end.replace(" ", "")
+
+            var end_min = end_result.text.substring(0, 2)
+            var end_sec = end_result.text.substring(3, 5)
+            day_night2.setText("오전") //스케줄 시작 오전/오후
+            end_result.setText("${end_min}   :   ${end_sec}") //스케줄 시작 시간
+
+            end.setOnClickListener {
+                val dialog1 = TimePickerDialog(
+                    requireContext(),
+                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+                    { view, HourOfDay, Minutes ->
+                        if (HourOfDay >= 12)
+                            day_night2.text = "오후"
+                        else
+                            day_night2.text = "오전"
+                        if (HourOfDay >= 10) {
+                            if (Minutes >= 10) {
+                                endString = "${HourOfDay}   :   ${Minutes}"
+                            } else {
+                                endString = "${HourOfDay}   :   0${Minutes}"
+                            }
+                        } else {
+                            if (Minutes >= 10) {
+                                endString = "0${HourOfDay}   :   ${Minutes}"
+                            } else {
+                                endString = "0${HourOfDay}   :   0${Minutes}"
+                            }
+                        }
+                        end_result.text = endString
+                        end_result.text = end_result.text.toString().replace(" ", "")
+                        schedule.schedule_start = end_result.text.toString()
+                        end_result.text = endString
+                    },
+                    0,
+                    0,
+                    false
+                )
+
+                dialog1.setTitle("종료 시간")
+                dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                dialog1.show()
+            }
+
+            // 스케줄 색상
+            val color = bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
+            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                drawable!!.colorFilter =
+                    BlendModeColorFilter(Color.parseColor(schedule.schedule_color), BlendMode.SRC_ATOP)
+            } else {
+                drawable!!.setColorFilter(
+                    Color.parseColor(schedule.schedule_color),
+                    PorterDuff.Mode.SRC_ATOP
+                )
+            }
+            color.background = drawable
+
+            color.setOnClickListener {
+                val color = bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
+                setupColorSheet(schedule, color)
+
+                val drawable =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    drawable!!.colorFilter = BlendModeColorFilter(
+                        Color.parseColor(schedule.schedule_color),
+                        BlendMode.SRC_ATOP
+                    )
+                } else {
+                    drawable!!.setColorFilter(
+                        Color.parseColor(schedule.schedule_color),
+                        PorterDuff.Mode.SRC_ATOP
+                    )
+                }
+                color.background = drawable
+            }
+
+
+            val alarmSpinner = bottomSheetView.findViewById<Spinner>(R.id.alarm_spinner)
+            val alarmList: Array<String> = resources.getStringArray(R.array.times)
+            alarmSpinner.setSelection(alarmList.indexOf(schedule.schedule_alarm))
+
+            val repeatSpinner = bottomSheetView.findViewById<Spinner>(R.id.repeat_spinner)
+            val repeatList: Array<String> = resources.getStringArray(R.array.repeat)
+            repeatSpinner.setSelection(repeatList.indexOf(schedule.schedule_repeat))
+
+            bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
+                .setText(schedule.schedule_memo) //스케줄 메모
+
+            val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
+            doneBtn.setOnClickListener {
+                hideKeyboard()
+                val schedule_title_2 =
+                    bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
+                val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
+//                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
+//                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
+                if (TextUtils.isEmpty(schedule_title_2.text.toString())) {
+                    Toast.makeText(
+                        requireContext(),
+                        "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    schedule.schedule_name = schedule_title_2.text.toString()
+
+                    start_result.text = start_result.text.toString().replace(" ", "")
+                    end_result.text = end_result.text.toString().replace(" ", "")
+
+
+                    Log.d("091283213", schedule.schedule_date.toString())
+//                    val year = day.toString().substring(12, 16)
+//                    var month = day.toString().substring(17, 19)
+//                    var date = ""
+//                    if (month.substring(1, 2) == "-") {
+//                        month = "0${(day.toString().substring(17, 18)).toInt() + 1}"
+//                        date = day.toString().substring(19, 21)
+//
+//                        if (date.substring(1, 2) == "}")
+//                            date = "0${day.toString().substring(19, 20)}"
+//                    } else {
+//                        month = (month.toInt() + 1).toString()
+//                        date = day.toString().substring(20, 22)
+//
+//                        if (date.substring(1, 2) == "}")
+//                            date = "0${day.toString().substring(20, 21)}"
+//                    }
+
+                    Log.d(
+                        "-=123",
+                        "${oldTitle}, ${schedule.schedule_name}, ${schedule.schedule_date} , ${schedule.schedule_start} , ${schedule.schedule_end}, ${schedule.schedule_color}, ${schedule.schedule_alarm}, ${schedule.schedule_memo}, ${schedule.schedule_isDone}"
+                    )
+
+                    if (schedule.schedule_color == "#FFFFFF")
+                        schedule.schedule_color = "#BADFD2"
+                    else
+                        ColorSheetUtils.colorToHex(selectedColor)
+
+                    schedule.schedule_alarm = alarmSpinner.selectedItem.toString()
+                    schedule.schedule_repeat = repeatSpinner.selectedItem.toString()
+                    schedule.schedule_memo = schedule_memo_2.text.toString()
+                    TimeTableRequest(schedule)
+
+                    Toast.makeText(
+                        requireContext(),
+                        String.format("스케줄 수정이 완료되었습니다."),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            bottomSheetDialog.show()
+        }
+
+
+        val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
+        val makeEventRadiogroup = view.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
+        makeEventRadiogroup.visibility = View.GONE
+        val makeEventScheduleRadioBtn= view.findViewById<RadioButton>(R.id.schedule_RadioBtn)
+        val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
+
+        //스케줄 만들기
+        makeEventBtn.setOnClickListener{
+            if(makeEventRadiogroup.visibility == View.VISIBLE)
+                makeEventRadiogroup.visibility = View.GONE
+            else makeEventRadiogroup.visibility = View.VISIBLE
+
+            makeEventScheduleRadioBtn.bringToFront()
+            makeEventButtonRadioBtn.bringToFront()
+
+            //새로운 일정 만들기
+            makeEventScheduleRadioBtn.setOnClickListener{
+                makeEventRadiogroup.visibility = View.GONE
+                makeEventScheduleRadioBtn.isChecked = false
+                val intent = Intent(context, Calendar_Add::class.java)
+                intent.putExtra("id", id)
+
+                val dateNow  = Date()
+
+                val calendar = Calendar.getInstance()
+                calendar.time = dateNow
+                val weekNum = calendar[Calendar.DAY_OF_WEEK]
+                var week=""
+                if(weekNum == 1) week = "Sun"
+                else if(weekNum == 2) week = "Mon"
+                else if(weekNum == 3) week ="Tue"
+                else if(weekNum == 4) week = "Wed"
+                else if(weekNum == 5) week = "Thu"
+                else if(weekNum == 6) week = "Fri"
+                else week = "Sat"
+
+                intent.putExtra("day", "${CalendarDay.today()}/$week")
+                intent.putExtra("flag", "timetable")
+                startActivity(intent)
+            }
+            //히스토리 일정 버튼 만들기
+            makeEventButtonRadioBtn.setOnClickListener{
+                makeEventRadiogroup.visibility = View.GONE
+                makeEventButtonRadioBtn.isChecked = false
+                val intent = Intent(context, Calendar_History_Add::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("day", CalendarDay.today().toString())
+
+                startActivity(intent)
+            }
+        }
 
         return view
     }
@@ -111,6 +443,110 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         )
         val queue = Volley.newRequestQueue(context)
         queue.add(request)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun TimeTableRequest(item : ScheduleEntity) {
+        val id = arguments?.getString("id").toString()
+
+        val updateScheduleUrl = "http://seonho.dothome.co.kr/updateCalendar.php"
+
+        Log.d("-=123", "${id} , ${oldTitle}, ${oldStartTime},${item.schedule_name}, ${item.schedule_date} , ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
+        val request = Upload_Request(
+            Request.Method.POST,
+            updateScheduleUrl,
+            { response ->
+                Log.d("CDCD", response.toString())
+                if (!response.equals("schedule update fail")) {
+
+
+                } else {
+
+                }
+            },
+            { Log.d("failed", "error......${error(requireContext())}") },
+            mutableMapOf(
+                "id" to id,
+                "oldTitle" to oldTitle,
+                "oldStartTime" to oldStartTime,
+                "schedule_name" to item.schedule_name,
+                "schedule_date" to item.schedule_date,
+                "schedule_start" to item.schedule_start,
+                "schedule_end" to item.schedule_end,
+                "schedule_color" to item.schedule_color,
+                "schedule_alarm" to item.schedule_alarm,
+                "schedule_repeat" to item.schedule_repeat,
+                "schedule_memo" to item.schedule_memo,
+                "isDone" to item.schedule_isDone.toString()
+            )
+        )
+
+
+        val queue = Volley.newRequestQueue(requireContext())
+        queue.add(request)
+    }
+
+    private fun deleteSchedule(item : ScheduleEntity){
+        val deleteSchedule = "http://seonho.dothome.co.kr/deleteSchedule.php"
+        val table = view?.findViewById<MinTimeTableView>(R.id.table)
+        val request = Upload_Request(
+            Request.Method.POST,
+            deleteSchedule,
+            { response ->
+                Log.d("CDCD", response.toString())
+                if (!response.equals("schedule update fail")) {
+
+                    table?.updateSchedules(scheduleList)
+
+                } else {
+
+                }
+            },
+            { Log.d("failed", "error......${error(requireContext())}") },
+            mutableMapOf(
+                "id" to item.id,
+                "schedule_name" to item.schedule_name,
+                "schedule_date" to item.schedule_date,
+                "schedule_start" to item.schedule_start
+            )
+        )
+
+        val queue = Volley.newRequestQueue(requireContext())
+        queue.add(request)
+    }
+
+    private fun setupColorSheet(data : ScheduleEntity, colorView : Button) {
+        val colors = resources.getIntArray(R.array.colors)
+        ColorSheet().cornerRadius(8)
+            //colorPicker 설정
+            .colorPicker(
+                colors = colors,
+                selectedColor = selectedColor,
+                listener = { color ->
+                    selectedColor = color
+                    setColor(selectedColor)
+                })
+            .show(parentFragmentManager)
+
+    }
+
+    private fun setColor(@ColorInt color: Int) {
+        val color_picker = view?.findViewById<Button>(R.id.schedule_color_view)
+        color_picker?.backgroundTintList = ColorStateList.valueOf(color)
+
+        Log.d("COLOE", color.toString())
+    }
+
+    private fun hideKeyboard() {
+        if (activity != null && requireActivity().currentFocus != null) {
+            // 프래그먼트기 때문에 getActivity() 사용
+            val inputManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(
+                requireActivity().currentFocus!!.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
     }
 }
 
