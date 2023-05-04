@@ -1,173 +1,88 @@
 package com.example.medi_nion
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
+import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-private var items =ArrayList<BoardItem>()
-private var all_items = ArrayList<BoardItem>()
-private val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
-private var scroll_count = 1
-//val viewModel = BoardViewModel()
-//lateinit var adapter : BoardListAdapter
-private var adapter = BoardListAdapter(items)
-private var scrollFlag = false
-private var itemIndex = ArrayList<Int>()
-
-class Board : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onStart() {
-        super.onStart() //프레그먼트로 생길 문제들은 추후에 생각하기,,
+class SearchActivity : AppCompatActivity() {
+    private lateinit var searchView: SearchView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: BoardListAdapter
+    private var items = ArrayList<BoardItem>()
+    private var filteredItems = ArrayList<BoardItem>()
 
 
-        fetchData()
-    }
-
-    var ad_images = intArrayOf(
-        R.drawable.ad1,
-        R.drawable.ad2,
-        R.drawable.ad3
-    )
-
-
-    @SuppressLint("MissingInflatedId")
-    override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.board_home)
+        setContentView(R.layout.searchview)
 
-        refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
+        // Retrieve references to the SearchView and RecyclerView
+        searchView = findViewById(R.id.search_view)
+        recyclerView = findViewById(R.id.boardRecyclerView)
 
-        val board_ad = findViewById<ImageView>(R.id.board_ad)
+        // Set up the RecyclerView and its adapter
+        adapter = BoardListAdapter(items)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val imageId = (Math.random() * ad_images.size).toInt()
-        board_ad.setBackgroundResource(ad_images[imageId])
+        // Set up the SearchView query listener
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // Perform the search when the search button is clicked
+                Log.d("ditto", "wowowowo")
+                performSearch(query)
+                return true
+            }
 
-        board_ad.setOnClickListener {
-            val address = "https://www.tripstore.kr/travels/b1653a2c-57ad-4f45-998b-7d79296dd444"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
-            startActivity(intent)
-        }
-
-
-
-        items.clear()
-        all_items.clear()
-
-        boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
-
-        var id = intent.getStringExtra("id")
-        var nickname = intent.getStringExtra("nickname")
-        var userType = intent.getStringExtra("userType").toString()
-        var userDept = intent.getStringExtra("userDept").toString()
-        val userMedal = intent.getIntExtra("userMedal", 0).toString()
-        //글쓰기
-        val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
-        writingFAB.setOnClickListener {
-            var board = intent.getStringExtra("board").toString()
-            val intent = Intent(applicationContext, BoardWrite::class.java)
-            intent.putExtra("id", id)
-            intent.putExtra("nickname", nickname)
-            intent.putExtra("board", board)
-            intent.putExtra("update", 0)
-            intent.putExtra("userType", userType)
-            intent.putExtra("userDept", userDept)
-            intent.putExtra("userMedal", userMedal)
-            Log.d("Floating Button Clicked", userType)
-            startActivity(intent)
-        }
-
-        boardRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if(scrollFlag==false){
-                    if (!boardRecyclerView.canScrollVertically(-1)) { //맨 위
-
-                        refresh_layout.setOnRefreshListener { //새로고침
-                            Log.d("omg", "hello refresh")
-
-                            try {
-                                //TODO 액티비티 화면 재갱신 시키는 코드
-                                val intent = intent
-                                finish() //현재 액티비티 종료 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-                                startActivity(intent) //현재 액티비티 재실행 실시
-                                overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
-
-                                refresh_layout.isRefreshing = false //새로고침 없애기
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-
-                    } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
-                        //로딩
-                        if(all_items.size > 20){
-                            scrollFlag = true
-
-                            Log.d("attention", "let it be")
-                            var progressBar : ProgressBar = findViewById(R.id.progressBar2)
-                            progressBar.visibility = View.VISIBLE
-
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                progressBar.visibility = View.INVISIBLE
-                            }, 2500)
-
-
-                            if((all_items.size - item_count*scroll_count) > 20){
-                                for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
-                                    items.add(all_items[i])
-                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
-                                }
-
-                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                                var new_items = ArrayList<BoardItem>()
-                                new_items.addAll(items)
-                                adapter = BoardListAdapter(new_items)
-                                boardRecyclerView.adapter = adapter
-                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-
-                                scrollFlag = false
-                            }
-                            else{
-                                for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
-                                    items.add(all_items[i])
-                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
-
-                                }
-                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                                var new_items = ArrayList<BoardItem>()
-                                new_items.addAll(items)
-                                adapter = BoardListAdapter(new_items)
-                                boardRecyclerView.adapter = adapter
-                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-                            }
-
-                            scroll_count ++
-                        }
-                    }
-                }
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onQueryTextChange(newText: String): Boolean {
+                // Optional: Perform incremental search as the user types
+                performSearch(newText)
+                return true
             }
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun performSearch(query: String) {
+        Log.d("ditto1", "$filteredItems")
+        fetchData()
+
+        filteredItems.clear()
+
+        if (query.isEmpty()) {
+            // If the query is empty, show all items without filtering
+            Toast.makeText(this, "검색 결과가 없습니다", Toast.LENGTH_SHORT).show()
+            filteredItems.addAll(items)
+        } else {
+            // Filter the items based on the query
+            for (item in items) {
+                if (item.title.contains(query, ignoreCase = true) || //title, content에서 동일한 단어가 있으면
+                    item.contents.contains(query, ignoreCase = true)
+                ) {
+                    filteredItems.add(item)
+                }
+            }
+        }
+        adapter.setItems(filteredItems)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -188,7 +103,7 @@ class Board : AppCompatActivity() {
             { response ->
                 val jsonArray = JSONArray(response)
                 items.clear()
-                all_items.clear()
+                filteredItems.clear()
 
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
@@ -205,15 +120,15 @@ class Board : AppCompatActivity() {
 
                     val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
-                    if(i >= jsonArray.length() - item_count*scroll_count){
-                        items.add(boardItem)
-                        itemIndex.add(num) //앞에다가 추가.
-                    }
+//                    if(i >= jsonArray.length() - item_count*scroll_count){
+//                        items.add(boardItem)
+//                        itemIndex.add(num) //앞에다가 추가.
+//                    }
 
-                    all_items.add(boardItem)
+                    filteredItems.add(boardItem)
                 }
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                var new_items = ArrayList<BoardItem>()
+                var new_items = java.util.ArrayList<BoardItem>()
                 new_items.addAll(items)
                 adapter = BoardListAdapter(new_items)
                 boardRecyclerView.adapter = adapter
@@ -341,6 +256,4 @@ class Board : AppCompatActivity() {
 
         return msg
     }
-
-
 }

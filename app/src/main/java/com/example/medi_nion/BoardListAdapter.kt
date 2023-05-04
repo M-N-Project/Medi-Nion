@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -21,6 +22,13 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
 
     fun setOnItemClickListener(listener: BoardListAdapter.OnItemClickListener) {
         this.listener = listener
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItems(items: ArrayList<BoardItem>) {
+        itemList.clear()
+        itemList.addAll(items)
+        notifyDataSetChanged()
     }
 
 
@@ -87,5 +95,4 @@ class BoardListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerVi
             return null
         }
     }
-
 }

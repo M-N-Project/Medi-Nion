@@ -192,6 +192,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         // Handle presses on the action bar items
         when(item.itemId){
             R.id.search -> {
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
                 return true
             }
             R.id.alarm -> {

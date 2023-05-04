@@ -165,6 +165,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".MedicalSeminar"
             android:screenOrientation="portrait"/>
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait"/>
 
 
         <uses-library

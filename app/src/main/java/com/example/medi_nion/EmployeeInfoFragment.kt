@@ -809,12 +809,10 @@ class EmployeeInfoFragment : Fragment() {
             }
         }
 
-        name15.setOnClickListener {
+        name14.setOnClickListener {
             Toast.makeText(context, "외과 선택", Toast.LENGTH_SHORT).show()
-            val apiURL =
-                "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&fields=expiration-date&job_mid_cd=6&job_cd=572"
-
-                GlobalScope.launch {
+            val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=567"
+            GlobalScope.launch {
                 try {
                     val response = getResponseFromApi(apiURL)
                     val responseBody = response?.body?.string()
@@ -822,47 +820,30 @@ class EmployeeInfoFragment : Fragment() {
                         responseBody?.let {
                             items.clear()
                             val jsonObj: JSONObject = JSONObject(responseBody)
-                            val jobsList: JSONObject = jsonObj.get("jobs") as JSONObject
-                            val jobList: JSONArray = jobsList.get("job") as JSONArray
+                            val jobsList:JSONObject = jsonObj.get("jobs") as JSONObject
+                            val jobList:JSONArray = jobsList.get("job") as JSONArray
 
                             for (i in 0 until jobList.length()) {
                                 val item = jobList.getJSONObject(i)
 
                                 val url = item.getString("url")
-                                val company = item.getJSONObject("company").getJSONObject("detail")
-                                    .getString("name")
+                                val company = item.getJSONObject("company").getJSONObject("detail").getString("name")
                                 val position = item.getJSONObject("position")
                                 val title = position.getString("title")
                                 val loca = position.getJSONObject("location").optString("name")
-                                val experience =
-                                    position.getJSONObject("experience-level").getString("name")
-                                val school = position.getJSONObject("required-education-level")
-                                    .getString("name")
+                                val experience = position.getJSONObject("experience-level").getString("name")
+                                val school = position.getJSONObject("required-education-level").getString("name")
                                 val deadlineType = item.getJSONObject("close-type").optInt("code")
                                 val deadline = item.optString("expiration-date")
 
-                                val infoItem = EmployeeRecyItem(
-                                    url,
-                                    company,
-                                    title,
-                                    loca,
-                                    experience,
-                                    school,
-                                    deadlineType,
-                                    deadline
-                                )
+                                val infoItem = EmployeeRecyItem(url, company, title, loca, experience, school, deadlineType, deadline)
                                 items.add(infoItem)
                             }
                             val adapter = EmployeeRecyAdapter(items)
                             employee_recycler.adapter = adapter
 
-                            adapter.setOnItemClickListener(object :
-                                EmployeeRecyAdapter.OnItemClickListener {
-                                override fun onItemClick(
-                                    v: View,
-                                    data: EmployeeRecyItem,
-                                    pos: Int
-                                ) {
+                            adapter.setOnItemClickListener(object:EmployeeRecyAdapter.OnItemClickListener {
+                                override fun onItemClick(v: View, data: EmployeeRecyItem, pos: Int) {
                                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(data.url))
                                     startActivity(intent)
                                 }
