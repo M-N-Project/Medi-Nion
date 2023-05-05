@@ -8,7 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
 
         <com.islandparadise14.mintable.MinTimeTableView
             android:id="@+id/table"
@@ -16,6 +17,7 @@
             android:layout_height="wrap_content"
             app:isFullWidth="true"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +49,7 @@
 
     <RadioGroup
         android:id="@+id/select_RadioGroup_MakeEvent"
-        android:layout_width="140dp"
+        android:layout_width="160dp"
         android:layout_height="100dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"

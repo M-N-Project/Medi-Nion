@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
+import android.text.style.LineBackgroundSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.Log
@@ -96,6 +97,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
         val id = arguments?.getString("id").toString()
+        val colorList: Array<String> = resources.getStringArray(R.array.colors)
 
         calendar.setSelectedDate(CalendarDay.today())
         calendar.apply {
@@ -156,8 +158,17 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         override fun decorate(view: DayViewFacade?) {
             view?.addSpan(StyleSpan(Typeface.BOLD))
             view?.addSpan(RelativeSizeSpan(1.0f))
+
+//            val colorList: Array<String> = resources.getStringArray(R.array.colors)
+//            var colors = IntArray(colorList.size)
+//            for(i in colorList.indices){
+//                colors[i] = Color.parseColor(colorList[i])
+//            }
+
+
         }
     }
+
 
     //선택 날짜가 달라지면 그에 맞는 일정들 가져와서 adapter붙여주기.
     inner class MyDaySelected : OnDateSelectedListener{
@@ -170,8 +181,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             fetchEvents(date)
 
         }
-
     }
+
     
     //토요일 색상 변경
     inner class SaturdayDecorator: DayViewDecorator {
@@ -477,8 +488,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                     else
                                         ColorSheetUtils.colorToHex(selectedColor)
 
-//                                    data.schedule_start = start_result.text.toString().replace(" ", "")
-//                                    data.schedule_end = end_result.text.toString().replace(" ", "")
+                                    data.schedule_start = start_result.replace(" ", "")
+                                    data.schedule_end = end_result.replace(" ", "")
                                     data.schedule_alarm = alarmSpinner.selectedItem.toString()
                                     data.schedule_repeat = repeatSpinner.selectedItem.toString()
                                     data.schedule_memo = schedule_memo_2.text.toString()
@@ -637,6 +648,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             { response ->
                 Log.d("CDCD", response.toString())
                 if (!response.equals("schedule update fail")) {
+                    Toast.makeText(requireContext(),
+                        "일정 삭제가 완료되었습니다..", Toast.LENGTH_SHORT).show()
 
                     adapter = CalendarRecyclerAdapter(items)
                     calendarRecyclerView.adapter = adapter
@@ -708,6 +721,21 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 selectedColor = selectedColor,
                 listener = { color ->
                     selectedColor = color
+
+                    data.schedule_color =  ColorSheetUtils.colorToHex(selectedColor)
+
+                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        drawable!!.colorFilter =
+                            BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
+                    } else {
+                        drawable!!.setColorFilter(
+                            Color.parseColor(data.schedule_color),
+                            PorterDuff.Mode.SRC_ATOP
+                        )
+                    }
+                    colorView.background = drawable
+
                     setColor(selectedColor)
                 })
             .show(parentFragmentManager)

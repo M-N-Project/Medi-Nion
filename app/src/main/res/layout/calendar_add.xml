@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout15"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -23,26 +24,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#ffffff"
                 android:ems="1"
                 android:hint="일정 이름"
-                android:textSize="16sp"
                 android:inputType="textPersonName"
+                android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="1dp"
-                tools:layout_editor_absoluteY="16dp"
-                android:background="#ffffff"/>
+                tools:layout_editor_absoluteY="16dp" />
 
             <!--        <Spinner-->
-    <!--            android:id="@+id/schedule_history_spinner"-->
-    <!--            android:visibility="gone"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="48dp"-->
-    <!--            android:layout_marginLeft="5dp"-->
-    <!--            android:layout_marginRight="5dp"-->
-    <!--            android:ems="5"-->
-    <!--            android:spinnerMode="dropdown"/>-->
+            <!--            android:id="@+id/schedule_history_spinner"-->
+            <!--            android:visibility="gone"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="48dp"-->
+            <!--            android:layout_marginLeft="5dp"-->
+            <!--            android:layout_marginRight="5dp"-->
+            <!--            android:ems="5"-->
+            <!--            android:spinnerMode="dropdown"/>-->
 
 
             <ScrollView
@@ -66,8 +67,8 @@
                 android:id="@+id/view"
                 android:layout_width="387dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
                 android:background="#8085AFD6" />
 
@@ -98,11 +99,11 @@
                         android:id="@+id/start_result"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:layout_marginTop="10dp"
+                        android:layout_weight="2"
                         android:gravity="center"
                         android:text="00   :   00"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -110,8 +111,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="5dp"
                     android:orientation="horizontal">
 
@@ -137,9 +138,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:textSize="16sp"
                         android:gravity="center"
-                        android:text="오전" />
+                        android:text="오전"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/end_result"
@@ -148,7 +149,7 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="00   :   00"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -156,8 +157,8 @@
                 android:id="@+id/view2"
                 android:layout_width="387dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:background="#8085AFD6" />
 
@@ -171,21 +172,21 @@
                     android:id="@+id/schedule_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="15dp"
                     android:gravity="center"
-                    android:layout_gravity="center"
                     android:text="색상"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/schedule_color_imageView"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:layout_marginStart="280dp"
-                    android:gravity="center"
                     android:layout_gravity="center"
+                    android:layout_marginStart="280dp"
+                    android:background="@drawable/calendar_color"
                     android:backgroundTint="#BADFD2"
-                    android:background="@drawable/calendar_color"/>
+                    android:gravity="center" />
 
             </LinearLayout>
 
@@ -193,8 +194,8 @@
                 android:id="@+id/view3"
                 android:layout_width="387dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:background="#8085AFD6" />
 
@@ -207,20 +208,20 @@
                     android:id="@+id/schedule_alarm_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
                     android:text="알람"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
-    <!--            <TextView-->
-    <!--                android:id="@+id/schedule_alarm"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_weight="0"-->
-    <!--                android:layout_marginTop="15dp"-->
-    <!--                android:text="설정 안함"-->
-    <!--                android:textSize="16sp"/>-->
+                <!--            <TextView-->
+                <!--                android:id="@+id/schedule_alarm"-->
+                <!--                android:layout_width="wrap_content"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_weight="0"-->
+                <!--                android:layout_marginTop="15dp"-->
+                <!--                android:text="설정 안함"-->
+                <!--                android:textSize="16sp"/>-->
 
                 <Spinner
                     android:id="@+id/alarm_spinner"
@@ -228,20 +229,19 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="15dp"
                     android:layout_weight="0"
-                    android:spinnerMode="dropdown"
                     android:ems="5"
                     android:entries="@array/times"
-                    />
+                    android:spinnerMode="dropdown" />
 
-    <!--            <Spinner-->
-    <!--                android:id="@+id/alarm_spinner"-->
-    <!--                android:layout_width="40dp"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_weight="0"-->
-    <!--                android:layout_marginTop="15dp"-->
-    <!--                android:spinnerMode="dropdown"-->
-    <!--                android:ems="1"-->
-    <!--                android:entries="@array/times"/>-->
+                <!--            <Spinner-->
+                <!--                android:id="@+id/alarm_spinner"-->
+                <!--                android:layout_width="40dp"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_weight="0"-->
+                <!--                android:layout_marginTop="15dp"-->
+                <!--                android:spinnerMode="dropdown"-->
+                <!--                android:ems="1"-->
+                <!--                android:entries="@array/times"/>-->
 
             </LinearLayout>
 
@@ -249,8 +249,8 @@
                 android:id="@+id/view4"
                 android:layout_width="387dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:background="#8085AFD6" />
 
@@ -264,11 +264,11 @@
                     android:id="@+id/schedule_repeat_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="15dp"
                     android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
                     android:text="반복"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <!--            <TextView-->
                 <!--                android:id="@+id/schedule_alarm"-->
@@ -285,9 +285,9 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="15dp"
                     android:layout_weight="0"
-                    android:spinnerMode="dropdown"
                     android:ems="5"
-                    android:entries="@array/repeat" />
+                    android:entries="@array/repeat"
+                    android:spinnerMode="dropdown" />
 
                 <!--            <Spinner-->
                 <!--                android:id="@+id/alarm_spinner"-->
@@ -305,8 +305,8 @@
                 android:id="@+id/view5"
                 android:layout_width="387dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="20dp"
                 android:background="#8085AFD6" />
 
@@ -319,38 +319,39 @@
                     android:id="@+id/schedule_memo_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
+                    android:layout_weight="2"
                     android:text="메모"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
 
                 <EditText
                     android:id="@+id/schedule_memo"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_weight="0"
+                    android:layout_height="200dp"
                     android:layout_marginStart="15dp"
-                    android:layout_marginEnd="15dp"
                     android:layout_marginTop="17dp"
-                    android:gravity="top"
-                    android:ems="10"
-                    android:hint="메모를 작성해주세요."
+                    android:layout_marginEnd="15dp"
+                    android:layout_weight="0"
                     android:background="#ffffff"
-                    android:textSize="16sp"/>
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="메모를 작성해주세요."
+                    android:textSize="16sp" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/schedule_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:text="등록"
-                android:textColor="@color/white"/>
-
-
         </LinearLayout>
+
+        <Button
+            android:id="@+id/schedule_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="등록"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout15"
+            tools:layout_editor_absoluteX="15dp" />
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

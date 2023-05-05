@@ -70,7 +70,7 @@
 
     <RadioGroup
         android:id="@+id/select_RadioGroup_MakeEvent"
-        android:layout_width="140dp"
+        android:layout_width="160dp"
         android:layout_height="100dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"

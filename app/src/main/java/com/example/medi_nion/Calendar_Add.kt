@@ -154,6 +154,7 @@ class Calendar_Add : AppCompatActivity() {
                                             color.background = drawable
                                             colorStr = data.schedule_color
 
+
                                             schedule_memo.setText(data.schedule_memo)
                                         }
 
@@ -261,8 +262,11 @@ class Calendar_Add : AppCompatActivity() {
                                             } else {
                                                 drawable!!.setColorFilter(Color.parseColor(data.schedule_color), PorterDuff.Mode.SRC_ATOP)
                                             }
+
+
                                             color.background = drawable
                                             colorStr = data.schedule_color
+
 
                                             schedule_memo.setText(data.schedule_memo)
                                         }
@@ -824,14 +828,11 @@ class Calendar_Add : AppCompatActivity() {
 
         val alarm_setting = "$presentDate $alarm_hour:$alarm_minute"
 
-        Log.d("DFDFS", "$alarm_hour, $alarm_minute")
-        Log.d("alarm_setting", alarm_setting)
 
         if(!alarm.equals("설정 안함")) {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
-        Log.d("018321",ColorSheetUtils.colorToHex(selectedColor))
-        Log.d("018324561",colorStr.toString())
+
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
@@ -858,7 +859,7 @@ class Calendar_Add : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            if (ColorSheetUtils.colorToHex(selectedColor) == "#FFFFFF") {
+            if (colorStr == "#FFFFFF") {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
@@ -878,7 +879,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
-                    "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
+                    "schedule_color" to colorStr,
                     "schedule_alarm" to alarm,
                     "schedule_repeat" to if(flag=="calendar") repeat else "매주",
                     "schedule_memo" to schedule_memo,
