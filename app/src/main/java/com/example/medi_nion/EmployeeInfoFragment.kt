@@ -809,7 +809,7 @@ class EmployeeInfoFragment : Fragment() {
             }
         }
 
-        name14.setOnClickListener {
+        name15.setOnClickListener {
             Toast.makeText(context, "외과 선택", Toast.LENGTH_SHORT).show()
             val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&count=110&job_mid_cd=6&job_cd=567"
             GlobalScope.launch {
@@ -859,6 +859,7 @@ class EmployeeInfoFragment : Fragment() {
         }
 
     }
+
 
     private suspend fun getResponseFromApi(apiUrl: String): Response? {
         val client = OkHttpClient()

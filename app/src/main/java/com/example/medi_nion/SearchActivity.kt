@@ -74,6 +74,7 @@ class SearchActivity : AppCompatActivity() {
             filteredItems.addAll(items)
         } else {
             // Filter the items based on the query
+
             for (item in items) {
                 if (item.title.contains(query, ignoreCase = true) || //title, content에서 동일한 단어가 있으면
                     item.contents.contains(query, ignoreCase = true)
