@@ -439,8 +439,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 hideKeyboard()
                                 val schedule_title_2 = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                                 val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
-//                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
-//                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
+                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
+                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
                                 if(TextUtils.isEmpty(schedule_title_2.text.toString())) {
                                     Toast.makeText(requireContext(),
                                         "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -448,8 +448,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 else {
                                     data.schedule_name = schedule_title_2.text.toString()
 
-                                    start_result.text = start_result.text.toString().replace(" ", "")
-                                    end_result.text = end_result.text.toString().replace(" ", "")
+//                                    start_result.text = start_result.text.toString().replace(" ", "")
+//                                    end_result.text = end_result.text.toString().replace(" ", "")
 
 
                                     val year = day.toString().substring(12,16)
@@ -477,6 +477,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                     else
                                         ColorSheetUtils.colorToHex(selectedColor)
 
+//                                    data.schedule_start = start_result.text.toString().replace(" ", "")
+//                                    data.schedule_end = end_result.text.toString().replace(" ", "")
                                     data.schedule_alarm = alarmSpinner.selectedItem.toString()
                                     data.schedule_repeat = repeatSpinner.selectedItem.toString()
                                     data.schedule_memo = schedule_memo_2.text.toString()
