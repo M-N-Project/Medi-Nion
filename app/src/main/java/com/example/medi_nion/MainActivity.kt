@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 //    private var passwd: String? = null
 //    private var userMedal: Int = 0
 
+    val infomap = HashMap<String, String>()
+
     companion object {
         private var NOTIFICATION_ID = "medinion"
         private var NOTIFICATION_NAME = "인증 알림"
@@ -62,13 +64,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setContentView(binding.root)
 
         ///id자리
-        val infomap = HashMap<String, String>()
+        //val infomap = HashMap<String, String>()
         infomap.put("id", intent.getStringExtra("id").toString())
         infomap.put("nickname", intent.getStringExtra("nickname").toString())
         infomap.put("userType", intent.getStringExtra("userType").toString())
         infomap.put("userDept", intent.getStringExtra("userDept").toString())
         infomap.put("passwd", intent.getStringExtra("passwd").toString())
         infomap.put("userMedal", intent.getIntExtra("userMedal", 0).toString())
+
+
 
         val notificationPermissionCheck = ContextCompat.checkSelfPermission(
             this@MainActivity,
@@ -193,6 +197,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when(item.itemId){
             R.id.search -> {
                 val intent = Intent(this, SearchActivity::class.java)
+                //val id = intent.getStringExtra("id").toString()
+                var id = infomap["id"]
+                intent.putExtra("id", id)
+                Log.d("ditto7", "$id")
                 startActivity(intent)
                 return true
             }

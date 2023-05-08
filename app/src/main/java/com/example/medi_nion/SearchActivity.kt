@@ -1,93 +1,67 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_home.*
 import org.json.JSONArray
-import java.security.AccessController.getContext
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class SearchActivity : AppCompatActivity() {
-    private lateinit var searchView: SearchView
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: BoardListAdapter
-    private var items = ArrayList<BoardItem>()
-    private var filteredItems = ArrayList<BoardItem>()
+
+
+    private var items = java.util.ArrayList<BoardItem>()
+    private var all_items = java.util.ArrayList<BoardItem>()
+    private val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
+    private var scroll_count = 1
+    private var adapter = SearchListAdapter(ArrayList())
+    private var itemIndex = java.util.ArrayList<Int>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.searchview)
 
-        // Retrieve references to the SearchView and RecyclerView
-        searchView = findViewById(R.id.search_view)
-        recyclerView = findViewById(R.id.boardRecyclerView)
+        var searchView: SearchView = findViewById(R.id.search_view)
 
-        // Set up the RecyclerView and its adapter
-        adapter = BoardListAdapter(items)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Set up the SearchView query listener
+        // SearchView listener to filter posts
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             @RequiresApi(Build.VERSION_CODES.O)
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // Perform the search when the search button is clicked
-                Log.d("ditto", "wowowowo")
-                performSearch(query)
-                return true
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Do nothing when submit button is clicked
+                Log.d("ditto1", "$query")
+                fetchData(query)
+                adapter.filter(query)
+
+                return false
             }
 
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onQueryTextChange(newText: String): Boolean {
-                // Optional: Perform incremental search as the user types
-                performSearch(newText)
+
+            override fun onQueryTextChange(newText: String?): Boolean { //검색하는거 인식
+                // Filter posts by title or content
+                Log.d("ditto2", "$newText")
+//                adapter.filter(newText)
                 return true
             }
         })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun performSearch(query: String) {
-        Log.d("ditto1", "$filteredItems")
-        fetchData()
-
-        filteredItems.clear()
-
-        if (query.isEmpty()) {
-            // If the query is empty, show all items without filtering
-            Toast.makeText(this, "검색 결과가 없습니다", Toast.LENGTH_SHORT).show()
-            filteredItems.addAll(items)
-        } else {
-            // Filter the items based on the query
-
-            for (item in items) {
-                if (item.title.contains(query, ignoreCase = true) || //title, content에서 동일한 단어가 있으면
-                    item.contents.contains(query, ignoreCase = true)
-                ) {
-                    filteredItems.add(item)
-                }
-            }
-        }
-        adapter.setItems(filteredItems)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun fetchData() {
+    fun fetchData(query: String?) {
         // url to post our data
         var id = intent.getStringExtra("id")
         var nickname = intent.getStringExtra("nickname")
@@ -95,8 +69,9 @@ class SearchActivity : AppCompatActivity() {
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
         var userMedal = intent.getIntExtra("userMedal", 0)
-        val urlBoard = "http://seonho.dothome.co.kr/Board.php"
+        val urlBoard = "http://seonho.dothome.co.kr/Search_board.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+        Log.d("ditto6", "$id")
 
         val request = Board_Request(
             Request.Method.POST,
@@ -104,7 +79,7 @@ class SearchActivity : AppCompatActivity() {
             { response ->
                 val jsonArray = JSONArray(response)
                 items.clear()
-                filteredItems.clear()
+                all_items.clear()
 
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
@@ -119,19 +94,27 @@ class SearchActivity : AppCompatActivity() {
 
                     val simpleTime = timeDiff(board_time)
 
+                    if (query != null && (title.contains(query) || content.contains(query))) {
+                        // add item to filtered list
+                        Log.d("ditto8", "$query")
+                        Log.d("ditto8", "$title, $content")
+
+                    }
+
                     val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
-//                    if(i >= jsonArray.length() - item_count*scroll_count){
-//                        items.add(boardItem)
-//                        itemIndex.add(num) //앞에다가 추가.
-//                    }
 
-                    filteredItems.add(boardItem)
+                    if(i >= jsonArray.length() - item_count*scroll_count){
+                        items.add(boardItem)
+                        itemIndex.add(num) //앞에다가 추가.
+                    }
+
+                    all_items.add(boardItem)
                 }
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
                 var new_items = java.util.ArrayList<BoardItem>()
                 new_items.addAll(items)
-                adapter = BoardListAdapter(new_items)
+                adapter = SearchListAdapter(new_items)
                 boardRecyclerView.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
@@ -143,10 +126,10 @@ class SearchActivity : AppCompatActivity() {
                 var detailTime : String = ""
                 var detailImg : String = ""
                 var detailCommentCnt : String = ""
-                //var detailCommentComment : String = ""
+
 
                 //게시판 상세
-                adapter.setOnItemClickListener(object : BoardListAdapter.OnItemClickListener {
+                adapter.setOnItemClickListener(object : SearchListAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: BoardItem, pos: Int) {
 
                         val request = Login_Request(

@@ -56,7 +56,7 @@ class EmployeeInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway&fields=expiration-date&count=110&job_mid_cd=6"
-        GlobalScope.launch {
+        GlobalScope.launch { //디폴트로 전체 채용정보 긁어옴
             try {
                 val response = getResponseFromApi(apiURL)
                 val responseBody = response?.body?.string()
