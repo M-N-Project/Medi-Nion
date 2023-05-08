@@ -32,7 +32,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.VolleyMultipartRequest2.DataPart
 import kotlinx.android.synthetic.main.business_home.*
-import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
+import kotlinx.android.synthetic.main.business_home.BusinessBoardHomeRecyclerView
 import kotlinx.android.synthetic.main.business_manage_create.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

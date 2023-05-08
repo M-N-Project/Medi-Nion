@@ -426,7 +426,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/BusinessSubRecycler"
+                android:id="@+id/BusinessHotRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

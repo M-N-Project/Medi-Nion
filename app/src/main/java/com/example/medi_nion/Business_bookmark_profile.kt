@@ -5,8 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -16,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.board_home.refresh_layout
-import kotlinx.android.synthetic.main.board_profile_home.*
 import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +29,7 @@ class Business_bookmark__profile : AppCompatActivity() {
     var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     var new_items = ArrayList<BusinessBoardItem>()
-    var adapter = BusinessRecyclerAdapter(items)
+    var adapter = BusinessDetailRecyclerAdapter(items)
 
     var num = 0 //비즈니스 채널 번호
     var writerId = ""
@@ -93,6 +89,7 @@ class Business_bookmark__profile : AppCompatActivity() {
 //                        adapter = BusinessRecyclerAdapter(items)
 //                        BusinessBoardRecyclerView.adapter = adapter
                     } else {
+                        noItemText.visibility = View.GONE
                         for (i in jsonArrayNum.length() - 1 downTo 0) {
                             val itemNum = jsonArrayNum.getJSONObject(i)
 
@@ -186,7 +183,7 @@ class Business_bookmark__profile : AppCompatActivity() {
                                                                                 new_items.clear()
                                                                                 new_items.addAll(items)
                                                                                 adapter =
-                                                                                    BusinessRecyclerAdapter(new_items)
+                                                                                    BusinessDetailRecyclerAdapter(new_items)
 
                                                                                 BusinessBoardRecyclerView.adapter =
                                                                                     adapter
@@ -196,7 +193,7 @@ class Business_bookmark__profile : AppCompatActivity() {
 
                                                                                 adapter.setOnItemClickListener(
                                                                                     object :
-                                                                                        BusinessRecyclerAdapter.OnItemClickListener {
+                                                                                        BusinessDetailRecyclerAdapter.OnItemClickListener {
                                                                                         override fun onProfileClick(
                                                                                             v: View,
                                                                                             data: BusinessBoardItem,

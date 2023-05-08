@@ -15,9 +15,12 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
+import kotlinx.android.synthetic.main.business_board_item.view.profileImg2
+import kotlinx.android.synthetic.main.business_board_item.view.titleName
+import kotlinx.android.synthetic.main.business_board_item.view.viewMore
 
-class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
-    RecyclerView.Adapter<BusinessRecyclerAdapter.ViewHolder>() {
+class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
+    RecyclerView.Adapter<BusinessDetailRecyclerAdapter.ViewHolder>() {
 
     var BusinessImgAdapterMap = HashMap<Int,BusinessPostImgRecyclerAdapter>()
 
@@ -29,13 +32,13 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     private var listener : OnItemClickListener? = null
 
 
-    fun setOnItemClickListener(listener: BusinessRecyclerAdapter.OnItemClickListener) {
+    fun setOnItemClickListener(listener: BusinessDetailRecyclerAdapter.OnItemClickListener) {
         this.listener = listener
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: BusinessRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BusinessDetailRecyclerAdapter.ViewHolder, position: Int) {
         val safePosition = holder.absoluteAdapterPosition
         holder.bind(items[position])
     }
@@ -43,7 +46,7 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.business_board_item, parent, false)
+            .inflate(R.layout.business_board_home_detail_item, parent, false)
         return ViewHolder(inflatedView)
     }
 
@@ -55,31 +58,32 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
         private var bookmark = v.findViewById<CheckBox>(R.id.checkBox)
         private var heart = v.findViewById<CheckBox>(R.id.checkBox2)
 
-        private val imgRecyclerView = v.findViewById<RecyclerView>(R.id.BusinessBoardImgRecyclerView)
+//        private val imgRecyclerView = v.findViewById<RecyclerView>(R.id.BusinessBoardImgRecyclerView)
 
 
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
             setViewMore(view.content, view.viewMore)
 
-            view.titleName.text = item.channel_name
+            view.titleName.text = item.title
             view.deadline.text = item.time
+//            view.deadline.text = ""
             view.content.text = item.content
             bookmark.isChecked = item.isBookm
             heart.isChecked = item.isHeart
 
-            profileImg.setImageResource(R.drawable.logo)
-            view.findViewById<HorizontalScrollView>(R.id.businessMG_Img).visibility  = View.GONE
-
-            if(item.profileImg.length >= 5){
-                if(item.profileImg.substring((item.profileImg).length-4, (item.profileImg).length) == ".jpg"){
-                    val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${item.profileImg}"
-                    val task = ImageLoadTask(imgUrl, profileImg)
-                    task.execute()
-                }
-            }
-
-            roundAll(view.profileImg2, 100.0f)
+//            profileImg.setImageResource(R.drawable.logo)
+//            view.findViewById<HorizontalScrollView>(R.id.businessMG_Img).visibility  = View.GONE
+//
+//            if(item.profileImg.length >= 5){
+//                if(item.profileImg.substring((item.profileImg).length-4, (item.profileImg).length) == ".jpg"){
+//                    val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${item.profileImg}"
+//                    val task = ImageLoadTask(imgUrl, profileImg)
+//                    task.execute()
+//                }
+//            }
+//
+//            roundAll(view.profileImg2, 100.0f)
 
             var imgItems = ArrayList<BusinessPostImgItem>()
             var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
@@ -122,9 +126,9 @@ class BusinessRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
 
 
             val pos = absoluteAdapterPosition
-            profileImg.setOnClickListener {
-                listener?.onProfileClick(itemView,item,pos)
-            }
+//            profileImg.setOnClickListener {
+//                listener?.onProfileClick(itemView,item,pos)
+//            }
 
 
             if(pos!= RecyclerView.NO_POSITION) {
