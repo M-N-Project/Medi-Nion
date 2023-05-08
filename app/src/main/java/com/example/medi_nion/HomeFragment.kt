@@ -64,6 +64,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
     private lateinit var activity : Activity
     private lateinit var id: String
+    private lateinit var device_id: String
     private lateinit var nickname: String
     private lateinit var userType: String
     private lateinit var userDept: String
@@ -172,6 +173,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         // bundle 에서 id, userType, userDept, userMedal 값 가져오기
         id = arguments?.getString("id").toString()
+        device_id = arguments?.getString("device_id").toString()
         nickname = arguments?.getString("nickname").toString()
         userType = arguments?.getString("userType").toString()
         userDept = arguments?.getString("userDept").toString()
@@ -329,6 +331,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "자유 게시판")
@@ -340,6 +343,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
@@ -353,6 +357,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
@@ -366,6 +371,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "장터 게시판")
@@ -377,6 +383,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "QnA 게시판")
@@ -567,6 +574,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
         val id = arguments?.getString("id")
+        val device_id = arguments?.getString("device_id")
         var nickname = arguments?.getString("nickname")
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
@@ -637,6 +645,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                         intent.putExtra("board", "QnA 게시판")
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("device_id", device_id)
                                         intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
 
@@ -882,6 +891,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         intent.putExtra("image", detailImg)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
+                        intent.putExtra("device_id", device_id)
                         startActivity(intent)
                     }
                 }

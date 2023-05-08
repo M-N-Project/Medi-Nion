@@ -18,7 +18,6 @@ import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -65,7 +64,7 @@ class BoardDetail : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingInflatedId", "CutPasteId")
+    @SuppressLint("MissingInflatedId", "CutPasteId", "HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
@@ -123,6 +122,7 @@ class BoardDetail : AppCompatActivity() {
 // ================================================= 변수 ==================================================================
         //Board.kt에서 BoardDetail.kt로 데이터 intent
         var id = intent.getStringExtra("id") //접속한 유저의 아이디
+        val device_id = intent.getStringExtra("device_id") //접속한 유저의 디바이스 고유 아이디
         var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
         var userMedal = intent.getIntExtra("userMedal", 0)
         val post_num = intent?.getIntExtra("num", 0).toString() //현재 상세보기 중인 게시물의 num
@@ -1532,23 +1532,27 @@ class BoardDetail : AppCompatActivity() {
             this@BoardDetail,
             AlarmReceiver_comment::class.java
         )
-//        val pendingIntent: PendingIntent =
-//            PendingIntent.getBroadcast(this@BoardDetail,
-//                BoardDetail.ALARM_REQUEST_CODE, receiverIntent,
-//                PendingIntent.FLAG_MUTABLE
-//            )
-//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this@BoardDetail,
+                BoardDetail.ALARM_REQUEST_CODE, receiverIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         var id = intent?.getStringExtra("id").toString()
-        var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
+        val device_id = intent.getStringExtra("device_id").toString()
+        var writerId = intent.getStringExtra("writerId").toString() //게시물을 작성한 유저의 아이디
         var board = intent?.getStringExtra("board").toString()
         var post_num = intent?.getIntExtra("num", 0).toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
+
+        Log.d("Devide", device_id)
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
         val urlNotification = "http://seonho.dothome.co.kr/notification_comment.php"
         val urlNotification_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
+        val urlNotification_select2 = "http://seonho.dothome.co.kr/notification_comment_select2.php"
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -1602,13 +1606,12 @@ class BoardDetail : AppCompatActivity() {
 
                                     val item = jsonArray.getJSONObject(i)
 
-                                    val notification_id = item.getString("id")   //게시판 쓴 사람
+                                    val notification_id = item.getString("id")   //게시물 올린 사람
 //                                    val notification_num = item.getString("num")  //board 테이블의 num
 
                                     Log.d("ididididididiidid", "$id, $notification_id, $writerId")
 
-                                    if (id == writerId && notification_id == writerId) {
-                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+                                    if (notification_id == writerId) {
                                         val request_noti = Login_Request(
                                             Request.Method.POST,
                                             urlNotification_select,
@@ -1619,11 +1622,38 @@ class BoardDetail : AppCompatActivity() {
 
                                                     val item = jsonArray.getJSONObject(i)
 
-                                                    val notification_comment_id = item.getString("id")  //댓글 쓴 사람 아이디
-                                                    Log.d("board_alarm2313", "$notification_comment_id, $notification_id, $id, $writerId")
-                                                    if (notification_comment_id != writerId) {
-                                                        Log.d("board_alarm1", "$notification_comment_id, $notification_id, $id, $writerId")
-                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")   //이게 안돼요 ,,,, 으아가아ㅏ아아앙ㄱ
+                                                    val commentId = item.getString("id")  //댓글 쓴 사람 아이디
+
+                                                    Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
+
+                                                    if (commentId != writerId) {
+                                                        Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
+                                                        //user에서 디바이스 고유 아이디 select
+                                                        val request_noti2 = Login_Request(
+                                                            Request.Method.POST,
+                                                            urlNotification_select2,
+                                                            { response_noti2 ->
+                                                                val jsonArray = JSONArray(response_noti2)
+
+                                                                for (i in 0 until jsonArray.length()) {
+
+                                                                    val item = jsonArray.getJSONObject(i)
+
+                                                                    val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
+
+                                                                    if (device_id != device_id_comment)
+                                                                        //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
+                                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+                                                                    Log.d("device123123", "$device_id, $device_id_comment")
+                                                                }
+
+                                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+                                                            hashMapOf(
+                                                                "id" to writerId
+                                                            )
+                                                        )
+                                                        val queue_noti = Volley.newRequestQueue(this)
+                                                        queue_noti.add(request_noti2)
                                                     }
                                                 }
 

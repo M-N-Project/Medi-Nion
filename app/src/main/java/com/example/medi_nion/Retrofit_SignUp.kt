@@ -15,6 +15,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -785,6 +786,7 @@ class Retrofit_SignUp : AppCompatActivity() {
 
 
     //db 연동 시작
+    @SuppressLint("HardwareIds")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun signUPRequest() {
         val basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
@@ -817,6 +819,9 @@ class Retrofit_SignUp : AppCompatActivity() {
 
         Log.d("identity", "$identity, $identity_opencv, $identity_check")
 
+        val android_id = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+        Log.d("ANDROID_ID", android_id)
+
         var spinner = findViewById<Spinner>(R.id.userDept_spinner)
         var userDept = spinner.selectedItem.toString()
 
@@ -829,9 +834,6 @@ class Retrofit_SignUp : AppCompatActivity() {
         } else if (userDept.equals("기타 (핵의학과, 진단검사의학과, 재활의학과 등)")) {
             userDept = "기타"
         }
-
-        //POST 방식으로 db에 데이터 전송
-        //Volley
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
 
@@ -864,6 +866,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             if(basicUserBtn.isChecked) {
                 hashMapOf(
                     "id" to id,
+                    "device_id" to android_id,
                     "passwd" to passwd,
                     "nickname" to nickname,
                     "userType" to basicUserBtn.text.toString(),
@@ -878,6 +881,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             } else {
                 hashMapOf(
                     "id" to id,
+                    "device_id" to android_id,
                     "passwd" to passwd,
                     "nickname" to nickname,
                     "userType" to corpUserBtn.text.toString(),
@@ -901,91 +905,6 @@ class Retrofit_SignUp : AppCompatActivity() {
         queue.add(request)
     }
     //db 연동 끝
-
-    //retrofit
-    //        val gson = GsonBuilder().setLenient().create()
-//        val uri = "http://seonho.dothome.co.kr/"
-//
-//        val retrofit = createOkHttpClient()?.let {
-//            Retrofit.Builder()
-//                .baseUrl(uri)
-//                .addConverterFactory(nullOnEmptyConverterFactory)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .client(it)
-//                .build()
-//        }
-//
-//        val server = retrofit?.create(SignUp_Request::class.java)
-//
-//        val call : Call<Data_SignUp_Request>? = server?.getUser(basicUserBtn.text.toString(), userDept, nickname_editText,
-//            id_editText, passwd_editText, userMedal, identity_editText)
-//
-//        if (basicUserBtn.isChecked) {
-//            if (call != null) {
-//                call.clone()
-//                    ?.enqueue(object :
-//                        Callback<Data_SignUp_Request> {
-//                        override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-//                            t.localizedMessage?.let { Log.d("retrofit1 fail", it) }
-//                            Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-//                        }
-//
-//                        override fun onResponse(
-//                            call: Call<Data_SignUp_Request>,
-//                            response: Response<Data_SignUp_Request>
-//                        ) {
-//                            //if (!response.equals("SignUP fail")) {
-//                            Log.d("retrofit1 success", response.toString())
-//                            Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT).show()
-////                            Log.d("IDENTITY", image)
-//                        }
-//
-//                    })
-//            }
-//        }
-//        else
-//        {
-//            server?.getUser(corpUserBtn.text.toString(), userDept, nickname_editText,
-//                id_editText, passwd_editText, userMedal, identity_editText)
-//                ?.enqueue(object:
-//                    Callback<Data_SignUp_Request> {
-//                    override fun onFailure(call: Call<Data_SignUp_Request>, t: Throwable) {
-//                        t.localizedMessage?.let { Log.d("retrofit2 fail", it) }
-//                        Toast.makeText(applicationContext, "회원가입 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onResponse(
-//                        call: Call<Data_SignUp_Request>,
-//                        response: Response<Data_SignUp_Request>
-//                    ) {
-//                        Log.d("retrofit2 success", response.toString())
-//                        Toast.makeText(applicationContext, "회원가입 성공하였습니다.", Toast.LENGTH_SHORT)
-//                            .show()
-//                        Log.d("IDENTITY12", identity_opencv)
-//                    }
-//                })
-//        }
-//    }
-
-//    private val nullOnEmptyConverterFactory = object : Converter.Factory() {
-//        override fun responseBodyConverter(
-//            type: Type,
-//            annotations: Array<Annotation>,
-//            retrofit: Retrofit
-//        ): Converter<ResponseBody, *> {
-//            val delegate: Converter<ResponseBody, *> =
-//                retrofit.nextResponseBodyConverter<Any>(this, type, annotations)
-//            return Converter { body -> if (body.contentLength() == 0L) null else delegate.convert(body) }
-//        }
-//    }
-//
-//    private fun createOkHttpClient(): OkHttpClient? {
-//        val builder = OkHttpClient.Builder()
-//        val interceptor = HttpLoggingInterceptor()
-//        interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
-//        builder.addInterceptor(interceptor)
-//        return builder.build()
-//    }
 
     private fun copyFile(lang: String) {
         try {

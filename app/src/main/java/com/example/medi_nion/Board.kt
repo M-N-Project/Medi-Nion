@@ -174,6 +174,7 @@ class Board : AppCompatActivity() {
     fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
+        val device_id = intent.getStringExtra("device_id")
         var nickname = intent.getStringExtra("nickname")
         var board = intent.getStringExtra("board").toString()
         var userType = intent.getStringExtra("userType").toString()
@@ -254,6 +255,7 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("board", board)
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("device_id", device_id)
                                         intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
                                         intent.putExtra("title", detailTitle)

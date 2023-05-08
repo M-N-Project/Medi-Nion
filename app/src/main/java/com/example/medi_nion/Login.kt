@@ -234,8 +234,6 @@ class Login : AppCompatActivity() {
     private fun loginRequest(url: String) {
         var id = findViewById<EditText>(R.id.id).text.toString()
         var passwd = findViewById<EditText>(R.id.password).text.toString()
-        var getDeviceID: String = ""   //디바이스 장치의 고유 아이디
-        var intent = Intent(this, MainActivity::class.java)
 
         var userSearchUrl = "http://seonho.dothome.co.kr/userSearch.php"
 
@@ -247,6 +245,7 @@ class Login : AppCompatActivity() {
                 var userDept = ""
                 var userMedal = 0
                 var nickname = ""
+                var device_id = ""
                 var intent = Intent(this, MainActivity::class.java)
                 if (!response.equals("Login Failed")) {
                     val userSearch = Login_Request(
@@ -258,15 +257,18 @@ class Login : AppCompatActivity() {
                             if (!responseUser.equals("userSearch fail")) {
                                 val jsonArray = JSONArray(responseUser)
 
-
                                 for (i in jsonArray.length() - 1 downTo 0) {
                                     val item = jsonArray.getJSONObject(i)
 
+                                    device_id = item.getString("device_id")
                                     userType = item.getString("userType")
                                     userDept = item.getString("userDept")
                                     userMedal = item.getInt("userMedal")
                                     nickname = item.getString("nickname")
 
+                                    Log.d("1", device_id)
+
+                                    intent.putExtra("device_id", device_id)
                                     intent.putExtra("userType", userType)
                                     intent.putExtra("userDept", userDept)
                                     intent.putExtra("userMedal", userMedal)
