@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -24,15 +23,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.android.synthetic.main.business_board_items.*
-import kotlinx.android.synthetic.main.business_home.BusinessBoardRecyclerView
 import kotlinx.android.synthetic.main.business_manage_create.*
-import kotlinx.android.synthetic.main.business_writing.*
-import kotlinx.android.synthetic.main.signup_detail.*
 import org.json.JSONArray
-import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 
 
@@ -48,7 +40,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
-    var adapter = BusinessRecyclerAdapter(items)
+    var adapter = BusinessDetailRecyclerAdapter(items)
     var scrollFlag = false
     var itemIndex = ArrayList<Int>()
 
@@ -58,7 +50,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return super.onCreateView(name, context, attrs)
 
-        adapter = BusinessRecyclerAdapter(items)
+        adapter = BusinessDetailRecyclerAdapter(items)
         BusinessBoardRecyclerView.adapter = adapter
     }
 
@@ -274,7 +266,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
                                     var new_items = ArrayList<BusinessBoardItem>()
                                     new_items.addAll(items)
-                                    adapter = BusinessRecyclerAdapter(new_items)
+                                    adapter = BusinessDetailRecyclerAdapter(new_items)
                                     BusinessBoardRecyclerView.adapter = adapter
                                     adapter.stateRestorationPolicy =
                                         RecyclerView.Adapter.StateRestorationPolicy.PREVENT
@@ -284,7 +276,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                                     // 좋아요 앤 북마크 request
                                     adapter.setOnItemClickListener(object :
-                                        BusinessRecyclerAdapter.OnItemClickListener {
+                                        BusinessDetailRecyclerAdapter.OnItemClickListener {
                                         override fun onProfileClick(
                                             v: View,
                                             data: BusinessBoardItem,

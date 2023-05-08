@@ -4,23 +4,17 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.CheckBox
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.board_home.refresh_layout
 import kotlinx.android.synthetic.main.business_sub_list.*
 import org.json.JSONArray
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -30,7 +24,7 @@ private val item_count = 20 // 초기 20개의 아이템만 불러오게 하고,
 private var scroll_count = 1
 //val viewModel = BoardViewModel()
 //lateinit var adapter : BoardListAdapter
-private var adapter = BusinessSubListAdapter(items)
+private var adapter = BusinessSubListProfileAdapter(items)
 private var scrollFlag = false
 private var itemIndex = ArrayList<Int>()
 
@@ -81,12 +75,12 @@ class BusinessSubList : AppCompatActivity() {
                             var recyclerViewState = businessChanListRecyclerView.layoutManager?.onSaveInstanceState()
                             val businessChanItem = BusinessChanListItem(channel_name, channel_message, profileImg)
                             items.add(businessChanItem)
-                            adapter = BusinessSubListAdapter(items)
+                            adapter = BusinessSubListProfileAdapter(items)
                             businessChanListRecyclerView.adapter = adapter
                             adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                             businessChanListRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
 
-                            adapter.setOnItemClickListener(object : BusinessSubListAdapter.OnItemClickListener {
+                            adapter.setOnItemClickListener(object : BusinessSubListProfileAdapter.OnItemClickListener {
                                 override fun onItemProfile(v: View, data: BusinessChanListItem, pos: Int) {
                                     var id = intent.getStringExtra("id")!!
                                     val intent = Intent(applicationContext, BusinessProfileActivity::class.java)
