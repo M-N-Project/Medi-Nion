@@ -136,14 +136,10 @@ class SearchActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchData() {
         // url to post our data
-        var id = intent.getStringExtra("id")
-        var nickname = intent.getStringExtra("nickname")
         var board = intent.getStringExtra("board").toString()
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
-        var userMedal = intent.getIntExtra("userMedal", 0)
         val urlBoard = "http://seonho.dothome.co.kr/Search_board.php"
-        val urlDetail = "http://seonho.dothome.co.kr/Search_board_detail.php"
 
         val request = Board_Request(
             Request.Method.POST,
@@ -175,78 +171,6 @@ class SearchActivity : AppCompatActivity() {
                     }
                     all_items.add(boardItem)
                 }
-
-//                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-//                var filter_items = java.util.ArrayList<BoardItem>()
-//                filter_items.addAll(items)
-//                adapter = SearchListAdapter(filter_items)
-//                boardRecyclerView.adapter = adapter
-//                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-//                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-
-                var detailId : String = ""
-                var detailTitle : String = ""
-                var detailContent : String = ""
-                var detailTime : String = ""
-                var detailImg : String = ""
-                var detailCommentCnt : String = ""
-
-
-                //게시판 상세
-                adapter.setOnItemClickListener(object : SearchListAdapter.OnItemClickListener {
-                    override fun onItemClick(v: View, data: BoardItem, pos: Int) {
-
-                        val request = Login_Request(
-                            Request.Method.POST,
-                            urlDetail,
-                            { responseDetail ->
-                                if(responseDetail!="Detail Info Error"){
-                                    val jsonArray = JSONArray(responseDetail)
-                                    items.clear()
-                                    for (i in jsonArray.length()-1  downTo  0) {
-                                        val item = jsonArray.getJSONObject(i)
-
-                                        detailId = item.getString("id")
-                                        detailTitle = item.getString("title")
-                                        detailContent = item.getString("content")
-                                        detailTime = item.getString("time")
-                                        detailImg = item.getString("image")
-                                        detailCommentCnt = item.getString("comment")
-
-                                        val intent = Intent(applicationContext, BoardDetail::class.java)
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-                                        intent.putExtra("board", board)
-                                        intent.putExtra("num", data.num)
-                                        intent.putExtra("id", id)
-                                        intent.putExtra("nickname", nickname)
-                                        intent.putExtra("writerId", detailId)
-                                        intent.putExtra("title", detailTitle)
-                                        intent.putExtra("content", detailContent)
-                                        intent.putExtra("time", detailTime)
-                                        intent.putExtra("image", detailImg)
-                                        intent.putExtra("userType", userType)
-                                        intent.putExtra("userDept", userDept)
-                                        intent.putExtra("userMedal", userMedal)
-                                        intent.putExtra("commentCnt", detailCommentCnt)
-                                        startActivity(intent)
-                                    }
-
-
-                                }
-
-                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
-                            hashMapOf(
-                                "board" to board,
-                                "post_num" to data.num.toString()
-                            )
-                        )
-                        val queue = Volley.newRequestQueue(applicationContext)
-                        queue.add(request)
-                    }
-
-                })
-
-
 
             }, { Log.d("login failed", "error......${error(applicationContext)}") },
             hashMapOf(
