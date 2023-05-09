@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_home.*
+import kotlinx.android.synthetic.main.home.*
 import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
 import org.json.JSONArray
