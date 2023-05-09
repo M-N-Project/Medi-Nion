@@ -3,7 +3,6 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
-import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Outline
@@ -26,17 +25,13 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_create_home1.view.*
 import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
@@ -753,7 +748,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     includeView = includeBasic.removeAt(0)
                     includeView.findViewById<TextView>(R.id.home_hot_num).text =
                         num.toString()
-                    includeView.findViewById<TextView>(R.id.home_hot).text = title
+                    includeView.findViewById<TextView>(R.id.business_home_title).text = title
                     includeView.findViewById<TextView>(R.id.home_hot_like).text =
                         heart.toString()
                     includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -779,7 +774,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                             includeView = includeJob.removeAt(0)
                             includeView.findViewById<TextView>(R.id.home_hot_num).text =
                                 num.toString()
-                            includeView.findViewById<TextView>(R.id.home_hot).text = title
+                            includeView.findViewById<TextView>(R.id.business_home_title).text = title
                             includeView.findViewById<TextView>(R.id.home_hot_like).text =
                                 heart.toString()
                             includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -806,7 +801,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                     includeView = includeDept.removeAt(0)
                                     includeView.findViewById<TextView>(R.id.home_hot_num).text =
                                         num.toString()
-                                    includeView.findViewById<TextView>(R.id.home_hot).text = title
+                                    includeView.findViewById<TextView>(R.id.business_home_title).text = title
                                     includeView.findViewById<TextView>(R.id.home_hot_like).text =
                                         heart.toString()
                                     includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -1094,7 +1089,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     hotListItems.reverse()
                     var hotAdapter = BusinessHotListAdapter(hotListItems)
                     hotAdapter.notifyDataSetChanged()
-                    BusinessSubRecycler.adapter = hotAdapter
+                    BusinessHotRecycler.adapter = hotAdapter
 
                     hotAdapter.setOnItemClickListener(object :
                         BusinessHotListAdapter.OnItemClickListener {
@@ -1143,7 +1138,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                 hotListItems.reverse()
                                 var hotAdapter = BusinessHotListAdapter(hotListItems)
                                 hotAdapter.notifyDataSetChanged()
-                                BusinessSubRecycler.adapter = hotAdapter
+                                BusinessHotRecycler.adapter = hotAdapter
 
                                 hotAdapter.setOnItemClickListener(object :
                                     BusinessHotListAdapter.OnItemClickListener {

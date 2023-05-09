@@ -10,6 +10,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하는 프레그먼트
 
@@ -64,7 +66,7 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
     private lateinit var etcDeptTextView: TextView
 
 
-    @SuppressLint("ResourceType")
+    @SuppressLint("ResourceType", "NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -607,18 +609,29 @@ class MenuFragment : Fragment(R.layout.bottom_menu) { //menu 창으로 이동하
 
         scheduleBtn.setOnClickListener {
             val scheduleFragment = CalendarFragment()
-            fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, scheduleFragment)?.commit()
+            val activity = requireActivity()
+            val viewPager = activity.findViewById<ViewPager2>(R.id.linearLayout)
+            val currentPosition = viewPager.currentItem
+            val newPosition = currentPosition - 1
+            viewPager.setCurrentItem(newPosition, false)
+            viewPager.adapter?.notifyDataSetChanged()
         }
 
-
-        manageBusinessBtn.setOnClickListener { //비즈니스 (bottom_menu 의 비즈니스와 같은 버튼)
+        manageBusinessBtn.setOnClickListener {
             val businessFragment = BusinessMainFragment()
-            var bundle = Bundle()
-            bundle.putString("id",id)
-            bundle.putString("nickname", nickname)
-            businessFragment.arguments = bundle //fragment의 arguments에 데이터를 담은 bundle을 넘겨줌
-            fragmentManager?.beginTransaction()?.replace(R.id.linearLayout, businessFragment)?.commit()
+            val bundle = Bundle().apply {
+                putString("id", id)
+                putString("nickname", nickname)
+            }
+            businessFragment.arguments = bundle
+            val activity = requireActivity()
+            val viewPager = activity.findViewById<ViewPager2>(R.id.linearLayout)
+            val currentPosition = viewPager.currentItem
+            val newPosition = currentPosition + 1
+            viewPager.setCurrentItem(newPosition, false)
+            viewPager.adapter?.notifyDataSetChanged()
         }
+
     }
 
     // 접근 제한 검사

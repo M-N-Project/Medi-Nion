@@ -1,22 +1,18 @@
 package com.example.medi_nion
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_home.*
 import org.json.JSONException
 import org.json.JSONObject
 
 
 var businessitems = ArrayList<BusinessProfileItem>()
 //val viewModel = BoardViewModel()
-lateinit var businessadapter : BusinessRecyclerAdapter
+lateinit var businessadapter : BusinessDetailRecyclerAdapter
 lateinit var businessmJsonString1: String
 var businesserrorString: String? = null
 

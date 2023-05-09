@@ -17,10 +17,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -36,12 +36,11 @@ import com.prolificinteractive.materialcalendarview.*
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import org.json.JSONArray
-import java.text.SimpleDateFormat
 import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
-    private val weekDay = arrayOf("Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat")
+    private val weekDay = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
@@ -128,6 +127,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         fetchEvent(v!!)
     }
 
+
+
     override fun onPause() {
         super.onPause()
         getFragmentManager()?.let { refreshFragment(this, it) }
@@ -144,6 +145,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val table = v.findViewById<MinTimeTableView>(R.id.table)
         val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
 
+        scheduleList.clear()
         val request = Board_Request(
             Request.Method.POST,
             url,
@@ -353,8 +355,17 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                             alarmSpinner.setSelection(alarmList.indexOf(schedule.schedule_alarm))
 
                             val repeatSpinner = bottomSheetView.findViewById<Spinner>(R.id.repeat_spinner)
-                            val repeatList: Array<String> = resources.getStringArray(R.array.repeat)
-                            repeatSpinner.setSelection(repeatList.indexOf(schedule.schedule_repeat))
+                            repeatSpinner.visibility = View.GONE // 시간표에서는 무조건 매주
+                            val repeatTextView = bottomSheetView.findViewById<TextView>(R.id.repeat_TextView)
+                            repeatTextView.visibility = View.VISIBLE
+                            repeatTextView.setText(schedule.schedule_repeat)
+                            repeatTextView.setOnClickListener{
+                                Toast.makeText(requireContext(),
+                                    "주간 일정에서는 매주 반복되는 일정만 적용됩니다.", Toast.LENGTH_SHORT).show()
+                            }
+
+//                            val repeatList : Array<String> = resources.getStringArray(R.array.repeat)
+//                            repeatSpinner.setSelection(repeatList.indexOf(schedule.schedule_repeat))
 
                             bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
                                 .setText(schedule.schedule_memo) //스케줄 메모
@@ -365,8 +376,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                                 val schedule_title_2 =
                                     bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                                 val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
-//                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
-//                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
+                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
+                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
                                 if (TextUtils.isEmpty(schedule_title_2.text.toString())) {
                                     Toast.makeText(
                                         requireContext(),
@@ -375,27 +386,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                                 } else {
                                     schedule.schedule_name = schedule_title_2.text.toString()
 
-                                    start_result.text = start_result.text.toString().replace(" ", "")
-                                    end_result.text = end_result.text.toString().replace(" ", "")
-
-
-                                    Log.d("091283213", schedule.schedule_date.toString())
-//                    val year = day.toString().substring(12, 16)
-//                    var month = day.toString().substring(17, 19)
-//                    var date = ""
-//                    if (month.substring(1, 2) == "-") {
-//                        month = "0${(day.toString().substring(17, 18)).toInt() + 1}"
-//                        date = day.toString().substring(19, 21)
-//
-//                        if (date.substring(1, 2) == "}")
-//                            date = "0${day.toString().substring(19, 20)}"
-//                    } else {
-//                        month = (month.toInt() + 1).toString()
-//                        date = day.toString().substring(20, 22)
-//
-//                        if (date.substring(1, 2) == "}")
-//                            date = "0${day.toString().substring(20, 21)}"
-//                    }
+//                                    start_result.text = start_result.text.toString().replace(" ", "")
+//                                    end_result.text = end_result.text.toString().replace(" ", "")
 
                                     Log.d(
                                         "-=123",
@@ -407,16 +399,22 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                                     else
                                         ColorSheetUtils.colorToHex(selectedColor)
 
+                                    schedule.schedule_start = start_result.replace(" ", "")
+                                    schedule.schedule_end = end_result.replace(" ", "")
                                     schedule.schedule_alarm = alarmSpinner.selectedItem.toString()
-                                    schedule.schedule_repeat = repeatSpinner.selectedItem.toString()
+                                    schedule.schedule_repeat = "매주"
                                     schedule.schedule_memo = schedule_memo_2.text.toString()
                                     TimeTableRequest(schedule)
+
+                                    fetchEvent(v!!)
 
                                     Toast.makeText(
                                         requireContext(),
                                         String.format("스케줄 수정이 완료되었습니다."),
                                         Toast.LENGTH_SHORT
                                     ).show()
+
+
                                 }
                             }
 
@@ -495,8 +493,9 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
             { response ->
                 Log.d("CDCD", response.toString())
                 if (!response.equals("schedule update fail")) {
-
-                    table?.updateSchedules(scheduleList)
+                    Toast.makeText(requireContext(),
+                        "일정 삭제가 완료되었습니다..", Toast.LENGTH_SHORT).show()
+                    fetchEvent(v!!)
 
                 } else {
 
@@ -524,6 +523,20 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 selectedColor = selectedColor,
                 listener = { color ->
                     selectedColor = color
+                    data.schedule_color =  ColorSheetUtils.colorToHex(selectedColor)
+
+                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        drawable!!.colorFilter =
+                            BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
+                    } else {
+                        drawable!!.setColorFilter(
+                            Color.parseColor(data.schedule_color),
+                            PorterDuff.Mode.SRC_ATOP
+                        )
+                    }
+                    colorView.background = drawable
+
                     setColor(selectedColor)
                 })
             .show(parentFragmentManager)
