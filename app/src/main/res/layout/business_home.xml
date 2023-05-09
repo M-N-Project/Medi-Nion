@@ -46,17 +46,21 @@
 
         </LinearLayout>
 
+        <com.example.medi_nion.NestedScrollableHost
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/BusinessHotRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/business_hot_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/BusinessHotRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal"
+                android:nestedScrollingEnabled="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/business_hot_item" />
+        </com.example.medi_nion.NestedScrollableHost>
 
         <View
             android:id="@+id/view2"
@@ -130,17 +134,5 @@
 
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/noChanTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="구독한 채널이 없습니다."
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout16" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
