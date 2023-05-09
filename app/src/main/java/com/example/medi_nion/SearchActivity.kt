@@ -44,24 +44,27 @@ class SearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // Do nothing when submit button is clicked
                 Log.d("ditto1", "$query")
-                fetchData(query)
+
                 adapter.filter(query)
 
-                return false
+                return true
             }
 
 
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextChange(newText: String?): Boolean { //검색하는거 인식
                 // Filter posts by title or content
                 Log.d("ditto2", "$newText")
 //                adapter.filter(newText)
+
                 return true
             }
         })
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
-    fun fetchData(query: String?) {
+    fun fetchData() {
         // url to post our data
         var id = intent.getStringExtra("id")
         var nickname = intent.getStringExtra("nickname")
@@ -69,8 +72,8 @@ class SearchActivity : AppCompatActivity() {
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
         var userMedal = intent.getIntExtra("userMedal", 0)
-        val urlBoard = "http://seonho.dothome.co.kr/Search_board.php"
-        val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+        val urlBoard = "http://seonho.dothome.co.kr/Search_board.php" //나오는건 자유게시판, 세부는 Q&A게시판,,
+        val urlDetail = "http://seonho.dothome.co.kr/Search_board_detail.php"
         Log.d("ditto6", "$id")
 
         val request = Board_Request(
@@ -94,12 +97,10 @@ class SearchActivity : AppCompatActivity() {
 
                     val simpleTime = timeDiff(board_time)
 
-                    if (query != null && (title.contains(query) || content.contains(query))) {
-                        // add item to filtered list
-                        Log.d("ditto8", "$query")
-                        Log.d("ditto8", "$title, $content")
-
-                    }
+//                    if (query != null && (title.contains(query) || content.contains(query))) {
+//                        // add item to filtered list
+//                        Log.d("ditto8", "$title, $content")
+//                    }
 
                     val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
@@ -111,6 +112,7 @@ class SearchActivity : AppCompatActivity() {
 
                     all_items.add(boardItem)
                 }
+
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
                 var new_items = java.util.ArrayList<BoardItem>()
                 new_items.addAll(items)
@@ -118,6 +120,9 @@ class SearchActivity : AppCompatActivity() {
                 boardRecyclerView.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+
+                adapter.notifyDataSetChanged()
+
 
 
                 var detailId : String = ""
@@ -166,8 +171,6 @@ class SearchActivity : AppCompatActivity() {
                                         intent.putExtra("commentCnt", detailCommentCnt)
                                         startActivity(intent)
                                     }
-
-
                                 }
 
                             }, { Log.d("login failed", "error......${error(applicationContext)}") },
