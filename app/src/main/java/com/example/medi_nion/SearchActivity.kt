@@ -22,7 +22,6 @@ import kotlin.collections.ArrayList
 
 class SearchActivity : AppCompatActivity() {
 
-
     private var items = java.util.ArrayList<BoardItem>()
     private var all_items = java.util.ArrayList<BoardItem>()
     private val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
@@ -30,12 +29,14 @@ class SearchActivity : AppCompatActivity() {
     private var adapter = SearchListAdapter(ArrayList())
     private var itemIndex = java.util.ArrayList<Int>()
 
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.searchview)
 
         var searchView: SearchView = findViewById(R.id.search_view)
+
+        fetchData()
 
         // SearchView listener to filter posts
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -44,6 +45,14 @@ class SearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // Do nothing when submit button is clicked
                 Log.d("ditto1", "$query")
+
+                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+                var filter_items = java.util.ArrayList<BoardItem>()
+                filter_items.addAll(items)
+                adapter = SearchListAdapter(filter_items)
+                boardRecyclerView.adapter = adapter
+                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
                 adapter.filter(query)
 
@@ -55,14 +64,13 @@ class SearchActivity : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?): Boolean { //검색하는거 인식
                 // Filter posts by title or content
                 Log.d("ditto2", "$newText")
-//                adapter.filter(newText)
+
 
                 return true
             }
         })
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchData() {
         // url to post our data
@@ -72,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
         var userMedal = intent.getIntExtra("userMedal", 0)
-        val urlBoard = "http://seonho.dothome.co.kr/Search_board.php" //나오는건 자유게시판, 세부는 Q&A게시판,,
+        val urlBoard = "http://seonho.dothome.co.kr/Search_board.php"
         val urlDetail = "http://seonho.dothome.co.kr/Search_board_detail.php"
         Log.d("ditto6", "$id")
 
@@ -97,11 +105,6 @@ class SearchActivity : AppCompatActivity() {
 
                     val simpleTime = timeDiff(board_time)
 
-//                    if (query != null && (title.contains(query) || content.contains(query))) {
-//                        // add item to filtered list
-//                        Log.d("ditto8", "$title, $content")
-//                    }
-
                     val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
 
 
@@ -109,20 +112,15 @@ class SearchActivity : AppCompatActivity() {
                         items.add(boardItem)
                         itemIndex.add(num) //앞에다가 추가.
                     }
-
                     all_items.add(boardItem)
                 }
-
-                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                var new_items = java.util.ArrayList<BoardItem>()
-                new_items.addAll(items)
-                adapter = SearchListAdapter(new_items)
-                boardRecyclerView.adapter = adapter
-                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-
-                adapter.notifyDataSetChanged()
-
+//                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+//                var filter_items = java.util.ArrayList<BoardItem>()
+//                filter_items.addAll(items)
+//                adapter = SearchListAdapter(filter_items)
+//                boardRecyclerView.adapter = adapter
+//                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+//                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
 
                 var detailId : String = ""
@@ -171,6 +169,8 @@ class SearchActivity : AppCompatActivity() {
                                         intent.putExtra("commentCnt", detailCommentCnt)
                                         startActivity(intent)
                                     }
+
+
                                 }
 
                             }, { Log.d("login failed", "error......${error(applicationContext)}") },

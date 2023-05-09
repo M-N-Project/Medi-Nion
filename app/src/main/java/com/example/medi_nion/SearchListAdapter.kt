@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import kotlin.collections.ArrayList
@@ -34,13 +35,12 @@ class SearchListAdapter(private val itemList : ArrayList<BoardItem>) : RecyclerV
         val filteredList = ArrayList<BoardItem>()
 
         if (query == null || query.isEmpty()) {
-            //filteredList.addAll(itemList)
+
         } else {
             for (item in itemList) {
                 val title = item.title.lowercase(Locale.getDefault())
                 val content = item.contents.lowercase(Locale.getDefault())
                 if (title.contains(query.lowercase(Locale.getDefault())) || content.contains(query.lowercase(Locale.getDefault()))) {
-                    Log.d("ditto9", "$title, $content")
                     filteredList.add(item)
                 }
             }

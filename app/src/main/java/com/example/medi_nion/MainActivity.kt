@@ -22,12 +22,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.comment_comment_detail.*
+import kotlinx.android.synthetic.main.notification_item.*
 import org.json.JSONArray
 
 private var backPressedTime: Long = 0
@@ -66,6 +70,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         ///id자리
         //val infomap = HashMap<String, String>()
         infomap.put("id", intent.getStringExtra("id").toString())
+        infomap.put("device_id", intent.getStringExtra("device_id").toString())
         infomap.put("nickname", intent.getStringExtra("nickname").toString())
         infomap.put("userType", intent.getStringExtra("userType").toString())
         infomap.put("userDept", intent.getStringExtra("userDept").toString())
@@ -104,7 +109,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            NotificationRequest()
+            //NotificationRequest()
         }
 
         setSupportActionBar(toolbar)
@@ -141,6 +146,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         //supportFragmentManager.beginTransaction().replace(R.id.linearLayout, menuFragment).commit()
 
         var id = intent.getStringExtra("id")
+        var device_id = intent.getStringExtra("device_id")
         var nickname = intent.getStringExtra("nickname")
         var userType = intent.getStringExtra("userType")
         var userDept = intent.getStringExtra("userDept")
@@ -194,6 +200,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar items
+        var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
+        var device_id = intent.getStringExtra("device_id")
+
         when(item.itemId){
             R.id.search -> {
                 val intent = Intent(this, SearchActivity::class.java)
@@ -205,7 +215,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.alarm -> {
-                Log.d("Alarm", "?")
+                val intent = Intent(this, NotificationActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
+                intent.putExtra("nickname", nickname)
+                startActivity(intent)
                 return true
             }
             else -> {return super.onOptionsItemSelected(item)}
@@ -217,56 +231,79 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    fun NotificationRequest() {
-        val receiverIntent: Intent = Intent(
-            this@MainActivity,
-            AlarmReceiver::class.java
-        )
-        val pendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this@MainActivity,
-                ALARM_REQUEST_CODE, receiverIntent,
-                PendingIntent.FLAG_MUTABLE
-            )
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val url = "http://seonho.dothome.co.kr/notification.php"
-
-        var Userid = intent?.getStringExtra("id").toString() //요청한 사람의 아이디
-        var identity_check = "false"
-        val notificationManager: NotificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        val jsonArray: JSONArray
-
-        val request = Login_Request(
-            Request.Method.POST,
-            url,
-            { response ->
-                val jsonArray = JSONArray(response)
-
-                for (i in 0 until jsonArray.length()) {
-
-                    val item = jsonArray.getJSONObject(i)
-
-                    val id = item.getString("id")
-
-                    Log.d("NOTIFICATION", "$id, $identity_check")
-
-                    if (id == Userid) {
-                        setAlarm(ALARM_REQUEST_CODE, "인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정")
-                    }
-                }
-
-
-            }, { Log.d("notification Failed", "error......${error(applicationContext)}") },
-            hashMapOf(
-                "id" to Userid,
-                "identity_check" to identity_check
-            )
-        )
-        val queue = Volley.newRequestQueue(this)
-        queue.add(request)
-    }
+//    @RequiresApi(Build.VERSION_CODES.S)
+//    fun NotificationRequest() {
+//        val receiverIntent: Intent = Intent(
+//            this@MainActivity,
+//            AlarmReceiver::class.java
+//        )
+//        val pendingIntent: PendingIntent =
+//            PendingIntent.getBroadcast(this@MainActivity,
+//                ALARM_REQUEST_CODE, receiverIntent,
+//                PendingIntent.FLAG_MUTABLE
+//            )
+//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val url = "http://seonho.dothome.co.kr/notification.php"
+//
+//        var Userid = intent?.getStringExtra("id").toString() //요청한 사람의 아이디
+//        var identity_check = "false"
+//        val notificationManager: NotificationManager =
+//            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//
+//        val jsonArray: JSONArray
+//
+//        val request = Login_Request(
+//            Request.Method.POST,
+//            url,
+//            { response ->
+//                val jsonArray = JSONArray(response)
+//
+//                for (i in 0 until jsonArray.length()) {
+//
+//                    val item = jsonArray.getJSONObject(i)
+//
+//                    val id = item.getString("id")
+//
+//                    Log.d("NOTIFICATION", "$id, $identity_check")
+//
+//                    if (id == Userid) {
+//                        setAlarm(ALARM_REQUEST_CODE, "인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정")
+//
+//                        val notification_title = "[Medi_Nion] 사용자 인증 알림"
+//                        val notification_content = "인증할 수 없습니다. 인증을 다시 시도해주세요.\n프로필 메뉴 > 설정"
+//                        val notiurl = "http://seonho.dothome.co.kr/notification_insert.php"
+//                        val request = Upload_Request(
+//                            Request.Method.POST,
+//                            notiurl,
+//                            { response ->
+//                                Log.d("NOTIDNOD", response.toString())
+//                            },
+//                            { Log.d("failed", "error......${error(applicationContext)}") },
+//                            mutableMapOf(
+//                                "id" to id,
+//                                "notification_title" to notification_title,
+//                                "notification_content" to notification_content
+//                            )
+//                        )
+//                        request.retryPolicy = DefaultRetryPolicy(
+//                            0,
+//                            -1,
+//                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//                        )
+//
+//                        val queue = Volley.newRequestQueue(this)
+//                        queue.add(request)
+//                    }
+//                }
+//            }, { Log.d("notification Failed", "error......${error(applicationContext)}") },
+//            hashMapOf(
+//                "id" to Userid,
+//                "identity_check" to identity_check
+//            )
+//        )
+//        val queue = Volley.newRequestQueue(this)
+//        queue.add(request)
+//    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setAlarm(alarm_code: Int, content: String){

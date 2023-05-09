@@ -9,6 +9,9 @@
     <uses-permission
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"
+        android:maxSdkVersion="33"/>
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" /> <!-- 저장소 쓰기 권한 -->
@@ -166,6 +169,8 @@
         <activity android:name=".MedicalSeminar"
             android:screenOrientation="portrait"/>
         <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NotificationActivity"
             android:screenOrientation="portrait"/>
 
 
