@@ -22,7 +22,6 @@ import java.util.*
 
 
 class Business_bookmark__profile : AppCompatActivity() {
-
     private lateinit var BusinessBoardRecyclerView : RecyclerView
     private lateinit var BusinessSubRecycler : RecyclerView
     private lateinit var activity : Activity

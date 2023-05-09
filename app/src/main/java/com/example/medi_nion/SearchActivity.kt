@@ -44,7 +44,6 @@ class SearchActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // Do nothing when submit button is clicked
-                Log.d("ditto1", "$query")
 
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
                 var filter_items = java.util.ArrayList<BoardItem>()
@@ -63,8 +62,10 @@ class SearchActivity : AppCompatActivity() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextChange(newText: String?): Boolean { //검색하는거 인식
                 // Filter posts by title or content
-                Log.d("ditto2", "$newText")
 
+                if (newText == "") {
+                    adapter.filter(newText)
+                }
 
                 return true
             }
@@ -82,7 +83,6 @@ class SearchActivity : AppCompatActivity() {
         var userMedal = intent.getIntExtra("userMedal", 0)
         val urlBoard = "http://seonho.dothome.co.kr/Search_board.php"
         val urlDetail = "http://seonho.dothome.co.kr/Search_board_detail.php"
-        Log.d("ditto6", "$id")
 
         val request = Board_Request(
             Request.Method.POST,
@@ -114,14 +114,6 @@ class SearchActivity : AppCompatActivity() {
                     }
                     all_items.add(boardItem)
                 }
-//                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-//                var filter_items = java.util.ArrayList<BoardItem>()
-//                filter_items.addAll(items)
-//                adapter = SearchListAdapter(filter_items)
-//                boardRecyclerView.adapter = adapter
-//                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-//                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-
 
                 var detailId : String = ""
                 var detailTitle : String = ""
@@ -202,11 +194,6 @@ class SearchActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun Millis(postTime : String) : Long {
-        // YY-MM-DD HH:MM:SS
-
-        //val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd, hh:mm:ss")
-        //val date = LocalDateTime.parse(dateString, formatter)
-
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date1: Date = simpleDateFormat.parse(postTime)
         return date1.time
