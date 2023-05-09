@@ -55,6 +55,67 @@ class SearchActivity : AppCompatActivity() {
 
                 adapter.filter(query)
 
+                adapter.setOnItemClickListener(object : SearchListAdapter.OnItemClickListener {
+                    override fun onItemClick(v: View, data: BoardItem, pos: Int) {
+
+                        val urlDetail = "http://seonho.dothome.co.kr/Search_board_detail.php"
+                        var id = intent.getStringExtra("id")
+                        var nickname = intent.getStringExtra("nickname")
+                        var board = intent.getStringExtra("board").toString()
+                        var userType = intent.getStringExtra("userType").toString()
+                        var userDept = intent.getStringExtra("userDept").toString()
+                        var userMedal = intent.getIntExtra("userMedal", 0)
+
+                        val request = Login_Request(
+                            Request.Method.POST,
+                            urlDetail,
+                            { responseDetail ->
+                                if(responseDetail!="Detail Info Error"){
+                                    val jsonArray = JSONArray(responseDetail)
+                                    items.clear()
+                                    for (i in jsonArray.length()-1  downTo  0) {
+                                        val item = jsonArray.getJSONObject(i)
+
+                                        val detailId = item.getString("id")
+                                        val detailTitle = item.getString("title")
+                                        val detailContent = item.getString("content")
+                                        val detailTime = item.getString("time")
+                                        val detailImg = item.getString("image")
+                                        val detailCommentCnt = item.getString("comment")
+
+                                        val intent = Intent(applicationContext, BoardDetail::class.java)
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+//                                        intent.putExtra("board", board)
+                                        intent.putExtra("num", data.num)
+                                        intent.putExtra("id", id)
+                                        intent.putExtra("nickname", nickname)
+                                        intent.putExtra("writerId", detailId)
+                                        intent.putExtra("title", detailTitle)
+                                        intent.putExtra("content", detailContent)
+                                        intent.putExtra("time", detailTime)
+                                        intent.putExtra("image", detailImg)
+                                        intent.putExtra("userType", userType)
+                                        intent.putExtra("userDept", userDept)
+                                        intent.putExtra("userMedal", userMedal)
+                                        intent.putExtra("commentCnt", detailCommentCnt)
+                                        startActivity(intent)
+                                    }
+
+
+                                }
+
+                            }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                            hashMapOf(
+                                "board" to board,
+                                "post_num" to data.num.toString()
+                            )
+                        )
+                        val queue = Volley.newRequestQueue(applicationContext)
+                        queue.add(request)
+                    }
+
+                })
+
                 return true
             }
 
@@ -114,6 +175,14 @@ class SearchActivity : AppCompatActivity() {
                     }
                     all_items.add(boardItem)
                 }
+
+//                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+//                var filter_items = java.util.ArrayList<BoardItem>()
+//                filter_items.addAll(items)
+//                adapter = SearchListAdapter(filter_items)
+//                boardRecyclerView.adapter = adapter
+//                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+//                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
 
                 var detailId : String = ""
                 var detailTitle : String = ""
