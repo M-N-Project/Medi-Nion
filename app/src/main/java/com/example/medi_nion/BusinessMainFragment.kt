@@ -62,7 +62,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 //            swipeRefreshLayout.isRefreshing = false
 //        }
 
-        noChan = view.findViewById<TextView>(R.id.noChanTextView)
         home_adapter = BusinessHomeRecyclerAdapter(appUser, items,info_items, detail_items)
 //        BusinessBoardRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardRecyclerView)
         BusinessBoardHomeRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardHomeRecyclerView)
@@ -564,6 +563,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                     val jsonArray = JSONArray(response)
                     items.clear()
                     all_items.clear()
+                    subListItems.clear()
                     detail_items.clear()
 
                     for (i in jsonArray.length() - 1 downTo 0) {
@@ -582,7 +582,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                             { response ->
                                 if(response != "business sub list fail") {
                                     if (response != "business board no Item") {
-                                        noChan.visibility = View.GONE
                                         val jsonArray = JSONArray(response)
 
 
@@ -727,9 +726,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
                                         }
 
-                                    }
-                                    else{
-                                        noChan.visibility = View.VISIBLE
                                     }
                                 }
 
