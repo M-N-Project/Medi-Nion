@@ -1592,7 +1592,6 @@ class BoardDetail : AppCompatActivity() {
                         urlUpdateCnt,
                         { responseComment ->
                             if (!responseComment.equals("update fail")) {
-                                post_num = responseComment.toString()
 
                             } else {
                                 Toast.makeText(
@@ -1645,7 +1644,9 @@ class BoardDetail : AppCompatActivity() {
                                             }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
                                             hashMapOf(
                                                 "Token" to response_key.toString(),
-                                                "writerId" to writerId
+                                                "writerId" to writerId,
+                                                "board" to board,
+                                                "post_num" to post_num
                                             )
                                         )
                                         val queue_noti = Volley.newRequestQueue(this)

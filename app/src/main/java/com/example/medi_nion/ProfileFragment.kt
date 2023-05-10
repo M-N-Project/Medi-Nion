@@ -34,7 +34,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.example.medi_nion.databinding.PrivacyPolicyBinding
 import com.example.medi_nion.databinding.ProfileBinding
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.json.JSONArray
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -344,6 +346,18 @@ class ProfileFragment : Fragment(R.layout.profile) {
                 startActivity(intent)
             }
 
+        }
+
+        binding.licenseLinearLayout.setOnClickListener{
+            startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+        }
+
+        binding.privacyLinearLayout.setOnClickListener{
+            startActivity(Intent(context, PrivacyPolicy::class.java))
+        }
+
+        binding.serviceLinearLayout.setOnClickListener{
+            startActivity(Intent(context, ServiceAgreement::class.java))
         }
 
         return binding.root
