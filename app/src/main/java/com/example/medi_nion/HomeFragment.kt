@@ -3,7 +3,6 @@ package com.example.medi_nion
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
-import android.content.Context.ALARM_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Outline
@@ -26,18 +25,14 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.business_create_home1.view.*
-import kotlinx.android.synthetic.main.business_home.*
+import kotlinx.android.synthetic.main.home.*
 import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
 import org.json.JSONArray
@@ -54,6 +49,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     private lateinit var manager: NotificationManager
     private lateinit var builder: NotificationCompat.Builder
     lateinit var notificationPermission: ActivityResultLauncher<String>
+    lateinit var BusinessHotRecycler : RecyclerView
 
     companion object {
         private const val COLOR_SELECTED = "selectedColor"
@@ -64,6 +60,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
     private lateinit var activity : Activity
     private lateinit var id: String
+    private lateinit var device_id: String
     private lateinit var nickname: String
     private lateinit var userType: String
     private lateinit var userDept: String
@@ -167,11 +164,12 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         var currentPosition = 0
         var big_currentPosition = 0
-
+        BusinessHotRecycler = view.findViewById<RecyclerView>(R.id.BusinessHotRecycler)
 
 
         // bundle 에서 id, userType, userDept, userMedal 값 가져오기
         id = arguments?.getString("id").toString()
+        device_id = arguments?.getString("device_id").toString()
         nickname = arguments?.getString("nickname").toString()
         userType = arguments?.getString("userType").toString()
         userDept = arguments?.getString("userDept").toString()
@@ -329,6 +327,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "자유 게시판")
@@ -340,6 +339,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
@@ -353,6 +353,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userType", userType)
                 intent.putExtra("userDept", userDept)
@@ -366,6 +367,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "장터 게시판")
@@ -377,6 +379,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
+                intent.putExtra("device_id", device_id)
                 intent.putExtra("nickname", nickname)
                 intent.putExtra("userMedal", userMedal)
                 intent.putExtra("board", "QnA 게시판")
@@ -563,6 +566,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
 
         val id = arguments?.getString("id")
+        val device_id = arguments?.getString("device_id")
         var nickname = arguments?.getString("nickname")
         val userType = arguments?.getString("userType")
         val userDept = arguments?.getString("userDept")
@@ -633,6 +637,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                         intent.putExtra("board", "QnA 게시판")
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("device_id", device_id)
                                         intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
 
@@ -740,7 +745,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     includeView = includeBasic.removeAt(0)
                     includeView.findViewById<TextView>(R.id.home_hot_num).text =
                         num.toString()
-                    includeView.findViewById<TextView>(R.id.home_hot).text = title
+                    includeView.findViewById<TextView>(R.id.business_home_title).text = title
                     includeView.findViewById<TextView>(R.id.home_hot_like).text =
                         heart.toString()
                     includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -766,7 +771,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                             includeView = includeJob.removeAt(0)
                             includeView.findViewById<TextView>(R.id.home_hot_num).text =
                                 num.toString()
-                            includeView.findViewById<TextView>(R.id.home_hot).text = title
+                            includeView.findViewById<TextView>(R.id.business_home_title).text = title
                             includeView.findViewById<TextView>(R.id.home_hot_like).text =
                                 heart.toString()
                             includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -793,7 +798,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                     includeView = includeDept.removeAt(0)
                                     includeView.findViewById<TextView>(R.id.home_hot_num).text =
                                         num.toString()
-                                    includeView.findViewById<TextView>(R.id.home_hot).text = title
+                                    includeView.findViewById<TextView>(R.id.business_home_title).text = title
                                     includeView.findViewById<TextView>(R.id.home_hot_like).text =
                                         heart.toString()
                                     includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -878,6 +883,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         intent.putExtra("image", detailImg)
                         intent.putExtra("userType", userType)
                         intent.putExtra("userDept", userDept)
+                        intent.putExtra("device_id", device_id)
                         startActivity(intent)
                     }
                 }
@@ -1080,7 +1086,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     hotListItems.reverse()
                     var hotAdapter = BusinessHotListAdapter(hotListItems)
                     hotAdapter.notifyDataSetChanged()
-                    BusinessSubRecycler.adapter = hotAdapter
+                    BusinessHotRecycler.adapter = hotAdapter
 
                     hotAdapter.setOnItemClickListener(object :
                         BusinessHotListAdapter.OnItemClickListener {
@@ -1129,7 +1135,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                 hotListItems.reverse()
                                 var hotAdapter = BusinessHotListAdapter(hotListItems)
                                 hotAdapter.notifyDataSetChanged()
-                                BusinessSubRecycler.adapter = hotAdapter
+                                BusinessHotRecycler.adapter = hotAdapter
 
                                 hotAdapter.setOnItemClickListener(object :
                                     BusinessHotListAdapter.OnItemClickListener {

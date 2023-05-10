@@ -10,6 +10,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
     override fun getItemCount(): Int = 5
 
     private val id = infomap["id"]
+    private val device_id = infomap["device_id"]
     private val nickname = infomap["nickname"]
     private val userType = infomap["userType"]
     private val userDept = infomap["userDept"]
@@ -25,6 +26,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 val homeFragment = HomeFragment()
                 val bundle = Bundle()
                 bundle.putString("id", id)
+                bundle.putString("device_id", device_id)
                 bundle.putString("nickname", nickname)
                 bundle.putString("userType", userType)
                 bundle.putString("userDept", userDept)
@@ -43,6 +45,7 @@ class ViewPagerAdapter2_Main (fragment : FragmentActivity, infomap:HashMap<Strin
                 val menuFragment = MenuFragment()
                 val bundle = Bundle()
                 bundle.putString("id", id)
+                bundle.putString("device_id", device_id)
                 bundle.putString("nickname", nickname)
                 bundle.putString("userType", userType)
                 bundle.putString("userDept", userDept)

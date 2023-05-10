@@ -158,14 +158,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         override fun decorate(view: DayViewFacade?) {
             view?.addSpan(StyleSpan(Typeface.BOLD))
             view?.addSpan(RelativeSizeSpan(1.0f))
-
-//            val colorList: Array<String> = resources.getStringArray(R.array.colors)
-//            var colors = IntArray(colorList.size)
-//            for(i in colorList.indices){
-//                colors[i] = Color.parseColor(colorList[i])
-//            }
-
-
         }
     }
 

@@ -196,5 +196,4 @@ class EmployeeInfoFragment : Fragment() {
             client.newCall(request).execute()
         }
     }
-
 }
