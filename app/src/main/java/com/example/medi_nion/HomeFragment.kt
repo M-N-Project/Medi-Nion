@@ -384,10 +384,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             }
         }
 
-        acadamy_info.setOnClickListener {
-            //학회 및 세미나 정보로 이동
-        }
-
         acadamy_info.setOnClickListener{ // 학회 및 세미나 정보로 이동
             activity?.let {
                 val intent = Intent(context, MedicalSeminar::class.java)

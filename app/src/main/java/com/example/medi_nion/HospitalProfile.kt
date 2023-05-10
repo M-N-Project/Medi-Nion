@@ -27,7 +27,12 @@ class HospitalProfile : AppCompatActivity() {
     private fun initViewPager() { //병원 프로필 액티비티 속 병원정보, 채용정보, 병원리뷰 프레그먼트 연결, viewpage2 adapter로
         //ViewPager2 Adapter 셋팅
         var viewPager2Adatper = ViewPager2Adapter(this)
-        viewPager2Adatper.addFragment(EmployeeInfoFragment())
+        val location = intent.getStringExtra("location").toString()
+        val dept = intent.getStringExtra("dept").toString()
+        val hospital = intent.getStringExtra("hospital").toString()
+        val employee = EmployeeInfoFragment()
+        employee.setter(location, dept, hospital)
+        viewPager2Adatper.addFragment(employee)
 //        viewPager2Adatper.addFragment(HospitalInfoFragment())
 //        viewPager2Adatper.addFragment(HospitalReviewFragment())
 
