@@ -123,4 +123,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
 
+    //오픈소스 라이선스
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.1'
+
+
 }

@@ -183,6 +183,13 @@
         <activity android:name=".EmployeeFiltering"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".LicenseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PrivacyPolicy"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ServiceAgreement"
+            android:screenOrientation="portrait"/>
+
 
         <uses-library
             android:name="org.apache.http.params"
