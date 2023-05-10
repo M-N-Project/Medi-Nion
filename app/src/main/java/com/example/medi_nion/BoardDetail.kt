@@ -130,7 +130,7 @@ class BoardDetail : AppCompatActivity() {
         val device_id = intent.getStringExtra("device_id") //접속한 유저의 디바이스 고유 아이디
         var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
         var userMedal = intent.getIntExtra("userMedal", 0)
-        val post_num = intent?.getIntExtra("num", 0).toString() //현재 상세보기 중인 게시물의 num
+        val post_num = intent?.getStringExtra("num").toString() //현재 상세보기 중인 게시물의 num
         val title = intent.getStringExtra("title") // 게시물 제목
         val content = intent.getStringExtra("content") // 게시물 내용
         val time = intent.getStringExtra("time") // 게시물 등록 시간
@@ -323,7 +323,7 @@ class BoardDetail : AppCompatActivity() {
     // 좋아요 fetch ----------------------------------------------------------------------------
     fun fetchLikeData() {
         val url = "http://seonho.dothome.co.kr/Heart_list.php"
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var id = intent?.getStringExtra("id").toString() //하트를 누른 유저의 아이디
 
         val board = intent?.getStringExtra("board").toString()
@@ -374,7 +374,7 @@ class BoardDetail : AppCompatActivity() {
         val urlCommentHeartFetch = "http://seonho.dothome.co.kr/commentHeart_list.php"
 
         var id = intent?.getStringExtra("id").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var board = intent?.getStringExtra("board").toString()
 
         comment_items.clear()
@@ -383,6 +383,7 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Log.d("conmentmr", response.toString())
                 if(response != "Comment Fetch fail"){
                     if(response == "no Comment"){
                         comment_items.clear()
@@ -1221,7 +1222,7 @@ class BoardDetail : AppCompatActivity() {
     // 북마크 fetch -----------------------------------------------------------------------------
     fun fetchBookmarkData() {
         val url = "http://seonho.dothome.co.kr/Bookmark_list.php"
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var id = intent?.getStringExtra("id").toString()
         val board = intent?.getStringExtra("board").toString()
 
@@ -1269,7 +1270,7 @@ class BoardDetail : AppCompatActivity() {
     fun PostDeleteRequest(){
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
         val board = intent.getStringExtra("board").toString()
-        val post_num = intent?.getIntExtra("num", 0).toString()
+        val post_num = intent?.getStringExtra("num").toString()
 
         val urlDelete = "http://seonho.dothome.co.kr/postDelete.php"
         val deleteHeart = "http://seonho.dothome.co.kr/heartDeleteOnPost.php"
@@ -1434,7 +1435,7 @@ class BoardDetail : AppCompatActivity() {
     fun LikeRequest(flag: Boolean) {
         var id = intent?.getStringExtra("id").toString()
         val board = intent.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var url = "http://seonho.dothome.co.kr/Heart.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
@@ -1563,10 +1564,10 @@ class BoardDetail : AppCompatActivity() {
         val device_id = intent.getStringExtra("device_id").toString()
         var writerId = intent.getStringExtra("writerId").toString() //게시물을 작성한 유저의 아이디
         var board = intent?.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
-        Log.d("Devide", device_id)
+        Log.d("as456", post_num)
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
@@ -1723,7 +1724,7 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun Comment2Request(comment_num : Int, comment2_num : Int) {
         var id = intent?.getStringExtra("id").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var board = intent?.getStringExtra("board").toString()
         var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
@@ -1809,7 +1810,7 @@ class BoardDetail : AppCompatActivity() {
     fun BookRequest(flag : Boolean) {
         var id = intent?.getStringExtra("id").toString()
         val board = intent.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var url = "http://seonho.dothome.co.kr/Bookmark.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
