@@ -186,7 +186,7 @@ class Login : AppCompatActivity() {
 
         signupBtn.setOnClickListener {
             //회원가입 화면으로 이동
-            val intent = Intent(applicationContext, Retrofit_SignUp::class.java)
+            val intent = Intent(applicationContext, SignUP::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
             startActivity(intent)
         }

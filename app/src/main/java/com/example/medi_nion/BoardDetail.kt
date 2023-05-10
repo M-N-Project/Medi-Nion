@@ -30,7 +30,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
 import java.time.LocalDateTime
@@ -1541,7 +1544,8 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest(comment_num : Int) {
         //FCM 서비스 도전 ===================================================
-        val token = MyFirebaseMessagingService().getFirebaseToken()
+//        val token = FirebaseMessagingService().getFirebaseToken()
+        val key = "AIzaSyCqmTtARfMVzB5TFE2Je6UOwreSNiHk_lU"
 //        initDynamicLink()
 
         // ==================================================================
@@ -1696,13 +1700,35 @@ class BoardDetail : AppCompatActivity() {
 //                        )
 //                    )
 //                    val queue_noti = Volley.newRequestQueue(this)
-//                    queue_noti.add(request_noti)
+//                    queue_noti.add(request_noti
 
-                    val request_noti = Login_Request(
-                        Request.Method.POST,
-                        noti_FCM,
-                        { response_noti ->
-                            Log.d("FCMResppp",response_noti)
+
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            return@OnCompleteListener
+                        }
+
+                        // Get new FCM registration token
+                        val token = task.result
+
+                        // Log and toast
+//                        val msg = getString(R.string.msg_token_fmt, token)
+                        Log.d(TAG, token)
+                    })
+
+                    val fcm = Intent(
+                        applicationContext,
+                        FirebaseMessagingService::class.java
+                    )
+                    startService(fcm)
+                    Log.d("set", "sevief")
+
+//                    val request_noti = Login_Request(
+//                        Request.Method.POST,
+//                        noti_FCM,
+//                        { response_noti ->
+//                            Log.d("FCMResppp",response_noti)
 //                            val jsonArray = JSONArray(response_noti)
 //
 //                            for (i in 0 until jsonArray.length()) {
@@ -1772,14 +1798,14 @@ class BoardDetail : AppCompatActivity() {
 //
 //                                }
 //                            }
-
-                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
-                        hashMapOf(
-                            "serverKey" to token.toString()
-                        )
-                    )
-                    val queue_noti = Volley.newRequestQueue(this)
-                    queue_noti.add(request_noti)
+//
+//                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                        hashMapOf(
+//                            "serverKey" to token.toString()
+//                        )
+//                    )
+//                    val queue_noti = Volley.newRequestQueue(this)
+//                    queue_noti.add(request_noti)
 
                     UpdateGrade()
 
@@ -1812,6 +1838,7 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setAlarm(time: String, alarm_code: Int, content: String){

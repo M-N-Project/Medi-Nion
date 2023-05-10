@@ -36,22 +36,17 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.googlecode.tesseract.android.TessBaseAPI
-import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
-import retrofit2.*
 import java.io.*
-import java.lang.reflect.Type
 import java.util.regex.Pattern
 import kotlin.math.max
 import kotlin.math.sqrt
 
 
-class Retrofit_SignUp : AppCompatActivity() {
+class SignUP : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
 
     val REQUEST_IMAGE_CAPTURE = 1
@@ -98,7 +93,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         camera_permission_btn.setOnClickListener {
             Log.d("0-09123","permission1")
             val cameraPermissionCheck = ContextCompat.checkSelfPermission(
-                this@Retrofit_SignUp,
+                this@SignUP,
                 android.Manifest.permission.CAMERA
             )
             if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
