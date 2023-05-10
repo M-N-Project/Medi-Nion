@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "65530733524",
+    "project_id": "medi-nion",
+    "storage_bucket": "medi-nion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65530733524:android:4f2e5eb88fa78b1f78ec41",
+        "android_client_info": {
+          "package_name": "com.example.medi_nion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65530733524-add93b3d5nge3lv9qq01shg6713gh9jl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnahkXfapF1yUo0IV3zpDY-_YTGHqekGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65530733524-add93b3d5nge3lv9qq01shg6713gh9jl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

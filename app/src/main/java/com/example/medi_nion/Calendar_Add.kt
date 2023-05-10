@@ -833,6 +833,9 @@ class Calendar_Add : AppCompatActivity() {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
 
+        Log.d("-0-9231","$id , ${schedule_title}, ${presentDate}, ${start_result}, ${end_result}, ${alarm}, ${repeat}, ${schedule_memo}")
+
+
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
@@ -859,7 +862,7 @@ class Calendar_Add : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            if (colorStr == "#FFFFFF") {
+            if (ColorSheetUtils.colorToHex(selectedColor) == "#FFFFFF") {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
@@ -879,7 +882,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_date" to presentDate,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
-                    "schedule_color" to colorStr,
+                    "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
                     "schedule_repeat" to if(flag=="calendar") repeat else "매주",
                     "schedule_memo" to schedule_memo,
