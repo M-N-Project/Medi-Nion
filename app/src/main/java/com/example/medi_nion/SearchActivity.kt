@@ -85,7 +85,7 @@ class SearchActivity : AppCompatActivity() {
 
                                         val intent = Intent(applicationContext, BoardDetail::class.java)
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
-//                                        intent.putExtra("board", board)
+                                        intent.putExtra("board", "자유 게시판")
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
                                         intent.putExtra("nickname", nickname)

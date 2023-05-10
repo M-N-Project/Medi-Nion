@@ -5,7 +5,6 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -32,7 +31,9 @@ import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
 import java.time.LocalDateTime
@@ -1543,7 +1544,8 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest(comment_num : Int) {
         //FCM 서비스 도전 ===================================================
-        //val token = MyFirebaseMessagingService().getFirebaseToken()
+//        val token = FirebaseMessagingService().getFirebaseToken()
+        val key = "AIzaSyCqmTtARfMVzB5TFE2Je6UOwreSNiHk_lU"
 //        initDynamicLink()
 
         // ==================================================================
@@ -1574,7 +1576,6 @@ class BoardDetail : AppCompatActivity() {
         val urlNotification_select2 = "http://seonho.dothome.co.kr/notification_comment_select2.php"
 
         val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
-        val userKey = "http://seonho.dothome.co.kr/userKey.php"
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -1618,53 +1619,193 @@ class BoardDetail : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val request_noti = Login_Request(
-                        Request.Method.POST,
-                        userKey,
-                        { response_key ->
-                            if(response_key!="Find Key Failed"){
-                                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                                    if (!task.isSuccessful) {
-                                        Log.w("new Token Fail", "Fetching FCM registration token failed", task.exception)
-                                        return@OnCompleteListener
-                                    }
+//                    val request_noti = Login_Request(
+//                        Request.Method.POST,
+//                        urlNotification,
+//                        { response_noti ->
+//                                val jsonArray = JSONArray(response_noti)
+//
+//                                for (i in 0 until jsonArray.length()) {
+//
+//                                    val item = jsonArray.getJSONObject(i)
+//
+//                                    val notification_id = item.getString("id")   //게시물 올린 사람
+////                                    val notification_num = item.getString("num")  //board 테이블의 num
+//
+//                                    Log.d("ididididididiidid", "$id, $notification_id, $writerId")
+//
+//                                    if (notification_id == writerId) {
+//                                        val request_noti = Login_Request(
+//                                            Request.Method.POST,
+//                                            urlNotification_select,
+//                                            { response_noti ->
+//                                                Log.d("879213", response_noti)
+//                                                val jsonArray = JSONArray(response_noti)
+//
+//                                                for (i in 0 until jsonArray.length()) {
+//
+//                                                    val item = jsonArray.getJSONObject(i)
+//
+//                                                    val commentId = item.getString("id")  //댓글 쓴 사람 아이디
+//
+//                                                    Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
+//
+//                                                    if (commentId != writerId) {
+//                                                        Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
+//                                                        //user에서 디바이스 고유 아이디 select
+//                                                        val request_noti2 = Login_Request(
+//                                                            Request.Method.POST,
+//                                                            urlNotification_select2,
+//                                                            { response_noti2 ->
+//                                                                Log.d("987132", response_noti2)
+//                                                                val jsonArray = JSONArray(response_noti2)
+//
+//                                                                for (i in 0 until jsonArray.length()) {
+//
+//                                                                    val item = jsonArray.getJSONObject(i)
+//
+//                                                                    val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
+//
+//                                                                    if (device_id != device_id_comment)
+//                                                                        //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
+//                                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+//                                                                    Log.d("device123123", "$device_id, $device_id_comment")
+//                                                                }
+//
+//                                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                                            hashMapOf(
+//                                                                "id" to writerId
+//                                                            )
+//                                                        )
+//                                                        val queue_noti = Volley.newRequestQueue(this)
+//                                                        queue_noti.add(request_noti2)
+//                                                    }
+//                                                }
+//
+//                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                            hashMapOf(
+//                                                "id" to id
+//                                            )
+//                                        )
+//                                        val queue_noti = Volley.newRequestQueue(this)
+//                                        queue_noti.add(request_noti)
+//
+//                                    }
+//                                }
+//
+//                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                        hashMapOf(
+//                            "board" to board,
+//                            "post_num" to post_num
+//                        )
+//                    )
+//                    val queue_noti = Volley.newRequestQueue(this)
+//                    queue_noti.add(request_noti
 
-                                    // Get new FCM registration token
-                                    val token = task.result
 
-                                    // Log and toast
-                                    if(writerId != id){
-                                        val request_noti = Login_Request(
-                                            Request.Method.POST,
-                                            noti_FCM,
-                                            { response_noti ->
-                                                Log.d("FCMResppp3",response_noti)
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                            return@OnCompleteListener
+                        }
 
+                        // Get new FCM registration token
+                        val token = task.result
 
-                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
-                                            hashMapOf(
-                                                "Token" to response_key.toString()
-                                            )
-                                        )
-                                        val queue_noti = Volley.newRequestQueue(this)
-                                        queue_noti.add(request_noti)
-                                    }
+                        // Log and toast
+//                        val msg = getString(R.string.msg_token_fmt, token)
+                        Log.d(TAG, token)
+                    })
 
-                                })
-
-                            }
-
-
-                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
-                        hashMapOf(
-                            "writerId" to writerId
-                        )
+                    val fcm = Intent(
+                        applicationContext,
+                        FirebaseMessagingService::class.java
                     )
-                    val queue_noti = Volley.newRequestQueue(this)
-                    queue_noti.add(request_noti)
+                    startService(fcm)
+                    Log.d("set", "sevief")
 
-
-
+//                    val request_noti = Login_Request(
+//                        Request.Method.POST,
+//                        noti_FCM,
+//                        { response_noti ->
+//                            Log.d("FCMResppp",response_noti)
+//                            val jsonArray = JSONArray(response_noti)
+//
+//                            for (i in 0 until jsonArray.length()) {
+//
+//                                val item = jsonArray.getJSONObject(i)
+//
+//                                val notification_id = item.getString("id")   //게시물 올린 사람
+////                                    val notification_num = item.getString("num")  //board 테이블의 num
+//
+//                                Log.d("ididididididiidid", "$id, $notification_id, $writerId")
+//
+//                                if (notification_id == writerId) {
+//                                    val request_noti = Login_Request(
+//                                        Request.Method.POST,
+//                                        urlNotification_select,
+//                                        { response_noti ->
+//                                            Log.d("879213", response_noti)
+//                                            val jsonArray = JSONArray(response_noti)
+//
+//                                            for (i in 0 until jsonArray.length()) {
+//
+//                                                val item = jsonArray.getJSONObject(i)
+//
+//                                                val commentId = item.getString("id")  //댓글 쓴 사람 아이디
+//
+//                                                Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
+//
+//                                                if (commentId != writerId) {
+//                                                    Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
+//                                                    //user에서 디바이스 고유 아이디 select
+//                                                    val request_noti2 = Login_Request(
+//                                                        Request.Method.POST,
+//                                                        urlNotification_select2,
+//                                                        { response_noti2 ->
+//                                                            Log.d("987132", response_noti2)
+//                                                            val jsonArray = JSONArray(response_noti2)
+//
+//                                                            for (i in 0 until jsonArray.length()) {
+//
+//                                                                val item = jsonArray.getJSONObject(i)
+//
+//                                                                val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
+//
+//                                                                if (device_id != device_id_comment)
+//                                                                //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
+//                                                                    setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+//                                                                Log.d("device123123", "$device_id, $device_id_comment")
+//                                                            }
+//
+//                                                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                                        hashMapOf(
+//                                                            "id" to writerId
+//                                                        )
+//                                                    )
+//                                                    val queue_noti = Volley.newRequestQueue(this)
+//                                                    queue_noti.add(request_noti2)
+//                                                }
+//                                            }
+//
+//                                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                        hashMapOf(
+//                                            "id" to id
+//                                        )
+//                                    )
+//                                    val queue_noti = Volley.newRequestQueue(this)
+//                                    queue_noti.add(request_noti)
+//
+//                                }
+//                            }
+//
+//                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                        hashMapOf(
+//                            "serverKey" to token.toString()
+//                        )
+//                    )
+//                    val queue_noti = Volley.newRequestQueue(this)
+//                    queue_noti.add(request_noti)
 
                     UpdateGrade()
 
@@ -1697,6 +1838,7 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setAlarm(time: String, alarm_code: Int, content: String){

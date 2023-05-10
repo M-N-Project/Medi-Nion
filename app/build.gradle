@@ -119,8 +119,11 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //firebase
+    //fire
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
+    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 
 }

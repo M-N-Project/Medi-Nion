@@ -40,6 +40,7 @@
             android:enabled="true"
             android:exported="true" />
 
+
         <receiver android:name=".AlarmReceiver"
             android:enabled="true"
             android:directBootAware="true"
@@ -134,7 +135,7 @@
             android:name=".BoardWrite"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Retrofit_SignUp"
+            android:name=".SignUP"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Board_profile"
