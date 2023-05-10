@@ -17,6 +17,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import org.json.JSONArray
 
 const val PREFERENCES_NAME = "rebuild_preference"
@@ -186,7 +188,7 @@ class Login : AppCompatActivity() {
 
         signupBtn.setOnClickListener {
             //회원가입 화면으로 이동
-            val intent = Intent(applicationContext, Retrofit_SignUp::class.java)
+            val intent = Intent(applicationContext, SignUP::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
             startActivity(intent)
         }
@@ -284,6 +286,8 @@ class Login : AppCompatActivity() {
                                         Toast.LENGTH_SHORT
                                     ).show()
 
+                                    UserKeyRequest()
+
                                     intent.putExtra("id", id)
                                     intent.putExtra("passwd", passwd)
                                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //인텐트 플래그 설정
@@ -321,6 +325,41 @@ class Login : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+    }
+
+    @SuppressLint("HardwareIds", "SuspiciousIndentation")
+    private fun UserKeyRequest() {
+        var id = findViewById<EditText>(R.id.id).text.toString()
+        var passwd = findViewById<EditText>(R.id.password).text.toString()
+
+        var updateUserKey = "http://seonho.dothome.co.kr/updateUserKey.php"
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("캬캬ㅑ캬", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            Log.d("892123", token)
+            val request = Login_Request(
+                Request.Method.POST,
+                updateUserKey,
+                { response ->
+
+
+                }, { Log.d("login failed", "error......${error(applicationContext)}") },
+                hashMapOf(
+                    "id" to id,
+                    "token" to token
+                )
+            )
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
+        })
+
     }
 
 

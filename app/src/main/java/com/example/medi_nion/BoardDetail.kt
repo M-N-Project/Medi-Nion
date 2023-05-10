@@ -30,11 +30,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+
+
 private var comment_items =ArrayList<CommentItem>()
 private var commentDetail_items =ArrayList<CommentDetailItem>()
 private var Commentadapter = CommentListAdapter(comment_items)
@@ -68,7 +74,6 @@ class BoardDetail : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
-
         //댓글 알림 권한
         val notificationPermissionCheck = ContextCompat.checkSelfPermission(
             this@BoardDetail,
@@ -125,7 +130,7 @@ class BoardDetail : AppCompatActivity() {
         val device_id = intent.getStringExtra("device_id") //접속한 유저의 디바이스 고유 아이디
         var writerId = intent.getStringExtra("writerId") //게시물을 작성한 유저의 아이디
         var userMedal = intent.getIntExtra("userMedal", 0)
-        val post_num = intent?.getIntExtra("num", 0).toString() //현재 상세보기 중인 게시물의 num
+        val post_num = intent?.getStringExtra("num").toString() //현재 상세보기 중인 게시물의 num
         val title = intent.getStringExtra("title") // 게시물 제목
         val content = intent.getStringExtra("content") // 게시물 내용
         val time = intent.getStringExtra("time") // 게시물 등록 시간
@@ -318,7 +323,7 @@ class BoardDetail : AppCompatActivity() {
     // 좋아요 fetch ----------------------------------------------------------------------------
     fun fetchLikeData() {
         val url = "http://seonho.dothome.co.kr/Heart_list.php"
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var id = intent?.getStringExtra("id").toString() //하트를 누른 유저의 아이디
 
         val board = intent?.getStringExtra("board").toString()
@@ -369,7 +374,7 @@ class BoardDetail : AppCompatActivity() {
         val urlCommentHeartFetch = "http://seonho.dothome.co.kr/commentHeart_list.php"
 
         var id = intent?.getStringExtra("id").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var board = intent?.getStringExtra("board").toString()
 
         comment_items.clear()
@@ -378,6 +383,7 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Log.d("conmentmr", response.toString())
                 if(response != "Comment Fetch fail"){
                     if(response == "no Comment"){
                         comment_items.clear()
@@ -1216,7 +1222,7 @@ class BoardDetail : AppCompatActivity() {
     // 북마크 fetch -----------------------------------------------------------------------------
     fun fetchBookmarkData() {
         val url = "http://seonho.dothome.co.kr/Bookmark_list.php"
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var id = intent?.getStringExtra("id").toString()
         val board = intent?.getStringExtra("board").toString()
 
@@ -1264,7 +1270,7 @@ class BoardDetail : AppCompatActivity() {
     fun PostDeleteRequest(){
         var id = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
         val board = intent.getStringExtra("board").toString()
-        val post_num = intent?.getIntExtra("num", 0).toString()
+        val post_num = intent?.getStringExtra("num").toString()
 
         val urlDelete = "http://seonho.dothome.co.kr/postDelete.php"
         val deleteHeart = "http://seonho.dothome.co.kr/heartDeleteOnPost.php"
@@ -1429,7 +1435,7 @@ class BoardDetail : AppCompatActivity() {
     fun LikeRequest(flag: Boolean) {
         var id = intent?.getStringExtra("id").toString()
         val board = intent.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var url = "http://seonho.dothome.co.kr/Heart.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
@@ -1524,10 +1530,25 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
-
+//    /** DynamicLink */
+//    private fun initDynamicLink() {
+//        val dynamicLinkData = intent.extras
+//        if (dynamicLinkData != null) {
+//            var dataStr = "DynamicLink 수신받은 값\n"
+//            for (key in dynamicLinkData.keySet()) {
+//                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
+//            }
+//
+//        }
+//    }
     // 댓글 request ------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest(comment_num : Int) {
+        //FCM 서비스 도전 ===================================================
+        //val token = MyFirebaseMessagingService().getFirebaseToken()
+//        initDynamicLink()
+
+        // ==================================================================
         val receiverIntent: Intent = Intent(
             this@BoardDetail,
             AlarmReceiver_comment::class.java
@@ -1543,16 +1564,19 @@ class BoardDetail : AppCompatActivity() {
         val device_id = intent.getStringExtra("device_id").toString()
         var writerId = intent.getStringExtra("writerId").toString() //게시물을 작성한 유저의 아이디
         var board = intent?.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
-        Log.d("Devide", device_id)
+        Log.d("as456", post_num)
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
         val urlNotification = "http://seonho.dothome.co.kr/notification_comment.php"
         val urlNotification_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
         val urlNotification_select2 = "http://seonho.dothome.co.kr/notification_comment_select2.php"
+
+        val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
+        val userKey = "http://seonho.dothome.co.kr/userKey.php"
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -1568,7 +1592,6 @@ class BoardDetail : AppCompatActivity() {
                         urlUpdateCnt,
                         { responseComment ->
                             if (!responseComment.equals("update fail")) {
-                                post_num = responseComment.toString()
 
                             } else {
                                 Toast.makeText(
@@ -1598,84 +1621,53 @@ class BoardDetail : AppCompatActivity() {
 
                     val request_noti = Login_Request(
                         Request.Method.POST,
-                        urlNotification,
-                        { response_noti ->
-                                val jsonArray = JSONArray(response_noti)
+                        userKey,
+                        { response_key ->
+                            if(response_key!="Find Key Failed"){
+                                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                                    if (!task.isSuccessful) {
+                                        Log.w("new Token Fail", "Fetching FCM registration token failed", task.exception)
+                                        return@OnCompleteListener
+                                    }
 
-                                for (i in 0 until jsonArray.length()) {
+                                    // Get new FCM registration token
+                                    val token = task.result
 
-                                    val item = jsonArray.getJSONObject(i)
-
-                                    val notification_id = item.getString("id")   //게시물 올린 사람
-//                                    val notification_num = item.getString("num")  //board 테이블의 num
-
-                                    Log.d("ididididididiidid", "$id, $notification_id, $writerId")
-
-                                    if (notification_id == writerId) {
+                                    // Log and toast
+                                    if(writerId != id){
                                         val request_noti = Login_Request(
                                             Request.Method.POST,
-                                            urlNotification_select,
+                                            noti_FCM,
                                             { response_noti ->
-                                                val jsonArray = JSONArray(response_noti)
-
-                                                for (i in 0 until jsonArray.length()) {
-
-                                                    val item = jsonArray.getJSONObject(i)
-
-                                                    val commentId = item.getString("id")  //댓글 쓴 사람 아이디
-
-                                                    Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
-
-                                                    if (commentId != writerId) {
-                                                        Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
-                                                        //user에서 디바이스 고유 아이디 select
-                                                        val request_noti2 = Login_Request(
-                                                            Request.Method.POST,
-                                                            urlNotification_select2,
-                                                            { response_noti2 ->
-                                                                val jsonArray = JSONArray(response_noti2)
-
-                                                                for (i in 0 until jsonArray.length()) {
-
-                                                                    val item = jsonArray.getJSONObject(i)
-
-                                                                    val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
-
-                                                                    if (device_id != device_id_comment)
-                                                                        //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
-                                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
-                                                                    Log.d("device123123", "$device_id, $device_id_comment")
-                                                                }
-
-                                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
-                                                            hashMapOf(
-                                                                "id" to writerId
-                                                            )
-                                                        )
-                                                        val queue_noti = Volley.newRequestQueue(this)
-                                                        queue_noti.add(request_noti2)
-                                                    }
-                                                }
+                                                Log.d("8972312", response_noti)
 
                                             }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
                                             hashMapOf(
-                                                "id" to id
+                                                "Token" to response_key.toString(),
+                                                "writerId" to writerId,
+                                                "board" to board,
+                                                "post_num" to post_num
                                             )
                                         )
                                         val queue_noti = Volley.newRequestQueue(this)
                                         queue_noti.add(request_noti)
-
                                     }
-                                }
+
+                                })
+
+                            }
+
 
                         }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
                         hashMapOf(
-                            "board" to board,
-                            "post_num" to post_num
+                            "writerId" to writerId
                         )
                     )
                     val queue_noti = Volley.newRequestQueue(this)
                     queue_noti.add(request_noti)
+
+
+
 
                     UpdateGrade()
 
@@ -1709,6 +1701,7 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setAlarm(time: String, alarm_code: Int, content: String){
         AlarmFunctions_comment(applicationContext).callAlarm(time, alarmCode, content)
@@ -1732,7 +1725,7 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun Comment2Request(comment_num : Int, comment2_num : Int) {
         var id = intent?.getStringExtra("id").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var board = intent?.getStringExtra("board").toString()
         var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
@@ -1818,7 +1811,7 @@ class BoardDetail : AppCompatActivity() {
     fun BookRequest(flag : Boolean) {
         var id = intent?.getStringExtra("id").toString()
         val board = intent.getStringExtra("board").toString()
-        var post_num = intent?.getIntExtra("num", 0).toString()
+        var post_num = intent?.getStringExtra("num").toString()
         var url = "http://seonho.dothome.co.kr/Bookmark.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 

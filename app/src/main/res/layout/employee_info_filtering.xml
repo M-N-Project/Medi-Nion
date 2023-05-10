@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- 근무지역 -->
+
+    <TextView
+        android:id="@+id/filteringTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="세부 조건 선택"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/subTitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="근무 지역" />
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/loca_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/employee_filtering_btn"
+                android:padding="8dp"
+                android:layout_marginRight="5dp"
+                android:text="삭제" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/loca_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/loca17"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="전국"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="서울"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="경기"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca3"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="광주"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca4"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="대구"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca5"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="대전"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca6"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="부산"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/loca_radioGroup2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/loca7"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="울산"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca8"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="인천"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca9"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="강원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca10"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="경남"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca11"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="경북"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca12"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="전남"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca13"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="전북"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/loca_radioGroup3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/loca14"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="충북"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca15"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="충남"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca16"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="제주"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/loca18"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="세종"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <!-- 진료과 -->
+    <View
+        android:id="@+id/view6"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/subTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="진료과" />
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/dept_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/employee_filtering_btn"
+                android:padding="8dp"
+                android:layout_marginRight="5dp"
+                android:text="삭제" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/dept_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dept1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="병원·진료"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="산부인과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept3"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="치과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept4"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="안과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept5"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="정형외과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept6"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="이비인후과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/dept_radioGroup2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dept7"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="소아과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept8"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="성형외과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept9"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="임상병리"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept10"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="한의원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept11"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="내과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept12"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="외과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/dept_radioGroup3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dept13"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="의료기기"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept14"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="응급궂"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept15"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="피부과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept16"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="물리치료"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept17"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="가정의학과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept18"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="신경외과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/dept_radioGroup4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dept19"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="대장항문과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept20"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="비뇨기과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept21"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="신경정신과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept22"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="재활의학과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept23"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="영상의학과"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/dept_radioGroup5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dept24"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="중환자실"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/dept25"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="인공신장실"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <!-- 병원별 -->
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/subTitle3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="병원 종류" />
+
+            <View
+                android:id="@+id/view10"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/hos_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/employee_filtering_btn"
+                android:padding="8dp"
+                android:layout_marginRight="5dp"
+                android:text="삭제" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/hos_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/hos1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="대학병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="종합병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos3"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="전문병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos4"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="검진센터"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos5"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="정신병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos6"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="요양병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/hos_radioGroup2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/hos7"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="국공립병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos8"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="보건소"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos9"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="노인병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+            <RadioButton
+                android:id="@+id/hos10"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/employee_filtering_btn"
+                android:button="@null"
+                android:padding="5dp"
+                android:text="한방병원"
+                android:textAlignment="center"
+                android:textColor="@drawable/employee_filtering_text"
+                android:textSize="12sp" />
+
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="검 색"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp" />
+</LinearLayout>

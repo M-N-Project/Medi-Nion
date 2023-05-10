@@ -49,6 +49,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     private lateinit var manager: NotificationManager
     private lateinit var builder: NotificationCompat.Builder
     lateinit var notificationPermission: ActivityResultLauncher<String>
+    lateinit var BusinessHotRecycler : RecyclerView
 
     companion object {
         private const val COLOR_SELECTED = "selectedColor"
@@ -163,7 +164,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         var currentPosition = 0
         var big_currentPosition = 0
-
+        BusinessHotRecycler = view.findViewById<RecyclerView>(R.id.BusinessHotRecycler)
 
 
         // bundle 에서 id, userType, userDept, userMedal 값 가져오기
@@ -384,10 +385,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 intent.putExtra("board", "QnA 게시판")
                 startActivity(intent)
             }
-        }
-
-        acadamy_info.setOnClickListener {
-            //학회 및 세미나 정보로 이동
         }
 
         acadamy_info.setOnClickListener{ // 학회 및 세미나 정보로 이동

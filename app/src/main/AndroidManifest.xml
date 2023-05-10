@@ -40,6 +40,7 @@
             android:enabled="true"
             android:exported="true" />
 
+
         <receiver android:name=".AlarmReceiver"
             android:enabled="true"
             android:directBootAware="true"
@@ -96,6 +97,14 @@
             android:name = ".AlarmService_hot"
             android:exported="false"/>
 
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".Login"
             android:exported="true"
@@ -126,7 +135,7 @@
             android:name=".BoardWrite"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Retrofit_SignUp"
+            android:name=".SignUP"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Board_profile"
@@ -171,6 +180,15 @@
         <activity android:name=".SearchActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".NotificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".EmployeeFiltering"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".LicenseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PrivacyPolicy"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ServiceAgreement"
             android:screenOrientation="portrait"/>
 
 

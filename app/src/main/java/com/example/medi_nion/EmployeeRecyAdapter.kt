@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.internal.concurrent.Task
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,7 +19,6 @@ class EmployeeRecyAdapter(private val itemList : ArrayList<EmployeeRecyItem>) : 
         fun onItemClick(v: View, data: EmployeeRecyItem, pos : Int)
     }
     private var listener : OnItemClickListener? = null
-
 
     fun setOnItemClickListener(listener: EmployeeRecyAdapter.OnItemClickListener) {
         this.listener = listener
