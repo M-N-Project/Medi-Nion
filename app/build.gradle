@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android-extensions'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -112,10 +113,14 @@ dependencies {
     implementation files('libs/app-debug.aar')
 //sd
 
-
     //Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
 
 }

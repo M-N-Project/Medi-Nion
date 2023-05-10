@@ -30,11 +30,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.board_detail.*
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+
+
 private var comment_items =ArrayList<CommentItem>()
 private var commentDetail_items =ArrayList<CommentDetailItem>()
 private var Commentadapter = CommentListAdapter(comment_items)
@@ -68,7 +71,6 @@ class BoardDetail : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
-
         //댓글 알림 권한
         val notificationPermissionCheck = ContextCompat.checkSelfPermission(
             this@BoardDetail,
@@ -1524,10 +1526,25 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
-
+//    /** DynamicLink */
+//    private fun initDynamicLink() {
+//        val dynamicLinkData = intent.extras
+//        if (dynamicLinkData != null) {
+//            var dataStr = "DynamicLink 수신받은 값\n"
+//            for (key in dynamicLinkData.keySet()) {
+//                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
+//            }
+//
+//        }
+//    }
     // 댓글 request ------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest(comment_num : Int) {
+        //FCM 서비스 도전 ===================================================
+        val token = MyFirebaseMessagingService().getFirebaseToken()
+//        initDynamicLink()
+
+        // ==================================================================
         val receiverIntent: Intent = Intent(
             this@BoardDetail,
             AlarmReceiver_comment::class.java
@@ -1553,6 +1570,8 @@ class BoardDetail : AppCompatActivity() {
         val urlNotification = "http://seonho.dothome.co.kr/notification_comment.php"
         val urlNotification_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
         val urlNotification_select2 = "http://seonho.dothome.co.kr/notification_comment_select2.php"
+
+        val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -1596,82 +1615,167 @@ class BoardDetail : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
+//                    val request_noti = Login_Request(
+//                        Request.Method.POST,
+//                        urlNotification,
+//                        { response_noti ->
+//                                val jsonArray = JSONArray(response_noti)
+//
+//                                for (i in 0 until jsonArray.length()) {
+//
+//                                    val item = jsonArray.getJSONObject(i)
+//
+//                                    val notification_id = item.getString("id")   //게시물 올린 사람
+////                                    val notification_num = item.getString("num")  //board 테이블의 num
+//
+//                                    Log.d("ididididididiidid", "$id, $notification_id, $writerId")
+//
+//                                    if (notification_id == writerId) {
+//                                        val request_noti = Login_Request(
+//                                            Request.Method.POST,
+//                                            urlNotification_select,
+//                                            { response_noti ->
+//                                                Log.d("879213", response_noti)
+//                                                val jsonArray = JSONArray(response_noti)
+//
+//                                                for (i in 0 until jsonArray.length()) {
+//
+//                                                    val item = jsonArray.getJSONObject(i)
+//
+//                                                    val commentId = item.getString("id")  //댓글 쓴 사람 아이디
+//
+//                                                    Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
+//
+//                                                    if (commentId != writerId) {
+//                                                        Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
+//                                                        //user에서 디바이스 고유 아이디 select
+//                                                        val request_noti2 = Login_Request(
+//                                                            Request.Method.POST,
+//                                                            urlNotification_select2,
+//                                                            { response_noti2 ->
+//                                                                Log.d("987132", response_noti2)
+//                                                                val jsonArray = JSONArray(response_noti2)
+//
+//                                                                for (i in 0 until jsonArray.length()) {
+//
+//                                                                    val item = jsonArray.getJSONObject(i)
+//
+//                                                                    val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
+//
+//                                                                    if (device_id != device_id_comment)
+//                                                                        //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
+//                                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+//                                                                    Log.d("device123123", "$device_id, $device_id_comment")
+//                                                                }
+//
+//                                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                                            hashMapOf(
+//                                                                "id" to writerId
+//                                                            )
+//                                                        )
+//                                                        val queue_noti = Volley.newRequestQueue(this)
+//                                                        queue_noti.add(request_noti2)
+//                                                    }
+//                                                }
+//
+//                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                            hashMapOf(
+//                                                "id" to id
+//                                            )
+//                                        )
+//                                        val queue_noti = Volley.newRequestQueue(this)
+//                                        queue_noti.add(request_noti)
+//
+//                                    }
+//                                }
+//
+//                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                        hashMapOf(
+//                            "board" to board,
+//                            "post_num" to post_num
+//                        )
+//                    )
+//                    val queue_noti = Volley.newRequestQueue(this)
+//                    queue_noti.add(request_noti)
+
                     val request_noti = Login_Request(
                         Request.Method.POST,
-                        urlNotification,
+                        noti_FCM,
                         { response_noti ->
-                                val jsonArray = JSONArray(response_noti)
-
-                                for (i in 0 until jsonArray.length()) {
-
-                                    val item = jsonArray.getJSONObject(i)
-
-                                    val notification_id = item.getString("id")   //게시물 올린 사람
-//                                    val notification_num = item.getString("num")  //board 테이블의 num
-
-                                    Log.d("ididididididiidid", "$id, $notification_id, $writerId")
-
-                                    if (notification_id == writerId) {
-                                        val request_noti = Login_Request(
-                                            Request.Method.POST,
-                                            urlNotification_select,
-                                            { response_noti ->
-                                                val jsonArray = JSONArray(response_noti)
-
-                                                for (i in 0 until jsonArray.length()) {
-
-                                                    val item = jsonArray.getJSONObject(i)
-
-                                                    val commentId = item.getString("id")  //댓글 쓴 사람 아이디
-
-                                                    Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
-
-                                                    if (commentId != writerId) {
-                                                        Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
-                                                        //user에서 디바이스 고유 아이디 select
-                                                        val request_noti2 = Login_Request(
-                                                            Request.Method.POST,
-                                                            urlNotification_select2,
-                                                            { response_noti2 ->
-                                                                val jsonArray = JSONArray(response_noti2)
-
-                                                                for (i in 0 until jsonArray.length()) {
-
-                                                                    val item = jsonArray.getJSONObject(i)
-
-                                                                    val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
-
-                                                                    if (device_id != device_id_comment)
-                                                                        //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
-                                                                        setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
-                                                                    Log.d("device123123", "$device_id, $device_id_comment")
-                                                                }
-
-                                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
-                                                            hashMapOf(
-                                                                "id" to writerId
-                                                            )
-                                                        )
-                                                        val queue_noti = Volley.newRequestQueue(this)
-                                                        queue_noti.add(request_noti2)
-                                                    }
-                                                }
-
-                                            }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
-                                            hashMapOf(
-                                                "id" to id
-                                            )
-                                        )
-                                        val queue_noti = Volley.newRequestQueue(this)
-                                        queue_noti.add(request_noti)
-
-                                    }
-                                }
+                            Log.d("FCMResppp",response_noti)
+//                            val jsonArray = JSONArray(response_noti)
+//
+//                            for (i in 0 until jsonArray.length()) {
+//
+//                                val item = jsonArray.getJSONObject(i)
+//
+//                                val notification_id = item.getString("id")   //게시물 올린 사람
+////                                    val notification_num = item.getString("num")  //board 테이블의 num
+//
+//                                Log.d("ididididididiidid", "$id, $notification_id, $writerId")
+//
+//                                if (notification_id == writerId) {
+//                                    val request_noti = Login_Request(
+//                                        Request.Method.POST,
+//                                        urlNotification_select,
+//                                        { response_noti ->
+//                                            Log.d("879213", response_noti)
+//                                            val jsonArray = JSONArray(response_noti)
+//
+//                                            for (i in 0 until jsonArray.length()) {
+//
+//                                                val item = jsonArray.getJSONObject(i)
+//
+//                                                val commentId = item.getString("id")  //댓글 쓴 사람 아이디
+//
+//                                                Log.d("board_alarm2313", "$commentId, $notification_id, $id, $writerId")
+//
+//                                                if (commentId != writerId) {
+//                                                    Log.d("board_alarm1", "$commentId, $notification_id, $id, $writerId")
+//                                                    //user에서 디바이스 고유 아이디 select
+//                                                    val request_noti2 = Login_Request(
+//                                                        Request.Method.POST,
+//                                                        urlNotification_select2,
+//                                                        { response_noti2 ->
+//                                                            Log.d("987132", response_noti2)
+//                                                            val jsonArray = JSONArray(response_noti2)
+//
+//                                                            for (i in 0 until jsonArray.length()) {
+//
+//                                                                val item = jsonArray.getJSONObject(i)
+//
+//                                                                val device_id_comment = item.getString("device_id")  //게시물 올린 사람의 device 아이디 받아오기
+//
+//                                                                if (device_id != device_id_comment)
+//                                                                //댓글 단 디바이스에 알림이 뜸 ,,,,,,,,,,,,,,,,,,,,,
+//                                                                    setAlarm(comment_time, ALARM_REQUEST_CODE, "익명의 누군가가 댓글을 등록했습니다. 확인해주세요!")
+//                                                                Log.d("device123123", "$device_id, $device_id_comment")
+//                                                            }
+//
+//                                                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                                        hashMapOf(
+//                                                            "id" to writerId
+//                                                        )
+//                                                    )
+//                                                    val queue_noti = Volley.newRequestQueue(this)
+//                                                    queue_noti.add(request_noti2)
+//                                                }
+//                                            }
+//
+//                                        }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
+//                                        hashMapOf(
+//                                            "id" to id
+//                                        )
+//                                    )
+//                                    val queue_noti = Volley.newRequestQueue(this)
+//                                    queue_noti.add(request_noti)
+//
+//                                }
+//                            }
 
                         }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
                         hashMapOf(
-                            "board" to board,
-                            "post_num" to post_num
+                            "serverKey" to token.toString()
                         )
                     )
                     val queue_noti = Volley.newRequestQueue(this)

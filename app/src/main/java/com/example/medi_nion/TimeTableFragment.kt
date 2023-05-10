@@ -422,7 +422,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                         }
 
                         scheduleList.add(schedule)
-                        Log.d("SCHE", scheduleList.toString())
                         table.updateSchedules(scheduleList)
 
                         val ft = fragmentManager!!.beginTransaction()
@@ -471,7 +470,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 "schedule_date" to item.schedule_date,
                 "schedule_start" to item.schedule_start,
                 "schedule_end" to item.schedule_end,
-                "schedule_color" to item.schedule_color,
+                "schedule_color" to if(item.schedule_color == "") "#BADFD2" else item.schedule_color,
                 "schedule_alarm" to item.schedule_alarm,
                 "schedule_repeat" to item.schedule_repeat,
                 "schedule_memo" to item.schedule_memo,

@@ -62,7 +62,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 //            swipeRefreshLayout.isRefreshing = false
 //        }
 
-        noChan = view.findViewById<TextView>(R.id.noChanTextView)
         home_adapter = BusinessHomeRecyclerAdapter(appUser, items,info_items, detail_items)
 //        BusinessBoardRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardRecyclerView)
         BusinessBoardHomeRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardHomeRecyclerView)
@@ -371,7 +370,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 //                                        var appUser = arguments?.getString("id").toString()
 //                                        intent.putExtra("appUser", appUser)
 //                                        intent.putExtra(
-//                                            "channel_name",
 //                                            data.chanName
 //                                        )
 //                                        startActivity(intent)
@@ -564,6 +562,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                     val jsonArray = JSONArray(response)
                     items.clear()
                     all_items.clear()
+                    subListItems.clear()
                     detail_items.clear()
 
                     for (i in jsonArray.length() - 1 downTo 0) {
@@ -575,14 +574,15 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
                         items.add(channel_name)
                         info_items[channel_name] = id
+                        detail_items[channel_name]?.clear()
 
                         val request2 = Board_Request(
                             Request.Method.POST,
                             urlBoard,
                             { response ->
+                                Log.d("07123", response)
                                 if(response != "business sub list fail") {
                                     if (response != "business board no Item") {
-                                        noChan.visibility = View.GONE
                                         val jsonArray = JSONArray(response)
 
 
@@ -729,7 +729,45 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
                                     }
                                     else{
-                                        noChan.visibility = View.VISIBLE
+                                        home_adapter =
+                                            BusinessHomeRecyclerAdapter(
+                                                appUser,
+                                                items,
+                                                info_items,
+                                                detail_items
+                                            )
+                                        BusinessBoardHomeRecyclerView.adapter =
+                                            home_adapter
+
+                                        Log.d(
+                                            "90812312",
+                                            detail_items.toString()
+                                        )
+                                        home_adapter.setOnItemClickListener(
+                                            object :
+                                                BusinessHomeRecyclerAdapter.OnItemClickListener {
+                                                override fun onProfileClick(
+                                                    v: View,
+                                                    data: String,
+                                                    pos: Int
+                                                ) {
+                                                    val intent =
+                                                        Intent(
+                                                            context,
+                                                            BusinessProfileActivity::class.java
+                                                        )
+                                                    intent.putExtra(
+                                                        "appUser",
+                                                        appUser
+                                                    )
+                                                    intent.putExtra(
+                                                        "channel_name",
+                                                        data
+                                                    )
+                                                    startActivity(intent)
+                                                }
+
+                                            })
                                     }
                                 }
 
@@ -748,47 +786,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         queue.add(request2)
                     }
                 }
-                else{
-                    home_adapter =
-                        BusinessHomeRecyclerAdapter(
-                            appUser,
-                            items,
-                            info_items,
-                            detail_items
-                        )
-                    BusinessBoardHomeRecyclerView.adapter =
-                        home_adapter
 
-                    Log.d(
-                        "90812312",
-                        detail_items.toString()
-                    )
-                    home_adapter.setOnItemClickListener(
-                        object :
-                            BusinessHomeRecyclerAdapter.OnItemClickListener {
-                            override fun onProfileClick(
-                                v: View,
-                                data: String,
-                                pos: Int
-                            ) {
-                                val intent =
-                                    Intent(
-                                        context,
-                                        BusinessProfileActivity::class.java
-                                    )
-                                intent.putExtra(
-                                    "appUser",
-                                    appUser
-                                )
-                                intent.putExtra(
-                                    "channel_name",
-                                    data
-                                )
-                                startActivity(intent)
-                            }
-
-                        })
-                }
 
 
             }, {
