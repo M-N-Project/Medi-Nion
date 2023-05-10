@@ -108,15 +108,19 @@ class NotificationActivity: AppCompatActivity() {
                 }
             }
         })
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNoti() {
         val id = intent.getStringExtra("id").toString()
         val nickname = intent.getStringExtra("nickname").toString()
+        val userType = intent.getStringExtra("userType").toString()
+        val userDept = intent.getStringExtra("userDept").toString()
+        val userMedal = intent.getStringExtra("userMedal").toString()
+
         val url = "http://seonho.dothome.co.kr/notification_fetch.php"
+        val url_comment = "http://seonho.dothome.co.kr/notification_comment.php"
+        val url_comment_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
         val request = Board_Request(
             Request.Method.POST,
             url,
@@ -155,10 +159,89 @@ class NotificationActivity: AppCompatActivity() {
                 //알람 누르면
                 adapter.setOnItemClickListener(object : NotificationListAdapter.OnItemClickListener {
                    override fun onItemClick(v: View, data: NotificationItem, pos: Int) {
-                       val intent = Intent(this@NotificationActivity, Profile_opencv::class.java)
-                       intent.putExtra("id", id)
-                       intent.putExtra("nickname", nickname)
-                       startActivity(intent)
+                       if (data.title.contains("사용자 인증 알림")) {  // opencv 알림
+                           val intent =
+                               Intent(this@NotificationActivity, Profile_opencv::class.java)
+                           intent.putExtra("id", id)
+                           intent.putExtra("nickname", nickname)
+                           startActivity(intent)
+                       } else {  // 댓글 알림
+
+                           var detailId = ""
+                           var detailNum = ""
+                           var detailTitle = ""
+                           var detailContent = ""
+                           var detailTime = ""
+                           var detailImg = ""
+                           var detailCommentCnt = ""
+
+                           val request = Board_Request(
+                               Request.Method.POST,
+                               url_comment_select,
+                               { response ->
+                                   val jsonArray = JSONArray(response)
+                                   items.clear()
+                                   all_items.clear()
+
+                                   for (i in jsonArray.length() - 1 downTo 0) {
+                                       val item = jsonArray.getJSONObject(i)
+
+                                       val board = item.getString("board")
+                                       val post_num = item.getString("post_num")
+
+                                       val request = Board_Request(
+                                           Request.Method.POST,
+                                           url_comment,
+                                           { response ->
+                                               val jsonArray = JSONArray(response)
+                                               items.clear()
+                                               for (i in jsonArray.length()-1  downTo  0) {
+                                                   val item = jsonArray.getJSONObject(i)
+
+                                                   detailId = item.getString("id")
+                                                   detailNum = item.getString("num")
+                                                   detailTitle = item.getString("title")
+                                                   detailContent = item.getString("content")
+                                                   detailTime = item.getString("time")
+                                                   detailImg = item.getString("image")
+                                                   detailCommentCnt = item.getString("comment")
+
+                                                   val intent =
+                                                       Intent(applicationContext, BoardDetail::class.java)
+                                                   intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
+                                                   intent.putExtra("num", detailNum)
+                                                   intent.putExtra("board", board)
+                                                   intent.putExtra("id", id)
+                                                   intent.putExtra("nickname", nickname)
+                                                   intent.putExtra("writerId", detailId)
+                                                   intent.putExtra("title", detailTitle)
+                                                   intent.putExtra("content", detailContent)
+                                                   intent.putExtra("time", detailTime)
+                                                   intent.putExtra("image", detailImg)
+                                                   intent.putExtra("userType", userType)
+                                                   intent.putExtra("userDept", userDept)
+                                                   intent.putExtra("userMedal", userMedal)
+                                                   intent.putExtra("commentCnt", detailCommentCnt)
+                                                   startActivity(intent)
+                                               }
+                                           }, { Log.d("fetch failed", "error......${error(applicationContext)}") },
+                                           hashMapOf(
+                                               "id" to id,
+                                               "board" to board,
+                                               "num" to post_num
+                                           )
+                                       )
+                                       val queue = Volley.newRequestQueue(applicationContext)
+                                       queue.add(request)
+                                   }
+                               } , { Log.d("fetch failed", "error......${error(applicationContext)}") },
+                               hashMapOf(
+                                   "id" to id
+                               )
+                           )
+                           val queue = Volley.newRequestQueue(applicationContext)
+                           queue.add(request)
+                       }
                     }
                 })
             }, { Log.d("fetch failed", "error......${error(applicationContext)}") },
