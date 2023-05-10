@@ -1638,12 +1638,12 @@ class BoardDetail : AppCompatActivity() {
                                             Request.Method.POST,
                                             noti_FCM,
                                             { response_noti ->
-                                                Log.d("FCMResppp3",response_noti)
-
+                                                Log.d("8972312", response_noti)
 
                                             }, { Log.d("noti Failed", "error......${error(applicationContext)}") },
                                             hashMapOf(
-                                                "Token" to response_key.toString()
+                                                "Token" to response_key.toString(),
+                                                "writerId" to writerId
                                             )
                                         )
                                         val queue_noti = Volley.newRequestQueue(this)
