@@ -35,6 +35,8 @@ import androidx.core.content.FileProvider
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.googlecode.tesseract.android.TessBaseAPI
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -808,6 +810,8 @@ class Retrofit_SignUp : AppCompatActivity() {
         var identity_image1 = ""
         var identity_image2 = ""
 
+        var token = ""
+
 
         identity_opencv = identity_before.replace("\n", "")
         identity_opencv = identity_opencv.replace(" ", "")
@@ -836,7 +840,22 @@ class Retrofit_SignUp : AppCompatActivity() {
         }
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
+        val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
 
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.w("캬캬ㅑ캬", "Fetching FCM registration token failed", task.exception)
+//                return@OnCompleteListener
+//            }
+//
+//            // Get new FCM registration token
+//            token = task.result
+//
+//            // Log and toast
+//            Log.d("캬캬ㅑ캬", token)
+//
+////                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+//        })
         val request = SignUP_Request(
             Request.Method.POST,
             url,
@@ -866,7 +885,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             if(basicUserBtn.isChecked) {
                 hashMapOf(
                     "id" to id,
-                    "device_id" to android_id,
+                    "device_id" to token,
                     "passwd" to passwd,
                     "nickname" to nickname,
                     "userType" to basicUserBtn.text.toString(),
@@ -881,7 +900,7 @@ class Retrofit_SignUp : AppCompatActivity() {
             } else {
                 hashMapOf(
                     "id" to id,
-                    "device_id" to android_id,
+                    "device_id" to token,
                     "passwd" to passwd,
                     "nickname" to nickname,
                     "userType" to corpUserBtn.text.toString(),
@@ -903,6 +922,7 @@ class Retrofit_SignUp : AppCompatActivity() {
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+
     }
     //db 연동 끝
 
