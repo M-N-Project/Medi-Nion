@@ -101,7 +101,7 @@
 
                 <ImageView
                     android:id="@+id/imageView_like"
-                    android:layout_width="14dp"
+                    android:layout_width="18dp"
                     android:layout_height="18dp"
                     app:srcCompat="@drawable/favorite_border" />
 
