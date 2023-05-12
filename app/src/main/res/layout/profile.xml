@@ -10,10 +10,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,17 +24,16 @@
                 android:id="@+id/my_profile"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_margin="8dp"
-                android:paddingBottom="16dp"
+                android:layout_margin="9dp"
                 android:background="@drawable/menu_button"
-                >
+                android:paddingBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal"
+                    android:layout_height="60dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -44,14 +43,14 @@
                         android:id="@+id/imageView_myprofile"
                         android:layout_width="43dp"
                         android:layout_height="38dp"
-                        android:src="@drawable/profile_mous"
-                        android:layout_marginTop="5dp"
                         android:layout_marginStart="5dp"
-                        app:riv_corner_radius="10dp"
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/profile_mous"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.065"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:riv_corner_radius="10dp"
                         tools:ignore="MissingClass" />
 
 
@@ -64,8 +63,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginStart="8dp">
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
 
 
                             <LinearLayout
@@ -100,19 +99,19 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="4dp">
+                                android:layout_marginTop="4dp"
+                                android:orientation="horizontal">
 
 
                                 <TextView
                                     android:id="@+id/textView_dept"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginEnd="3dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="3dp"
                                     android:text="진료과"
-                                    android:textStyle="bold"
                                     android:textSize="12sp"
+                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     tools:layout_editor_absoluteY="77dp" />
 
@@ -120,11 +119,11 @@
                                     android:id="@+id/textView"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginEnd="3dp"
                                     android:layout_marginTop="5dp"
+                                    android:layout_marginEnd="3dp"
                                     android:text=" / "
-                                    android:textStyle="bold"
                                     android:textSize="12sp"
+                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     tools:layout_editor_absoluteY="77dp" />
 
@@ -134,8 +133,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="5dp"
                                     android:text="직종"
-                                    android:textStyle="bold"
                                     android:textSize="12sp"
+                                    android:textStyle="bold"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     tools:layout_editor_absoluteY="77dp" />
 
@@ -150,908 +149,370 @@
                         android:layout_height="30dp"
                         android:layout_marginStart="90dp"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/identity_warning"/>
+                        android:src="@drawable/identity_warning" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/line12"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="4dp"
-                android:background="#000000"
-                android:backgroundTint="#E6E6E6"
-                android:foregroundTint="#000000" />
 
-            <LinearLayout
-                android:id="@+id/item1"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/my_profile1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@drawable/menu_button"
+                android:paddingBottom="16dp">
 
                 <LinearLayout
-                    android:id="@+id/item1_title"
+                    android:id="@+id/profile_linear1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn1"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="나의 활동"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/item1ListLayout"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
 
                     <LinearLayout
-                        android:id="@+id/item1List"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item1_list1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/page_file_icon" />
-
-                        <TextView
-                            android:id="@+id/item1_list1_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="내가 쓴 글"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/item3List"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item1_list3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/page_file_icon" />
-
-                        <TextView
-                            android:id="@+id/item1_list3_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="내 좋아요한 글"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item1_list4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/page_file_icon" />
-
-                        <TextView
-                            android:id="@+id/item1_list4_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="내가 댓글쓴 글"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item1_list2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/bookmark_icon1" />
-
-                        <TextView
-                            android:id="@+id/item1_list2_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="내가 스크랩한 글"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item1_list5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/bookmark_icon1" />
-
-                        <TextView
-                            android:id="@+id/item1_list5_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="내가 북마크한 글"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn4"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item4"
+                        android:id="@+id/item1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="비즈니스 채널 관리"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical">
+                        <!--                        요기에 설정-->
+
+
+                        <TextView
+                            android:id="@+id/profile_item1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginTop="3dp"
+                            android:text="나의 활동"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/myact_writing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  내가 쓴 글"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/myact_like"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  내가 좋아요 한 글"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/myact_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  내가 쓴 댓글"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/myact_likescrap"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  내가 스크랩한 글"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/myact_businessscrap"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  내가 북마크 한 글"
+                            android:textSize="13sp" />
+
+
+                        <TextView
+                            android:id="@+id/profile_item2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginTop="20dp"
+                            android:text="비즈니스 채널 관리"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/myact_businesssub"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  나의 구독 채널"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/myact_businesssubmanage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="15dp"
+                            android:text="·  나의 채널 관리"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/my_profile5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
+            android:background="@drawable/menu_button"
+            android:layout_marginTop="16dp"
+            android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/profile_linear5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/item5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_item3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="20dp"
+                android:text="어플 설정"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/app_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="15dp"
+                android:text="·  알림 설정"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/app_dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="15dp"
+                android:text="·  다크모드 설정"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/profile_item4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="20dp"
+                android:text="계정 설정"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/app_passwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="15dp"
+                android:text="·  비밀번호 변경"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/app_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="15dp"
+                android:text="·  로그아웃"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/app_sec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="15dp"
+                android:text="·  서비스 탈퇴"
+                android:textColor="#44DBCA"
+                android:textSize="13sp" />
+
+
+
+        </LinearLayout>
+        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/my_profile3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@drawable/menu_button"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="16dp">
+
                 <LinearLayout
-                    android:id="@+id/item4ListLayout"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/profile_linear2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
 
                     <LinearLayout
-                        android:id="@+id/item4List"
+                        android:id="@+id/item2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/item4_list1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_channel1" />
 
                         <TextView
-                            android:id="@+id/item4_list1_text"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/profile_item5"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="나의 구독 채널"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item4_list2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_home" />
+                            android:layout_marginTop="20dp"
+                            android:text="공지사항"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item4_list2_text"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/profile_item6"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="나의 채널 관리"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line5"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/item2_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn2"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="어플 설정"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/item2ListLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item2_list1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_notification2" />
+                            android:layout_marginTop="20dp"
+                            android:text="고객센터"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item2_list1_text"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/profile_item7"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="알림 설정"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item2_list2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_darkmode1" />
+                            android:layout_marginTop="20dp"
+                            android:text="이용 약관"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item2_list2_text"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/profile_item8"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="다크모드 설정"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/item3_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn3"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="계정 설정"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/item3ListLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item3_list1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_passwd" />
+                            android:layout_marginTop="20dp"
+                            android:text="개인 정보 처리 방침"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item3_list1_text"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/profile_item9"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="비밀번호 변경"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item3_list2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_logout" />
+                            android:layout_marginTop="20dp"
+                            android:text="서비스 이용 동의"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item3_list2_text"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/profile_item10"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="로그아웃"
-                            android:textColor="#595959"
-                            android:textSize="14sp" />
+                            android:layout_marginTop="20dp"
+                            android:text="오픈 소스 라이선스"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="3dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/item3_list3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            app:srcCompat="@drawable/profile_servicewidraw" />
-
-                        <TextView
-                            android:id="@+id/item3_list3_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="3dp"
-                            android:layout_marginBottom="3dp"
-                            android:layout_weight="1"
-                            android:text="서비스 탈퇴"
-                            android:textColor="#FF6A6A"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/line4"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            <LinearLayout
-                android:id="@+id/item5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn5"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button2"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="공지사항"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line6"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn6"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button2"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="고객센터"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line7"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn7"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button2"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="이용 약관"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line8"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/privacyLinearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn8"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button2"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="개인정보 처리 방침"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line9"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/serviceLinearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn9"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button2"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="서비스 이용 동의"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line10"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/item10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/licenseLinearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <android.widget.Button
-                        android:id="@+id/profile_basicBtn10"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:background="@drawable/profile_triangle_button2"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-                    <TextView
-                        android:id="@+id/profile_item10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="3dp"
-                        android:text="오픈 소스 라이선스"
-                        android:textAlignment="viewStart"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/line11"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#000000"
-                    android:backgroundTint="#E6E6E6"
-                    android:foregroundTint="#000000" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
