@@ -158,6 +158,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         val acadamy_info = view.findViewById<TextView>(R.id.home_boardList6)
         val employee_info = view.findViewById<TextView>(R.id.home_boardList7)
         val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
+        val hot_more = view.findViewById<LinearLayout>(R.id.boardList_more)
 
         val business_nickname = view.findViewById<TextView>(R.id.home_business_nickname)
 
@@ -319,6 +320,15 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
 
 ///////////////////  즐겨찾는 게시판 클릭 이벤트 ////////////////////////////////////////////
+        hot_more.setOnClickListener{
+            val activity = requireActivity()
+            val viewPager = activity.findViewById<ViewPager2>(R.id.linearLayout)
+            val currentPosition = viewPager.currentItem
+            val newPosition = currentPosition + 2
+            viewPager.setCurrentItem(newPosition, false)
+            viewPager.adapter?.notifyDataSetChanged()
+        }
+
         basicBoard.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, Board::class.java)
