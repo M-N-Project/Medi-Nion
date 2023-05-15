@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -46,6 +47,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     private var selectedColor: Int = ColorSheet.NO_COLOR
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
+
+    var lastSelected = ""
 
     private var v: View? = null
 
@@ -74,18 +77,94 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val makeEventButtonRadioBtn = v!!.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
         //스케줄 만들기
-        makeEventBtn.setOnClickListener{
-            if(makeEventRadiogroup.visibility == View.VISIBLE)
-                makeEventRadiogroup.visibility = View.GONE
-            else makeEventRadiogroup.visibility = View.VISIBLE
+        makeEventBtn.setOnClickListener {
+            var makeEventArray = resources.getStringArray(R.array.make_event_type)
+            var makeEventArrayList = ArrayList<String>()
+            for(i in makeEventArray){
+                makeEventArrayList.add(i)
+            }
+            showBottomSheet(makeEventArrayList, "timetable")
+        }
+//        makeEventBtn.setOnClickListener{
+//            if(makeEventRadiogroup.visibility == View.VISIBLE)
+//                makeEventRadiogroup.visibility = View.GONE
+//            else makeEventRadiogroup.visibility = View.VISIBLE
+//
+//            makeEventScheduleRadioBtn.bringToFront()
+//            makeEventButtonRadioBtn.bringToFront()
+//
+//            //새로운 일정 만들기
+//            makeEventScheduleRadioBtn.setOnClickListener{
+//                makeEventRadiogroup.visibility = View.GONE
+//                makeEventScheduleRadioBtn.isChecked = false
+//                val intent = Intent(context, Calendar_Add::class.java)
+//                intent.putExtra("id", id)
+//
+//                val dateNow  = Date()
+//
+//                val calendar = Calendar.getInstance()
+//                calendar.time = dateNow
+//                val weekNum = calendar[Calendar.DAY_OF_WEEK]
+//                var week=""
+//                if(weekNum == 1) week = "Sun"
+//                else if(weekNum == 2) week = "Mon"
+//                else if(weekNum == 3) week ="Tue"
+//                else if(weekNum == 4) week = "Wed"
+//                else if(weekNum == 5) week = "Thu"
+//                else if(weekNum == 6) week = "Fri"
+//                else week = "Sat"
+//
+//                intent.putExtra("day", "${CalendarDay.today()}/$week")
+//                intent.putExtra("flag", "timetable")
+//                startActivity(intent)
+//            }
+//            //히스토리 일정 버튼 만들기
+//            makeEventButtonRadioBtn.setOnClickListener{
+//                makeEventRadiogroup.visibility = View.GONE
+//                makeEventButtonRadioBtn.isChecked = false
+//                val intent = Intent(context, Calendar_History_Add::class.java)
+//                intent.putExtra("id", id)
+//                intent.putExtra("day", CalendarDay.today().toString())
+//
+//                startActivity(intent)
+//            }
+//        }
 
-            makeEventScheduleRadioBtn.bringToFront()
-            makeEventButtonRadioBtn.bringToFront()
+        return v
+    }
 
-            //새로운 일정 만들기
-            makeEventScheduleRadioBtn.setOnClickListener{
-                makeEventRadiogroup.visibility = View.GONE
-                makeEventScheduleRadioBtn.isChecked = false
+    override fun onResume() {
+        super.onResume()
+        fetchEvent(v!!)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        lastSelected = ""
+        getFragmentManager()?.let { refreshFragment(this, it) }
+    }
+
+    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+        var ft: FragmentTransaction = fragmentManager.beginTransaction()
+        ft.detach(fragment)
+    }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+            lastSelected = ""
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(lastSelected == "새로운 일정 만들기"){
                 val intent = Intent(context, Calendar_Add::class.java)
                 intent.putExtra("id", id)
 
@@ -107,36 +186,32 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 intent.putExtra("flag", "timetable")
                 startActivity(intent)
             }
-            //히스토리 일정 버튼 만들기
-            makeEventButtonRadioBtn.setOnClickListener{
-                makeEventRadiogroup.visibility = View.GONE
-                makeEventButtonRadioBtn.isChecked = false
+            else {
                 val intent = Intent(context, Calendar_History_Add::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("day", CalendarDay.today().toString())
 
                 startActivity(intent)
             }
+            bottomSheetDialog.dismiss()
+            lastSelected = ""
         }
 
-        return v
-    }
-
-    override fun onResume() {
-        super.onResume()
-        fetchEvent(v!!)
-    }
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
 
 
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+                }
 
-    override fun onPause() {
-        super.onPause()
-        getFragmentManager()?.let { refreshFragment(this, it) }
-    }
+            }
+        )
 
-    fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
-        var ft: FragmentTransaction = fragmentManager.beginTransaction()
-        ft.detach(fragment)
+        bottomSheetDialog.show()
     }
 
     @SuppressLint("UseRequireInsteadOfGet")

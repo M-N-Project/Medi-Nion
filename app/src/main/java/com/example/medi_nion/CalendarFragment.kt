@@ -50,6 +50,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
     var currentDate : CalendarDay = CalendarDay.today()
+    
+    var lastSelected = ""
 
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
@@ -59,6 +61,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         private const val COLOR_SELECTED = "selectedColor"
     }
 
+    override fun onPause() {
+        super.onPause()
+        lastSelected = ""
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -111,36 +117,13 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
 
         //스케줄 만들기
-        makeEventBtn.setOnClickListener{
-            if(makeEventRadiogroup.visibility == View.VISIBLE)
-                makeEventRadiogroup.visibility = View.GONE
-            else makeEventRadiogroup.visibility = View.VISIBLE
-
-            makeEventScheduleRadioBtn.bringToFront()
-            makeEventButtonRadioBtn.bringToFront()
-
-            //새로운 일정 만들기
-            makeEventScheduleRadioBtn.setOnClickListener{
-                makeEventRadiogroup.visibility = View.GONE
-                makeEventScheduleRadioBtn.isChecked = false
-                val intent = Intent(context, Calendar_Add::class.java)
-                intent.putExtra("id", id)
-
-                val week = currentDate.date.toString().substring(0,3)
-                Log.d("018323", currentDate.toString())
-                intent.putExtra("day", "${currentDate.toString()}/$week")
-                intent.putExtra("flag", "calendar")
-                startActivity(intent)
+        makeEventBtn.setOnClickListener {
+            var makeEventArray = resources.getStringArray(R.array.make_event_type)
+            var makeEventArrayList = ArrayList<String>()
+            for(i in makeEventArray){
+                makeEventArrayList.add(i)
             }
-            //히스토리 일정 버튼 만들기
-            makeEventButtonRadioBtn.setOnClickListener{
-                makeEventRadiogroup.visibility = View.GONE
-                makeEventButtonRadioBtn.isChecked = false
-                val intent = Intent(context, Calendar_History_Add::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("day", CalendarDay.today().toString())
-                startActivity(intent)
-            }
+            showBottomSheet(makeEventArrayList, "calendar")
         }
 
 
@@ -205,6 +188,59 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             view?.addSpan(object: ForegroundColorSpan(Color.RED){})
         }
     }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+            lastSelected = ""
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(lastSelected == "새로운 일정 만들기"){
+                val intent = Intent(context, Calendar_Add::class.java)
+                intent.putExtra("id", id)
+
+                val week = currentDate.date.toString().substring(0,3)
+                Log.d("018323", currentDate.toString())
+                intent.putExtra("day", "${currentDate.toString()}/$week")
+                intent.putExtra("flag", "calendar")
+                startActivity(intent)
+            }
+            else {
+                val intent = Intent(context, Calendar_History_Add::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("day", CalendarDay.today().toString())
+                startActivity(intent)
+            }
+            bottomSheetDialog.dismiss()
+            lastSelected = ""
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
+    }
+
 
     private fun fetchEvents(day : CalendarDay){
         // url to post our data

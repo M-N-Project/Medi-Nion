@@ -85,20 +85,16 @@
 
             </LinearLayout>
 
-            <androidx.core.widget.NestedScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/BusinessBoardHomeItemRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/business_board_detail_item">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/BusinessBoardHomeItemRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/business_board_detail_item">
+            </androidx.recyclerview.widget.RecyclerView>
 
-                </androidx.recyclerview.widget.RecyclerView>
-            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
 
 

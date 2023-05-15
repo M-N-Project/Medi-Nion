@@ -19,9 +19,11 @@ import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -35,7 +37,7 @@ class BoardWrite : AppCompatActivity() {
     lateinit var ImageData : Uri
     var image : String = "null"
     var flagUpdate = "false"
-
+    var lastSelected = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId")
@@ -96,42 +98,13 @@ class BoardWrite : AppCompatActivity() {
         board_select.text = board
 
         board_select.setOnClickListener {
-            if(select_RadioGroup.visibility == View.GONE){
-                select_RadioGroup.visibility = View.VISIBLE
-                select_RadioGroup.bringToFront()
+            var boardTypeArray = resources.getStringArray(R.array.boardType)
+            var boardTypeArrayList = ArrayList<String>()
+            for(i in boardTypeArray){
+                boardTypeArrayList.add(i)
             }
-            else select_RadioGroup.visibility = View.GONE
+            showBottomSheet(boardTypeArrayList, "boardType")
 
-
-            free_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "자유 게시판"
-            }
-
-            job_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "직종별 게시판"
-            }
-
-            department_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "진료과별 게시판"
-            }
-
-            my_hospital_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "우리 병원 게시판"
-            }
-
-            market_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "장터 게시판"
-            }
-
-            QnA_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "QnA 게시판"
-            }
         }
 
         postbtn.setOnClickListener {
@@ -150,6 +123,42 @@ class BoardWrite : AppCompatActivity() {
         }
     }
 
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        var board_select = findViewById<TextView>(R.id.board_select)
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            board_select.text = lastSelected
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createBoardRequest() {

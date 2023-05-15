@@ -100,25 +100,11 @@
 
         </LinearLayout>
 
-        <!--    <HorizontalScrollView-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content" >-->
-        <!--    <androidx.recyclerview.widget.RecyclerView-->
-        <!--        android:id="@+id/BusinessSubRecycler"-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:orientation="horizontal"-->
-        <!--        android:layout_marginLeft="8dp"-->
-        <!--        android:layout_marginRight="10dp"-->
-        <!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-        <!--        tools:listitem="@layout/business_hot_item"-->
-        <!--        />-->
-        <!--    </HorizontalScrollView>-->
 
 
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/BusinessBoardHomeRecyclerView"
@@ -130,7 +116,7 @@
                 tools:listitem="@layout/business_board_home_item">
 
             </androidx.recyclerview.widget.RecyclerView>
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
 
     </LinearLayout>

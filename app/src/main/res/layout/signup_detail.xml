@@ -20,15 +20,25 @@
         android:textColor="#000000"
         android:textSize="16sp" />
 
-    <Spinner
-        android:id="@+id/userDept_spinner"
+<!--    <Spinner-->
+<!--        android:id="@+id/userDept_spinner"-->
+<!--        android:layout_width="326dp"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:layout_marginLeft="40dp"-->
+<!--        android:spinnerMode="dropdown"-->
+<!--        android:ems="5"-->
+<!--        android:entries="@array/userDept_spinner_array"-->
+<!--        />-->
+    <EditText
+        android:id="@+id/userDept_selection"
         android:layout_width="326dp"
         android:layout_height="48dp"
         android:layout_marginLeft="40dp"
-        android:spinnerMode="dropdown"
-        android:ems="5"
-        android:entries="@array/userDept_spinner_array"
-        />
+        android:hint="진료과 선택하기"
+        android:textSize="17sp"
+        android:paddingLeft="8sp"
+        android:editable="false"
+        android:gravity="center_vertical"/>
 
     <TextView
         android:id="@+id/nickname_view"
