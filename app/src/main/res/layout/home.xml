@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:orientation="vertical">
 
             <!-- 최신 qna -->
-            <include layout="@layout/home_qna"/>
+            <include layout="@layout/home_qna" />
 
             <!-- 첫번째 광고 -->
             <include layout="@layout/ad_viewpager2" />
@@ -29,21 +29,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/home_qna_detail"
+                android:background="@drawable/main_border_gray"
                 android:paddingBottom="20dp">
 
-                <TextView
-                    android:id="@+id/home_boardList_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                <LinearLayout
+                    android:id="@+id/titleView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:text="즐겨찾는 게시판"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/home_boardList"
-                    app:layout_constraintTop_toTopOf="@+id/home_boardList" />
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@id/home_boardList"
+                    app:layout_constraintStart_toStartOf="@id/home_boardList"
+                    app:layout_constraintTop_toTopOf="@id/home_boardList">
+
+                    <TextView
+                        android:id="@+id/home_boardList_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="즐겨찾는 게시판"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/home_boardList"
+                        app:layout_constraintTop_toTopOf="@+id/home_boardList" />
+
+                    <View
+                        android:id="@+id/view12"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/boardList_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="더 보기"
+                        android:textSize="10sp" />
+
+                    <ImageView
+                        android:id="@+id/arrow1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:baselineAlignBottom="true"
+                        app:srcCompat="@drawable/arrow_resize" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -52,7 +88,7 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/home_boardList_title">
+                    app:layout_constraintTop_toBottomOf="@+id/titleView1">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -161,7 +197,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/home_qna_detail"
+                android:background="@drawable/main_border_gray"
                 android:paddingLeft="8dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="5dp">
@@ -192,57 +228,79 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
                         android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/hot_basic_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="10"
+                            android:layout_gravity="start"
                             android:text="자유 게시판"
                             android:textSize="10sp" />
 
-                        <TextView
+                        <LinearLayout
                             android:id="@+id/btn_hot_basic_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="더보기"
-                            android:textSize="10sp" />
-
-                    </LinearLayout>
-
-                    <include
-                        android:id="@+id/hot_detail_basic1"
-                        layout="@layout/home_hot_detail"
-                        android:layout_width="350dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5sp"
-                        android:layout_weight="0" />
-
-                    <LinearLayout
-                        android:id="@+id/hot_detail_basic_more"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <include
-                            android:id="@+id/hot_detail_basic2"
-                            layout="@layout/home_hot_detail"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5sp" />
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:orientation="horizontal">
 
-                        <include
-                            android:id="@+id/hot_detail_basic3"
-                            layout="@layout/home_hot_detail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:text="더 보기"
+                                android:textSize="10sp" />
+
+                            <ImageView
+                                android:id="@+id/imageView5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                app:srcCompat="@drawable/arrow_resize" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <!--                    구분선 긋기-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/hot_detail_basic1"
+                            layout="@layout/home_hot_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp"
+                            android:layout_weight="0" />
+
+                        <LinearLayout
+                            android:id="@+id/hot_detail_basic_more"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <include
+                                android:id="@+id/hot_detail_basic2"
+                                layout="@layout/home_hot_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp" />
+
+                            <include
+                                android:id="@+id/hot_detail_basic3"
+                                layout="@layout/home_hot_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View
                         android:id="@+id/view"
                         android:layout_width="match_parent"
@@ -260,48 +318,70 @@
                             android:id="@+id/hot_job_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="10"
+                            android:layout_gravity="start"
                             android:text="직종별 게시판"
                             android:textSize="10sp" />
 
-                        <TextView
+                        <LinearLayout
                             android:id="@+id/btn_hot_job_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="더보기"
-                            android:textSize="10sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:text="더보기"
+                                android:textSize="10sp" />
+
+                            <ImageView
+                                android:id="@+id/imageView7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:layout_marginTop="2dp"
+                                app:srcCompat="@drawable/arrow_resize" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <include
-                        android:id="@+id/hot_detail_job1"
-                        layout="@layout/home_hot_detail"
-                        android:layout_width="350dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5sp"
-                        android:layout_weight="0" />
-
                     <LinearLayout
-                        android:id="@+id/hot_detail_job_more"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
                         <include
-                            android:id="@+id/hot_detail_job2"
+                            android:id="@+id/hot_detail_job1"
                             layout="@layout/home_hot_detail"
-                            android:layout_width="350dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5sp" />
+                            android:layout_marginTop="5sp"
+                            android:layout_weight="0" />
 
-                        <include
-                            android:id="@+id/hot_detail_job3"
-                            layout="@layout/home_hot_detail"
-                            android:layout_width="350dp"
+                        <LinearLayout
+                            android:id="@+id/hot_detail_job_more"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5sp" />
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <include
+                                android:id="@+id/hot_detail_job2"
+                                layout="@layout/home_hot_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp" />
+
+                            <include
+                                android:id="@+id/hot_detail_job3"
+                                layout="@layout/home_hot_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp" />
+                        </LinearLayout>
                     </LinearLayout>
 
                     <!--                    구분선 긋기-->
@@ -322,54 +402,76 @@
                             android:id="@+id/hot_dept_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="10"
                             android:text="진료과별 게시판"
                             android:textSize="10sp" />
 
-                        <TextView
+                        <LinearLayout
                             android:id="@+id/btn_hot_dept_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="더보기"
-                            android:textSize="10sp" />
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_gravity="right"
+                            android:gravity="right">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:text="더보기"
+                                android:textSize="10sp" />
+
+                            <ImageView
+                                android:id="@+id/imageView8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:layout_marginTop="2dp"
+                                app:srcCompat="@drawable/arrow_resize" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
-                    <include
-                        android:id="@+id/hot_detail_dept1"
-                        layout="@layout/home_hot_detail"
-                        android:layout_width="350dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5sp"
-                        android:layout_weight="0" />
-
                     <LinearLayout
-                        android:id="@+id/hot_detail_dept_more"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
                         <include
-                            android:id="@+id/hot_detail_dept2"
+                            android:id="@+id/hot_detail_dept1"
                             layout="@layout/home_hot_detail"
-                            android:layout_width="350dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5sp" />
+                            android:layout_marginTop="5sp"
+                            android:layout_weight="0" />
 
-                        <include
-                            android:id="@+id/hot_detail_dept3"
-                            layout="@layout/home_hot_detail"
-                            android:layout_width="350dp"
+                        <LinearLayout
+                            android:id="@+id/hot_detail_dept_more"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5sp" />
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <include
+                                android:id="@+id/hot_detail_dept2"
+                                layout="@layout/home_hot_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp" />
+
+                            <include
+                                android:id="@+id/hot_detail_dept3"
+                                layout="@layout/home_hot_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5sp" />
+                        </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <include layout="@layout/home_busi_new"/>
+            <include layout="@layout/home_busi_new" />
 
             <!-- 그냥 여백용 -->
             <View
@@ -425,15 +527,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:orientation="horizontal"
                     android:nestedScrollingEnabled="true"
+                    android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/business_hot_item" />
             </com.example.medi_nion.NestedScrollableHost>
 
             <!-- 두번째 광고 -->
-            <include
-                layout="@layout/big_ad_viewpager"/>
+            <include layout="@layout/big_ad_viewpager" />
 
         </LinearLayout>
     </ScrollView>

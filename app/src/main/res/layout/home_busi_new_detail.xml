@@ -3,42 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <View
-        android:id="@+id/home_subsc_box"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/home_qna_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/home_business_chanName"
-        tools:ignore="SpeakableTextPresentCheck" />
+    android:layout_height="match_parent"
+    android:background="@drawable/main_border_gray"
+    android:id="@+id/home_subsc_box"
+    android:paddingTop="8dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="15dp"
+    android:layout_margin="10dp">
 
     <TextView
         android:id="@+id/home_business_box_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
         android:text="구독 채널 새소식"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/home_subsc_box"
-        app:layout_constraintTop_toTopOf="@+id/home_subsc_box" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/home_subsc_box"
+        android:id="@+id/busi_profileImg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_business_box_title"
         app:srcCompat="@drawable/business_profile_img" />
 
@@ -47,27 +39,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="종근당건강"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView6"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/busi_profileImg"
+        app:layout_constraintStart_toStartOf="@+id/busi_profileImg"
+        app:layout_constraintTop_toBottomOf="@+id/busi_profileImg" />
 
     <TextView
         android:id="@+id/home_business_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:text="포스트 제목"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/busi_profileImg"
         app:layout_constraintTop_toBottomOf="@+id/home_business_box_title" />
 
     <TextView
         android:id="@+id/home_business_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
@@ -75,7 +68,7 @@
         android:text="종근당, ‘첨단 기술 기반 신성장 동력 발굴’ 다짐.. 2023년도 시무식 거행…디지털 경영 통해 지속가능한 성장기반 마련 이장한 회장은 신년사를 통해 올해 경영 목표를 ‘첨단 기술 기반의 신성장 동력 발굴’로 제시"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/home_subsc_box"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/busi_profileImg"
         app:layout_constraintTop_toBottomOf="@+id/home_business_title" />
 
 
