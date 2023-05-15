@@ -190,6 +190,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ServiceAgreement"
             android:screenOrientation="portrait"/>
+        <activity android:name=".TermsOfUse"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CustomerService"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Notice"
+            android:screenOrientation="portrait"/>
 
 
         <uses-library

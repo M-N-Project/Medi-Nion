@@ -334,17 +334,17 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         //공지사항
         binding.profileItem5.setOnClickListener {
-
+            startActivity(Intent(context, Notice::class.java))
         }
 
         //고객센터
         binding.profileItem6.setOnClickListener {
-
+            startActivity(Intent(context, CustomerService::class.java))
         }
 
         //이용약관
         binding.profileItem7.setOnClickListener {
-
+            startActivity(Intent(context, TermsOfUse::class.java))
         }
 
         //개인 정보 처리 방침
@@ -901,6 +901,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
 //            Request.Method.POST,
 //            userDeleteUrl,
 //            { response ->
+//                Log.d("456", id.toString())
 //                Log.d("456", id.toString())
 //                if (!response.equals("Delete Fail")) {
 //                    Toast.makeText(
