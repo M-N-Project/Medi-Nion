@@ -17,7 +17,7 @@ class HomeNewRecyclerAdapter(private val newItem: ArrayList<HomeNewRecyclerItem>
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val subsc_box = itemView.findViewById<View>(R.id.home_subsc_box)
-        val imageView = itemView.findViewById<ImageView>(R.id.imageView6)
+        val imageView = itemView.findViewById<ImageView>(R.id.busi_profileImg)
         val nameView = itemView.findViewById<TextView>(R.id.home_business_chanName)
         val titleView = itemView.findViewById<TextView>(R.id.home_business_title)
         val detailView = itemView.findViewById<TextView>(R.id.home_business_detail)

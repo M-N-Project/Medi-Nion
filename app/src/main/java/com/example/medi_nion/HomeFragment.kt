@@ -408,11 +408,11 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         ////////////////////// hot 게시물 클릭 이벤트 ///////////////////////////////
 
         ////// 더보기 클릭했을 때 hot 게시물 보이게 하기 ////////
-        val hotBasicMore = view.findViewById<TextView>(R.id.btn_hot_basic_more)
+        val hotBasicMore = view.findViewById<LinearLayout>(R.id.btn_hot_basic_more)
         val basic_more = view.findViewById<LinearLayout>(R.id.hot_detail_basic_more)
-        val hotJobMore = view.findViewById<TextView>(R.id.btn_hot_job_more)
+        val hotJobMore = view.findViewById<LinearLayout>(R.id.btn_hot_job_more)
         val job_more = view.findViewById<LinearLayout>(R.id.hot_detail_job_more)
-        val hotDeptMore = view.findViewById<TextView>(R.id.btn_hot_dept_more)
+        val hotDeptMore = view.findViewById<LinearLayout>(R.id.btn_hot_dept_more)
         val dept_more = view.findViewById<LinearLayout>(R.id.hot_detail_dept_more)
 
         hotBasicMore.setOnClickListener {
