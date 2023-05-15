@@ -199,7 +199,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 //val id = intent.getStringExtra("id").toString()
                 var id = infomap["id"]
                 intent.putExtra("id", id)
-                Log.d("ditto7", "$id")
                 startActivity(intent)
                 return true
             }

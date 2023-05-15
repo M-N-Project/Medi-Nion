@@ -48,7 +48,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:text="여기는 QnA 게시판 최근 게시물의 상세 내용을 표시하는 공간으로써 이렇게 하면 자연스럽게 글자가 끊어질때까지 슬슬 말줄임표로 표시되어야할듯"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/detail_box"
         app:layout_constraintStart_toStartOf="@+id/home_qna_title"
         app:layout_constraintTop_toBottomOf="@+id/home_qna_title" />

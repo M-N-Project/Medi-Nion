@@ -57,27 +57,30 @@
                         app:layout_constraintStart_toStartOf="@+id/home_boardList"
                         app:layout_constraintTop_toTopOf="@+id/home_boardList" />
 
-                    <View
-                        android:id="@+id/view12"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/boardList_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:text="더 보기"
-                        android:textSize="10sp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="right"
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/arrow1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:baselineAlignBottom="true"
-                        app:srcCompat="@drawable/arrow_resize" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="10dp"
+                            android:text="더 보기"
+                            android:textSize="10sp" />
+
+                        <ImageView
+                            android:id="@+id/arrow1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="1dp"
+                            android:baselineAlignBottom="true"
+                            app:srcCompat="@drawable/arrow_resize" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -237,6 +240,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:text="자유 게시판"
+                            android:textColor="#B6B6B6"
                             android:textSize="10sp" />
 
                         <LinearLayout
@@ -320,6 +324,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:text="직종별 게시판"
+                            android:textColor="#B6B6B6"
                             android:textSize="10sp" />
 
                         <LinearLayout
@@ -403,6 +408,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="진료과별 게시판"
+                            android:textColor="#B6B6B6"
                             android:textSize="10sp" />
 
                         <LinearLayout
@@ -487,6 +493,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -532,6 +539,11 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/business_hot_item" />
             </com.example.medi_nion.NestedScrollableHost>
+
+            <View
+                android:id="@+id/marginView2"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"/>
 
             <!-- 두번째 광고 -->
             <include layout="@layout/big_ad_viewpager" />

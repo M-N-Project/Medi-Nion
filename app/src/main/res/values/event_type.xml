@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="make_event_type">
+        <item>새로운 일정 만들기</item>
+        <item>자주 사용할 일정 만들기</item>
+    </array>
+</resources>

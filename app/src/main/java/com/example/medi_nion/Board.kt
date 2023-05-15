@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -17,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.board_home.toolbar2
 import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,11 +52,47 @@ class Board : AppCompatActivity() {
         R.drawable.ad3
     )
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.titlebar_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle presses on the action bar items
+        var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
+        var userType = intent.getStringExtra("userType")
+        var userDept = intent.getStringExtra("userDept")
+        var userMedal = intent.getStringExtra("userMedal")
 
+        when(item.itemId){
+            R.id.search -> {
+                val intent = Intent(this, SearchActivity::class.java)
+                val id = intent.getStringExtra("id").toString()
+                intent.putExtra("id", id)
+                startActivity(intent)
+                return true
+            }
+            R.id.alarm -> {
+                val intent = Intent(this, NotificationActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
+                intent.putExtra("userMedal", userMedal)
+                startActivity(intent)
+                return true
+            }
+            else -> {return super.onOptionsItemSelected(item)}
+        }
+    }
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
+
+        setSupportActionBar(toolbar2)
+        supportActionBar!!.title = ""
+        supportActionBar!!.subtitle = intent.getStringExtra("board").toString()
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
