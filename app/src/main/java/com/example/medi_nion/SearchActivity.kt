@@ -151,7 +151,7 @@ class SearchActivity : AppCompatActivity() {
 
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
-                    val num = item.getInt("num")
+                    val num = item.getString("num")
                     val title = item.getString("title")
                     val content = item.getString("content")
                     val board_time = item.getString("time")
@@ -167,7 +167,7 @@ class SearchActivity : AppCompatActivity() {
 
                     if(i >= jsonArray.length() - item_count*scroll_count){
                         items.add(boardItem)
-                        itemIndex.add(num) //앞에다가 추가.
+                        itemIndex.add(num.toInt()) //앞에다가 추가.
                     }
                     all_items.add(boardItem)
                 }
