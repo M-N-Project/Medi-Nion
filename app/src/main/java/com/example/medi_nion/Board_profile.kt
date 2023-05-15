@@ -223,7 +223,7 @@ class Board_profile : AppCompatActivity() {
                             if((all_items.size - item_count*scroll_count) > 20){
                                 for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
                                     items.add(all_items[i])
-                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
+                                    itemIndex.add(all_items[i].num.toInt()) //앞에다가 추가.
                                 }
 
                                 var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
@@ -239,7 +239,7 @@ class Board_profile : AppCompatActivity() {
                             else{
                                 for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
                                     items.add(all_items[i])
-                                    itemIndex.add(all_items[i].num) //앞에다가 추가.
+                                    itemIndex.add(all_items[i].num.toInt()) //앞에다가 추가.
 
                                 }
                                 var recyclerViewState = boardRecyclerView_profile.layoutManager?.onSaveInstanceState()
@@ -290,7 +290,7 @@ class Board_profile : AppCompatActivity() {
                 for (i in jsonArray.length()-1  downTo  0) {
                     val item = jsonArray.getJSONObject(i)
 
-                    val num = item.getInt("num")
+                    val num = item.getString("num")
                     val title = item.getString("title")
                     val content = item.getString("content")
                     val board_time = item.getString("time")
@@ -306,7 +306,7 @@ class Board_profile : AppCompatActivity() {
 
                     if (i >= jsonArray.length() - item_count * scroll_count) {
                         items.add(boardItem)
-                        itemIndex.add(num) //앞에다가 추가.
+                        itemIndex.add(num.toInt()) //앞에다가 추가.
                     }
 
                     all_items.add(boardItem)
@@ -448,7 +448,7 @@ class Board_profile : AppCompatActivity() {
                                     for (i in 0 until  jsonArrayLikeBoard.length()) {
                                         val item = jsonArrayLikeBoard.getJSONObject(i)
 
-                                        val num = item.getInt("num")
+                                        val num = item.getString("num")
                                         val title = item.getString("title")
                                         val content = item.getString("content")
                                         val board_time = item.getString("time")
@@ -464,7 +464,7 @@ class Board_profile : AppCompatActivity() {
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
                                         if(i >= jsonArrayLikeBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
-                                            itemIndex.add(num) //앞에다가 추가.
+                                            itemIndex.add(num.toInt()) //앞에다가 추가.
                                         }
                                         newItems[index++] = boardItem
                                         all_items.add(boardItem)
@@ -627,7 +627,7 @@ class Board_profile : AppCompatActivity() {
                                     for (i in 0 until  jsonArrayLikeBoard.length()) {
                                         val item = jsonArrayLikeBoard.getJSONObject(i)
 
-                                        val num = item.getInt("num")
+                                        val num = item.getString("num")
                                         val title = item.getString("title")
                                         val content = item.getString("content")
                                         val board_time = item.getString("time")
@@ -643,7 +643,7 @@ class Board_profile : AppCompatActivity() {
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
                                         if(i >= jsonArrayLikeBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
-                                            itemIndex.add(num) //앞에다가 추가.
+                                            itemIndex.add(num.toInt()) //앞에다가 추가.
                                         }
                                         newItems[index++] = boardItem
                                         all_items.add(boardItem)
@@ -806,7 +806,7 @@ class Board_profile : AppCompatActivity() {
                                     for (i in 0 until  jsonArrayCommentBoard.length()) {
                                         val item = jsonArrayCommentBoard.getJSONObject(i)
 
-                                        val num = item.getInt("num")
+                                        val num = item.getString("num")
                                         val title = item.getString("title")
                                         val content = item.getString("content")
                                         val board_time = item.getString("time")
@@ -822,7 +822,7 @@ class Board_profile : AppCompatActivity() {
                                         val boardItem = BoardItem(num, title, content, simpleTime, image, heart, comment, bookmark)
                                         if(i >= jsonArrayCommentBoard.length() - item_count*scroll_count){
                                             items.add(boardItem)
-                                            itemIndex.add(num) //앞에다가 추가.
+                                            itemIndex.add(num.toInt()) //앞에다가 추가.
                                         }
                                         newItems[index++] = boardItem
                                         all_items.add(boardItem)
