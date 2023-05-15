@@ -116,22 +116,31 @@
         <!--    </HorizontalScrollView>-->
 
 
-        <androidx.core.widget.NestedScrollView
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@drawable/home_qna_detail"
+            >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/BusinessBoardHomeRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/business_board_home_item">
+                tools:listitem="@layout/business_board_home_item"
+                android:background="@drawable/home_qna_detail">
 
             </androidx.recyclerview.widget.RecyclerView>
-        </androidx.core.widget.NestedScrollView>
-
+        </ScrollView>
+        <View
+            android:id="@+id/view6"
+            android:layout_width="420dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="8dp"
+            android:background="#8BE0C4" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
