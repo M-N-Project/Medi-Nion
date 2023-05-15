@@ -135,6 +135,15 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         fetchHotProfile()
     }
 
+    override fun onResume() {
+        id = arguments?.getString("id").toString()
+        super.onResume()
+        fetchNewQna()
+        fetchHotPost()
+        fetchNewBusi()
+        fetchHotProfile()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

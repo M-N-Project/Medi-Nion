@@ -1573,9 +1573,6 @@ class BoardDetail : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
-        val urlNotification = "http://seonho.dothome.co.kr/notification_comment.php"
-        val urlNotification_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
-        val urlNotification_select2 = "http://seonho.dothome.co.kr/notification_comment_select2.php"
 
         val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
         val userKey = "http://seonho.dothome.co.kr/userKey.php"
@@ -1615,6 +1612,7 @@ class BoardDetail : AppCompatActivity() {
                     val queue = Volley.newRequestQueue(this)
                     queue.add(requestCnt)
 
+                    Log.d("Commentcnednfd", board.toString())
                     Toast.makeText(
                         baseContext,
                         String.format("댓글이 등록되었습니다."),
