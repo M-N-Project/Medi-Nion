@@ -119,9 +119,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/main_border_gray"
-            >
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/BusinessBoardHomeRecyclerView"
@@ -130,17 +128,15 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/business_board_home_item"
-                android:background="@drawable/main_border_gray">
+                tools:listitem="@layout/business_board_home_item">
 
             </androidx.recyclerview.widget.RecyclerView>
         </ScrollView>
         <View
             android:id="@+id/view6"
-            android:layout_width="420dp"
-            android:layout_height="10dp"
-            android:layout_marginTop="8dp"
-            android:background="#8BE0C4" />
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
