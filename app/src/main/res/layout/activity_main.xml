@@ -14,7 +14,8 @@
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/titlebar_menu" />
+        app:menu="@menu/titlebar_menu"
+        android:elevation="5dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/linearLayout"
