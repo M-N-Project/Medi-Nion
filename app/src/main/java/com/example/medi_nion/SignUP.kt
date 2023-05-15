@@ -4,6 +4,8 @@ package com.example.medi_nion
 //import com.example.medi_nion.`object`.RetrofitCilent_Request
 //import com.example.medi_nion.dataclass.Data_SignUp_Request
 import android.annotation.SuppressLint
+import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
@@ -28,14 +30,17 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
 import com.googlecode.tesseract.android.TessBaseAPI
 import org.opencv.android.OpenCVLoader
@@ -53,11 +58,17 @@ class SignUP : AppCompatActivity() {
 
     val REQUEST_IMAGE_CAPTURE = 1
     val TAKE_PICTURE = 2
+    var lastSelected = ""
+    var userDept = ""
+
+//    private var selectCheck: HashMap<String, Int> = arrayListOf()
 
     lateinit var cameraPermission: ActivityResultLauncher<String>
     lateinit var storagePermission: ActivityResultLauncher<String>
     lateinit var cameraLauncher: ActivityResultLauncher<Uri>
 
+    private var selectedUserType = ""
+    private var selectedUserDept = ""
     lateinit var idImgView: ImageView
     var photoUri: Uri? = null
     lateinit var bitmap: Bitmap
@@ -93,7 +104,6 @@ class SignUP : AppCompatActivity() {
 
         val camera_permission_btn = findViewById<Button>(R.id.id_verify_btn)
         camera_permission_btn.setOnClickListener {
-            Log.d("0-09123","permission1")
             val cameraPermissionCheck = ContextCompat.checkSelfPermission(
                 this@SignUP,
                 android.Manifest.permission.CAMERA
@@ -105,7 +115,6 @@ class SignUP : AppCompatActivity() {
                     1000
                 )
             } else { //권한이 있는 경우
-                Log.d("0-09123","permission2")
                 openCamera()
             }
         }
@@ -138,58 +147,11 @@ class SignUP : AppCompatActivity() {
         var basicOffBtn = findViewById<RadioButton>(R.id.office_RadioBtn)
         var basicStuBtn = findViewById<RadioButton>(R.id.student_RadioBtn)
 
-
-        //라디오 버튼들 clickListener -> group으로 안하는 이유는 check가 바뀌었을 때 말고도 버튼만 누르면 일반회원의 종류가 나열되게 하기 위하여.
-        basicUserBtn.setOnClickListener {
-            val basicUserGroup =
-                findViewById<RadioGroup>(R.id.basicUser_RadioGroup); // 일반회원의 종류를 담은 RadioGroup, RadioButton
-            basicUserGroup.visibility = View.VISIBLE // 일반회원의 종류를 담은 RadioGroup 활성화
-            informView.text = "" //회원 종류에 따른 안내멘트 초기화
-
-            //키보드 숨기기
-            imm.hideSoftInputFromWindow(basicUserBtn.getWindowToken(), 0);
-
-            basicDocBtn.setOnClickListener {
-                userType = "doctor"
-                informView.text = informAll
-                basicUserBtn.text = "의사"
-
-                basicUserGroup.visibility = View.GONE //일반회원의 종류를 보여주는 RadioGroup 없애기
-            }
-
-            basicNurBtn.setOnClickListener {
-                userType = "nurse"
-                informView.text = informAll
-                basicUserBtn.text = "간호사"
-
-                basicUserGroup.visibility = View.GONE //일반회원의 종류를 보여주는 RadioGroup 없애기
-            }
-
-            basicTechBtn.setOnClickListener {
-                userType = "mediTech"
-                informView.text = informConst
-                basicUserBtn.text = "의료기사"
-
-                basicUserGroup.visibility = View.GONE //일반회원의 종류를 보여주는 RadioGroup 없애기
-            }
-
-            basicOffBtn.setOnClickListener {
-                userType = "office"
-                informView.text = informConst
-                basicUserBtn.text = "사무직"
-
-                basicUserGroup.visibility = View.GONE //일반회원의 종류를 보여주는 RadioGroup 없애기
-            }
-
-            basicStuBtn.setOnClickListener {
-                userType = "student"
-                informView.text = informConst
-                basicUserBtn.text = "학생"
-
-                basicUserGroup.visibility = View.GONE //일반회원의 종류를 보여주는 RadioGroup 없애기
-            }
-
+        basicUserBtn.setOnClickListener{
+            val basicUserArray = arrayListOf("의사", "간호사", "의료기사", "사무직", "학생")
+            showBottomSheet(basicUserArray, "userType")
         }
+
 
         corpUserBtn.setOnClickListener {
             val basicUserGroup =
@@ -207,6 +169,18 @@ class SignUP : AppCompatActivity() {
         signUpDetail.setOnClickListener {
             var basicType = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
             basicType.visibility = View.GONE
+        }
+
+        var userDept_selection = findViewById<TextView>(R.id.userDept_selection)
+        Log.d("89713213", userDept_selection.toString())
+        userDept_selection.setOnClickListener{
+
+            var userDeptArray = getResources().getStringArray(R.array.userDept_spinner_array)
+            var userDeptArrayList = ArrayList<String>()
+            for(i in userDeptArray){
+                userDeptArrayList.add(i)
+            }
+            showBottomSheet(userDeptArrayList, "userDept")
         }
 
         var nickname_editText = findViewById<EditText>(R.id.nickname_editText)
@@ -410,20 +384,6 @@ class SignUP : AppCompatActivity() {
             })
         }, 2000)
 
-//        passwdCheck_editText.setOnClickListener {
-//            Log.d("passwd", "1")
-//            passwdCheck_warning.visibility = View.VISIBLE
-//
-//            val passwdInput = passwd_editText.text.toString()
-//            val passwdCheckInput = passwdCheck_editText.text.toString()
-//            if (passwdCheckInput != passwdInput) {
-//                passwdCheck_warning.setTextColor(Color.RED)
-//                passwdCheck_warning.text = "비밀번호가 동일하지 않습니다."
-//            } else {
-//                passwdCheck_warning.setTextColor(Color.BLUE)
-//                passwdCheck_warning.text = "올바른 비밀번호입니다."
-//            }
-//        }
 
 
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
@@ -455,15 +415,6 @@ class SignUP : AppCompatActivity() {
             } else {
 
                 signUPRequest()
-
-                setContentView(R.layout.signup_done)
-
-                var goSignIn = findViewById<Button>(R.id.goSignInBtn)
-                goSignIn.setOnClickListener {
-                    //로그인 페이지로 이동.
-                    val intent = Intent(applicationContext, Login::class.java)
-                    startActivity(intent)
-                }
             }
         }
 
@@ -504,30 +455,86 @@ class SignUP : AppCompatActivity() {
 
 
                 doOCR()
-//                if (!OpenCVLoader.initDebug()) {
-//                    Log.d(
-//                        "OpenCV",
-//                        "Internal OpenCV library not found. Using OpenCV Manager for initialization"
-//                    )
-//                    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback)
-//                } else {
-//                    Log.d("OpenCV", "OpenCV library found inside package. Using it!")
-//                    mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
-//                }
-
-
-//                idImgView.setImageBitmap(bitmap)
-//                processImage(bitmap) //이미지 가공후 텍스트뷰에 띄우기
-//                processImage(BitmapFactory.decodeResource(resources,R.drawable.sample_kor)) //이미지 가공후 텍스트뷰에 띄우기
-
-
-
 
             }
         }
 
         storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
+    }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        var userTypeGroup = findViewById<RadioGroup>(R.id.userType_RadioGroup)
+        var userType: String = "" //사용자의 유형을 저장할 변수.
+        var informView = findViewById<TextView>(R.id.informView)
+
+        var informAll = "사용자 인증 후 모든 기능을 이용할 수 있습니다."
+        var informConst = "사용자 인증 후에도 특정 접근이 제한될 수 있습니다."
+        var informCorp = "사용자 인증 후 특정 기능을 이용하실 수 있습니다."
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+
+            if(type == "userType"){
+                if (selectedUserType == "의사") {
+                    userType = "doctor"
+                    informView.text = informAll
+                } else if (selectedUserType == "간호사") {
+                    userType = "doctor"
+                    informView.text = informAll
+                } else if (selectedUserType == "의료기사") {
+                    userType = "mediTech"
+                    informView.text = informConst
+                } else if (selectedUserType == "사무직") {
+                    userType = "office"
+                    informView.text = informConst
+                } else if (selectedUserType == "학생") {
+                    userType = "student"
+                    informView.text = informConst
+                }
+            }
+
+            else if(type == "userDept"){
+                Log.d("slslslsle", selectedUserDept)
+                findViewById<EditText>(R.id.userDept_selection).setText(selectedUserDept)
+            }
+
+            bottomSheetDialog.dismiss()
+            if(type == "userType")
+                lastSelected = selectedUserType
+            else if(type == "userDept")
+                lastSelected = selectedUserDept
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    if(type == "userType")
+                        selectedUserType = data
+                    else if(type == "userDept")
+                        selectedUserDept = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -783,7 +790,7 @@ class SignUP : AppCompatActivity() {
 
 
     //db 연동 시작
-    @SuppressLint("HardwareIds")
+    @SuppressLint("HardwareIds", "ResourceType")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun signUPRequest() {
         val basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
@@ -821,9 +828,11 @@ class SignUP : AppCompatActivity() {
         val android_id = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("ANDROID_ID", android_id)
 
-        var spinner = findViewById<Spinner>(R.id.userDept_spinner)
-        var userDept = spinner.selectedItem.toString()
-
+//        var spinner = findViewById<Spinner>(R.id.userDept_spinner)
+//
+//        var userDept = spinner.selectedItem.toString()
+//
+        userDept = selectedUserDept
         if (userDept.equals("내과 (심장내과, 혈액내과, 호흡기내과, 소화기내과 등)")) {
             userDept = "내과"
         } else if (userDept.equals("외과 (혈관외과 등)")) {
@@ -836,21 +845,7 @@ class SignUP : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
         val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
-
-//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-//            if (!task.isSuccessful) {
-//                Log.w("캬캬ㅑ캬", "Fetching FCM registration token failed", task.exception)
-//                return@OnCompleteListener
-//            }
-//
-//            // Get new FCM registration token
-//            token = task.result
-//
-//            // Log and toast
-//            Log.d("캬캬ㅑ캬", token)
-//
-////                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-//        })
+        
         val request = SignUP_Request(
             Request.Method.POST,
             url,
@@ -867,6 +862,15 @@ class SignUP : AppCompatActivity() {
                             String.format("가입을 환영합니다. 로그인 해주세요."),
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        setContentView(R.layout.signup_done)
+
+                        var goSignIn = findViewById<Button>(R.id.goSignInBtn)
+                        goSignIn.setOnClickListener {
+                            //로그인 페이지로 이동.
+                            val intent = Intent(applicationContext, Login::class.java)
+                            startActivity(intent)
+                        }
                     }
                 } else {
                     Toast.makeText(

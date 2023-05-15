@@ -341,8 +341,7 @@ class Calendar_History_Add : AppCompatActivity() {
                     "schedule_color" to "#BADFD2",
                     "schedule_alarm" to alarm,
                     "schedule_repeat" to repeat,
-                    "schedule_memo" to schedule_memo,
-                    "isDone" to "0"
+                    "schedule_memo" to schedule_memo
                 )
             } else {
                 mutableMapOf(
@@ -354,8 +353,7 @@ class Calendar_History_Add : AppCompatActivity() {
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
                     "schedule_repeat" to repeat,
-                    "schedule_memo" to schedule_memo,
-                    "isDone" to "0"
+                    "schedule_memo" to schedule_memo
                 )
             }
         )

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="boardType">
+        <item>자유 게시판</item>
+        <item>직종별 게시판</item>
+        <item>진료과별 게시판</item>
+        <item>장터 게시판</item>
+        <item>QnA 게시판</item>
+    </array>
+</resources>
