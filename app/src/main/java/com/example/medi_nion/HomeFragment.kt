@@ -127,7 +127,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStart() {
         id = arguments?.getString("id").toString()
-        Log.d("idididiidid   Home", id)
         super.onStart()
         fetchNewQna()
         fetchHotPost()
@@ -202,7 +201,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                Log.d("ontintno", "hot notinoti")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     notification()
                 }
@@ -213,7 +211,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
-            Log.d("create", "Channel")
         }
 
         val detector = GestureDetector(context, object : GestureDetector.OnGestureListener {
@@ -225,7 +222,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             }
 
             override fun onSingleTapUp(p0: MotionEvent): Boolean {
-                Log.d("onSingleTapUp", "onSingleTapUp")
                 val address = "https://github.com/M-N-Project/Medi-Nion"
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(address))
                 startActivity(intent)
@@ -612,7 +608,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 //게시판 상세
                 adapter2.setOnItemClickListener(object : PagerRecyclerAdapter.OnItemClickListener {
                     override fun onItemClick(v: View, data: qnaNewItem, pos: Int) {
-                        Log.d("onItemClick", "override fun 실행")
                         val request = Login_Request(
                             Request.Method.POST,
                             urlDetail,
@@ -705,7 +700,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         var nickname = arguments?.getString("nickname").toString()
         val userType = arguments?.getString("userType").toString()
         val userDept = arguments?.getString("userDept").toString()
-        //Log.d("user", "$userType $userDept")
 
         // include 했던 항목들
         val includeBasic = ArrayList<View>()
@@ -732,6 +726,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 val jsonArray = JSONArray(response)
                 for (i in jsonArray.length() - 1 downTo 0) {
                     val item = jsonArray.getJSONObject(i)
+                    Log.d("핫게시물", item.toString())
 
                     val num = item.getInt("num")
                     val title = item.getString("title")
@@ -742,10 +737,14 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     var comment = item.getInt("comment")
                     var bookmark = item.getInt("bookmark")
 
+                    Log.d("핫게시물1111",includeBasic.toString())
                     includeView = includeBasic.removeAt(0)
                     includeView.findViewById<TextView>(R.id.home_hot_num).text =
                         num.toString()
                     includeView.findViewById<TextView>(R.id.business_home_title).text = title
+                    Log.d("핫게시물2222",
+                        includeView.findViewById<TextView>(R.id.business_home_title).text as String
+                    )
                     includeView.findViewById<TextView>(R.id.home_hot_like).text =
                         heart.toString()
                     includeView.findViewById<TextView>(R.id.home_hot_comm).text =
@@ -868,8 +867,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         detailTime = item.getString("time")
                         detailImg = item.getString("image")
 
-                        Log.d("gotoDetail", "$board $post_num")
-
                         val intent = Intent(activity?.applicationContext, BoardDetail::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                         intent.putExtra("board", board)
@@ -919,7 +916,6 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             Request.Method.POST,
             urlBusiNew,
             { response ->
-                Log.d("비즈니스새소식새소식새소식", response)
                 if(response != "No NewBusi"){
                     val jsonArray = JSONArray(response)
                     newBusiItems.clear()

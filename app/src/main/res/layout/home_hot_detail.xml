@@ -1,23 +1,20 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    >
 
 
     <LinearLayout
         android:id="@+id/linearLayout12"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/business_home_title"
             android:layout_width="0dp"
@@ -25,21 +22,24 @@
             android:layout_weight="2"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="좋아요 댓글 가장 많은 게시물 제목"
+            android:text="아직 인기 게시물이 없습니다"
             android:textSize="12sp" />
 
     </LinearLayout>
 
 
+    <View
+        android:id="@+id/view11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_weight="0"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/home_hot_like_Img"
@@ -54,7 +54,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="3dp"
-            android:text="20"
+            android:text="0"
             android:textSize="10sp" />
 
         <TextView
@@ -77,9 +77,9 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="3dp"
-            android:text="20"
+            android:text="0"
             android:textSize="10sp" />
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

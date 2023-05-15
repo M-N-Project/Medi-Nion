@@ -223,7 +223,7 @@
                     <LinearLayout
                         android:id="@+id/hot_detail_basic_more"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -285,7 +285,7 @@
                     <LinearLayout
                         android:id="@+id/hot_detail_job_more"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -346,7 +346,7 @@
                     <LinearLayout
                         android:id="@+id/hot_detail_dept_more"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -381,16 +381,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/home_business" />
 
             <!-- 추천 비즈니스채널 프로필 -->
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="400dp"
-                android:layout_height="2.5dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="20dp"
-                android:background="#8BE0C4" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -440,16 +430,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/business_hot_item" />
             </com.example.medi_nion.NestedScrollableHost>
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="400dp"
-                android:layout_height="2.5dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="20dp"
-                android:background="#8BE0C4" />
 
             <!-- 두번째 광고 -->
             <include
