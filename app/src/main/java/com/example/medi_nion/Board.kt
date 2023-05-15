@@ -91,7 +91,8 @@ class Board : AppCompatActivity() {
         setContentView(R.layout.board_home)
 
         setSupportActionBar(toolbar2)
-        supportActionBar!!.title = intent.getStringExtra("board").toString()
+        supportActionBar!!.title = ""
+        supportActionBar!!.subtitle = intent.getStringExtra("board").toString()
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
