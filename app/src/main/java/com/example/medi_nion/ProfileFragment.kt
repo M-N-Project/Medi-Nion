@@ -349,21 +349,19 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         //개인 정보 처리 방침
         binding.profileItem8.setOnClickListener {
-
+            startActivity(Intent(context, PrivacyPolicy::class.java))
         }
 
         //서비스 이용 동의
         binding.profileItem9.setOnClickListener {
-
+            startActivity(Intent(context, ServiceAgreement::class.java))
         }
 
         //오픈 소스 라이선스
         binding.profileItem10.setOnClickListener {
-
+            val intent = Intent(context, LicenseActivity::class.java)
+            startActivity(intent)
         }
-
-
-
 
         return binding.root
     }
