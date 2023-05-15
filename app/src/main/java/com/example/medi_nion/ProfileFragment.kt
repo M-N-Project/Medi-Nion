@@ -359,7 +359,8 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
         //오픈 소스 라이선스
         binding.profileItem10.setOnClickListener {
-            val intent = Intent(context, LicenseActivity::class.java)
+            OssLicensesMenuActivity.setActivityTitle("오픈소스 라이센스 목록")
+            val intent = Intent(context, OssLicensesMenuActivity::class.java)
             startActivity(intent)
         }
 
