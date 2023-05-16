@@ -132,7 +132,7 @@
                     android:layout_weight="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/postBtn_business"
-                    app:srcCompat="@drawable/image_icon1"
+                    app:srcCompat="@drawable/img_icon"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             </LinearLayout>

@@ -236,8 +236,8 @@
 
                                 <CheckBox
                                     android:id="@+id/imageView_like2"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
+                                    android:layout_width="13dp"
+                                    android:layout_height="13dp"
                                     android:layout_marginTop="4dp"
                                     android:button="@null"
                                     android:background="@drawable/heart_checkbox"
@@ -270,8 +270,8 @@
 
                                 <ImageView
                                     android:id="@+id/imageView_comment2"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
+                                    android:layout_width="13dp"
+                                    android:layout_height="13dp"
                                     android:layout_marginLeft="4dp"
                                     android:layout_marginTop="4dp"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -283,7 +283,7 @@
                                     android:id="@+id/textView_commentcount2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="3dp"
+                                    android:layout_marginTop="1dp"
                                     android:layout_marginStart="10dp"
                                     android:text="0"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -301,8 +301,8 @@
 
                                 <CheckBox
                                     android:id="@+id/checkbox_bookmark2"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
+                                    android:layout_width="13dp"
+                                    android:layout_height="13dp"
                                     android:layout_marginLeft="6dp"
                                     android:layout_marginTop="4dp"
                                     android:button="@null"
@@ -318,7 +318,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="2dp"
                                     android:layout_marginStart="10dp"
-                                    android:layout_marginTop="4dp"
+                                    android:layout_marginTop="1dp"
                                     android:text="0"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintHorizontal_bias="0.003" />
@@ -337,6 +337,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="5dp"
                     app:srcCompat="@drawable/ad1" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -375,15 +376,15 @@
 
             <EditText
                 android:id="@+id/Comment_editText"
-                android:layout_width="200dp"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
                 android:hint="댓글을 입력해주세요."
-                android:layout_weight="0.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="NestedWeights" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -391,9 +392,8 @@
 
                 <Button
                     android:id="@+id/Comment_Btn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:background="#86C9C6"
                     android:backgroundTint="#86C9C6"
                     android:text="등록"
