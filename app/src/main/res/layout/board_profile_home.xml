@@ -14,30 +14,42 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.widget.Button
-            android:id="@+id/profile_basicBtn1"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="6dp"
-            android:background="@drawable/profile_triangle_button"
-            android:rotation="-270"
-            app:layout_constraintEnd_toStartOf="@+id/board_select_profile"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-        <TextView
-            android:id="@+id/board_select_profile"
+        <LinearLayout
+            android:id="@+id/titleBarLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="19dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="게시판 종류 선택"
+            android:layout_marginStart="24dp"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TouchTargetSizeCheck" />
+            app:layout_constraintTop_toTopOf="parent">
+
+
+
+            <android.widget.Button
+                android:id="@+id/profile_basicBtn1"
+                android:layout_width="12dp"
+                android:layout_height="11dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/arrow_resize"
+                android:rotation="-270"
+                app:layout_constraintEnd_toStartOf="@+id/board_select_profile"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/board_select_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_marginLeft="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="게시판 종류 선택"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
 
 
         <ImageView
@@ -47,7 +59,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/board_select_profile"
+            app:layout_constraintTop_toBottomOf="@+id/titleBarLinearLayout"
             app:srcCompat="@drawable/ad1" />
 
         <ScrollView
