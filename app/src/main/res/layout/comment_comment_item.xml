@@ -96,8 +96,8 @@
 
                 <CheckBox
                     android:id="@+id/imageView_comment2_like"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
                     android:button="@null"
                     android:background="@drawable/heart_checkbox"
                     android:layout_marginTop="8dp"
@@ -111,7 +111,7 @@
                     android:id="@+id/comment2_heartCnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="0"
                     android:text="0" />
