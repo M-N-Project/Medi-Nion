@@ -70,7 +70,7 @@ class BoardDetail : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingInflatedId", "CutPasteId", "HardwareIds")
+    @SuppressLint("MissingInflatedId", "CutPasteId", "HardwareIds", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
@@ -135,7 +135,7 @@ class BoardDetail : AppCompatActivity() {
         val content = intent.getStringExtra("content") // 게시물 내용
         val time = intent.getStringExtra("time") // 게시물 등록 시간
         val image = intent.getStringExtra("image") // 게시물 사진
-        val commentCnt = intent.getStringExtra("commentCnt")
+        val commentCnt = intent.getIntExtra("commentCnt", 0)
 
         val title_textView = findViewById<TextView>(R.id.textView_title) // 게시물 상세 - 제목
         val content_textView = findViewById<TextView>(R.id.textView_content) // 게시물 상세 - 내용
@@ -162,7 +162,7 @@ class BoardDetail : AppCompatActivity() {
         title_textView.setText(title) // 제목
         content_textView.setText(content) // 내용
         time_textView.setText(time) //시간
-        comment_count.setText(commentCnt)
+        comment_count.setText(commentCnt.toString())
 
         //이미지 fetch
         if (image != null) {
@@ -250,6 +250,7 @@ class BoardDetail : AppCompatActivity() {
                 comment_comment_flag = false
                 findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
                 findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() + 1).toString()
+                Log.d("CONNENE", findViewById<TextView>(R.id.textView_commentcount2).text.toString())
             }
             else{ //댓글
                 CommentRequest(++comment_num)
@@ -260,6 +261,7 @@ class BoardDetail : AppCompatActivity() {
                 Comment_editText.setText(null) //댓글입력창 clear
                 if( findViewById<TextView>(R.id.textView_commentcount2).text.toString() == "")  findViewById<TextView>(R.id.textView_commentcount2).text = "1"
                 else findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() + 1).toString()
+                Log.d("CONNENE123", findViewById<TextView>(R.id.textView_commentcount2).text.toString())
             }
 
         }
@@ -1571,9 +1573,6 @@ class BoardDetail : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
-        val urlNotification = "http://seonho.dothome.co.kr/notification_comment.php"
-        val urlNotification_select = "http://seonho.dothome.co.kr/notification_comment_select.php"
-        val urlNotification_select2 = "http://seonho.dothome.co.kr/notification_comment_select2.php"
 
         val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
         val userKey = "http://seonho.dothome.co.kr/userKey.php"
@@ -1613,6 +1612,7 @@ class BoardDetail : AppCompatActivity() {
                     val queue = Volley.newRequestQueue(this)
                     queue.add(requestCnt)
 
+                    Log.d("Commentcnednfd", board.toString())
                     Toast.makeText(
                         baseContext,
                         String.format("댓글이 등록되었습니다."),

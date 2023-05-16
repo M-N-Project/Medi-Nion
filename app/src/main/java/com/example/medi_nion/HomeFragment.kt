@@ -37,7 +37,7 @@ import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
 import org.json.JSONArray
 
-class qnaNewItem(val num: Int, val title: String, val content: String) {
+class qnaNewItem(val num: String, val title: String, val content: String, val comment: Int) {
 }
 
 var qnaItems = java.util.ArrayList<qnaNewItem>()
@@ -128,6 +128,15 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     override fun onStart() {
         id = arguments?.getString("id").toString()
         super.onStart()
+        fetchNewQna()
+        fetchHotPost()
+        fetchNewBusi()
+        fetchHotProfile()
+    }
+
+    override fun onResume() {
+        id = arguments?.getString("id").toString()
+        super.onResume()
         fetchNewQna()
         fetchHotPost()
         fetchNewBusi()
@@ -587,7 +596,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                 for (i in jsonArray.length() - 1 downTo 0) {
                     val item = jsonArray.getJSONObject(i)
 
-                    val num = item.getInt("num")
+                    val num = item.getString("num")
                     val title = item.getString("title")
                     val content = item.getString("content")
                     val board_time = item.getString("time")
@@ -596,7 +605,10 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     var comment = item.getInt("comment")
                     var bookmark = item.getInt("bookmark")
 
-                    val newItem = qnaNewItem(num, title, content)
+                    Log.d("Commentsdf", comment.toString())
+                    Log.d("COmmentNUm", num.toString())
+
+                    val newItem = qnaNewItem(num, title, content, comment)
                     qnaItems.add(newItem)
                 }
 
@@ -645,6 +657,8 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                                         intent.putExtra("device_id", device_id)
                                         intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
+                                        intent.putExtra("commentCnt", data.comment)
+                                        Log.d("Comment123sdf", data.comment.toString())
 
                                         intent.putExtra("title", detailTitle)
                                         intent.putExtra("content", detailContent)
@@ -861,6 +875,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         var detailContent: String = ""
         var detailTime: String = ""
         var detailImg: String = ""
+        var commentCnt: String = ""
 
         val request = Login_Request(
             Request.Method.POST,
@@ -877,11 +892,48 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                         detailTime = item.getString("time")
                         detailImg = item.getString("image")
 
+                        Log.d("gotoDetail", "$board $post_num")
+
+                        // include 했던 항목들
+                        val includeBasic = ArrayList<View>()
+                        view?.findViewById<View>(R.id.hot_detail_basic1)?.let { includeBasic.add(it) }
+                        view?.findViewById<View>(R.id.hot_detail_basic2)?.let { includeBasic.add(it) }
+                        view?.findViewById<View>(R.id.hot_detail_basic3)?.let { includeBasic.add(it) }
+
+                        val includeJob = ArrayList<View>()
+                        view?.findViewById<View>(R.id.hot_detail_job1)?.let { includeJob.add(it) }
+                        view?.findViewById<View>(R.id.hot_detail_job2)?.let { includeJob.add(it) }
+                        view?.findViewById<View>(R.id.hot_detail_job3)?.let { includeJob.add(it) }
+
+                        val includeDept = ArrayList<View>()
+                        view?.findViewById<View>(R.id.hot_detail_dept1)?.let { includeDept.add(it) }
+                        view?.findViewById<View>(R.id.hot_detail_dept2)?.let { includeDept.add(it) }
+                        view?.findViewById<View>(R.id.hot_detail_dept3)?.let { includeDept.add(it) }
+
+                        val hot_basic_title = view?.findViewById<TextView>(R.id.hot_basic_title)
+                        val hot_job_title = view?.findViewById<TextView>(R.id.hot_job_title)
+                        val hot_dept_title = view?.findViewById<TextView>(R.id.hot_dept_title)
+
+                        if (board == "자유 게시판") {
+                            var includeView: View
+                            includeView = includeBasic.removeAt(0)
+                            commentCnt = includeView.findViewById<TextView>(R.id.home_hot_comm).text.toString()
+                        } else if (board == "직종별 게시판") {
+                            var includeView: View
+                            includeView = includeJob.removeAt(0)
+                            commentCnt = includeView.findViewById<TextView>(R.id.home_hot_comm).text.toString()
+                        } else {
+                            var includeView: View
+                            includeView = includeDept.removeAt(0)
+                            commentCnt = includeView.findViewById<TextView>(R.id.home_hot_comm).text.toString()
+                        }
+
                         val intent = Intent(activity?.applicationContext, BoardDetail::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) //인텐트 플래그 설정
                         intent.putExtra("board", board)
                         intent.putExtra("num", post_num)
                         intent.putExtra("id", id)
+                        intent.putExtra("commentCnt", commentCnt.toInt())
                         intent.putExtra("nickname", nickname)
                         intent.putExtra("writerId", detailId)
                         intent.putExtra("title", detailTitle)

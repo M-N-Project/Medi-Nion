@@ -352,6 +352,8 @@ class Board_profile : AppCompatActivity() {
                                         intent.putExtra("writerId", detailId)
                                         intent.putExtra("title", detailTitle)
                                         intent.putExtra("content", detailContent)
+                                        intent.putExtra("commentCnt", data.comment)
+                                        Log.d("commentCnt", data.comment.toString())
                                         intent.putExtra("time", detailTime)
                                         intent.putExtra("image", detailImg)
                                         intent.putExtra("userType", userType)
