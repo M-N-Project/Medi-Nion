@@ -77,15 +77,9 @@ class BoardWrite : AppCompatActivity() {
         var imgbtn = findViewById<ImageButton>(R.id.imageButton_gallery)
         var postTitle = findViewById<EditText>(R.id.editText_Title)
         var postContent = findViewById<EditText>(R.id.editText_Content)
-        var postbtn = findViewById<Button>(R.id.post_Btn)
+        var postbtn = findViewById<TextView>(R.id.post_Btn)
+        var cancelbtn = findViewById<TextView>(R.id.cancel_Btn)
         var board_select = findViewById<TextView>(R.id.board_select)
-        var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
-        var free_RadioBtn = findViewById<RadioButton>(R.id.free_RadioBtn)
-        var job_RadioBtn = findViewById<RadioButton>(R.id.job_RadioBtn)
-        var department_RadioBtn = findViewById<RadioButton>(R.id.department_RadioBtn)
-        var my_hospital_RadioBtn = findViewById<RadioButton>(R.id.my_hospital_RadioBtn)
-        var market_RadioBtn = findViewById<RadioButton>(R.id.market_RadioBtn)
-        var QnA_RadioBtn = findViewById<RadioButton>(R.id.QnA_RadioBtn)
 
         val url_Post = "http://seonho.dothome.co.kr/createBoard.php"
 
@@ -119,6 +113,10 @@ class BoardWrite : AppCompatActivity() {
             } else {
                 createBoardRequest()
             }
+
+        }
+
+        cancelbtn.setOnClickListener{
 
         }
     }
@@ -172,8 +170,6 @@ class BoardWrite : AppCompatActivity() {
         var postContent = findViewById<EditText>(R.id.editText_Content).text.toString()
         var board_select = findViewById<TextView>(R.id.board_select).text.toString()
 //        var image = findViewById<ImageButton>(R.id.imageButton_gallery).toString()
-
-        var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup)
 
         val currentTime = Calendar.getInstance().time
         val format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
