@@ -301,6 +301,7 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("board", board)
                                         intent.putExtra("num", data.num)
                                         intent.putExtra("id", id)
+                                        intent.putExtra("commentCnt", data.comment)
                                         intent.putExtra("device_id", device_id)
                                         intent.putExtra("nickname", nickname)
                                         intent.putExtra("writerId", detailId)
@@ -311,7 +312,7 @@ class Board : AppCompatActivity() {
                                         intent.putExtra("userType", userType)
                                         intent.putExtra("userDept", userDept)
                                         intent.putExtra("userMedal", userMedal)
-                                        intent.putExtra("commentCnt", detailCommentCnt)
+//                                        intent.putExtra("commentCnt", detailCommentCnt)
                                         startActivity(intent)
                                     }
 
