@@ -76,9 +76,6 @@ class SignUP : AppCompatActivity() {
 
     lateinit var tess: TessBaseAPI //Tesseract API 객체 생성
     var dataPath: String = "" //데이터 경로 변수 선언
-    private var mCurrentPhotoPath: String? = null
-    var photoFile: File? = null
-    val tempImage: String = "" //이미지  OpenCVLoader.initDebug()이름.
 
     init{
         OpenCVLoader.initDebug()
@@ -89,7 +86,6 @@ class SignUP : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sign_up)
-        //test
 
         OpenCVLoader.initDebug()
 
@@ -118,11 +114,6 @@ class SignUP : AppCompatActivity() {
                 openCamera()
             }
         }
-
-
-        //프래그먼트일때는
-        //InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        //inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         var userTypeGroup = findViewById<RadioGroup>(R.id.userType_RadioGroup)
         var userType: String = "" //사용자의 유형을 저장할 변수.
@@ -158,7 +149,6 @@ class SignUP : AppCompatActivity() {
                 findViewById<RadioGroup>(R.id.basicUser_RadioGroup) // 일반회원의 종류를 담은 RadioGroup, RadioButton
             basicUserGroup.visibility = View.GONE
 
-            //키보드 숨기기
             imm.hideSoftInputFromWindow(corpUserBtn.getWindowToken(), 0)
 
             userType = "corp"
@@ -233,10 +223,6 @@ class SignUP : AppCompatActivity() {
                                 nickname_warning.setTextColor(Color.BLUE)
                                 nickname_warning.text = "사용가능한 닉네임입니다."
 
-                                Log.d(
-                                    "nickname_validate",
-                                    nickname_editText
-                                )
                             } else {
                                 nickname_warning.setTextColor(Color.RED)
                                 nickname_warning.text = "이미 사용중인 닉네임입니다."
@@ -288,10 +274,6 @@ class SignUP : AppCompatActivity() {
                                 id_warning.setTextColor(Color.BLUE)
                                 id_warning.text = "사용가능한 아이디입니다."
 
-                                Log.d(
-                                    "id_validate",
-                                    "$id_editText"
-                                )
                             } else {
                                 id_warning.setTextColor(Color.RED)
                                 id_warning.text = "이미 사용중인 아이디입니다."
@@ -384,8 +366,6 @@ class SignUP : AppCompatActivity() {
             })
         }, 2000)
 
-
-
         var signUpButton = findViewById<Button>(R.id.signUpBtn)
         signUpButton.setOnClickListener {
             val validate = true
@@ -418,20 +398,15 @@ class SignUP : AppCompatActivity() {
             }
         }
 
-        //val tempImage : File = null
-
         storagePermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
                 setViews()
             } else {
-//                Toast.makeText(baseContext, "권한을 승인해야 앱을 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
-//                finish()
             }
         }
 
         cameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                Log.d("0-09123", "oepn Cmaera")
                 openCamera()
             } else {
                 Toast.makeText(baseContext, "권한을 승인해야 카메라를 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
@@ -453,14 +428,11 @@ class SignUP : AppCompatActivity() {
                 idImgView.colorFilter = filter
                 idImgView.setImageURI(photoUri)
 
-
                 doOCR()
 
             }
         }
-
         storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
     }
 
     private fun showBottomSheet(items : ArrayList<String> , type : String){
@@ -562,19 +534,16 @@ class SignUP : AppCompatActivity() {
         Utils.bitmapToMat(bitmap, mat)
 
         //흑백 영상으로 전환
-        Log.d("ggdf", "흑백")
         val graySrc = Mat()
         Imgproc.cvtColor(mat, graySrc, Imgproc.COLOR_RGB2GRAY)
 
         //2.이진화
-        Log.d("tess-two", "이진화")
         val binarySrc = Mat()
         Imgproc.threshold(graySrc, binarySrc, 0.0, 255.0, Imgproc.THRESH_OTSU)
         Log.d("binary", binarySrc.toString())
 
         //3. 윤곽선 검출
         // 윤곽선 찾기
-        Log.d("tess-two", "윤곽선")
         val contours = ArrayList<MatOfPoint>()
         val hierarchy = Mat()
         Imgproc.findContours(
@@ -620,20 +589,15 @@ class SignUP : AppCompatActivity() {
         if (approxCandidate.rows() != 4) {
             Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
             openCamera()
-            Log.d("newjeans", "omomgot")
-            //throw java.lang.IllegalArgumentException("It's not rectangle")
         }
         // 컨벡스(볼록한 도형)인지 판별
         if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
             Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
             openCamera()
-            Log.d("newjeans1", "omomgot1")
-            //throw java.lang.IllegalArgumentException("It's not convex")
         }
 
         //4. 투시변환
         // 좌상단부터 시계 반대 방향으로 정점을 정렬한다.
-        Log.d("tess-two", "투시")
         val points = arrayListOf(
             org.opencv.core.Point(approxCandidate.get(0, 0)[0],
                 approxCandidate.get(0, 0)[1]
@@ -682,15 +646,10 @@ class SignUP : AppCompatActivity() {
         // 투시변환 매트릭스 구하기
         val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
 
-        //사진 자르기?
-
-
         // 투시변환 된 결과 영상 얻기
         val dst = Mat()
         Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
 
-
-        Log.d("tess-two", "ocr")
         Toast.makeText(applicationContext, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
         printOCRResult(dst)
     }
@@ -713,27 +672,6 @@ class SignUP : AppCompatActivity() {
         val maxHeight = max(heightA, heightB)
         return Size(maxWidth, maxHeight)
     }
-
-
-//    fun printOCRResult(src: Mat){
-//        with(TessBaseAPI()){
-//            val result = findViewById<TextView>(R.id.text_result)
-//            dataPath = "$filesDir/tesseracts/"
-//            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-//            checkFile(File(dataPath + "tessdata/"), "eng")
-//            init(dataPath, "kor+eng")
-//
-//            val dst = Mat()
-//            Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB)
-//            Log.d("scr", src.toString())
-//            val bitmap = Bitmap.createBitmap(dst.cols(), dst.rows(), Bitmap.Config.ARGB_8888)
-//            Utils.matToBitmap(dst, bitmap)
-//            Log.d("dst", dst.toString())
-//            setImage(bitmap)
-//            result.text = utF8Text
-//            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
-//        }
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun printOCRResult(src: Mat) {
@@ -776,15 +714,11 @@ class SignUP : AppCompatActivity() {
                 Log.e("printOCRResult", "Trained data files are missing")
             }
 
-            // Recognize text and set text result to the TextView
-            //setImage(src)
-            //recognize(null)
             setImage(bitmap)
             bitmap = resize(bitmap)!!
             image = BitMapToString(bitmap)
             result.text = utF8Text
 
-            Log.e("NameCardProcessor","utF8Text :\n$utF8Text")
         }
     }
 
@@ -813,7 +747,6 @@ class SignUP : AppCompatActivity() {
         var identity_image2 = ""
 
         var token = ""
-
 
         identity_opencv = identity_before.replace("\n", "")
         identity_opencv = identity_opencv.replace(" ", "")
@@ -845,7 +778,7 @@ class SignUP : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
         val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
-        
+
         val request = SignUP_Request(
             Request.Method.POST,
             url,
@@ -854,9 +787,6 @@ class SignUP : AppCompatActivity() {
                 //비밀번호와 비밀번호 확인이 같으면 회원가입 성공
                 if (passwd == passwdCheck_editText) {
                     if (!response.equals("SignUP fail")) {
-
-                        Log.d("SignUP", "SUCCESS")
-
                         Toast.makeText(
                             baseContext,
                             String.format("가입을 환영합니다. 로그인 해주세요."),
@@ -923,8 +853,6 @@ class SignUP : AppCompatActivity() {
         queue.add(request)
 
     }
-    //db 연동 끝
-
     private fun copyFile(lang: String) {
         try {
             //언어데이타파일의 위치
@@ -936,7 +864,6 @@ class SignUP : AppCompatActivity() {
             //byte 스트림을 읽기 쓰기용으로 열기
             val inputStream: InputStream = assetManager.open("tessdata/$lang.traineddata")
             val outStream: OutputStream = FileOutputStream(filePath)
-
 
             //위에 적어둔 파일 경로쪽으로 해당 바이트코드 파일을 복사한다.
             val buffer = ByteArray(1024)
@@ -975,8 +902,8 @@ class SignUP : AppCompatActivity() {
         }
 
         if (dir.exists()) {
-            val datafilePath: String = "$dataPath/tessdata/$lang.traineddata"
-            val dataFile: File = File(datafilePath)
+            val datafilePath = "$dataPath/tessdata/$lang.traineddata"
+            val dataFile = File(datafilePath)
             if (!dataFile.exists()) {
                 copyFile(lang)
             }
@@ -984,28 +911,11 @@ class SignUP : AppCompatActivity() {
 
     }
 
-    /***
-     *  이미지에서 텍스트 추출해서 결과뷰에 보여주는 기능
-     *  @param bitmap: 이미지 비트맵
-     */
-    private fun processImage(bitmap: Bitmap) {
-        Toast.makeText(applicationContext, "잠시 기다려 주세요", Toast.LENGTH_LONG).show()
-        var ocrResult: String? = null;
-//        tess.setImage(photoFile)
-        tess.setImage(bitmap.copy(Bitmap.Config.ARGB_8888, true))
-        ocrResult = tess.utF8Text
-        val result = findViewById<TextView>(R.id.text_result)
-        result.text = ocrResult
-    }
-
-
     private fun setViews() {
         val verifyingBtn = findViewById<Button>(R.id.id_verify_btn)
         verifyingBtn.setOnClickListener {
-
             cameraPermission.launch(android.Manifest.permission.CAMERA)
         }
-
     }
 
     private fun openCamera() {
@@ -1019,20 +929,6 @@ class SignUP : AppCompatActivity() {
         )
         cameraLauncher.launch(photoUri)
     }
-
-    private fun convertToGrayscale(bitmap: Bitmap): Bitmap {
-        val grayBitmap = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(grayBitmap)
-        val paint = Paint()
-        val colorMatrix = ColorMatrix().apply {
-            setSaturation(0f)
-        }
-        val filter = ColorMatrixColorFilter(colorMatrix)
-        paint.colorFilter = filter
-        canvas.drawBitmap(bitmap, 0f, 0f, paint)
-        return grayBitmap
-    }
-
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         val focusView: View? = currentFocus
@@ -1057,12 +953,8 @@ class SignUP : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
         val arr = baos.toByteArray()
         val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
-//        findViewById<TextView>(R.id.imageSrc).text = arr.toString()
-//        val image: ByteArray? = Base64.encode(arr,0)
-//        val image: String = getEncoder(arr)
-        var temp = ""
         try {
-            //temp = URLEncoder.encode(image, "utf-8")
+
         } catch (e: Exception) {
             Log.e("exception", e.toString())
         }
@@ -1071,13 +963,8 @@ class SignUP : AppCompatActivity() {
 
     private fun resize(bitmap: Bitmap): Bitmap? {
         var bitmap: Bitmap? = bitmap
-        val config: Configuration = Resources.getSystem().configuration
-        var bitmap_width : Int? = bitmap?.width
-        var bitmap_height : Int? = bitmap?.height
 
         bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
-        Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap
     }
-
 }
