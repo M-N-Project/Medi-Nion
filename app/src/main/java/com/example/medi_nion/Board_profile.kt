@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.board_home.refresh_layout
 import kotlinx.android.synthetic.main.board_profile_home.*
 import org.json.JSONArray
@@ -32,6 +33,9 @@ private var scrollFlag = false
 private var itemIndex = ArrayList<Int>()
 
 class Board_profile : AppCompatActivity() {
+
+    var lastSelected = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
         super.onStart() //프레그먼트로 생길 문제들은 추후에 생각하기,,
@@ -57,13 +61,6 @@ class Board_profile : AppCompatActivity() {
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
         var board_select = findViewById<TextView>(R.id.board_select_profile) //게시판 종류 선택
-        var select_RadioGroup = findViewById<RadioGroup>(R.id.select_RadioGroup_profile) // 게시판 종류 라디오 그룹
-        var free_RadioBtn = findViewById<RadioButton>(R.id.free_RadioBtn_profile)
-        var job_RadioBtn = findViewById<RadioButton>(R.id.job_RadioBtn_profile)
-        var department_RadioBtn = findViewById<RadioButton>(R.id.department_RadioBtn_profile)
-        var my_hospital_RadioBtn = findViewById<RadioButton>(R.id.my_hospital_RadioBtn_profile)
-        var market_RadioBtn = findViewById<RadioButton>(R.id.market_RadioBtn_profile)
-        var QnA_RadioBtn = findViewById<RadioButton>(R.id.QnA_RadioBtn_profile)
 
 
         var profileType = intent.getStringExtra("profileMenuType")
@@ -78,102 +75,18 @@ class Board_profile : AppCompatActivity() {
 //            fetchComment(board_select.text.toString())
 
         board_select.text = "자유 게시판"
+        lastSelected = "자유 게시판"
         var boardInit = intent.getStringExtra("board")
         if(boardInit != null) board_select.text = boardInit
 
-        if(board_select.text == "자유 게시판") free_RadioBtn.isChecked = true
-        if(board_select.text == "직종별 게시판") job_RadioBtn.isChecked = true
-        if(board_select.text == "진료과별 게시판") department_RadioBtn.isChecked = true
-        if(board_select.text == "우리 병원 게시판") my_hospital_RadioBtn.isChecked = true
-        if(board_select.text == "장터 게시판") market_RadioBtn.isChecked = true
-        if(board_select.text == "QnA 게시판") QnA_RadioBtn.isChecked = true
-
         board_select.setOnClickListener {
-            if(select_RadioGroup.visibility == View.GONE){
-                select_RadioGroup.visibility = View.VISIBLE
-                select_RadioGroup.bringToFront()
+            var boardTypeArray = resources.getStringArray(R.array.boardType)
+            var boardTypeArrayList = ArrayList<String>()
+            for(i in boardTypeArray){
+                boardTypeArrayList.add(i)
             }
-            else{
-                select_RadioGroup.visibility = View.GONE
-            }
+            showBottomSheet(boardTypeArrayList, "boardType")
 
-            free_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "자유 게시판"
-                if(profileType=="post")
-                    fetchPost(board_select.text.toString())
-                else if(profileType=="scrap")
-                    fetchScrap(board_select.text.toString())
-                else if(profileType=="like")
-                    fetchLike(board_select.text.toString())
-                else if(profileType=="comment")
-                    fetchComment(board_select.text.toString())
-            }
-
-            job_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "직종별 게시판"
-                if(profileType=="post")
-                    fetchPost(board_select.text.toString())
-                else if(profileType=="scrap")
-                    fetchScrap(board_select.text.toString())
-                else if(profileType=="like")
-                    fetchLike(board_select.text.toString())
-                else if(profileType=="comment")
-                    fetchComment(board_select.text.toString())
-            }
-
-            department_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "진료과별 게시판"
-                if(profileType=="post")
-                    fetchPost(board_select.text.toString())
-                else if(profileType=="scrap")
-                    fetchScrap(board_select.text.toString())
-                else if(profileType=="like")
-                    fetchLike(board_select.text.toString())
-                else if(profileType=="comment")
-                    fetchComment(board_select.text.toString())
-            }
-
-            my_hospital_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "우리 병원 게시판"
-                if(profileType=="post")
-                    fetchPost(board_select.text.toString())
-                else if(profileType=="scrap")
-                    fetchScrap(board_select.text.toString())
-                else if(profileType=="like")
-                    fetchLike(board_select.text.toString())
-                else if(profileType=="comment")
-                    fetchComment(board_select.text.toString())
-            }
-
-            market_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "장터 게시판"
-                if(profileType=="post")
-                    fetchPost(board_select.text.toString())
-                else if(profileType=="scrap")
-                    fetchScrap(board_select.text.toString())
-                else if(profileType=="like")
-                    fetchLike(board_select.text.toString())
-                else if(profileType=="comment")
-                    fetchComment(board_select.text.toString())
-            }
-
-            QnA_RadioBtn.setOnClickListener {
-                select_RadioGroup.visibility = View.GONE
-                board_select.text = "QnA 게시판"
-                if(profileType=="post")
-                    fetchPost(board_select.text.toString())
-                else if(profileType=="scrap")
-                    fetchScrap(board_select.text.toString())
-                else if(profileType=="like")
-                    fetchLike(board_select.text.toString())
-                else if(profileType=="comment")
-                    fetchComment(board_select.text.toString())
-            }
         }
 
 
@@ -259,7 +172,6 @@ class Board_profile : AppCompatActivity() {
         })
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun fetchPost(boardSelect : String) {
         // url to post our data
@@ -272,6 +184,9 @@ class Board_profile : AppCompatActivity() {
         userDept = intent.getStringExtra("userDept").toString()
         val urlBoard = "http://seonho.dothome.co.kr/BoardProfilePost.php"
         val urlDetail = "http://seonho.dothome.co.kr/postInfoDetail.php"
+
+        items.clear()
+        all_items.clear()
 
         val request = Board_Request(
             Request.Method.POST,
@@ -921,6 +836,56 @@ class Board_profile : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(requestCommentNum)
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showBottomSheet(items : ArrayList<String>, type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        var profileType = intent.getStringExtra("profileMenuType")
+        var board_select = findViewById<TextView>(R.id.board_select_profile)
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            items.clear()
+            all_items.clear()
+            board_select.text = lastSelected
+            if(profileType=="post")
+                fetchPost(board_select.text.toString())
+            else if(profileType=="scrap")
+                fetchScrap(board_select.text.toString())
+            else if(profileType=="like")
+                fetchLike(board_select.text.toString())
+            else if(profileType=="comment")
+                fetchComment(board_select.text.toString())
+
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 
 

@@ -553,17 +553,17 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         val urlIsSub = "http://seonho.dothome.co.kr/ChannelSubList.php"
         val urlProfile = "http://seonho.dothome.co.kr/Business_profileSub_list.php"
 
+        items.clear()
+        all_items.clear()
+        subListItems.clear()
+        detail_items.clear()
+
         val request1 = Board_Request(
             Request.Method.POST,
             urlProfile,
             { response ->
-                Log.d("9073123",response)
                 if (response != "business sub list no Item") {
                     val jsonArray = JSONArray(response)
-                    items.clear()
-                    all_items.clear()
-                    subListItems.clear()
-                    detail_items.clear()
 
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
@@ -572,17 +572,17 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         val channel_name = item.getString("Channel_name")
                         val profileImg = item.getString("Channel_profile_img")
 
-                        items.add(channel_name)
-                        info_items[channel_name] = id
-                        detail_items[channel_name]?.clear()
-
                         val request2 = Board_Request(
                             Request.Method.POST,
                             urlBoard,
                             { response ->
-                                Log.d("07123", response)
                                 if(response != "business sub list fail") {
                                     if (response != "business board no Item") {
+
+                                        items.add(channel_name)
+                                        info_items[channel_name] = id
+                                        detail_items[channel_name]?.clear()
+
                                         val jsonArray = JSONArray(response)
 
 
