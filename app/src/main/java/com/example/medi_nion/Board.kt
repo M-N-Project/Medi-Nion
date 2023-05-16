@@ -90,9 +90,20 @@ class Board : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_home)
 
+        var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
+        var board = intent.getStringExtra("board").toString()
+        val userMedal = intent.getIntExtra("userMedal", 0).toString()
+
         setSupportActionBar(toolbar2)
         supportActionBar!!.title = ""
-        supportActionBar!!.subtitle = intent.getStringExtra("board").toString()
+        if(board=="직종별 게시판") {
+            supportActionBar!!.subtitle = "$board > $userType"
+        } else if (board == "진료과별 게시판"){
+            supportActionBar!!.subtitle = "$board > $userDept"
+        } else supportActionBar!!.subtitle = board
 
         refresh_layout.setColorSchemeResources(R.color.color5) //새로고침 색상 변경
 
@@ -114,15 +125,10 @@ class Board : AppCompatActivity() {
 
         boardRecyclerView.setLayoutManager(boardRecyclerView.layoutManager);
 
-        var id = intent.getStringExtra("id")
-        var nickname = intent.getStringExtra("nickname")
-        var userType = intent.getStringExtra("userType").toString()
-        var userDept = intent.getStringExtra("userDept").toString()
-        val userMedal = intent.getIntExtra("userMedal", 0).toString()
         //글쓰기
         val writingFAB = findViewById<FloatingActionButton>(R.id.wrtingFAB)
         writingFAB.setOnClickListener {
-            var board = intent.getStringExtra("board").toString()
+            board = intent.getStringExtra("board").toString()
             val intent = Intent(applicationContext, BoardWrite::class.java)
             intent.putExtra("id", id)
             intent.putExtra("nickname", nickname)
