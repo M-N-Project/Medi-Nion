@@ -16,6 +16,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -35,6 +37,9 @@ import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.android.synthetic.main.board_detail.*
+import kotlinx.android.synthetic.main.board_detail.refresh_layout
+import kotlinx.android.synthetic.main.board_home.*
+import kotlinx.android.synthetic.main.board_home.toolbar2
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -69,11 +74,58 @@ class BoardDetail : AppCompatActivity() {
         const val CHANNEL_NAME = "comment alarm"
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.titlebar_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle presses on the action bar items
+        var id = intent.getStringExtra("id")
+        var nickname = intent.getStringExtra("nickname")
+        var userType = intent.getStringExtra("userType")
+        var userDept = intent.getStringExtra("userDept")
+        var userMedal = intent.getStringExtra("userMedal")
+
+        when(item.itemId){
+            R.id.search -> {
+                val intent = Intent(this, SearchActivity::class.java)
+                val id = intent.getStringExtra("id").toString()
+                intent.putExtra("id", id)
+                startActivity(intent)
+                return true
+            }
+            R.id.alarm -> {
+                val intent = Intent(this, NotificationActivity::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("nickname", nickname)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
+                intent.putExtra("userMedal", userMedal)
+                startActivity(intent)
+                return true
+            }
+            else -> {return super.onOptionsItemSelected(item)}
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "CutPasteId", "HardwareIds", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) { //프레그먼트로 생길 문제들은 추후에 생각하기,,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.board_detail)
+
+        var board = intent.getStringExtra("board").toString()
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
+
+        setSupportActionBar(toolbar2)
+        supportActionBar!!.title = ""
+        if(board=="직종별 게시판") {
+            supportActionBar!!.subtitle = "$board > $userType"
+        } else if (board == "진료과별 게시판"){
+            supportActionBar!!.subtitle = "$board > $userDept"
+        } else supportActionBar!!.subtitle = board
+
         //댓글 알림 권한
         val notificationPermissionCheck = ContextCompat.checkSelfPermission(
             this@BoardDetail,

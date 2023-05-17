@@ -20,15 +20,6 @@
         android:textColor="#000000"
         android:textSize="16sp" />
 
-<!--    <Spinner-->
-<!--        android:id="@+id/userDept_spinner"-->
-<!--        android:layout_width="326dp"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_marginLeft="40dp"-->
-<!--        android:spinnerMode="dropdown"-->
-<!--        android:ems="5"-->
-<!--        android:entries="@array/userDept_spinner_array"-->
-<!--        />-->
     <EditText
         android:id="@+id/userDept_selection"
         android:layout_width="326dp"
@@ -176,7 +167,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="10dp"
-        android:text="주민등록번호 확인"
+        android:text="자격증 번호 / 학번"
         android:textColor="#000000"
         android:textSize="16sp" />
 
@@ -186,7 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:ems="5"
-        android:hint="예시) 123456-1234567"
+        android:hint="자격증 번호 혹은 학번을 입력해주세요."
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="#676767" />
@@ -197,8 +188,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#8BCEE0"
-        android:text="신분증으로 본인인증하기"
+        android:backgroundTint="#8BE0C4"
+        android:text="자격증 또는 학생증으로 본인인증하기"
         android:textColor="#000000" />
 
     <ImageView
