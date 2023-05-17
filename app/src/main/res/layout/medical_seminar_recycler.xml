@@ -26,7 +26,9 @@
                 android:id="@+id/ms_kimes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/main_border_gray"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -42,6 +44,8 @@
                         android:id="@+id/ms_kimes_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:text="KIMES"
                         android:textSize="16sp" />
 
@@ -95,8 +99,11 @@
                             android:id="@+id/asan_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="10"
-                            android:text="서울아산" />
+                            android:layout_weight="5"
+                            android:text="서울아산"
+                            android:textColor="@color/black"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -131,6 +138,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:textColor="@color/black"
                         android:text="서울 삼성" />
 
                 </LinearLayout>
@@ -164,6 +174,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
                         android:text="대한의료정보학회" />
 
                 </LinearLayout>
@@ -197,6 +210,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:textColor="@color/black"
                         android:text="한국보건산업진흥원" />
 
                 </LinearLayout>

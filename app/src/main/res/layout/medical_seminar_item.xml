@@ -8,7 +8,8 @@
         android:id="@+id/ms_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="임상 현장 응급 초음파 교육_성인" />
+        android:text="임상 현장 응급 초음파 교육_성인"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/ms_time"
