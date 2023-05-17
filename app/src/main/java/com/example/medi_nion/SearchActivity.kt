@@ -1,11 +1,13 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.annotation.RequiresApi
@@ -44,6 +46,10 @@ class SearchActivity : AppCompatActivity() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // Do nothing when submit button is clicked
+
+                // 키보드를 자동으로 올립니다.
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
                 var filter_items = java.util.ArrayList<BoardItem>()

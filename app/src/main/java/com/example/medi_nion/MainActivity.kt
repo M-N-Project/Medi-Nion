@@ -12,7 +12,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -20,15 +22,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayout
-import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.comment_comment_detail.*
 import kotlinx.android.synthetic.main.notification_item.*
@@ -111,6 +110,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         setSupportActionBar(toolbar2)
+//        supportActionBar?.hide()
         supportActionBar!!.title = ""
         supportActionBar!!.setIcon(R.drawable.logo_resize)
 
@@ -200,8 +200,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 var id = infomap["id"]
                 intent.putExtra("id", id)
                 startActivity(intent)
+
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+
                 return true
             }
+
             R.id.alarm -> {
                 val intent = Intent(this, NotificationActivity::class.java)
                 intent.putExtra("id", id)
