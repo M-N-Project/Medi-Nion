@@ -40,7 +40,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
-    var adapter = BusinessDetailRecyclerAdapter(items)
+    var adapter = BusinessProfileRecyclerAdapter(items)
     var scrollFlag = false
     var itemIndex = ArrayList<Int>()
 
@@ -50,7 +50,7 @@ class BusinessProfileActivity : AppCompatActivity() {
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return super.onCreateView(name, context, attrs)
 
-        adapter = BusinessDetailRecyclerAdapter(items)
+        adapter = BusinessProfileRecyclerAdapter(items)
         BusinessBoardRecyclerView.adapter = adapter
     }
 
@@ -102,9 +102,7 @@ class BusinessProfileActivity : AppCompatActivity() {
         val chanName = findViewById<TextView>(R.id.profileName)
         val chanDesc = findViewById<TextView>(R.id.profileDesc)
         val chanIsSub = findViewById<CheckBox>(R.id.channelPlusBtn)
-        val businessPageTitle = findViewById<TextView>(R.id.businessChanTitle)
-        val businessPostDcrp = findViewById<TextView>(R.id.businessMyPost)
-        val chanSubNum = findViewById<TextView>(R.id.profileSubscribe)
+        val chanSubNum = findViewById<TextView>(R.id.subscribe_count)
 
         val request = Board_Request(
             Request.Method.POST,
@@ -128,8 +126,6 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                         chanName.text = channel_name
                         chanDesc.text = channel_desc
-                        businessPageTitle.text = "${channel_name}님의 비즈니스 채널"
-                        businessPostDcrp.text = "${channel_name}님의비즈니스 게시물"
 
                         chanSubNum.text = chanSub_num + " 명 구독 중"
 
@@ -266,7 +262,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
                                     var new_items = ArrayList<BusinessBoardItem>()
                                     new_items.addAll(items)
-                                    adapter = BusinessDetailRecyclerAdapter(new_items)
+                                    adapter = BusinessProfileRecyclerAdapter(new_items)
                                     BusinessBoardRecyclerView.adapter = adapter
                                     adapter.stateRestorationPolicy =
                                         RecyclerView.Adapter.StateRestorationPolicy.PREVENT
@@ -276,7 +272,7 @@ class BusinessProfileActivity : AppCompatActivity() {
 
                                     // 좋아요 앤 북마크 request
                                     adapter.setOnItemClickListener(object :
-                                        BusinessDetailRecyclerAdapter.OnItemClickListener {
+                                        BusinessProfileRecyclerAdapter.OnItemClickListener {
                                         override fun onProfileClick(
                                             v: View,
                                             data: BusinessBoardItem,
@@ -421,8 +417,8 @@ class BusinessProfileActivity : AppCompatActivity() {
         var appUser = intent.getStringExtra("appUser")!!
         var isFirst = intent.getBooleanExtra("isFirst", true)
 
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editIntro = findViewById<EditText>(R.id.profileDesc)
+        val editName = findViewById<TextView>(R.id.profileName)
+        val editIntro = findViewById<TextView>(R.id.profileDesc)
 
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)

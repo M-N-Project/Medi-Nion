@@ -25,14 +25,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/busi_profileImg"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="15dp"
+    <LinearLayout
+        android:id="@+id/layout_img_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/business_profile2"
+        app:layout_constraintEnd_toStartOf="@+id/home_business_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_business_box_title"
-        app:srcCompat="@drawable/business_profile_img" />
+        app:layout_constraintTop_toBottomOf="@+id/home_business_box_title">
+
+        <ImageView
+            android:id="@+id/busi_profileImg"
+            android:layout_width="60dp"
+            android:layout_height="62dp"
+            android:layout_gravity="center"
+            android:background="@drawable/business_profile2"
+            android:padding="12dp"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/home_business_chanName"
@@ -41,34 +56,32 @@
         android:text="종근당건강"
         android:layout_marginTop="8dp"
         android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="@+id/busi_profileImg"
-        app:layout_constraintStart_toStartOf="@+id/busi_profileImg"
-        app:layout_constraintTop_toBottomOf="@+id/busi_profileImg" />
+        app:layout_constraintEnd_toEndOf="@+id/layout_img_border"
+        app:layout_constraintStart_toStartOf="@+id/layout_img_border"
+        app:layout_constraintTop_toBottomOf="@+id/layout_img_border" />
 
     <TextView
         android:id="@+id/home_business_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="10dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="10dp"
         android:text="포스트 제목"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/busi_profileImg"
+        app:layout_constraintStart_toEndOf="@+id/home_business_box_title"
         app:layout_constraintTop_toBottomOf="@+id/home_business_box_title" />
 
     <TextView
         android:id="@+id/home_business_detail"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
-        android:maxLines="4"
+        android:maxLines="3"
         android:text="종근당, ‘첨단 기술 기반 신성장 동력 발굴’ 다짐.. 2023년도 시무식 거행…디지털 경영 통해 지속가능한 성장기반 마련 이장한 회장은 신년사를 통해 올해 경영 목표를 ‘첨단 기술 기반의 신성장 동력 발굴’로 제시"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/home_subsc_box"
-        app:layout_constraintStart_toEndOf="@+id/busi_profileImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/home_business_title"
         app:layout_constraintTop_toBottomOf="@+id/home_business_title" />
 
 

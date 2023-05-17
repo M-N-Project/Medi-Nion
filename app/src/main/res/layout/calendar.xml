@@ -46,27 +46,25 @@
             tools:listitem="@layout/calendar_item" />
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/makeEvent"
-        android:layout_width="50dp"
-        android:layout_height="81dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="35dp"
-        android:backgroundTint="#8BE0C4"
-        android:clickable="true"
-        app:maxImageSize="25dp"
-        android:elevation="8dp"
-        android:src="@drawable/plus"
-        app:borderWidth="0dp"
-        app:fabCustomSize="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@null"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/makeEvent"
+            android:layout_width="50dp"
+            android:layout_height="81dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="35dp"
+            android:backgroundTint="#84C7C4"
+            android:clickable="true"
+            android:elevation="8dp"
+            android:src="@drawable/create_button_resize"
+            app:borderWidth="0dp"
+            app:fabCustomSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="25dp"
+            app:tint="@null"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
     <RadioGroup
         android:id="@+id/select_RadioGroup_MakeEvent"

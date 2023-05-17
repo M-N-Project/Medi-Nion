@@ -142,7 +142,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="24dp"
                 android:button="@null"
-                android:drawableStart="@drawable/subscribe_checkbox"
+                android:drawableStart="@drawable/subscirbe_icon"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/profileImg"
                 app:layout_constraintStart_toEndOf="@+id/profileImg"

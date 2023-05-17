@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -32,6 +33,7 @@
                 android:id="@+id/subTitle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginBottom="10dp"
                 android:text="근무 지역" />
 
@@ -41,14 +43,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/loca_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/employee_filtering_btn"
-                android:padding="8dp"
-                android:layout_marginRight="5dp"
-                android:text="삭제" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/cancel"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"/>
         </LinearLayout>
 
         <RadioGroup
@@ -329,6 +330,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:layout_marginStart="5dp"
                 android:text="진료과" />
 
             <View
@@ -337,14 +339,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/dept_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/employee_filtering_btn"
-                android:padding="8dp"
-                android:layout_marginRight="5dp"
-                android:text="삭제" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/cancel"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"/>
         </LinearLayout>
 
         <RadioGroup
@@ -731,6 +732,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:layout_marginStart="5dp"
                 android:text="병원 종류" />
 
             <View
@@ -739,14 +741,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/hos_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/employee_filtering_btn"
-                android:padding="8dp"
-                android:layout_marginRight="5dp"
-                android:text="삭제" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:srcCompat="@drawable/cancel"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"/>
         </LinearLayout>
 
         <RadioGroup
@@ -902,7 +903,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="30dp"
         android:text="검 색"
         android:textColor="#FFFFFF"
         android:textSize="17sp" />

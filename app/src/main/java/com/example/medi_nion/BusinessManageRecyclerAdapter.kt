@@ -58,25 +58,10 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
             setViewMore(view.content, view.viewMore)
 
-            view.titleName.text = item.channel_name
+            view.titleName.text = item.title
             view.deadline.text = item.time
             view.content.text = item.content
 
-
-            view.profileImg2.setImageResource(R.drawable.logo)
-
-            if (item.profileImg.length >= 5) {
-                if (item.profileImg.substring(
-                        (item.profileImg).length - 4,
-                        (item.profileImg).length
-                    ) == ".jpg"
-                ) {
-                    val imgUrl =
-                        "http://seonho.dothome.co.kr/images/businessProfile/${item.profileImg}"
-                    val task = ImageLoadTask(imgUrl, view.profileImg2)
-                    task.execute()
-                }
-            }
 
 //            roundAll(view.profileImg2, 100.0f)
 

@@ -1,14 +1,18 @@
 package com.example.medi_nion
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.medi_nion.databinding.ActivityMainBinding
 import com.example.medi_nion.databinding.HospitalProfileBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.synthetic.main.board_home.*
 
 class HospitalProfile : AppCompatActivity() {
 
@@ -18,6 +22,7 @@ class HospitalProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = HospitalProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         initViewPager()
     }

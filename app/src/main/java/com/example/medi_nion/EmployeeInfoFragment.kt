@@ -2,25 +2,23 @@ package com.example.medi_nion
 
 import android.content.Intent
 import android.net.Uri
-import kotlinx.coroutines.*
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.employee_info.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import org.bytedeco.javacpp.opencv_core.finish
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
-import java.util.ArrayList
 
 class EmployeeInfoFragment : Fragment() {
     private lateinit var locaSelected : String
@@ -54,12 +52,35 @@ class EmployeeInfoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.employee_info, container, false)
+        setHasOptionsMenu(true)
         return view
     }
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar2)
+        toolbar.inflateMenu(R.menu.employee_titlebar)
+        toolbar.setNavigationIcon(R.drawable.arrow_resize)
+        if(locaSelected=="null" && deptSelected == "null" && hosSelected == "null") toolbar.subtitle = "채용 정보"
+            else toolbar.subtitle="$locaSelected $deptSelected $hosSelected"
+        toolbar.setNavigationOnClickListener{
+            activity?.onBackPressed()
+        }
+        toolbar.setOnMenuItemClickListener{
+            when(it.itemId){
+                R.id.filter -> {
+                    activity?.let {
+                        val intent = Intent(context, EmployeeFiltering::class.java)
+                        startActivity(intent)
+                    }
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
 
         val locaCode:String = if(locaSelected?.equals("서울") == true) "&loc_cd=101000"
         else if(locaSelected?.equals("경기") == true) "&loc_cd=102000"
@@ -170,19 +191,6 @@ class EmployeeInfoFragment : Fragment() {
                 }
             }
         }
-
-
-//        val accessKey = "jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway" // 발급받은 accessKey"
-//        val text = URLEncoder.encode("", "UTF-8")
-
-        val filtering = view.findViewById<Button>(R.id.filteringBtn)
-        filtering.setOnClickListener{
-            activity?.let {
-                val intent = Intent(context, EmployeeFiltering::class.java)
-                startActivity(intent)
-            }
-        }
-
     }
 
 

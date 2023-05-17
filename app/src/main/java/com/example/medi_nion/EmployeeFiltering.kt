@@ -2,10 +2,7 @@ package com.example.medi_nion
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 class EmployeeFiltering : AppCompatActivity() {
@@ -23,9 +20,9 @@ class EmployeeFiltering : AppCompatActivity() {
     private lateinit var hos_radioGroup1:RadioGroup
     private lateinit var hos_radioGroup2:RadioGroup
 
-    private lateinit var loca_clear:TextView
-    private lateinit var dept_clear:TextView
-    private lateinit var hos_clear:TextView
+    private lateinit var loca_clear:ImageView
+    private lateinit var dept_clear:ImageView
+    private lateinit var hos_clear:ImageView
 
     private var location = -1
     private var dept = -1
@@ -49,9 +46,9 @@ class EmployeeFiltering : AppCompatActivity() {
         hos_radioGroup1 = findViewById<RadioGroup>(R.id.hos_radioGroup)
         hos_radioGroup2 = findViewById<RadioGroup>(R.id.hos_radioGroup2)
 
-        loca_clear = findViewById<TextView>(R.id.loca_clear)
-        dept_clear = findViewById<TextView>(R.id.dept_clear)
-        hos_clear = findViewById<TextView>(R.id.hos_clear)
+        loca_clear = findViewById<ImageView>(R.id.loca_clear)
+        dept_clear = findViewById<ImageView>(R.id.dept_clear)
+        hos_clear = findViewById<ImageView>(R.id.hos_clear)
 
         ///////////////// 근무지역 라디오그룹 제어 /////////////////////////
         loca_radioGroup1.clearCheck()

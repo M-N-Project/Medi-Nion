@@ -18,8 +18,8 @@ import kotlinx.android.synthetic.main.business_board_item.view.*
 import kotlinx.android.synthetic.main.business_board_item.view.titleName
 import kotlinx.android.synthetic.main.business_board_item.view.viewMore
 
-class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
-    RecyclerView.Adapter<BusinessDetailRecyclerAdapter.ViewHolder>() {
+class BusinessProfileRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
+    RecyclerView.Adapter<BusinessProfileRecyclerAdapter.ViewHolder>() {
 
     var BusinessImgAdapterMap = HashMap<Int,BusinessPostImgRecyclerAdapter>()
 
@@ -31,13 +31,13 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
     private var listener : OnItemClickListener? = null
 
 
-    fun setOnItemClickListener(listener: BusinessDetailRecyclerAdapter.OnItemClickListener) {
+    fun setOnItemClickListener(listener: BusinessProfileRecyclerAdapter.OnItemClickListener) {
         this.listener = listener
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: BusinessDetailRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BusinessProfileRecyclerAdapter.ViewHolder, position: Int) {
         val safePosition = holder.absoluteAdapterPosition
         holder.bind(items[position])
     }
@@ -45,7 +45,7 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             ViewHolder {
         val inflatedView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.business_board_home_detail_item, parent, false)
+            .inflate(R.layout.business_board_item, parent, false)
         return ViewHolder(inflatedView)
     }
 
@@ -63,6 +63,8 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
              //뒤는 item class 변수명을 입력하면 된다,,,
             setViewMore(view.content, view.viewMore)
 
+            view.titleName.text = item.title
+            view.deadline.text = item.time
             view.content.text = item.content
             bookmark.isChecked = item.isBookm
             heart.isChecked = item.isHeart
