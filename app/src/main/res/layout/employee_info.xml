@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-
-    <Button
-        android:id="@+id/filteringBtn"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/employee_item_border"
-        android:backgroundTint="#00FFFFFF"
-        android:text="검색 조건 추가"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/employee_recycler"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginBottom="5dp"
+        app:menu="@menu/employee_titlebar"
+        android:elevation="5dp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/employee_recycler"
@@ -28,4 +26,4 @@
         app:layout_constraintTop_toBottomOf="@+id/filteringBtn"
         tools:listitem="@layout/employee_item" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
