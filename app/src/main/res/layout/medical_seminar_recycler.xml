@@ -44,10 +44,10 @@
                         android:id="@+id/ms_kimes_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
+                        android:text="·  KIMES"
                         android:textColor="@color/black"
-                        android:text="KIMES"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/ms_kimes_subtitle"
@@ -100,7 +100,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
-                            android:text="서울아산"
+                            android:text="·  서울아산"
                             android:textColor="@color/black"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -138,10 +138,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
-                        android:textStyle="bold"
-                        android:textSize="17sp"
+                        android:text="·  서울 삼성"
                         android:textColor="@color/black"
-                        android:text="서울 삼성" />
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -174,10 +174,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
+                        android:text="·  대한의료정보학회"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         android:textSize="17sp"
-                        android:text="대한의료정보학회" />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -210,10 +210,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
-                        android:textStyle="bold"
-                        android:textSize="17sp"
+                        android:text="·  한국보건산업진흥원"
                         android:textColor="@color/black"
-                        android:text="한국보건산업진흥원" />
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
