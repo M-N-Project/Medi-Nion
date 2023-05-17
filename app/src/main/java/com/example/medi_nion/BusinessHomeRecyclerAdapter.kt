@@ -14,7 +14,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_home_item.view.*
-import kotlinx.android.synthetic.main.business_board_item.view.profileImg2
 import kotlinx.android.synthetic.main.business_board_item.view.titleName
 
 class BusinessHomeRecyclerAdapter(private val appUser : String, private val items: ArrayList<String>, private val itemInfo : HashMap<String, String>,  private val detailItems : HashMap<String, ArrayList<BusinessBoardItem>>) :
@@ -48,9 +47,9 @@ class BusinessHomeRecyclerAdapter(private val appUser : String, private val item
 
         private var view: View = v
         private var titleName = view.findViewById<TextView>(R.id.titleName)
-        private var profileImgView = view.findViewById<ImageView>(R.id.profileImg2)
         private var businessHomeItemRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardHomeItemRecyclerView)
         private var businessDetailRecyclerView = businessHomeItemRecyclerView.findViewById<RecyclerView>(R.id.BusinessBoardDetailRecyclerView)
+        private var profileImgView = view.findViewById<ImageView>(R.id.profileImg2)
 //        private var bookmark = v.findViewById<CheckBox>(R.id.checkBox)
 //        private var heart = v.findViewById<CheckBox>(R.id.checkBox2)
 
@@ -61,7 +60,6 @@ class BusinessHomeRecyclerAdapter(private val appUser : String, private val item
             view.titleName.text = item
 
             val id = itemInfo[item]
-            profileImgView.setImageResource(R.drawable.logo)
 
             if(detailItems[item] == null){
                 view.visibility = View.GONE
@@ -80,25 +78,6 @@ class BusinessHomeRecyclerAdapter(private val appUser : String, private val item
                 var BusinessHomeItemAdapter = BusinessHomeItemRecyclerAdapter(detailItemArray, appUser)
                 view.BusinessBoardHomeItemRecyclerView.adapter = BusinessHomeItemAdapter
 
-//                var tempArray = ArrayList<BusinessBoardItem>()
-//
-//                BusinessHomeItemAdapter.setOnItemClickListener(
-//                    object : BusinessHomeItemRecyclerAdapter.OnItemClickListener{
-//                        override fun onItemClick(v: View, data: BusinessBoardItem, pos: Int, flag : Boolean) {
-//                            if(flag == true){
-//                                tempArray.add(data)
-//                                var BusinessDetailAdapter = BusinessDetailRecyclerAdapter(tempArray)
-//                                businessDetailRecyclerView.adapter = BusinessDetailAdapter
-//                            }
-//                            else{
-//                                tempArray.clear()
-//                                var BusinessDetailAdapter = BusinessDetailRecyclerAdapter(tempArray)
-//                                businessDetailRecyclerView.adapter = BusinessDetailAdapter
-//                            }
-//                        }
-//
-//                    }
-//                )
             }
 
 

@@ -31,6 +31,7 @@ import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.VolleyMultipartRequest2.DataPart
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.business_home.BusinessBoardHomeRecyclerView
 import kotlinx.android.synthetic.main.business_manage_create.*
@@ -88,14 +89,14 @@ class BusinessManageActivity : AppCompatActivity() {
 
         findViewById<RadioGroup>(R.id.businessSetting_RadioGroup).bringToFront()
 
-        val write = findViewById<Button>(R.id.write_btn)
+        val write = findViewById<FloatingActionButton>(R.id.write_btn)
         val profileImg = findViewById<ImageView>(R.id.profileImg)
 //        val saveBtn = findViewById<Button>(R.id.save_btn)
-        val subscribe_count = findViewById<EditText>(R.id.subscribe_count)
+        val subscribe_count = findViewById<TextView>(R.id.subscribe_count)
 
         val editProfile = findViewById<ImageView>(R.id.profileImg)
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editDesc = findViewById<EditText>(R.id.profileDesc)
+        val editName = findViewById<TextView>(R.id.profileName)
+        val editDesc = findViewById<TextView>(R.id.profileDesc)
 
         val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -106,8 +107,8 @@ class BusinessManageActivity : AppCompatActivity() {
         //채널명이 없으면 글쓰기 못하게끔
 
         write.setOnClickListener {
-            val editName = findViewById<EditText>(R.id.profileName)
-            val editIntro = findViewById<EditText>(R.id.profileDesc)
+            val editName = findViewById<TextView>(R.id.profileName)
+            val editIntro = findViewById<TextView>(R.id.profileDesc)
             if(editName.text.toString() == "" || editIntro.text.toString() == ""){
                 Toast.makeText(this, "비즈니스 채널 설정 완료 후에 게시글 업로드가 가능합니다.", Toast.LENGTH_SHORT).show()
             }
@@ -125,7 +126,7 @@ class BusinessManageActivity : AppCompatActivity() {
         editName.isEnabled = false
         editDesc.isEnabled = false
 
-        val settingBtn = findViewById<Button>(R.id.businessSettingBtn)
+        val settingBtn = findViewById<TextView>(R.id.manageButton)
         settingBtn.setOnClickListener{
             val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
 
@@ -154,7 +155,6 @@ class BusinessManageActivity : AppCompatActivity() {
                 editName.requestFocus();
                 val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT)
-                editName.setSelection(editName.length()); //커서를 끝에 위치!
 
                 editName_RadioBtn.isSelected = false
                 editName_RadioBtn.isChecked = false
@@ -181,7 +181,7 @@ class BusinessManageActivity : AppCompatActivity() {
                 editDesc.requestFocus();
                 val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(editDesc, InputMethodManager.SHOW_IMPLICIT)
-                editDesc.setSelection(editDesc.length()); //커서를 끝에 위치!
+//                editDesc.setSelection(editDesc.length()); //커서를 끝에 위치!
 
                 editDesc_RadioBtn.isSelected = false
                 editDesc_RadioBtn.isChecked = false
@@ -211,8 +211,8 @@ class BusinessManageActivity : AppCompatActivity() {
         var id = intent.getStringExtra("id")!!
         var isFirst = intent.getBooleanExtra("isFirst", true)
 
-        val channel_name = findViewById<EditText>(R.id.profileName).text.toString()
-        val channel_desc = findViewById<EditText>(R.id.profileDesc).text.toString()
+        val channel_name = findViewById<TextView>(R.id.profileName).text.toString()
+        val channel_desc = findViewById<TextView>(R.id.profileDesc).text.toString()
 
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)
@@ -282,10 +282,10 @@ class BusinessManageActivity : AppCompatActivity() {
         val url2 = "http://seonho.dothome.co.kr/BusinessProfile2.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editDesc = findViewById<EditText>(R.id.profileDesc)
+        val editName = findViewById<TextView>(R.id.profileName)
+        val editDesc = findViewById<TextView>(R.id.profileDesc)
         val editProfile = findViewById<ImageView>(R.id.profileImg)
-        val subscribe_text = findViewById<EditText>(R.id.subscribe_count)
+        val subscribe_text = findViewById<TextView>(R.id.subscribe_count)
 
         Toast.makeText(this, "로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
 
@@ -367,10 +367,10 @@ class BusinessManageActivity : AppCompatActivity() {
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
 
-        val editName = findViewById<EditText>(R.id.profileName)
-        val editDesc = findViewById<EditText>(R.id.profileDesc)
+        val editName = findViewById<TextView>(R.id.profileName)
+        val editDesc = findViewById<TextView>(R.id.profileDesc)
         val editProfile = findViewById<ImageView>(R.id.profileImg)
-        val subscribe_text = findViewById<EditText>(R.id.subscribe_count)
+        val subscribe_text = findViewById<TextView>(R.id.subscribe_count)
 
         Toast.makeText(this, "로딩중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
 
@@ -589,8 +589,8 @@ class BusinessManageActivity : AppCompatActivity() {
         var id = intent.getStringExtra("id")!!
         var isFirst = intent.getBooleanExtra("isFirst", true)
 
-        val channel_name = findViewById<EditText>(R.id.profileName).text.toString()
-        val channel_desc = findViewById<EditText>(R.id.profileDesc).text.toString()
+        val channel_name = findViewById<TextView>(R.id.profileName).text.toString()
+        val channel_desc = findViewById<TextView>(R.id.profileDesc).text.toString()
 
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)

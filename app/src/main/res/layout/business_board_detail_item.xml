@@ -8,6 +8,7 @@
     android:padding="8dp">
 
     <LinearLayout
+        android:id="@+id/linearLayout12"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
@@ -15,7 +16,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linearLayout12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -32,7 +32,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
+                android:fontFamily="@font/gothic_regular"
                 android:text="최신 게시물 제목"
+                android:textColor="#616161"
                 android:textSize="12sp" />
 
             <TextView
@@ -48,7 +50,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
+                android:fontFamily="@font/gothic_regular"
                 android:text="최신 게시물 시간"
+                android:textColor="#A5A5A5"
                 android:textSize="12sp" />
 
         </LinearLayout>

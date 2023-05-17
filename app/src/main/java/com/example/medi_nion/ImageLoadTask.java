@@ -80,6 +80,8 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
                 }
             }
 
+            imageView.setPadding(10,10,10,10);
+            imageView.setClipToOutline(true);
             imageView.setImageBitmap(bitmap);
             imageView.invalidate();
         }
