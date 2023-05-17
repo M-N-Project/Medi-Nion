@@ -403,10 +403,9 @@
 
                         <Button
                             android:id="@+id/Comment_Btn"
-                            android:layout_width="wrap_content"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="#86C9C6"
+                            android:background="@drawable/rounded_button"
                             android:backgroundTint="#86C9C6"
                             android:text="등록"
                             android:textColor="@color/white"
