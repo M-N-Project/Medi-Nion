@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="10dp"
-        android:height="5dp"
+        android:width="135dp"
+        android:height="20dp"
         android:drawable="@drawable/titlebar_icon" />
-</selector>
+</layer-list>

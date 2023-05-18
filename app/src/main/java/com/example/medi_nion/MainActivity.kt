@@ -110,6 +110,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             NotificationRequest()
         }
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         setSupportActionBar(toolbar2)
 //        supportActionBar?.hide()
         supportActionBar!!.title = ""
