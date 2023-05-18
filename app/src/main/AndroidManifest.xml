@@ -169,6 +169,9 @@
         <activity
             android:name=".Business_bookmark__profile"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".BusinessManageEdit"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Profile_opencv"
             android:screenOrientation="portrait"/>
 
