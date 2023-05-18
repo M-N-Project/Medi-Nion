@@ -11,17 +11,17 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
-import android.text.style.LineBackgroundSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -32,15 +32,13 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.islandparadise14.mintable.utils.getWindowWidth
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import org.json.JSONArray
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 import java.util.*
 
 
@@ -50,7 +48,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
     var currentDate : CalendarDay = CalendarDay.today()
-    
+
+    private lateinit var darkOverlay: View
+    var isFABOpen : Boolean = false
+
     var lastSelected = ""
 
     private var oldTitle : String = ""
@@ -72,7 +73,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.calendar, container, false)
+        var view =  inflater.inflate(R.layout.calendar, container, false)
 
         fetchEvents(currentDate)
 
@@ -96,11 +97,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         //CalendarDay.today()를 가지고와서 오늘 날짜에 맞는 일정 가져와서 adapter 붙여주고 시작하기.
 
         val calendar = view.findViewById<MaterialCalendarView>(R.id.calendarView)
-        val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
-        val makeEventRadiogroup = view.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
-        makeEventRadiogroup.visibility = View.GONE
-        val makeEventScheduleRadioBtn= view.findViewById<RadioButton>(R.id.schedule_RadioBtn)
-        val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
         val id = arguments?.getString("id").toString()
         val colorList: Array<String> = resources.getStringArray(R.array.colors)
@@ -115,17 +111,48 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         calendar.setOnDateChangedListener(MyDaySelected())
         DateFormatTitleFormatter()
 
+        val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
+        val newEventFAB= view.findViewById<FloatingActionButton>(R.id.newEvent)
+        val newEventTextView = view.findViewById<TextView>(R.id.newEvent_textView)
+        val fixEventFAB = view.findViewById<FloatingActionButton>(R.id.fixEvent)
+        val fixEventTextView = view.findViewById<TextView>(R.id.fixEvent_textView)
+
 
         //스케줄 만들기
         makeEventBtn.setOnClickListener {
-            var makeEventArray = resources.getStringArray(R.array.make_event_type)
-            var makeEventArrayList = ArrayList<String>()
-            for(i in makeEventArray){
-                makeEventArrayList.add(i)
-            }
-            showBottomSheet(makeEventArrayList, "calendar")
-        }
+            if (!isFABOpen) {
+                makeEventBtn.setImageResource(R.drawable.event_cancel_button_resize)
+                newEventTextView.visibility = View.VISIBLE
+                fixEventTextView.visibility = View.VISIBLE
 
+                showFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+
+                newEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_Add::class.java)
+                    intent.putExtra("id", id)
+
+                    val week = currentDate.date.toString().substring(0,3)
+                    Log.d("018323", currentDate.toString())
+                    intent.putExtra("day", "${currentDate.toString()}/$week")
+                    intent.putExtra("flag", "calendar")
+                    startActivity(intent)
+                }
+
+                fixEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_History_Add::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("day", CalendarDay.today().toString())
+                    startActivity(intent)
+                }
+            } else {
+                makeEventBtn.setImageResource(R.drawable.create_button_resize)
+                newEventTextView.visibility = View.GONE
+                fixEventTextView.visibility = View.GONE
+//                darkOverlay.visibility = View.GONE
+
+                closeFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+            }
+        }
 
         return view
     }
@@ -774,7 +801,23 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         val color_picker = view?.findViewById<Button>(R.id.schedule_color_view)
         color_picker?.backgroundTintList = ColorStateList.valueOf(color)
 
-        Log.d("COLOE", color.toString())
+    }
+
+    private fun showFABMenu(newEventFAB : FloatingActionButton, newEventTV :TextView , fixEventFAB : FloatingActionButton, fixEventTV :TextView ) {
+        isFABOpen = true
+        newEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        newEventTV.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        fixEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+        fixEventTV.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+
+    }
+
+    private fun closeFABMenu(newEventFAB : FloatingActionButton, newEventTV :TextView , fixEventFAB : FloatingActionButton, fixEventTV :TextView ) {
+        isFABOpen = false
+        newEventFAB.animate().translationY(0F)
+        newEventTV.animate().translationY(0F)
+        fixEventFAB.animate().translationY(0F)
+        fixEventTV.animate().translationY(0F)
     }
 
 }

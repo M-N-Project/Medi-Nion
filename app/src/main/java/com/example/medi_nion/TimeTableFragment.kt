@@ -48,6 +48,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
 
+    var isFABOpen : Boolean = false
     var lastSelected = ""
 
     private var v: View? = null
@@ -71,20 +72,58 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         fetchEvent(v!!)
 
         val makeEventBtn = v!!.findViewById<FloatingActionButton>(R.id.makeEvent)
-        val makeEventRadiogroup = v!!.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
-        makeEventRadiogroup.visibility = View.GONE
-        val makeEventScheduleRadioBtn= v!!.findViewById<RadioButton>(R.id.schedule_RadioBtn)
-        val makeEventButtonRadioBtn = v!!.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
+        val newEventFAB= v!!.findViewById<FloatingActionButton>(R.id.newEvent)
+        val newEventTextView = v!!.findViewById<TextView>(R.id.newEvent_textView)
+        val fixEventFAB = v!!.findViewById<FloatingActionButton>(R.id.fixEvent)
+        val fixEventTextView = v!!.findViewById<TextView>(R.id.fixEvent_textView)
 
         //스케줄 만들기
         makeEventBtn.setOnClickListener {
-            var makeEventArray = resources.getStringArray(R.array.make_event_type)
-            var makeEventArrayList = ArrayList<String>()
-            for(i in makeEventArray){
-                makeEventArrayList.add(i)
+            if (!isFABOpen) {
+                makeEventBtn.setImageResource(R.drawable.event_cancel_button_resize)
+                newEventTextView.visibility = View.VISIBLE
+                fixEventTextView.visibility = View.VISIBLE
+
+                showFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+
+                newEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_Add::class.java)
+                    intent.putExtra("id", id)
+
+                    val dateNow  = Date()
+
+                    val calendar = Calendar.getInstance()
+                    calendar.time = dateNow
+                    val weekNum = calendar[Calendar.DAY_OF_WEEK]
+                    var week=""
+                    if(weekNum == 1) week = "Sun"
+                    else if(weekNum == 2) week = "Mon"
+                    else if(weekNum == 3) week ="Tue"
+                    else if(weekNum == 4) week = "Wed"
+                    else if(weekNum == 5) week = "Thu"
+                    else if(weekNum == 6) week = "Fri"
+                    else week = "Sat"
+
+                    intent.putExtra("day", "${CalendarDay.today()}/$week")
+                    intent.putExtra("flag", "timetable")
+                    startActivity(intent)
+                }
+
+                fixEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_History_Add::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("day", CalendarDay.today().toString())
+                    startActivity(intent)
+                }
+            } else {
+                makeEventBtn.setImageResource(R.drawable.create_button_resize)
+                newEventTextView.visibility = View.GONE
+                fixEventTextView.visibility = View.GONE
+
+                closeFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
             }
-            showBottomSheet(makeEventArrayList, "timetable")
         }
+
 //        makeEventBtn.setOnClickListener{
 //            if(makeEventRadiogroup.visibility == View.VISIBLE)
 //                makeEventRadiogroup.visibility = View.GONE
@@ -621,7 +660,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val color_picker = view?.findViewById<Button>(R.id.schedule_color_view)
         color_picker?.backgroundTintList = ColorStateList.valueOf(color)
 
-        Log.d("COLOE", color.toString())
     }
 
     private fun hideKeyboard() {
@@ -634,6 +672,23 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
+    }
+
+    private fun showFABMenu(newEventFAB : FloatingActionButton, newEventTV :TextView , fixEventFAB : FloatingActionButton, fixEventTV :TextView ) {
+        isFABOpen = true
+        newEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        newEventTV.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        fixEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+        fixEventTV.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+
+    }
+
+    private fun closeFABMenu(newEventFAB : FloatingActionButton, newEventTV :TextView , fixEventFAB : FloatingActionButton, fixEventTV :TextView ) {
+        isFABOpen = false
+        newEventFAB.animate().translationY(0F)
+        newEventTV.animate().translationY(0F)
+        fixEventFAB.animate().translationY(0F)
+        fixEventTV.animate().translationY(0F)
     }
 }
 
