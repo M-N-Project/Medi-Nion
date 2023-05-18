@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setSupportActionBar(toolbar2)
 //        supportActionBar?.hide()
         supportActionBar!!.title = ""
-        supportActionBar!!.setIcon(R.drawable.logo_resize)
+        supportActionBar!!.setIcon(R.drawable.titlebar_icon_resize)
 
         val tabLayout: BottomNavigationView  = findViewById(R.id.bottomNavigationView)
 

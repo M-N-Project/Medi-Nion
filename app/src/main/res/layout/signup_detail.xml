@@ -186,11 +186,13 @@
         android:id="@+id/id_verify_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#8BE0C4"
+        android:backgroundTint="@color/color3"
+        android:background="@drawable/login_round_button"
         android:text="자격증 또는 학생증으로 본인인증하기"
-        android:textColor="#000000" />
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/idImgView"
