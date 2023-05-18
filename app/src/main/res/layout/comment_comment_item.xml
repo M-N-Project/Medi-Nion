@@ -26,7 +26,6 @@
             <LinearLayout
                 android:layout_width="247dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -91,31 +90,43 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="right">
 
-                <CheckBox
-                    android:id="@+id/imageView_comment2_like"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:button="@null"
-                    android:background="@drawable/heart_checkbox"
-                    android:layout_marginTop="8dp"
-                    android:text=""
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.041"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="TouchTargetSizeCheck" />
+                <View
+                    android:id="@+id/view15"
+                    android:layout_width="95dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
-                <TextView
-                    android:id="@+id/comment2_heartCnt"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="0"
-                    android:text="0" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
+                    <CheckBox
+                        android:id="@+id/imageView_comment2_like"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/heart_checkbox"
+                        android:button="@null"
+                        android:text=""
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.041"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <TextView
+                        android:id="@+id/comment2_heartCnt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0"
+                        android:text="0" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <android.widget.Button
