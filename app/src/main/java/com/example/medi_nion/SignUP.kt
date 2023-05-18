@@ -774,7 +774,6 @@ class SignUP : AppCompatActivity() {
         }
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
-        val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
 
         Log.d("789", "$id, $basicUserBtn, $userDept, $token, $identity")
 
