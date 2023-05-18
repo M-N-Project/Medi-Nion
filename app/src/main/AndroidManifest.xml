@@ -120,9 +120,11 @@
                 android:value="" />
         </activity>
         <activity android:name=".FindPasswd"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Menu_All"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Agreement"
