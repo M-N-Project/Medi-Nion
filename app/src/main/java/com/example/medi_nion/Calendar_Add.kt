@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import dev.sasikanth.colorsheet.ColorSheet
@@ -52,6 +53,8 @@ class Calendar_Add : AppCompatActivity() {
     private lateinit var manager: NotificationManager
     private lateinit var builder: NotificationCompat.Builder
     lateinit var notificationPermission: ActivityResultLauncher<String>
+    
+    private var lastSelected = ""
 
     //히스토리 스피너에 들어갈 요소들
     private lateinit var calendarHistoryView : RecyclerView
@@ -69,18 +72,13 @@ class Calendar_Add : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    @SuppressLint("MissingInflatedId", "SetTextI18n")
+    @SuppressLint("MissingInflatedId", "SetTextI18n", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.calendar_add)
 
         val id = intent?.getStringExtra("id")
         val flag = intent.getStringExtra("flag")
-
-        if(flag == "timetable") {
-            findViewById<LinearLayout>(R.id.repeatLinearLayout).visibility = View.GONE
-            findViewById<View>(R.id.view5).visibility = View.GONE
-        }
 
         var calendarHistoryScrollView = findViewById<ScrollView>(R.id.calendarHistoryScrollView)
         calendarHistoryView = findViewById(R.id.calendarHistoryRecyclerView)
@@ -95,9 +93,9 @@ class Calendar_Add : AppCompatActivity() {
         val end = findViewById<LinearLayout>(R.id.end_time_linear)
         val schedule_btn = findViewById<Button>(R.id.schedule_btn)
         val color = findViewById<Button>(R.id.schedule_color_imageView)
-        val spinner = findViewById<Spinner>(R.id.alarm_spinner)
-        var alarm = spinner.selectedItem.toString()
-        val schedule_memo = findViewById<EditText>(R.id.schedule_memo)
+        val schedule_memo = findViewById<EditText>(R.id.schedule_memo_textView)
+        val alarmSpinner = findViewById<TextView>(R.id.alarm_spinner)
+        val repeatSpinner = findViewById<TextView>(R.id.repeat_spinner)
 
         var startString = ""
         var endString = ""
@@ -117,7 +115,6 @@ class Calendar_Add : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 similarItems.clear()
 
-                Log.d("haha", items.size.toString())
                 if(s != null && s.length>0) {
                     for (i in 0 until items.size) {
                         if(items[i].schedule_name.length >= s.length) {
@@ -130,19 +127,12 @@ class Calendar_Add : AppCompatActivity() {
 
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
-                                            Log.d("DFSDFD", data.schedule_alarm)
+                                            Log.d("DFSDFD1", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
 
-                                            when (data.schedule_alarm) {
-                                                "1시간 전" -> spinner.setSelection(1)
-                                                "2시간 전" -> spinner.setSelection(2)
-                                                "3시간 전" -> spinner.setSelection(3)
-                                                "6시간 전" -> spinner.setSelection(4)
-                                                else -> spinner.setSelection(0)
-                                            }
 
                                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -153,6 +143,9 @@ class Calendar_Add : AppCompatActivity() {
                                             }
                                             color.background = drawable
                                             colorStr = data.schedule_color
+
+                                            alarmSpinner.text = data.schedule_alarm
+                                            repeatSpinner.text = data.schedule_repeat
 
 
                                             schedule_memo.setText(data.schedule_memo)
@@ -241,19 +234,19 @@ class Calendar_Add : AppCompatActivity() {
                                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                                             Log.d("0-9132", data.schedule_name)
-                                            Log.d("DFSDFD", data.schedule_alarm)
+                                            Log.d("DFSDFD2", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
 
-                                            when (data.schedule_alarm) {
-                                                "1시간 전" -> spinner.setSelection(1)
-                                                "2시간 전" -> spinner.setSelection(2)
-                                                "3시간 전" -> spinner.setSelection(3)
-                                                "6시간 전" -> spinner.setSelection(4)
-                                                else -> spinner.setSelection(0)
-                                            }
+//                                            when (data.schedule_alarm) {
+//                                                "1시간 전" -> spinner.setSelection(1)
+//                                                "2시간 전" -> spinner.setSelection(2)
+//                                                "3시간 전" -> spinner.setSelection(3)
+//                                                "6시간 전" -> spinner.setSelection(4)
+//                                                else -> spinner.setSelection(0)
+//                                            }
 
                                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -267,6 +260,8 @@ class Calendar_Add : AppCompatActivity() {
                                             color.background = drawable
                                             colorStr = data.schedule_color
 
+                                            alarmSpinner.text = data.schedule_alarm
+                                            repeatSpinner.text = data.schedule_repeat
 
                                             schedule_memo.setText(data.schedule_memo)
                                         }
@@ -352,19 +347,19 @@ class Calendar_Add : AppCompatActivity() {
                     adapter.setOnItemClickListener(object : CalendarHistoryAdapter.OnItemClickListener{
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                             Log.d("0-9132", data.schedule_name)
-                            Log.d("DFSDFD", data.schedule_alarm)
+                            Log.d("DFSDFD3", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
 
-                            when (data.schedule_alarm) {
-                                "1시간 전" -> spinner.setSelection(1)
-                                "2시간 전" -> spinner.setSelection(2)
-                                "3시간 전" -> spinner.setSelection(3)
-                                "6시간 전" -> spinner.setSelection(4)
-                                else -> spinner.setSelection(0)
-                            }
+//                            when (data.schedule_alarm) {
+//                                "1시간 전" -> spinner.setSelection(1)
+//                                "2시간 전" -> spinner.setSelection(2)
+//                                "3시간 전" -> spinner.setSelection(3)
+//                                "6시간 전" -> spinner.setSelection(4)
+//                                else -> spinner.setSelection(0)
+//                            }
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -375,6 +370,9 @@ class Calendar_Add : AppCompatActivity() {
                             }
                             color.background = drawable
                             colorStr = data.schedule_color
+
+                            alarmSpinner.text = data.schedule_alarm
+                            repeatSpinner.text = data.schedule_repeat
 
                             schedule_memo.setText(data.schedule_memo)
                         }
@@ -476,6 +474,7 @@ class Calendar_Add : AppCompatActivity() {
             Log.d("create", "Channel")
         }
 
+        //시간 설정
         start.setOnClickListener {
             val dialog = TimePickerDialog(
                 this,
@@ -550,6 +549,32 @@ class Calendar_Add : AppCompatActivity() {
 
         }
 
+        val selectAlarmLinearLayout = findViewById<LinearLayout>(R.id.alarm_linearLayout)
+        selectAlarmLinearLayout.setOnClickListener{
+            var alarmArray = resources.getStringArray(R.array.times)
+            var alarmArrayList = ArrayList<String>()
+            for(i in alarmArray){
+                alarmArrayList.add(i)
+            }
+            showBottomSheet(alarmArrayList, "alarm")
+        }
+
+        val selectRepeatLinearLayout = findViewById<LinearLayout>(R.id.repeat_linearLayout)
+        selectRepeatLinearLayout.setOnClickListener{
+            if(flag == "timetable") {
+                var repeatArrayList = arrayListOf<String>("설정 안함", "매일", "매주")
+                showBottomSheet(repeatArrayList, "repeat")
+            }
+            else{
+                var repeatArray = resources.getStringArray(R.array.repeat)
+                var repeatArrayList = ArrayList<String>()
+                for(i in repeatArray){
+                    repeatArrayList.add(i)
+                }
+                showBottomSheet(repeatArrayList, "repeat")
+            }
+
+        }
 
         schedule_btn.setOnClickListener {
             if(TextUtils.isEmpty(schedule_title.text.toString())) {
@@ -569,6 +594,11 @@ class Calendar_Add : AppCompatActivity() {
 
     private fun fetchCalendarHistory(){
         val id = intent?.getStringExtra("id").toString()
+        val schedule_memo = findViewById<EditText>(R.id.schedule_memo_textView)
+
+        val alarmSpinner = findViewById<TextView>(R.id.alarm_spinner)
+        val repeatSpinner = findViewById<TextView>(R.id.repeat_spinner)
+
         //스피너에 들어갈 item list 가져오기 (request)
         val historyUrl = "http://seonho.dothome.co.kr/CalendarHistory.php"
         val request = Upload_Request(
@@ -588,10 +618,10 @@ class Calendar_Add : AppCompatActivity() {
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
                         val schedule_alarm = item.getString("schedule_alarm")
-//                        val schedule_repeat = item.getString("schedule_repeat")
+                        val schedule_repeat = item.getString("schedule_repeat")
                         val schedule_memo = item.getString("schedule_memo")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, "", schedule_memo, false)
+                        val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo, false)
                         items.add(CalendarItem)
                     }
 
@@ -659,22 +689,21 @@ class Calendar_Add : AppCompatActivity() {
                         }
 
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
-                            val spinner = findViewById<Spinner>(R.id.alarm_spinner)
-                            var alarm = spinner.selectedItem.toString()
-                            Log.d("0-9132", data.schedule_name)
-                            Log.d("DFSDFD123", data.schedule_alarm)
-                            Log.d("456456", alarm)
+                            val alarmSpinner = findViewById<TextView>(R.id.alarm_spinner)
+                            val repeatSpinner = findViewById<TextView>(R.id.repeat_spinner)
+
+                            Log.d("DFSDFD4", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
-                            when (data.schedule_alarm) {
-                                "1시간 전" -> spinner.setSelection(1)
-                                "2시간 전" -> spinner.setSelection(2)
-                                "3시간 전" -> spinner.setSelection(3)
-                                "6시간 전" -> spinner.setSelection(4)
-                                else -> spinner.setSelection(0)
-                            }
+//                            when (data.schedule_alarm) {
+//                                "1시간 전" -> spinner.setSelection(1)
+//                                "2시간 전" -> spinner.setSelection(2)
+//                                "3시간 전" -> spinner.setSelection(3)
+//                                "6시간 전" -> spinner.setSelection(4)
+//                                else -> spinner.setSelection(0)
+//                            }
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
@@ -685,6 +714,10 @@ class Calendar_Add : AppCompatActivity() {
                             }
                             color.background = drawable
                             colorStr = data.schedule_color
+
+
+                            alarmSpinner.text = data.schedule_alarm
+                            repeatSpinner.text = data.schedule_repeat
 
                             schedule_memo.setText(data.schedule_memo)
                         }
@@ -762,11 +795,11 @@ class Calendar_Add : AppCompatActivity() {
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
-        val alarm_spinner = findViewById<Spinner>(R.id.alarm_spinner)
-        var alarm = alarm_spinner.selectedItem.toString()
-        val repeat_spinner = findViewById<Spinner>(R.id.repeat_spinner)
-        var repeat = repeat_spinner.selectedItem.toString()
-        val schedule_memo = findViewById<EditText>(R.id.schedule_memo).text.toString()
+        val alarm_spinner = findViewById<TextView>(R.id.alarm_spinner)
+        var alarm = alarm_spinner.text.toString()
+        val repeat_spinner = findViewById<TextView>(R.id.repeat_spinner)
+        var repeat = repeat_spinner.text.toString()
+        val schedule_memo = findViewById<EditText>(R.id.schedule_memo_textView).text.toString()
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
 
@@ -840,7 +873,6 @@ class Calendar_Add : AppCompatActivity() {
             Request.Method.POST,
             postUrl,
             { response ->
-                Log.d("CDCD", response.toString())
                 if (!response.equals("schedule fail")) {
                     Toast.makeText(
                         baseContext,
@@ -871,7 +903,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
                     "schedule_alarm" to alarm,
-                    "schedule_repeat" to if(flag=="calendar") repeat else "매주",
+                    "schedule_repeat" to repeat,
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
                 )
@@ -884,7 +916,7 @@ class Calendar_Add : AppCompatActivity() {
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
                     "schedule_alarm" to alarm,
-                    "schedule_repeat" to if(flag=="calendar") repeat else "매주",
+                    "schedule_repeat" to repeat,
                     "schedule_memo" to schedule_memo,
                     "isDone" to "0"
                 )
@@ -918,5 +950,48 @@ class Calendar_Add : AppCompatActivity() {
             )
         )
 
+    }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        val alarmTextView = findViewById<TextView>(R.id.alarm_spinner)
+        val repeatTextView = findViewById<TextView>(R.id.repeat_spinner)
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(type == "alarm"){
+                alarmTextView.text = lastSelected
+            }
+            else{
+                repeatTextView.text = lastSelected
+            }
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 }

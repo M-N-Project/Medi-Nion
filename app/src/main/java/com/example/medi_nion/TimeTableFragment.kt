@@ -48,6 +48,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
 
+    var isFABOpen : Boolean = false
     var lastSelected = ""
 
     private var v: View? = null
@@ -71,65 +72,57 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         fetchEvent(v!!)
 
         val makeEventBtn = v!!.findViewById<FloatingActionButton>(R.id.makeEvent)
-        val makeEventRadiogroup = v!!.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
-        makeEventRadiogroup.visibility = View.GONE
-        val makeEventScheduleRadioBtn= v!!.findViewById<RadioButton>(R.id.schedule_RadioBtn)
-        val makeEventButtonRadioBtn = v!!.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
+        val newEventFAB= v!!.findViewById<FloatingActionButton>(R.id.newEvent)
+        val newEventTextView = v!!.findViewById<TextView>(R.id.newEvent_textView)
+        val fixEventFAB = v!!.findViewById<FloatingActionButton>(R.id.fixEvent)
+        val fixEventTextView = v!!.findViewById<TextView>(R.id.fixEvent_textView)
 
         //스케줄 만들기
         makeEventBtn.setOnClickListener {
-            var makeEventArray = resources.getStringArray(R.array.make_event_type)
-            var makeEventArrayList = ArrayList<String>()
-            for(i in makeEventArray){
-                makeEventArrayList.add(i)
-            }
-            showBottomSheet(makeEventArrayList, "timetable")
-        }
-//        makeEventBtn.setOnClickListener{
-//            if(makeEventRadiogroup.visibility == View.VISIBLE)
-//                makeEventRadiogroup.visibility = View.GONE
-//            else makeEventRadiogroup.visibility = View.VISIBLE
-//
-//            makeEventScheduleRadioBtn.bringToFront()
-//            makeEventButtonRadioBtn.bringToFront()
-//
-//            //새로운 일정 만들기
-//            makeEventScheduleRadioBtn.setOnClickListener{
-//                makeEventRadiogroup.visibility = View.GONE
-//                makeEventScheduleRadioBtn.isChecked = false
-//                val intent = Intent(context, Calendar_Add::class.java)
-//                intent.putExtra("id", id)
-//
-//                val dateNow  = Date()
-//
-//                val calendar = Calendar.getInstance()
-//                calendar.time = dateNow
-//                val weekNum = calendar[Calendar.DAY_OF_WEEK]
-//                var week=""
-//                if(weekNum == 1) week = "Sun"
-//                else if(weekNum == 2) week = "Mon"
-//                else if(weekNum == 3) week ="Tue"
-//                else if(weekNum == 4) week = "Wed"
-//                else if(weekNum == 5) week = "Thu"
-//                else if(weekNum == 6) week = "Fri"
-//                else week = "Sat"
-//
-//                intent.putExtra("day", "${CalendarDay.today()}/$week")
-//                intent.putExtra("flag", "timetable")
-//                startActivity(intent)
-//            }
-//            //히스토리 일정 버튼 만들기
-//            makeEventButtonRadioBtn.setOnClickListener{
-//                makeEventRadiogroup.visibility = View.GONE
-//                makeEventButtonRadioBtn.isChecked = false
-//                val intent = Intent(context, Calendar_History_Add::class.java)
-//                intent.putExtra("id", id)
-//                intent.putExtra("day", CalendarDay.today().toString())
-//
-//                startActivity(intent)
-//            }
-//        }
+            if (!isFABOpen) {
+                makeEventBtn.setImageResource(R.drawable.event_cancel_button_resize)
+                newEventTextView.visibility = View.VISIBLE
+                fixEventTextView.visibility = View.VISIBLE
 
+                showFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+
+                newEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_Add::class.java)
+                    intent.putExtra("id", id)
+
+                    val dateNow  = Date()
+
+                    val calendar = Calendar.getInstance()
+                    calendar.time = dateNow
+                    val weekNum = calendar[Calendar.DAY_OF_WEEK]
+                    var week=""
+                    if(weekNum == 1) week = "Sun"
+                    else if(weekNum == 2) week = "Mon"
+                    else if(weekNum == 3) week ="Tue"
+                    else if(weekNum == 4) week = "Wed"
+                    else if(weekNum == 5) week = "Thu"
+                    else if(weekNum == 6) week = "Fri"
+                    else week = "Sat"
+
+                    intent.putExtra("day", "${CalendarDay.today()}/$week")
+                    intent.putExtra("flag", "timetable")
+                    startActivity(intent)
+                }
+
+                fixEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_History_Add::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("day", CalendarDay.today().toString())
+                    startActivity(intent)
+                }
+            } else {
+                makeEventBtn.setImageResource(R.drawable.create_button_resize)
+                newEventTextView.visibility = View.GONE
+                fixEventTextView.visibility = View.GONE
+
+                closeFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+            }
+        }
         return v
     }
 
@@ -147,71 +140,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
         var ft: FragmentTransaction = fragmentManager.beginTransaction()
         ft.detach(fragment)
-    }
-
-    private fun showBottomSheet(items : ArrayList<String> , type : String){
-        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-        bottomSheetDialog.setContentView(bottomSheetView)
-
-
-        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
-        cancelBtn?.setOnClickListener{
-            bottomSheetDialog.dismiss()
-            lastSelected = ""
-        }
-
-        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
-
-        selectBtn?.setOnClickListener{
-            if(lastSelected == "새로운 일정 만들기"){
-                val intent = Intent(context, Calendar_Add::class.java)
-                intent.putExtra("id", id)
-
-                val dateNow  = Date()
-
-                val calendar = Calendar.getInstance()
-                calendar.time = dateNow
-                val weekNum = calendar[Calendar.DAY_OF_WEEK]
-                var week=""
-                if(weekNum == 1) week = "Sun"
-                else if(weekNum == 2) week = "Mon"
-                else if(weekNum == 3) week ="Tue"
-                else if(weekNum == 4) week = "Wed"
-                else if(weekNum == 5) week = "Thu"
-                else if(weekNum == 6) week = "Fri"
-                else week = "Sat"
-
-                intent.putExtra("day", "${CalendarDay.today()}/$week")
-                intent.putExtra("flag", "timetable")
-                startActivity(intent)
-            }
-            else {
-                val intent = Intent(context, Calendar_History_Add::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("day", CalendarDay.today().toString())
-
-                startActivity(intent)
-            }
-            bottomSheetDialog.dismiss()
-            lastSelected = ""
-        }
-
-        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
-        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
-        dialogRecyclerView?.adapter = dialogAdapter
-
-
-        dialogAdapter.setOnItemClickListener(
-            object : DialogRecyclerAdapter.OnItemClickListener{
-                override fun onItemClick(v: View, data: String) {
-                    lastSelected = data
-                }
-
-            }
-        )
-
-        bottomSheetDialog.show()
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
@@ -425,24 +353,27 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                             }
 
 
-                            val alarmSpinner = bottomSheetView.findViewById<Spinner>(R.id.alarm_spinner)
-                            val alarmList: Array<String> = resources.getStringArray(R.array.times)
-                            alarmSpinner.setSelection(alarmList.indexOf(schedule.schedule_alarm))
-
-                            val repeatSpinner = bottomSheetView.findViewById<Spinner>(R.id.repeat_spinner)
-                            repeatSpinner.visibility = View.GONE // 시간표에서는 무조건 매주
-                            val repeatTextView = bottomSheetView.findViewById<TextView>(R.id.repeat_TextView)
-                            repeatTextView.visibility = View.VISIBLE
-                            repeatTextView.setText(schedule.schedule_repeat)
-                            repeatTextView.setOnClickListener{
+                            val alarmSpinner = bottomSheetView.findViewById<TextView>(R.id.alarm_spinner)
+                            Log.d("8972123", schedule.schedule_alarm)
+                            alarmSpinner.setText(schedule.schedule_alarm)
+                            alarmSpinner.setOnClickListener{
+                                var alarmArray = resources.getStringArray(R.array.times)
+                                var alarmArrayList = ArrayList<String>()
+                                for(i in alarmArray){
+                                    alarmArrayList.add(i)
+                                }
+                                showBottomSheet(alarmArrayList, "alarm")
+                            }
+                            Log.d("8972123", schedule.schedule_repeat)
+                            val repeatSpinner = bottomSheetView.findViewById<TextView>(R.id.repeat_spinner)
+                            repeatSpinner.setText(schedule.schedule_repeat)
+                            repeatSpinner.setOnClickListener{
                                 Toast.makeText(requireContext(),
                                     "주간 일정에서는 매주 반복되는 일정만 적용됩니다.", Toast.LENGTH_SHORT).show()
                             }
 
-//                            val repeatList : Array<String> = resources.getStringArray(R.array.repeat)
-//                            repeatSpinner.setSelection(repeatList.indexOf(schedule.schedule_repeat))
 
-                            bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
+                            bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
                                 .setText(schedule.schedule_memo) //스케줄 메모
 
                             val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
@@ -450,7 +381,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                                 hideKeyboard()
                                 val schedule_title_2 =
                                     bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
-                                val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
+                                val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
                                 var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
                                 var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
                                 if (TextUtils.isEmpty(schedule_title_2.text.toString())) {
@@ -476,7 +407,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
                                     schedule.schedule_start = start_result.replace(" ", "")
                                     schedule.schedule_end = end_result.replace(" ", "")
-                                    schedule.schedule_alarm = alarmSpinner.selectedItem.toString()
+                                    schedule.schedule_alarm = alarmSpinner.text.toString()
                                     schedule.schedule_repeat = "매주"
                                     schedule.schedule_memo = schedule_memo_2.text.toString()
                                     TimeTableRequest(schedule)
@@ -621,7 +552,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val color_picker = view?.findViewById<Button>(R.id.schedule_color_view)
         color_picker?.backgroundTintList = ColorStateList.valueOf(color)
 
-        Log.d("COLOE", color.toString())
     }
 
     private fun hideKeyboard() {
@@ -634,6 +564,66 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
+    }
+
+    private fun showFABMenu(newEventFAB : FloatingActionButton, newEventTV :TextView , fixEventFAB : FloatingActionButton, fixEventTV :TextView ) {
+        isFABOpen = true
+        newEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        newEventTV.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        fixEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+        fixEventTV.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+
+    }
+
+    private fun closeFABMenu(newEventFAB : FloatingActionButton, newEventTV :TextView , fixEventFAB : FloatingActionButton, fixEventTV :TextView ) {
+        isFABOpen = false
+        newEventFAB.animate().translationY(0F)
+        newEventTV.animate().translationY(0F)
+        fixEventFAB.animate().translationY(0F)
+        fixEventTV.animate().translationY(0F)
+    }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        val alarmTextView = view?.findViewById<TextView>(R.id.alarm_spinner)
+        val repeatTextView = view?.findViewById<TextView>(R.id.repeat_spinner)
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(type == "alarm"){
+                alarmTextView?.text = lastSelected
+            }
+            else{
+                repeatTextView?.text = lastSelected
+            }
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 }
 

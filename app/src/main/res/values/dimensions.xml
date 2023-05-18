@@ -4,4 +4,7 @@
     <dimen name="design_fab_size_normal" tools:override="true">70dp</dimen>
     <dimen name="design_fab_image_size" tools:override="true">70dp</dimen>
 
+    <dimen name="FABMoveTo_60">60dp</dimen>
+    <dimen name="FABMoveTo_120">120dp</dimen>
+
 </resources>

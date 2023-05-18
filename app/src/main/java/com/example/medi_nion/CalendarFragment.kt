@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
-import android.text.style.LineBackgroundSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.Log
@@ -20,11 +19,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -38,9 +38,6 @@ import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import org.json.JSONArray
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 import java.util.*
 
 
@@ -50,7 +47,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private val items = ArrayList<CalendarItem>()
     var adapter = CalendarRecyclerAdapter(items)
     var currentDate : CalendarDay = CalendarDay.today()
-    
+
+    private lateinit var darkOverlay: View
+    var isFABOpen : Boolean = false
+
     var lastSelected = ""
 
     private var oldTitle : String = ""
@@ -72,7 +72,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.calendar, container, false)
+        var view =  inflater.inflate(R.layout.calendar, container, false)
 
         fetchEvents(currentDate)
 
@@ -96,11 +96,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         //CalendarDay.today()를 가지고와서 오늘 날짜에 맞는 일정 가져와서 adapter 붙여주고 시작하기.
 
         val calendar = view.findViewById<MaterialCalendarView>(R.id.calendarView)
-        val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
-        val makeEventRadiogroup = view.findViewById<RadioGroup>(R.id.select_RadioGroup_MakeEvent)
-        makeEventRadiogroup.visibility = View.GONE
-        val makeEventScheduleRadioBtn= view.findViewById<RadioButton>(R.id.schedule_RadioBtn)
-        val makeEventButtonRadioBtn = view.findViewById<RadioButton>(R.id.customBtn_RadioBtn)
 
         val id = arguments?.getString("id").toString()
         val colorList: Array<String> = resources.getStringArray(R.array.colors)
@@ -115,17 +110,51 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         calendar.setOnDateChangedListener(MyDaySelected())
         DateFormatTitleFormatter()
 
+        val makeEventBtn = view.findViewById<FloatingActionButton>(R.id.makeEvent)
+        val newEventFAB= view.findViewById<FloatingActionButton>(R.id.newEvent)
+        val newEventTextView = view.findViewById<TextView>(R.id.newEvent_textView)
+        val fixEventFAB = view.findViewById<FloatingActionButton>(R.id.fixEvent)
+        val fixEventTextView = view.findViewById<TextView>(R.id.fixEvent_textView)
+
 
         //스케줄 만들기
         makeEventBtn.setOnClickListener {
-            var makeEventArray = resources.getStringArray(R.array.make_event_type)
-            var makeEventArrayList = ArrayList<String>()
-            for(i in makeEventArray){
-                makeEventArrayList.add(i)
-            }
-            showBottomSheet(makeEventArrayList, "calendar")
-        }
+            if (!isFABOpen) {
 
+                makeEventBtn.setImageResource(R.drawable.event_cancel_button_resize)
+                newEventTextView.visibility = View.VISIBLE
+                fixEventTextView.visibility = View.VISIBLE
+
+                showFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+                makeEventBtn.bringToFront()
+
+                newEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_Add::class.java)
+                    intent.putExtra("id", id)
+
+                    val week = currentDate.date.toString().substring(0,3)
+                    Log.d("018323", currentDate.toString())
+                    intent.putExtra("day", "${currentDate.toString()}/$week")
+                    intent.putExtra("flag", "calendar")
+                    startActivity(intent)
+                }
+
+                fixEventFAB.setOnClickListener{
+                    val intent = Intent(context, Calendar_History_Add::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("day", CalendarDay.today().toString())
+                    startActivity(intent)
+                }
+            } else {
+                makeEventBtn.setImageResource(R.drawable.create_button_resize)
+                newEventTextView.visibility = View.GONE
+                fixEventTextView.visibility = View.GONE
+                darkOverlay.visibility = View.GONE
+
+                closeFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+                makeEventBtn.bringToFront()
+            }
+        }
 
         return view
     }
@@ -188,59 +217,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             view?.addSpan(object: ForegroundColorSpan(Color.RED){})
         }
     }
-
-    private fun showBottomSheet(items : ArrayList<String> , type : String){
-        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-        bottomSheetDialog.setContentView(bottomSheetView)
-
-
-        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
-        cancelBtn?.setOnClickListener{
-            bottomSheetDialog.dismiss()
-            lastSelected = ""
-        }
-
-        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
-
-        selectBtn?.setOnClickListener{
-            if(lastSelected == "새로운 일정 만들기"){
-                val intent = Intent(context, Calendar_Add::class.java)
-                intent.putExtra("id", id)
-
-                val week = currentDate.date.toString().substring(0,3)
-                Log.d("018323", currentDate.toString())
-                intent.putExtra("day", "${currentDate.toString()}/$week")
-                intent.putExtra("flag", "calendar")
-                startActivity(intent)
-            }
-            else {
-                val intent = Intent(context, Calendar_History_Add::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("day", CalendarDay.today().toString())
-                startActivity(intent)
-            }
-            bottomSheetDialog.dismiss()
-            lastSelected = ""
-        }
-
-        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
-        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
-        dialogRecyclerView?.adapter = dialogAdapter
-
-
-        dialogAdapter.setOnItemClickListener(
-            object : DialogRecyclerAdapter.OnItemClickListener{
-                override fun onItemClick(v: View, data: String) {
-                    lastSelected = data
-                }
-
-            }
-        )
-
-        bottomSheetDialog.show()
-    }
-
 
     private fun fetchEvents(day : CalendarDay){
         // url to post our data
@@ -462,22 +438,35 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                 color.background = drawable
                             }
 
+                            val alarmSpinner = bottomSheetView.findViewById<TextView>(R.id.alarm_spinner)
+                            alarmSpinner.setText(data.schedule_alarm)
+                            alarmSpinner.setOnClickListener{
+                                var alarmArray = resources.getStringArray(R.array.times)
+                                var alarmArrayList = ArrayList<String>()
+                                for(i in alarmArray){
+                                    alarmArrayList.add(i)
+                                }
+                                showBottomSheet(alarmArrayList, "alarm")
+                            }
 
-                            val alarmSpinner = bottomSheetView.findViewById<Spinner>(R.id.alarm_spinner)
-                            val alarmList: Array<String> = resources.getStringArray(R.array.times)
-                            alarmSpinner.setSelection(alarmList.indexOf(data.schedule_alarm))
+                            val repeatSpinner = bottomSheetView.findViewById<TextView>(R.id.repeat_spinner)
+                            repeatSpinner.setText(data.schedule_repeat)
+                            repeatSpinner.setOnClickListener{
+                                var repeatArray = resources.getStringArray(R.array.repeat)
+                                var repeatArrayList = ArrayList<String>()
+                                for(i in repeatArray){
+                                    repeatArrayList.add(i)
+                                }
+                                showBottomSheet(repeatArrayList, "repeat")
+                            }
 
-                            val repeatSpinner = bottomSheetView.findViewById<Spinner>(R.id.repeat_spinner)
-                            val repeatList: Array<String> = resources.getStringArray(R.array.repeat)
-                            repeatSpinner.setSelection(repeatList.indexOf(data.schedule_repeat))
-
-                            bottomSheetView.findViewById<EditText>(R.id.schedule_memo).setText(data.schedule_memo) //스케줄 메모
+                            bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView).setText(data.schedule_memo) //스케줄 메모
 
                             val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
                             doneBtn.setOnClickListener {
                                 hideKeyboard()
                                 val schedule_title_2 = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
-                                val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo)
+                                val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
                                 var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
                                 var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
                                 if(TextUtils.isEmpty(schedule_title_2.text.toString())) {
@@ -518,8 +507,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                                     data.schedule_start = start_result.replace(" ", "")
                                     data.schedule_end = end_result.replace(" ", "")
-                                    data.schedule_alarm = alarmSpinner.selectedItem.toString()
-                                    data.schedule_repeat = repeatSpinner.selectedItem.toString()
+                                    data.schedule_alarm = alarmSpinner.text.toString()
+                                    data.schedule_repeat = repeatSpinner.text.toString()
                                     data.schedule_memo = schedule_memo_2.text.toString()
                                     CalendarRequest(data)
 
@@ -774,7 +763,72 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         val color_picker = view?.findViewById<Button>(R.id.schedule_color_view)
         color_picker?.backgroundTintList = ColorStateList.valueOf(color)
 
-        Log.d("COLOE", color.toString())
+    }
+
+    private fun showFABMenu(newEventFAB : FloatingActionButton, newEventTextView :TextView , fixEventFAB : FloatingActionButton, fixEventTextView :TextView ) {
+        isFABOpen = true
+
+        newEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        newEventTextView.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
+        fixEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+        fixEventTextView.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+
+        newEventFAB.bringToFront()
+        newEventTextView.bringToFront()
+        fixEventFAB.bringToFront()
+        fixEventTextView.bringToFront()
+
+    }
+
+    private fun closeFABMenu(newEventFAB : FloatingActionButton, newEventTextView :TextView , fixEventFAB : FloatingActionButton, fixEventTextView :TextView ) {
+        isFABOpen = false
+        newEventFAB.animate().translationY(0F)
+        newEventTextView.animate().translationY(0F)
+        fixEventFAB.animate().translationY(0F)
+        fixEventTextView.animate().translationY(0F)
+    }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        val alarmTextView = view?.findViewById<TextView>(R.id.alarm_spinner)
+        val repeatTextView = view?.findViewById<TextView>(R.id.repeat_spinner)
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(type == "alarm"){
+                alarmTextView?.text = lastSelected
+            }
+            else{
+                repeatTextView?.text = lastSelected
+            }
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 
 }

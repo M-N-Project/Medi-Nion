@@ -11,11 +11,19 @@
     android:id="@+id/calendarFrame"
     android:layout_width="wrap_content"
     android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/darkOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80FFFFFF"
+        android:visibility="invisible" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,82 +36,114 @@
         android:layout_marginRight="10dp"/>
 <!--        app:mcv_selectionMode="range"/>-->
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="409dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/calendarRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/calendar_item" />
-    </androidx.core.widget.NestedScrollView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/makeEvent"
-            android:layout_width="50dp"
-            android:layout_height="81dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="35dp"
-            android:backgroundTint="#84C7C4"
-            android:clickable="true"
-            android:elevation="8dp"
-            android:src="@drawable/create_button_resize"
-            app:borderWidth="0dp"
-            app:fabCustomSize="50dp"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="409dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="25dp"
-            app:tint="@null"
-            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView">
 
-    <RadioGroup
-        android:id="@+id/select_RadioGroup_MakeEvent"
-        android:layout_width="160dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/selector_radio_button_group"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/makeEvent"
-        app:layout_constraintEnd_toEndOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendarRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/calendar_item" />
+        </androidx.core.widget.NestedScrollView>
 
 
-        <RadioButton
-            android:id="@+id/schedule_RadioBtn"
-            android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newEvent"
+        android:layout_width="50dp"
+        android:layout_height="81dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="#84C7C4"
+        android:clickable="true"
+        android:elevation="8dp"
+        android:src="@drawable/new_event_button_resize"
+        app:borderWidth="0dp"
+        app:fabCustomSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="35dp"
+        app:maxImageSize="25dp"
+        app:fabSize="normal"
+        app:tint="@null"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/newEvent_textView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/selector_radio_button_top"
-            android:button="@null"
-            android:text="새로운 일정 만들기"
-            android:textAlignment="center" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="새로운 일정"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/newEvent"
+            app:layout_constraintEnd_toStartOf="@+id/newEvent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fixEvent"
+        android:layout_width="50dp"
+        android:layout_height="81dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="#84C7C4"
+        android:clickable="true"
+        android:elevation="8dp"
+        android:src="@drawable/new_event_button_resize"
+        app:borderWidth="0dp"
+        app:fabCustomSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="35dp"
+        app:maxImageSize="25dp"
+        app:fabSize="normal"
+        app:tint="@null"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
-        <RadioButton
-            android:id="@+id/customBtn_RadioBtn"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/fixEvent_textView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/selector_radio_button_bottom"
-            android:button="@null"
-            android:text="자주 사용할 일정 만들기"
-            android:textAlignment="center" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="고정 일정"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/newEvent"
+            app:layout_constraintEnd_toStartOf="@+id/newEvent" />
 
-    </RadioGroup>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeEvent"
+        android:layout_width="50dp"
+        android:layout_height="81dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="#84C7C4"
+        android:clickable="true"
+        android:elevation="8dp"
+        android:src="@drawable/create_button"
+        app:borderWidth="0dp"
+        app:fabCustomSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="35dp"
+        app:maxImageSize="25dp"
+        app:fabSize="normal"
+        app:tint="@null"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>
 </layout>
