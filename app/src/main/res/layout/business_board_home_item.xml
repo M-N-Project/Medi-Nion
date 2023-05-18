@@ -77,7 +77,7 @@
                         android:layout_height="33dp"
                         android:fontFamily="@font/gothic_bold"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="채널 이름"

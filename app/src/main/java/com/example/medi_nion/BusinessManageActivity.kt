@@ -6,69 +6,63 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.database.Cursor
 import android.graphics.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewOutlineProvider
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.loader.content.CursorLoader
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.VolleyMultipartRequest2.DataPart
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.business_home.*
-import kotlinx.android.synthetic.main.business_home.BusinessBoardHomeRecyclerView
 import kotlinx.android.synthetic.main.business_manage_create.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.bytedeco.javacpp.RealSense.context
 import org.json.JSONArray
 import java.io.*
 
 
 class BusinessManageActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
-     private val GALLERY = 1
-    var image_profile : String = "null"
-    lateinit var bitmap :Bitmap
-    var profileEncoded : String = ""
+    private val GALLERY = 1
+    var image_profile: String = "null"
+    lateinit var bitmap: Bitmap
+    var profileEncoded: String = ""
 
-    var isEditProfile : Boolean = false
-    var isEditName : Boolean = false
-    var isEditDesc : Boolean = false
+    var isEditProfile: Boolean = false
+    var isEditName: Boolean = false
+    var isEditDesc: Boolean = false
 
     private var boardProfileMap = HashMap<String, Bitmap>()
 
     private var haveChan = false
-    var items =ArrayList<BusinessBoardItem>()
+    var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     val item_count = 20 // 초기 20개의 아이템만 불러오게 하고, 스크롤 시 더 많은 아이템 불러오게 하기 위해
     var scroll_count = 1
     var adapter = BusinessManageRecyclerAdapter(items)
     var scrollFlag = false
     var itemIndex = ArrayList<Int>()
+
     // RecyclerView.adapter에 지정할 Adapter
     private lateinit var listAdapter: BusinessManageRecyclerAdapter
 
-    var profileImgPath : String = ""
+    var profileImgPath: String = ""
     private var resultLauncher //콜백함수
             : ActivityResultLauncher<Intent>? = null
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
@@ -76,13 +70,13 @@ class BusinessManageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-        val id:String? = this.intent.getStringExtra("id")
+        val id: String? = this.intent.getStringExtra("id")
         var isFirst = intent.getBooleanExtra("isFirst", true)
 
         items.clear()
         all_items.clear()
 
-        if(!isFirst){
+        if (!isFirst) {
             fetchProfile()
             fetchProfileImg()
         }
@@ -98,7 +92,8 @@ class BusinessManageActivity : AppCompatActivity() {
         val editName = findViewById<TextView>(R.id.profileName)
         val editDesc = findViewById<TextView>(R.id.profileDesc)
 
-        val inputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         subscribe_count.setOnClickListener {
             Toast.makeText(applicationContext, "구독자 수는 설정할 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -109,10 +104,9 @@ class BusinessManageActivity : AppCompatActivity() {
         write.setOnClickListener {
             val editName = findViewById<TextView>(R.id.profileName)
             val editIntro = findViewById<TextView>(R.id.profileDesc)
-            if(editName.text.toString() == "" || editIntro.text.toString() == ""){
+            if (editName.text.toString() == "" || editIntro.text.toString() == "") {
                 Toast.makeText(this, "비즈니스 채널 설정 완료 후에 게시글 업로드가 가능합니다.", Toast.LENGTH_SHORT).show()
-            }
-            else{
+            } else {
                 var intent = Intent(this, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
                 intent.putExtra("id", id)
                 intent.putExtra("chanName", editName.text.toString())
@@ -127,84 +121,91 @@ class BusinessManageActivity : AppCompatActivity() {
         editDesc.isEnabled = false
 
         val settingBtn = findViewById<TextView>(R.id.manageButton)
-        settingBtn.setOnClickListener{
-            val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
+        settingBtn.setOnClickListener {
+            // manage 화면으로 이동
+            val intent = Intent(applicationContext, BusinessManageEdit::class.java)
+            intent.putExtra("chanName", editName.text)
+            intent.putExtra("chanDesc", editDesc.text)
+            intent.putExtra("chanImg", profileEncoded)
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
 
-            val editProfile_RadioBtn = findViewById<RadioButton>(R.id.edit_profile)
-            val editName_RadioBtn = findViewById<RadioButton>(R.id.edit_chanName)
-            val editDesc_RadioBtn = findViewById<RadioButton>(R.id.edit_chanDesc)
-
-            setting_RadioGroup.bringToFront()
-
-            if(setting_RadioGroup.visibility == View.VISIBLE) setting_RadioGroup.visibility = View.GONE
-            else setting_RadioGroup.visibility = View.VISIBLE
-
-            editProfile_RadioBtn.setOnClickListener{
-                isEditProfile =true
-                openGallery()
-//                showFileChooser()
-            }
-
-            editName_RadioBtn.setOnClickListener{
-                Log.d("92123", "clickName")
-                isEditName = true
-                setting_RadioGroup.visibility = View.GONE
-                editName.isEnabled = true
-                editName.setFocusableInTouchMode(true);
-                editName.setFocusable(true);
-                editName.requestFocus();
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT)
-
-                editName_RadioBtn.isSelected = false
-                editName_RadioBtn.isChecked = false
-
-            }
-
-            editName.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-                override fun onFocusChange(view: View, hasFocus: Boolean) {
-                    if (hasFocus) {
-                        //  .. 포커스시
-                    } else {
-                        requestBusinessName()
-                    }
-                }
-            })
-
-
-            editDesc_RadioBtn.setOnClickListener{
-                isEditDesc = true
-                setting_RadioGroup.visibility = View.GONE
-                editDesc.isEnabled = true
-                editDesc.setFocusableInTouchMode(true);
-                editDesc.setFocusable(true);
-                editDesc.requestFocus();
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(editDesc, InputMethodManager.SHOW_IMPLICIT)
-//                editDesc.setSelection(editDesc.length()); //커서를 끝에 위치!
-
-                editDesc_RadioBtn.isSelected = false
-                editDesc_RadioBtn.isChecked = false
-
-
-            }
-
-            editDesc.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-                override fun onFocusChange(view: View, hasFocus: Boolean) {
-                    if (hasFocus) {
-                        //  .. 포커스시
-                    } else {
-                        requestBusinessDesc()
-                    }
-                }
-            })
+//            val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
+//
+//            val editProfile_RadioBtn = findViewById<RadioButton>(R.id.edit_profile)
+//            val editName_RadioBtn = findViewById<RadioButton>(R.id.edit_chanName)
+//            val editDesc_RadioBtn = findViewById<RadioButton>(R.id.edit_chanDesc)
+//
+//            setting_RadioGroup.bringToFront()
+//
+//            if (setting_RadioGroup.visibility == View.VISIBLE) setting_RadioGroup.visibility =
+//                View.GONE
+//            else setting_RadioGroup.visibility = View.VISIBLE
+//
+//            editProfile_RadioBtn.setOnClickListener {
+//                isEditProfile = true
+//                openGallery()
+////                showFileChooser()
+//            }
+//
+//            editName_RadioBtn.setOnClickListener {
+//                isEditName = true
+//                setting_RadioGroup.visibility = View.GONE
+//                editName.isEnabled = true
+//                editName.setFocusableInTouchMode(true);
+//                editName.setFocusable(true);
+//                editName.requestFocus();
+//                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT)
+//
+//                editName_RadioBtn.isSelected = false
+//                editName_RadioBtn.isChecked = false
+//
+//            }
+//
+//            editName.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+//                override fun onFocusChange(view: View, hasFocus: Boolean) {
+//                    if (hasFocus) {
+//                        //  .. 포커스시
+//                    } else {
+//                        requestBusinessName()
+//                    }
+//                }
+//            })
+//
+//
+//            editDesc_RadioBtn.setOnClickListener {
+//                isEditDesc = true
+//                setting_RadioGroup.visibility = View.GONE
+//                editDesc.isEnabled = true
+//                editDesc.setFocusableInTouchMode(true);
+//                editDesc.setFocusable(true);
+//                editDesc.requestFocus();
+//                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//                imm.showSoftInput(editDesc, InputMethodManager.SHOW_IMPLICIT)
+////                editDesc.setSelection(editDesc.length()); //커서를 끝에 위치!
+//
+//                editDesc_RadioBtn.isSelected = false
+//                editDesc_RadioBtn.isChecked = false
+//
+//
+//            }
+//
+//            editDesc.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+//                override fun onFocusChange(view: View, hasFocus: Boolean) {
+//                    if (hasFocus) {
+//                        //  .. 포커스시
+//                    } else {
+//                        requestBusinessDesc()
+//                    }
+//                }
+//            })
         }
 
-        if(image_profile!=null){
-            val bitmap: Bitmap? = StringToBitmaps(image_profile)
-            profileImg.setImageBitmap(bitmap)
-        }
-
+            if (image_profile != null) {
+                val bitmap: Bitmap? = StringToBitmaps(image_profile)
+                profileImg.setImageBitmap(bitmap)
+            }
     }
 
     private fun uploadDataToDB() {
@@ -230,22 +231,26 @@ class BusinessManageActivity : AppCompatActivity() {
             startService(intent)
         }
 
-        GlobalScope.launch{
+        GlobalScope.launch {
             val request: StringRequest =
-                object : StringRequest(Method.POST, urlBusinessProfileUpdate, object : Response.Listener<String?> {
-                    override fun onResponse(response: String?) {
-                        Log.d("bussine123", response.toString())
+                object : StringRequest(
+                    Method.POST,
+                    urlBusinessProfileUpdate,
+                    object : Response.Listener<String?> {
+                        override fun onResponse(response: String?) {
+                            Log.d("bussine123", response.toString())
 
-                        loadingText.visibility = View.GONE
-                        progressBar.visibility = View.GONE
+                            loadingText.visibility = View.GONE
+                            progressBar.visibility = View.GONE
 
-                        fetchBusinessPost(findViewById(R.id.profileImg))
-                    }
-                }, object : Response.ErrorListener {
-                    override fun onErrorResponse(error: VolleyError) {
-                        Log.d("bussine123", error.toString())
-                    }
-                }) {
+                            fetchBusinessPost(findViewById(R.id.profileImg))
+                        }
+                    },
+                    object : Response.ErrorListener {
+                        override fun onErrorResponse(error: VolleyError) {
+                            Log.d("bussine123", error.toString())
+                        }
+                    }) {
                     @Throws(AuthFailureError::class)
                     override fun getParams(): Map<String, String>? {
                         val map: MutableMap<String, String> = HashMap()
@@ -270,13 +275,10 @@ class BusinessManageActivity : AppCompatActivity() {
         }
 
 
-
-
-
     }
 
     @SuppressLint("SetTextI18n")
-    fun fetchProfile(){
+    fun fetchProfile() {
         var id = intent.getStringExtra("id")!!
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
         val url2 = "http://seonho.dothome.co.kr/BusinessProfile2.php"
@@ -293,11 +295,11 @@ class BusinessManageActivity : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                Log.d("0i234",response)
-                if(!response.equals("business profile fail")){
+                Log.d("0i234", response)
+                if (!response.equals("business profile fail")) {
                     val jsonArray = JSONArray(response)
 
-                    for (i in jsonArray.length()-1  downTo  0) {
+                    for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
 
                         val channel_name = item.getString("Channel_Name")
@@ -307,15 +309,21 @@ class BusinessManageActivity : AppCompatActivity() {
                             Request.Method.POST,
                             url2,
                             { response ->
-                                if(!response.equals("no Subscribe")){
+                                if (!response.equals("no Subscribe")) {
                                     val jsonArray = JSONArray(response)
-                                    for (i in jsonArray.length()-1  downTo  0) {
+                                    for (i in jsonArray.length() - 1 downTo 0) {
                                         val item = jsonArray.getJSONObject(i)
                                         val subscribe_count = item.getInt("subscribe_count")
                                         subscribe_text.setText("구독자 수: " + subscribe_count.toString() + "명")
                                     }
-                                }else subscribe_text.setText("구독자 수: 0명")
-                            }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+                                } else subscribe_text.setText("구독자 수: 0명")
+                            },
+                            {
+                                Log.d(
+                                    "login failed",
+                                    "error......${this.let { it1 -> error(it1) }}"
+                                )
+                            },
                             hashMapOf(
                                 "id" to id
                             )
@@ -323,21 +331,19 @@ class BusinessManageActivity : AppCompatActivity() {
                         val queue = Volley.newRequestQueue(this)
                         queue.add(request)
 
-                        Log.d("????!!!", "${channel_name.equals("null")} / ${channel_desc==null}")
+                        Log.d("????!!!", "${channel_name.equals("null")} / ${channel_desc == null}")
 
-                        if(channel_name.equals("null")) {
+                        if (channel_name.equals("null")) {
                             editName.setText(null)
                             editName.setHint("채널명")
-                        }
-                        else editName.setText(channel_name)
+                        } else editName.setText(channel_name)
 
-                        if(channel_desc.equals("null")) {
+                        if (channel_desc.equals("null")) {
                             editDesc.setText(null)
                             editDesc.setHint("채널에 대한 간단한 소개를 작성해주세요.")
-                        }
-                        else editDesc.setText(channel_desc)
+                        } else editDesc.setText(channel_desc)
 
-                        if(image_profile!="null"){
+                        if (image_profile != "null") {
                             val bitmap: Bitmap? = StringToBitmaps(image_profile)
                             roundAll(editProfile, 70.0f)
                             editProfile.setImageBitmap(bitmap)
@@ -362,7 +368,7 @@ class BusinessManageActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun fetchProfileImg(){
+    fun fetchProfileImg() {
         var id = intent.getStringExtra("id")!!
         val url = "http://seonho.dothome.co.kr/BusinessProfile.php"
         val noPostView = findViewById<TextView>(R.id.noBusinessPostTextView)
@@ -378,11 +384,11 @@ class BusinessManageActivity : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                Log.d("0i234",response)
-                if(!response.equals("business profile fail")){
+                Log.d("0i234", response)
+                if (!response.equals("business profile fail")) {
                     val jsonArray = JSONArray(response)
 
-                    for (i in jsonArray.length()-1  downTo  0) {
+                    for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
 
                         val channel_name = item.getString("Channel_Name")
@@ -390,15 +396,16 @@ class BusinessManageActivity : AppCompatActivity() {
                         val image_profile = item.getString("Channel_Profile_Img")
                         val subscribe_count = item.getInt("subscribe_count")
 
-                        val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/$image_profile"
+                        val imgUrl =
+                            "http://seonho.dothome.co.kr/images/businessProfile/$image_profile"
 
                         //Log.d("4444", "$channel_name, $channel_desc, $image_profile")
 
-                        if(channel_name == null)
+                        if (channel_name == null)
                             editName.setHint("채널명")
                         else editName.setText(channel_name)
 
-                        if(channel_desc == null)
+                        if (channel_desc == null)
                             editDesc.setHint("채널에 대한 간단한 소개를 작성해주세요.")
                         else editDesc.setText(channel_desc)
 
@@ -433,7 +440,7 @@ class BusinessManageActivity : AppCompatActivity() {
         queue.add(request)
     }
 
-    fun fetchBusinessPost(profile : ImageView) {
+    fun fetchBusinessPost(profile: ImageView) {
         // url to post our data
         var appUser = intent.getStringExtra("id")!!
         val urlBoard = "http://seonho.dothome.co.kr/BusinessManage.php"
@@ -447,10 +454,10 @@ class BusinessManageActivity : AppCompatActivity() {
             { response ->
                 val jsonArray = JSONArray(response)
 
-                if(jsonArray.length() == 0) noPostView.visibility = View.VISIBLE
+                if (jsonArray.length() == 0) noPostView.visibility = View.VISIBLE
                 items.clear()
                 all_items.clear()
-                for (i in jsonArray.length()-1  downTo  0) {
+                for (i in jsonArray.length() - 1 downTo 0) {
                     val item = jsonArray.getJSONObject(i)
 
                     val num = item.getInt("num")
@@ -467,10 +474,10 @@ class BusinessManageActivity : AppCompatActivity() {
                         Request.Method.POST,
                         urlProfile,
                         { responseProfile ->
-                            if(!response.equals("business profile fail")){
+                            if (!response.equals("business profile fail")) {
                                 val jsonArray = JSONArray(responseProfile)
 
-                                for (i in jsonArray.length()-1  downTo  0) {
+                                for (i in jsonArray.length() - 1 downTo 0) {
                                     val item = jsonArray.getJSONObject(i)
 
                                     val channel_name = item.getString("Channel_Name")
@@ -478,28 +485,50 @@ class BusinessManageActivity : AppCompatActivity() {
                                     val image_profile = item.getString("Channel_Profile_Img")
                                     val subscribe_count = item.getInt("subscribe_count")
 
-                                    val BusinessItem = BusinessBoardItem(num, id, image_profile, channel_name, title, content, time, image1, image2, image3,false, false, true)
+                                    val BusinessItem = BusinessBoardItem(
+                                        num,
+                                        id,
+                                        image_profile,
+                                        channel_name,
+                                        title,
+                                        content,
+                                        time,
+                                        image1,
+                                        image2,
+                                        image3,
+                                        false,
+                                        false,
+                                        true
+                                    )
 
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
 
-                                    var recyclerViewState = BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
+                                    var recyclerViewState =
+                                        BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
                                     var new_items = ArrayList<BusinessBoardItem>()
                                     new_items.addAll(items)
                                     adapter = BusinessManageRecyclerAdapter(new_items)
                                     BusinessBoardRecyclerView.adapter = adapter
-                                    adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+                                    adapter.stateRestorationPolicy =
+                                        RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+                                    BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
+                                        recyclerViewState
+                                    );
 
                                     // 수정 삭제 ItemClick 이벤트
-                                    adapter.setOnItemClickListener(object:BusinessManageRecyclerAdapter.OnItemClickListener{
+                                    adapter.setOnItemClickListener(object :
+                                        BusinessManageRecyclerAdapter.OnItemClickListener {
                                         override fun onUpdateClick(
                                             v: View,
                                             data: BusinessBoardItem,
                                             pos: Int
                                         ) {
                                             // 글쓰기 화면으로 이동
-                                            var intent = Intent(applicationContext, BusinessWriting::class.java) //비즈니스 글쓰기 액티비티
+                                            var intent = Intent(
+                                                applicationContext,
+                                                BusinessWriting::class.java
+                                            ) //비즈니스 글쓰기 액티비티
                                             intent.putExtra("id", data.id)
                                             intent.putExtra("chanName", data.channel_name)
                                             intent.putExtra("num", data.post_num.toString())
@@ -508,7 +537,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                             intent.putExtra("image1", data.image1)
                                             intent.putExtra("image2", data.image2)
                                             intent.putExtra("image3", data.image3)
-                                            intent.putExtra("time",data.time)
+                                            intent.putExtra("time", data.time)
                                             intent.putExtra("update", 1)
                                             startActivity(intent)
                                         }
@@ -525,7 +554,8 @@ class BusinessManageActivity : AppCompatActivity() {
                                 }
                             }
 
-                        }, { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
+                        },
+                        { Log.d("login failed", "error......${this.let { it1 -> error(it1) }}") },
                         hashMapOf(
                             "id" to id
                         )
@@ -545,7 +575,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
     }
 
-    fun PostDeleteRequest(channel_name:String, num:String){
+    fun PostDeleteRequest(channel_name: String, num: String) {
         var appUser = intent?.getStringExtra("id").toString() //user id 받아오기, 내가 좋아요 한 글 보기 위함
         val urlDelete = "http://seonho.dothome.co.kr/BusinessDelete.php"
 
@@ -563,7 +593,8 @@ class BusinessManageActivity : AppCompatActivity() {
                     var intent = Intent(applicationContext, BusinessManageActivity::class.java)
                     intent.putExtra("id", appUser)
                     intent.putExtra("isFirst", false)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
                     startActivity(intent)
 
                 } else {
@@ -611,7 +642,7 @@ class BusinessManageActivity : AppCompatActivity() {
             urlBusinessProfileUpdate,
             { response ->
                 Log.d("bussine123", response.toString())
-                if(!response.equals("business Chan update fail")) {
+                if (!response.equals("business Chan update fail")) {
                     Toast.makeText(this, "비즈니스 채널 프로필 업데이트 완료", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "비즈니스 채널 프로필 업데이트 실패", Toast.LENGTH_SHORT).show()
@@ -643,7 +674,8 @@ class BusinessManageActivity : AppCompatActivity() {
 
 
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdateName.php"
-        val urlBusinessProfileUpdateBoard = "http://seonho.dothome.co.kr/BusinessProfileNameBoardUpdate.php"
+        val urlBusinessProfileUpdateBoard =
+            "http://seonho.dothome.co.kr/BusinessProfileNameBoardUpdate.php"
 
         val intent: Intent = Intent(applicationContext, ProfileFragment::class.java)
 
@@ -657,16 +689,22 @@ class BusinessManageActivity : AppCompatActivity() {
             urlBusinessProfileUpdate,
             { response ->
                 Log.d("bussine123", response.toString())
-                if(!response.equals("business Chan update fail")) {
+                if (!response.equals("business Chan update fail")) {
                     Toast.makeText(this, "비즈니스 채널 프로필 업데이트 완료", Toast.LENGTH_SHORT).show()
 
                     val requestUpdateBoard = Login_Request(
                         Request.Method.POST,
                         urlBusinessProfileUpdateBoard,
-                        {responseBoard ->
+                        { responseBoard ->
                             Log.d("business update Sucess", responseBoard)
 
-                        },{Log.d("business Profile fail","error......${this.let { it1 -> error(it1) }}" )},
+                        },
+                        {
+                            Log.d(
+                                "business Profile fail",
+                                "error......${this.let { it1 -> error(it1) }}"
+                            )
+                        },
                         hashMapOf(
                             "id" to id,
                             "Channel_Name" to channel_name
@@ -694,22 +732,26 @@ class BusinessManageActivity : AppCompatActivity() {
     }
 
     private fun openGallery() {
-        val intent : Intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(intent, GALLERY)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { //uri -> bitmap
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
 
         var profileImg = findViewById<ImageView>(R.id.profileImg)
-        val id:String? = this.intent.getStringExtra("id")
+        val id: String? = this.intent.getStringExtra("id")
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)
         if (resultCode == Activity.RESULT_OK) {
-            if(requestCode == GALLERY) {
-                val currentImgUri : Uri? = data?.data
+            if (requestCode == GALLERY) {
+                val currentImgUri: Uri? = data?.data
                 Log.d("sel IMGGG", "sel2")
 
                 try {
@@ -750,7 +792,12 @@ class BusinessManageActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadBitmap(id : String, channel_name : String , channel_desc : String, bitmap: Bitmap) {
+    private fun uploadBitmap(
+        id: String,
+        channel_name: String,
+        channel_desc: String,
+        bitmap: Bitmap
+    ) {
         val imgByteArr = bitmapToByteArray(bitmap)
         val urlBusinessProfileUpdate = "http://seonho.dothome.co.kr/BusinessProfileUpdate2.php"
         val volleyMultipartRequest: VolleyMultipartRequest = object : VolleyMultipartRequest(
@@ -768,8 +815,12 @@ class BusinessManageActivity : AppCompatActivity() {
             override fun getByteData(): java.util.ArrayList<Pair<String, DataPart>> {
                 //여기서 이미지파일을 넣은 컬렉션을 리턴하면 된다.
                 val params = ArrayList<Pair<String, DataPart>>()
-                params.add(Pair("profile",
-                    DataPart("profile/$id/$channel_name",imgByteArr, "profile")))
+                params.add(
+                    Pair(
+                        "profile",
+                        DataPart("profile/$id/$channel_name", imgByteArr, "profile")
+                    )
+                )
 
                 return params
             }
@@ -789,7 +840,7 @@ class BusinessManageActivity : AppCompatActivity() {
 
     }
 
-    fun roundAll(iv: ImageView, curveRadius : Float)  : ImageView {
+    fun roundAll(iv: ImageView, curveRadius: Float): ImageView {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -810,22 +861,22 @@ class BusinessManageActivity : AppCompatActivity() {
     private fun resizeProfile(bitmap: Bitmap): Bitmap {
         var bitmap: Bitmap? = bitmap
         val config: Configuration = Resources.getSystem().configuration
-        var bitmap_width : Int? = bitmap?.width
-        var bitmap_height : Int? = bitmap?.height
+        var bitmap_width: Int? = bitmap?.width
+        var bitmap_height: Int? = bitmap?.height
 
         val resize_size = 260
 
         //사진의 가로길이가 더 길거나 같으면
-        if(bitmap_width!=null && bitmap_height!=null){
-            if(bitmap_width >= bitmap_height){
+        if (bitmap_width != null && bitmap_height != null) {
+            if (bitmap_width >= bitmap_height) {
 
-                val ratio = (bitmap_height*resize_size)/bitmap_width
+                val ratio = (bitmap_height * resize_size) / bitmap_width
                 bitmap = Bitmap.createScaledBitmap(bitmap!!, resize_size, ratio, true)
             }
             //사진의 세로길이가 더 길면
-            else{
-                val ratio = (bitmap_width*resize_size)/bitmap_height
-                bitmap = Bitmap.createScaledBitmap(bitmap!!, ratio, resize_size , true)
+            else {
+                val ratio = (bitmap_width * resize_size) / bitmap_height
+                bitmap = Bitmap.createScaledBitmap(bitmap!!, ratio, resize_size, true)
             }
         }
 
@@ -856,7 +907,7 @@ class BusinessManageActivity : AppCompatActivity() {
     fun StringToBitmaps(image: String?): Bitmap? {
         try {
             val encodeByte = Base64.decode(image, Base64.DEFAULT)
-            val bitmap : Bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            val bitmap: Bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
             return bitmap
         } catch (e: Exception) {
             e.message
@@ -895,13 +946,13 @@ class BusinessManageActivity : AppCompatActivity() {
     }
 
     // 게시물 수정
-    fun updatePost(){
+    fun updatePost() {
 
     }
 
 
     // 게시물 삭제
-    fun deletePost(){
+    fun deletePost() {
 
     }
 }

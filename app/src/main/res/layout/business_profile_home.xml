@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="200dp"
         android:layout_weight="2"
-        android:text="내가 작성한 비즈니스 채널 글이 없습니다."
+        android:text="비즈니스 채널 글이 없습니다."
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout7"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout7"
-        android:visibility="gone"/>
+        app:layout_constraintStart_toStartOf="@+id/linearLayout7" />
 
     <android.widget.ProgressBar
         android:id="@+id/progressbarBusiness"
