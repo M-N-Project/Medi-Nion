@@ -107,7 +107,7 @@
         </LinearLayout>
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -122,7 +122,7 @@
                 tools:listitem="@layout/business_board_home_item">
 
             </androidx.recyclerview.widget.RecyclerView>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <View
             android:id="@+id/view6"
