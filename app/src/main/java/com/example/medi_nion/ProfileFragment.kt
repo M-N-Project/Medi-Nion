@@ -152,9 +152,9 @@ class ProfileFragment : Fragment(R.layout.profile) {
         }
 
         //다크모드 추가하기
-        binding.appDark.setOnClickListener {
-
-        }
+//        binding.appDark.setOnClickListener {
+//
+//        }
 
         //비밀번호 설정
         binding.appPasswd.setOnClickListener {

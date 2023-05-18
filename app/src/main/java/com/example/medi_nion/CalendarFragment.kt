@@ -71,8 +71,13 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+
         // Inflate the layout for this fragment
         var view =  inflater.inflate(R.layout.calendar, container, false)
+
+        val darkOverlay = view.findViewById<View>(R.id.darkOverlay)
 
         fetchEvents(currentDate)
 
@@ -187,7 +192,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         }
     }
 
-    
+
     //토요일 색상 변경
     inner class SaturdayDecorator: DayViewDecorator {
 
