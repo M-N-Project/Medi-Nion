@@ -1,0 +1,13 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="12dp"
+        android:height="12dp">
+        <rotate
+            android:fromDegrees="180"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <drawable
+                android:drawable="@drawable/arrow" />
+        </rotate>
+    </item>
+</layer-list>

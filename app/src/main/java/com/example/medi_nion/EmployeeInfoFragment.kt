@@ -85,23 +85,23 @@ class EmployeeInfoFragment : Fragment() {
             }
         }
 
-//        refresh_layout1.setColorSchemeResources(R.color.color5)
-//        refresh_layout1.setOnRefreshListener {
-//            try {
-//                val intent = activity?.intent
-//                activity?.finish() // Finish the current Activity
-//                activity?.overridePendingTransition(0, 0) // Disable transition animation
-//                intent?.let {
-//                    activity?.startActivity(it) // Start the Activity again
-//                }
-//                activity?.overridePendingTransition(0, 0) // Disable transition animation
-//
-//                refresh_layout1.isRefreshing = false // Hide the refresh indicator if needed
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//
-//        }
+        refresh_layout1.setColorSchemeResources(R.color.color5)
+        refresh_layout1.setOnRefreshListener {
+            try {
+                val intent = activity?.intent
+                activity?.finish() // Finish the current Activity
+                activity?.overridePendingTransition(0, 0) // Disable transition animation
+                intent?.let {
+                    activity?.startActivity(it) // Start the Activity again
+                }
+                activity?.overridePendingTransition(0, 0) // Disable transition animation
+
+                refresh_layout1.isRefreshing = false // Hide the refresh indicator if needed
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
 
 
 
