@@ -64,15 +64,6 @@ class Board_profile : AppCompatActivity() {
 
 
         var profileType = intent.getStringExtra("profileMenuType")
-        Log.d("create", profileType.toString())
-//        if(profileType=="post")
-//            fetchPost(board_select.text.toString())
-//        else if(profileType=="scrap")
-//            fetchScrap(board_select.text.toString())
-//        else if(profileType=="like")
-//            fetchLike(board_select.text.toString())
-//        else if(profileType=="comment")
-//            fetchComment(board_select.text.toString())
 
         board_select.text = "자유 게시판"
         lastSelected = "자유 게시판"
@@ -86,13 +77,10 @@ class Board_profile : AppCompatActivity() {
                 boardTypeArrayList.add(i)
             }
             showBottomSheet(boardTypeArrayList, "boardType")
-
         }
 
 
         refresh_layout.setOnRefreshListener { //새로고침
-            Log.d("omg", "hello refresh")
-
             try {
                 //TODO 액티비티 화면 재갱신 시키는 코드
                 val intent = intent
@@ -124,7 +112,6 @@ class Board_profile : AppCompatActivity() {
                         if(all_items.size > 20){
                             scrollFlag = true
 
-                            Log.d("attention", "let it be")
                             var progressBar : ProgressBar = findViewById(R.id.progressBar2)
                             progressBar.visibility = View.VISIBLE
 
