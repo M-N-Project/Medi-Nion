@@ -126,7 +126,8 @@ class BusinessManageActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, BusinessManageEdit::class.java)
             intent.putExtra("chanName", editName.text)
             intent.putExtra("chanDesc", editDesc.text)
-            intent.putExtra("chanImg", profileEncoded)
+            intent.putExtra("chanImg", profileImgUrl)
+            intent.putExtra("id", intent.getStringExtra("id").toString())
             //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
 
@@ -367,6 +368,7 @@ class BusinessManageActivity : AppCompatActivity() {
         queue.add(request)
     }
 
+    private lateinit var profileImgUrl : String
     @SuppressLint("SetTextI18n")
     fun fetchProfileImg() {
         var id = intent.getStringExtra("id")!!
@@ -399,6 +401,7 @@ class BusinessManageActivity : AppCompatActivity() {
                         val imgUrl =
                             "http://seonho.dothome.co.kr/images/businessProfile/$image_profile"
 
+                        profileImgUrl = imgUrl
                         //Log.d("4444", "$channel_name, $channel_desc, $image_profile")
 
                         if (channel_name == null)
