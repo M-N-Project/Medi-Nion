@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -226,6 +227,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
+    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.S)
     fun NotificationRequest() {
         val receiverIntent: Intent = Intent(

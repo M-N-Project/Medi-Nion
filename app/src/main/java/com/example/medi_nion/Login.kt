@@ -1,20 +1,23 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
@@ -29,6 +32,7 @@ private const val DEFAULT_VALUE_LONG = -1L
 private const val DEFAULT_VALUE_FLOAT = -1f
 
 class Login : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,12 +183,18 @@ class Login : AppCompatActivity() {
         val id = findViewById<EditText>(R.id.id)
         val password = findViewById<EditText>(R.id.password)
         val loginBtn = findViewById<Button>(R.id.loginBtn)
-        val signupBtn = findViewById<Button>(R.id.signupBtn)
+        val signupBtn = findViewById<TextView>(R.id.signupBtn)
         val autologin = findViewById<CheckBox>(R.id.autologin)
+        val findpasswd = findViewById<TextView>(R.id.passwd_find)
 
         var checkID: String = ""
         var checkPW: String = ""
         var mContext = this
+
+        findpasswd.setOnClickListener {
+            val intent = Intent(applicationContext, FindPasswd::class.java)
+            startActivity(intent)
+        }
 
         signupBtn.setOnClickListener {
             //회원가입 화면으로 이동
@@ -212,9 +222,6 @@ class Login : AppCompatActivity() {
                 setString(mContext, "pw", password.text.toString())
                 checkID = getString(mContext, "id")
                 checkPW = getString(mContext, "pw")
-                Log.d("99999", "$checkID, $checkPW")
-//                    intent.putExtra("checkID", checkID)
-//                    intent.putExtra("checkPW", checkPW)
                 loginRequest(url)
             }
         }
@@ -223,12 +230,10 @@ class Login : AppCompatActivity() {
             setString(mContext, "id", id.text.toString())
             setString(mContext, "pw", password.text.toString())
             setBoolean(mContext, "check", autologin.isChecked)
-            Log.d("mmmmmmm", "123")
         }
         else {
             //setBoolean(mContext, "check", autologin.isChecked)
             clear(mContext)
-            Log.d("fffffff", "456")
         }
     }
 
@@ -343,7 +348,6 @@ class Login : AppCompatActivity() {
             // Get new FCM registration token
             val token = task.result
 
-            Log.d("892123", token)
             val request = Login_Request(
                 Request.Method.POST,
                 updateUserKey,
