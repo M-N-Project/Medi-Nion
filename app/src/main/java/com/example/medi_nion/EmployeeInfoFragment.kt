@@ -64,7 +64,7 @@ class EmployeeInfoFragment : Fragment() {
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar2)
         //toolbar.inflateMenu(R.menu.employee_titlebar)
         //toolbar.setNavigationIcon(R.drawable.arrow_resize)
-        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(),R.drawable.arrow_resize)
+        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.arrow_resize1)
         if(locaSelected=="null" && deptSelected == "null" && hosSelected == "null") toolbar.subtitle = "채용 정보"
             else toolbar.subtitle="$locaSelected $deptSelected $hosSelected"
         toolbar.setNavigationOnClickListener{

@@ -747,7 +747,7 @@ class SignUP : AppCompatActivity() {
         var identity_image1 = ""
         var identity_image2 = ""
 
-        var token = ""
+        var token = "sdfdsf"
 
         identity_opencv = identity_before.replace("\n", "")
         identity_opencv = identity_opencv.replace(" ", "")
@@ -762,10 +762,6 @@ class SignUP : AppCompatActivity() {
         val android_id = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("ANDROID_ID", android_id)
 
-//        var spinner = findViewById<Spinner>(R.id.userDept_spinner)
-//
-//        var userDept = spinner.selectedItem.toString()
-//
         userDept = selectedUserDept
         if (userDept.equals("내과 (심장내과, 혈액내과, 호흡기내과, 소화기내과 등)")) {
             userDept = "내과"
@@ -778,7 +774,8 @@ class SignUP : AppCompatActivity() {
         }
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
-        val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
+
+        Log.d("789", "$id, $basicUserBtn, $userDept, $token, $identity")
 
         val request = SignUP_Request(
             Request.Method.POST,
