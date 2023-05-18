@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 class EmployeeFiltering : AppCompatActivity() {
     private lateinit var doneBtn:Button
+    private lateinit var cancel:TextView
     private lateinit var loca_radioGroup1:RadioGroup
     private lateinit var loca_radioGroup2:RadioGroup
     private lateinit var loca_radioGroup3:RadioGroup
@@ -28,10 +30,12 @@ class EmployeeFiltering : AppCompatActivity() {
     private var dept = -1
     private var hospital = -1
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) { //병원 정보 프로필 액티비티
         super.onCreate(savedInstanceState)
         setContentView(R.layout.employee_info_filtering)
 
+        cancel = findViewById<TextView>(R.id.filterlingcancel)
         doneBtn = findViewById<Button>(R.id.button)
         loca_radioGroup1 = findViewById<RadioGroup>(R.id.loca_radioGroup)
         loca_radioGroup2 = findViewById<RadioGroup>(R.id.loca_radioGroup2)
@@ -78,6 +82,12 @@ class EmployeeFiltering : AppCompatActivity() {
 
         hos_radioGroup1.setOnCheckedChangeListener(hos_listener1())
         hos_radioGroup2.setOnCheckedChangeListener(hos_listener2())
+
+        //////////취소 눌렀을때 이벤트////////////////////////////////////////
+        cancel.setOnClickListener {
+            onBackPressed()
+        }
+
 
         //////////////// 선택 완료 버튼 클릭 이벤트 ///////////////////////////
         doneBtn.setOnClickListener {

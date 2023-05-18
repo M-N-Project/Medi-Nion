@@ -196,6 +196,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Notice"
             android:screenOrientation="portrait"/>
+        <activity android:name=".EmployeeInfoFragment"
+            android:screenOrientation="portrait"/>
+
 
 
         <uses-library

@@ -8,7 +8,9 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.board_home.*
 import kotlinx.android.synthetic.main.employee_info.*
 import kotlinx.coroutines.*
@@ -60,8 +62,9 @@ class EmployeeInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar2)
-        toolbar.inflateMenu(R.menu.employee_titlebar)
-        toolbar.setNavigationIcon(R.drawable.arrow_resize)
+        //toolbar.inflateMenu(R.menu.employee_titlebar)
+        //toolbar.setNavigationIcon(R.drawable.arrow_resize)
+        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(),R.drawable.arrow_resize)
         if(locaSelected=="null" && deptSelected == "null" && hosSelected == "null") toolbar.subtitle = "채용 정보"
             else toolbar.subtitle="$locaSelected $deptSelected $hosSelected"
         toolbar.setNavigationOnClickListener{
@@ -81,6 +84,26 @@ class EmployeeInfoFragment : Fragment() {
                 }
             }
         }
+
+//        refresh_layout1.setColorSchemeResources(R.color.color5)
+//        refresh_layout1.setOnRefreshListener {
+//            try {
+//                val intent = activity?.intent
+//                activity?.finish() // Finish the current Activity
+//                activity?.overridePendingTransition(0, 0) // Disable transition animation
+//                intent?.let {
+//                    activity?.startActivity(it) // Start the Activity again
+//                }
+//                activity?.overridePendingTransition(0, 0) // Disable transition animation
+//
+//                refresh_layout1.isRefreshing = false // Hide the refresh indicator if needed
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//
+//        }
+
+
 
         val locaCode:String = if(locaSelected?.equals("서울") == true) "&loc_cd=101000"
         else if(locaSelected?.equals("경기") == true) "&loc_cd=102000"
@@ -141,10 +164,16 @@ class EmployeeInfoFragment : Fragment() {
         else if (hosSelected?.equals("한방병원")== true) "70210"
         else ""
 
-        val indCode:String = if(deptSelected == null && hosSelected == null) ""
-        else if(deptSelected != null && hosSelected == null) "ind_cd=$deptCode"
-        else if(deptSelected == null && hosSelected != null) "ind_cd=$hosCode"
-        else "&ind_cd=$deptCode,$hosCode"
+        val indCode: String = if (deptSelected == null && hosSelected == null) {
+            ""
+        } else if (deptSelected != null && hosSelected == null) {
+            "ind_cd=$deptCode"
+        } else if (deptSelected == null && hosSelected != null) {
+            "ind_cd=$hosCode"
+        } else {
+            "&ind_cd=$deptCode,$hosCode"
+        }
+
 
         val apiURL = "https://oapi.saramin.co.kr/job-search?access-key=jyadKDRGVi7FGKeg03ZM6FS3nQiSVB9TCENCtBIimhWDywFEway$locaCode$indCode&fields=expiration-date+keyword-code&count=110&job_mid_cd=6"
         GlobalScope.launch {

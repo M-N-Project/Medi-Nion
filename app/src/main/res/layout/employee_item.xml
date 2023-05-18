@@ -44,6 +44,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="2023년 약무직(약사) 모집"
+                    android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 

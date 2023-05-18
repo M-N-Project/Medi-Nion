@@ -2,11 +2,13 @@ package com.example.medi_nion
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.medical_seminar_item.view.*
@@ -42,6 +44,9 @@ class MedicalSeminarAdapter(val items: ArrayList<MedicalSeminar.MediSeminar>, co
             val openUrl = Intent(Intent.ACTION_VIEW)
             openUrl.data = Uri.parse(items[position].saminar_siteUrl)
             startActivity(holder.view.context, openUrl, null)
+
+            // Change ms_title text color to purple
+            holder.view.ms_title.setTextColor(Color.BLUE)
         }
     }
 }

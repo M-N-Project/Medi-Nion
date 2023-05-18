@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="서비스이용약관"
+            android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -40,6 +41,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="24dp"
             android:text="제1조(목적)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -58,6 +60,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:text="제2조(정의)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -194,6 +197,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="24dp"
             android:text="제3조(약관 등의 명시와 설명 및 개정)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -239,6 +243,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:text="제4조(서비스의 제공)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -330,6 +335,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:text="제5조(서비스 이용계약의 성립)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -375,6 +381,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:text="제6조(개인정보의 관리 및 보호)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -412,6 +419,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:text="제7조(서비스 이용계약의 종료)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -448,6 +456,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:text="제8조(금지행위)"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
