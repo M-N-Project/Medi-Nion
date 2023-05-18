@@ -30,7 +30,7 @@ class CalendarDialog : Dialog {
         val end_time = findViewById<TextView>(R.id.end_time)
         val schedule_color_view = findViewById<Button>(R.id.schedule_color_view)
         val schedule_alarm = findViewById<TextView>(R.id.schedule_alarm_textView)
-        val schedule_memo = findViewById<EditText>(R.id.schedule_memo)
+        val schedule_memo = findViewById<EditText>(R.id.schedule_memo_textView)
 
         editText_scheduleName.setText(schedule_item.schedule_name)
 

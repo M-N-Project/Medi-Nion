@@ -11,6 +11,14 @@
     android:id="@+id/calendarFrame"
     android:layout_width="wrap_content"
     android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/darkOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80FFFFFF"
+        android:visibility="invisible" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -134,6 +142,8 @@
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>
 </layout>

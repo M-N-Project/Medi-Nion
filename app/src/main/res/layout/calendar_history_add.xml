@@ -189,16 +189,28 @@
 <!--                android:text="설정 안함"-->
 <!--                android:textSize="16sp"/>-->
 
-            <Spinner
-                android:id="@+id/alarm_spinner"
-                android:layout_width="130dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="0"
-                android:spinnerMode="dropdown"
-                android:ems="5"
-                android:entries="@array/times"
-                />
+            <LinearLayout
+                android:id="@+id/alarm_linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <TextView
+                    android:id="@+id/alarm_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="설정 안함"/>
+
+                <android.widget.Button
+                    android:id="@+id/alarm_btn"
+                    android:layout_width="12dp"
+                    android:layout_height="11dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="36dp"
+                    android:background="@drawable/arrow_resize"
+                    android:rotation="-270"/>
+            </LinearLayout>
 
 <!--            <Spinner-->
 <!--                android:id="@+id/alarm_spinner"-->
@@ -245,15 +257,28 @@
             <!--                android:text="설정 안함"-->
             <!--                android:textSize="16sp"/>-->
 
-            <Spinner
-                android:id="@+id/repeat_spinner"
-                android:layout_width="130dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="15dp"
-                android:layout_weight="0"
-                android:spinnerMode="dropdown"
-                android:ems="5"
-                android:entries="@array/repeat" />
+            <LinearLayout
+                android:id="@+id/repeat_linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
+                <TextView
+                    android:id="@+id/repeat_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="설정 안함"/>
+
+                <android.widget.Button
+                    android:id="@+id/repeat_btn"
+                    android:layout_width="12dp"
+                    android:layout_height="11dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="36dp"
+                    android:background="@drawable/arrow_resize"
+                    android:rotation="-270"/>
+            </LinearLayout>
 
             <!--            <Spinner-->
             <!--                android:id="@+id/alarm_spinner"-->
@@ -281,29 +306,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <EditText
                 android:id="@+id/schedule_memo_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:text="메모"
-                android:textSize="16sp"/>
-
-            <EditText
-                android:id="@+id/schedule_memo"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_weight="0"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="17dp"
-                android:gravity="top"
-                android:ems="10"
-                android:hint="메모를 작성해주세요."
-                android:background="#ffffff"
-                android:textSize="16sp"/>
+                android:layout_weight="2"
+                android:backgroundTint="#00000000"
+                android:hint="메모"
+                android:textColor="#757575"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <Button

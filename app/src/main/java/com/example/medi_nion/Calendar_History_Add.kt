@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,9 +28,11 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import java.util.*
@@ -43,6 +46,7 @@ class Calendar_History_Add : AppCompatActivity() {
     private lateinit var builder: NotificationCompat.Builder
     lateinit var notificationPermission: ActivityResultLauncher<String>
 
+    private var lastSelected = ""
 //    var builder: NotificationCompat.Builder? = null
 
     companion object {
@@ -186,6 +190,26 @@ class Calendar_History_Add : AppCompatActivity() {
 
         }
 
+        val selectAlarmLinearLayout = findViewById<LinearLayout>(R.id.alarm_linearLayout)
+        selectAlarmLinearLayout.setOnClickListener{
+            var alarmArray = resources.getStringArray(R.array.times)
+            var alarmArrayList = ArrayList<String>()
+            for(i in alarmArray){
+                alarmArrayList.add(i)
+            }
+            showBottomSheet(alarmArrayList, "alarm")
+        }
+
+        val selectRepeatLinearLayout = findViewById<LinearLayout>(R.id.repeat_linearLayout)
+        selectRepeatLinearLayout.setOnClickListener{
+            var repeatArray = resources.getStringArray(R.array.repeat)
+            var repeatArrayList = ArrayList<String>()
+            for(i in repeatArray){
+                repeatArrayList.add(i)
+            }
+            showBottomSheet(repeatArrayList, "repeat")
+        }
+
         schedule_btn.setOnClickListener {
             if(TextUtils.isEmpty(schedule_title.text.toString())) {
                 Toast.makeText(applicationContext,
@@ -248,11 +272,11 @@ class Calendar_History_Add : AppCompatActivity() {
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
-        val alarm_spinner = findViewById<Spinner>(R.id.alarm_spinner)
-        var alarm = alarm_spinner.selectedItem.toString()
-        val repeat_spinner = findViewById<Spinner>(R.id.repeat_spinner)
-        var repeat = repeat_spinner.selectedItem.toString()
-        val schedule_memo = findViewById<EditText>(R.id.schedule_memo).text.toString()
+        val alarm_spinner = findViewById<TextView>(R.id.alarm_spinner)
+        var alarm = alarm_spinner.text.toString()
+        val repeat_spinner = findViewById<TextView>(R.id.repeat_spinner)
+        var repeat = repeat_spinner.text.toString()
+        val schedule_memo = findViewById<EditText>(R.id.schedule_memo_textView).text.toString()
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
 
@@ -317,7 +341,7 @@ class Calendar_History_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val item = CalendarItem(id, schedule_title ,presentDate,start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
+                    val item = CalendarItem(id, schedule_title ,presentDate,start_result ,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
                     CalendarFragment.viewModel.addItemLiveList(item)
 
                     this.finish()
@@ -385,5 +409,48 @@ class Calendar_History_Add : AppCompatActivity() {
             )
         )
 
+    }
+
+    private fun showBottomSheet(items : ArrayList<String> , type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        val alarmTextView = findViewById<TextView>(R.id.alarm_spinner)
+        val repeatTextView = findViewById<TextView>(R.id.repeat_spinner)
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(type == "alarm"){
+                alarmTextView.text = lastSelected
+            }
+            else{
+                repeatTextView.text = lastSelected
+            }
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 }
