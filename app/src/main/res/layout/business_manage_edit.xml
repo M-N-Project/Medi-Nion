@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         app:menu="@menu/business_chan_manage"
+        android:background="@color/white"
         android:elevation="5dp"/>
 
     <LinearLayout
@@ -44,7 +45,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="40dp"
-                app:srcCompat="@drawable/create_button" />
+                app:srcCompat="@drawable/camera" />
         </FrameLayout>
 
         <LinearLayout
@@ -74,11 +75,12 @@
 
                 <EditText
                     android:id="@+id/editChanName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:inputType="text"
                     android:text="채널 이름"
+                    android:textAlignment="viewEnd"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -104,11 +106,12 @@
 
                 <EditText
                     android:id="@+id/editChanDesc"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:inputType="text"
                     android:text="채널 소개"
+                    android:textAlignment="viewEnd"
                     android:textSize="16sp" />
             </LinearLayout>
 

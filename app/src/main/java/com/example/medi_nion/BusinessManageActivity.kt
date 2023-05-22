@@ -70,8 +70,10 @@ class BusinessManageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-        val id: String? = this.intent.getStringExtra("id")
+        val id: String? = intent.getStringExtra("id")
         var isFirst = intent.getBooleanExtra("isFirst", true)
+        Log.d("비즈니스 수정0-0", "$id $isFirst")
+
 
         items.clear()
         all_items.clear()
@@ -127,8 +129,9 @@ class BusinessManageActivity : AppCompatActivity() {
             intent.putExtra("chanName", editName.text)
             intent.putExtra("chanDesc", editDesc.text)
             intent.putExtra("chanImg", profileImgUrl)
-            intent.putExtra("id", intent.getStringExtra("id").toString())
-            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.putExtra("isFirst", isFirst)
+            intent.putExtra("id", this.intent.getStringExtra("id").toString())
+            Log.d("비즈니스 수정0", "$id $isFirst $editName.text $editDesc.text $profileEncoded")
             startActivity(intent)
 
 //            val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
