@@ -53,10 +53,12 @@ class BusinessManageEdit : AppCompatActivity() {
         val isFirst = intent.getBooleanExtra("isFirst", false)
         Log.d("비즈니스 수정1-1", "$chanName $chanDesc $chanImgUrl")
 
-        val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
-        val task = ImageLoadTask(chanImgUrl, chanProfileImg)
-        task.execute()
-        roundAll(chanProfileImg, 100.0f)
+        if(!chanImgUrl.equals("")) {
+            val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
+            val task = ImageLoadTask(chanImgUrl, chanProfileImg)
+            task.execute()
+            roundAll(chanProfileImg, 100.0f)
+        }
 
         val editName = findViewById<EditText>(R.id.editChanName)
         val editDesc = findViewById<EditText>(R.id.editChanDesc)

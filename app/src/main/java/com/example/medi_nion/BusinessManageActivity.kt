@@ -371,7 +371,7 @@ class BusinessManageActivity : AppCompatActivity() {
         queue.add(request)
     }
 
-    private lateinit var profileImgUrl : String
+    private var profileImgUrl : String=""
     @SuppressLint("SetTextI18n")
     fun fetchProfileImg() {
         var id = intent.getStringExtra("id")!!

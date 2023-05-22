@@ -23,13 +23,14 @@
             android:id="@+id/busi_optionRadioGroup"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="30dp"
             android:background="@drawable/selector_radio_button_group_opt"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout13"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout13">
+            app:layout_constraintTop_toTopOf="@+id/linearLayout13"
+            >
 
-            <RadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/busi_postUpdate_RadioBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,11 +38,12 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginRight="2dp"
                 android:background="@drawable/selector_radio_button_top_opt"
+                android:backgroundTint="#FFFFFF"
                 android:button="@null"
                 android:text="게시물 수정"
                 android:textAlignment="center" />
 
-            <RadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/busi_postDelete_RadioBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,6 +51,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_marginBottom="2dp"
                 android:background="@drawable/selector_radio_button_bottom_opt"
+                android:backgroundTint="@color/white"
                 android:button="@null"
                 android:text="게시물 삭제"
                 android:textAlignment="center" />
