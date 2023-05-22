@@ -455,6 +455,7 @@ class SignUP : AppCompatActivity() {
         }
 
         val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+        val basicUserBtn = findViewById<RadioButton>(R.id.basicUser_RadioBtn)
 
         selectBtn?.setOnClickListener{
 
@@ -475,6 +476,8 @@ class SignUP : AppCompatActivity() {
                     userType = "student"
                     informView.text = informConst
                 }
+
+                basicUserBtn.text = selectedUserType
             }
 
             else if(type == "userDept"){
@@ -778,7 +781,6 @@ class SignUP : AppCompatActivity() {
         }
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
-        val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
 
         val request = SignUP_Request(
             Request.Method.POST,
