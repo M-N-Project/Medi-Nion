@@ -39,8 +39,9 @@
 
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="10dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="7"
                         android:orientation="horizontal">
 
                         <com.makeramen.roundedimageview.RoundedImageView
@@ -168,18 +169,31 @@
                                 android:text="0" />
                         </LinearLayout>
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:layout_weight="1"/>
 
-                        <android.widget.Button
-                            android:id="@+id/commentMoreBtn"
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="0dp"
-                            android:background="@drawable/board_detail_more_btn"
-                            android:textColor="@color/black"
-                            android:visibility="visible"
-                            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp">
+
+                            <android.widget.Button
+                                android:id="@+id/commentMoreBtn"
+                                android:layout_width="13dp"
+                                android:layout_height="13dp"
+                                android:gravity="right"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginRight="0dp"
+                                android:background="@drawable/cancel2"
+                                android:textColor="@color/black"
+                                android:visibility="gone"
+                                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
 
