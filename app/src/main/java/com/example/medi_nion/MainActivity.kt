@@ -196,6 +196,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         var userDept = intent.getStringExtra("userDept")
         var userMedal = intent.getStringExtra("userMedal")
 
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         when(item.itemId){
             R.id.search -> {
                 val intent = Intent(this, SearchActivity::class.java)
@@ -204,7 +206,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 intent.putExtra("id", id)
                 startActivity(intent)
 
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
                 return true
