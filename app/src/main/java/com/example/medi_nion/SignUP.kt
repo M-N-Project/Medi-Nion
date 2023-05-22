@@ -775,8 +775,6 @@ class SignUP : AppCompatActivity() {
 
         val url = "http://seonho.dothome.co.kr/SignUP.php"
 
-        Log.d("789", "$id, $basicUserBtn, $userDept, $token, $identity")
-
         val request = SignUP_Request(
             Request.Method.POST,
             url,
