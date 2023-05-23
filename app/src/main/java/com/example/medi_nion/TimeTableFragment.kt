@@ -161,6 +161,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
     fun fetchEvent(v: View) {
         val id = arguments?.getString("id").toString()
         val table = v.findViewById<MinTimeTableView>(R.id.table)
+        val cal = Calendar.getInstance()
+        val week = cal.get(Calendar.WEEK_OF_MONTH)
         val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
 
         scheduleList.clear()
@@ -188,7 +190,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                         val schedule = ScheduleEntity(
                             id,
                             schedule_name,
-//                            start_date,
+                            start_date,
                             end_date,
                             schedule_start,
                             schedule_end,
@@ -230,7 +232,9 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                             }
 
                             val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
-                            dialog_date.text = schedule.schedule_date
+                            val calendar = Calendar.getInstance()
+//                            dialog_date.text = schedule.schedule_date
+                            dialog_date.text = calendar.toString()
 
                             val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                             schedule_title.setText(schedule.schedule_name) //스케줄 이름
@@ -414,7 +418,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
                                     Log.d(
                                         "-=123",
-                                        "${oldTitle}, ${schedule.schedule_name}, ${schedule.schedule_date} , ${schedule.schedule_start} , ${schedule.schedule_end}, ${schedule.schedule_color}, ${schedule.schedule_alarm}, ${schedule.schedule_memo}, ${schedule.schedule_isDone}"
+                                        "${oldTitle}, ${schedule.schedule_name}, ${schedule.schedule_start} , ${schedule.schedule_end}, ${schedule.schedule_color}, ${schedule.schedule_alarm}, ${schedule.schedule_memo}, ${schedule.schedule_isDone}"
                                     )
 
                                     if (schedule.schedule_color == "#FFFFFF")
@@ -458,7 +462,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 }
             }, { Log.d("login failed", "error......${error(this)}") },
             hashMapOf(
-                "id" to id
+                "id" to id,
+                "week" to week.toString()
             )
         )
         val queue = Volley.newRequestQueue(context)
@@ -471,7 +476,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
         val updateScheduleUrl = "http://seonho.dothome.co.kr/updateCalendar.php"
 
-        Log.d("-=123", "${id} , ${oldTitle}, ${oldStartTime},${item.schedule_name}, ${item.schedule_date} , ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
+        Log.d("-=123", "${id} , ${oldTitle}, ${oldStartTime},${item.schedule_name}, ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
         val request = Upload_Request(
             Request.Method.POST,
             updateScheduleUrl,
@@ -490,7 +495,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 "oldTitle" to oldTitle,
                 "oldStartTime" to oldStartTime,
                 "schedule_name" to item.schedule_name,
-                "schedule_date" to item.schedule_date,
+                "start_date" to item.start_date,
+                "end_date" to item.end_date,
                 "schedule_start" to item.schedule_start,
                 "schedule_end" to item.schedule_end,
                 "schedule_color" to if(item.schedule_color == "") "#BADFD2" else item.schedule_color,
@@ -527,7 +533,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
             mutableMapOf(
                 "id" to item.id,
                 "schedule_name" to item.schedule_name,
-                "schedule_date" to item.schedule_date,
+                "start_date" to item.start_date,
+                "end_date" to item.end_date,
                 "schedule_start" to item.schedule_start
             )
         )
