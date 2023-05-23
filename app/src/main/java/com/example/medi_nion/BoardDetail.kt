@@ -6,6 +6,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -25,14 +26,18 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.Constants.MessageNotificationKeys.TAG
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -59,6 +64,7 @@ class BoardDetail : AppCompatActivity() {
     var comment_comment_posPresent = -1 //대댓글 인덱스
     var comment_comment_posBefore = -1 //대댓글 인덱스
 
+    var lastSelected = ""
     var commentHeartFlag = "false"
     var comment2HeartFlag = "false"
 
@@ -223,7 +229,7 @@ class BoardDetail : AppCompatActivity() {
                 postImg.visibility = View.VISIBLE
                 val bitmap: Bitmap? = StringToBitmaps(image)
                 postImg.setImageBitmap(bitmap)
-            } else {
+            } else if(image == "" || image == "NULL"){
                 var postImg = findViewById<ImageView>(R.id.post_imgView)
                 postImg.visibility = View.GONE
             }
@@ -242,38 +248,8 @@ class BoardDetail : AppCompatActivity() {
 
             //게시물 옵션 버튼 눌렀을때 수정/삭제 버튼 visible / 다시 누르면 invisible
             optionBtn.setOnClickListener{
-                if(optionRadio.visibility == View.GONE)
-                    optionRadio.visibility = View.VISIBLE
-                else optionRadio.visibility = View.GONE
-            }
-
-            // 게시물 수정 버튼 클릭
-            val option_updatePost = findViewById<RadioButton>(R.id.postUpdate_RadioBtn)
-            option_updatePost.setOnClickListener{
-                // 글쓰기 화면으로 이동
-                val board = intent.getStringExtra("board")
-                var userType = intent.getStringExtra("userType")
-                var userDept = intent.getStringExtra("userDept")
-                val intent = Intent(applicationContext, BoardWrite::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("board", board)
-                intent.putExtra("post_num", post_num)
-                intent.putExtra("title", title)
-                intent.putExtra("content", content)
-                intent.putExtra("image", image)
-                intent.putExtra("update", 1)
-                intent.putExtra("userType", userType)
-                intent.putExtra("userDept", userDept)
-                intent.putExtra("userMedal", userMedal)
-
-                startActivity(intent)
-            }
-
-            // 게시물 삭제 버튼 클릭
-            val option_deletePost = findViewById<RadioButton>(R.id.postDelete_RadioBtn)
-            option_deletePost.setOnClickListener{
-                // 지우기.
-                PostDeleteRequest()
+                var optionArrayList = arrayListOf<String>("게시물 수정", "게시물 삭제")
+                showBottomSheet(optionArrayList, "boardOpt")
             }
         }
 
@@ -334,6 +310,69 @@ class BoardDetail : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun notification() {
         notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    private fun showBottomSheet(items : java.util.ArrayList<String>, type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
+        bottomSheetView.setBackgroundColor(Color.parseColor("#00000000"))
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        var id = intent.getStringExtra("id") //접속한 유저의 아이디
+        var userMedal = intent.getIntExtra("userMedal", 0)
+        val post_num = intent?.getStringExtra("num").toString() //현재 상세보기 중인 게시물의 num
+        val title = intent.getStringExtra("title") // 게시물 제목
+        val content = intent.getStringExtra("content") // 게시물 내용
+        val image = intent.getStringExtra("image") // 게시물 사진
+
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+
+        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+           if(lastSelected == "게시물 수정"){
+               val board = intent.getStringExtra("board")
+               var userType = intent.getStringExtra("userType")
+               var userDept = intent.getStringExtra("userDept")
+               val intent = Intent(applicationContext, BoardWrite::class.java)
+               intent.putExtra("id", id)
+               intent.putExtra("board", board)
+               intent.putExtra("post_num", post_num)
+               intent.putExtra("title", title)
+               intent.putExtra("content", content)
+               intent.putExtra("image", image)
+               intent.putExtra("update", 1)
+               intent.putExtra("userType", userType)
+               intent.putExtra("userDept", userDept)
+               intent.putExtra("userMedal", userMedal)
+
+               startActivity(intent)
+           }
+            else{
+               PostDeleteRequest()
+           }
+            bottomSheetDialog.dismiss()
+        }
+
+        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
+        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
+        dialogRecyclerView?.adapter = dialogAdapter
+
+
+        dialogAdapter.setOnItemClickListener(
+            object : DialogRecyclerAdapter.OnItemClickListener{
+                override fun onItemClick(v: View, data: String) {
+                    lastSelected = data
+
+                }
+
+            }
+        )
+
+        bottomSheetDialog.show()
     }
 
 //fetch 함수들 ====================================================================================================================
@@ -759,50 +798,91 @@ class BoardDetail : AppCompatActivity() {
                                                                                     data: CommentDetailItem,
                                                                                     pos: Int
                                                                                 ) {
-                                                                                    // 대댓글 테이블에서 찾아서 삭제
-                                                                                    val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
-                                                                                    val requestDelete2 = Login_Request(
-                                                                                        Request.Method.POST,
-                                                                                        urlDelete2,
-                                                                                        { responseDelete2 ->
-                                                                                            if (responseDelete2 != "comment delete2 fail") {
-                                                                                                // 댓글 카운트 찾아서 삭제
-                                                                                                Log.d("90234", "대댓글 삭제")
-                                                                                                val urlCommentDeleteCount = "http://seonho.dothome.co.kr/updateBoardCnt.php"
-                                                                                                val requestDeleteCount = Login_Request(
+                                                                                    val builder = AlertDialog.Builder(this@BoardDetail)
+                                                                                    builder.setTitle("댓글 삭제")
+                                                                                        .setMessage("댓글을 삭제하시겠습니까?")
+                                                                                        .setPositiveButton("삭제",
+                                                                                            DialogInterface.OnClickListener { dialog, id ->
+                                                                                                // 대댓글 테이블에서 찾아서 삭제
+                                                                                                val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
+                                                                                                val requestDelete2 = Login_Request(
                                                                                                     Request.Method.POST,
-                                                                                                    urlCommentDeleteCount,
-                                                                                                    { requestDeleteCount ->
-                                                                                                        if (requestDeleteCount != "update fail") {
-                                                                                                            Toast.makeText(
-                                                                                                                baseContext,
-                                                                                                                String.format("댓글이 삭제되었습니다."),
-                                                                                                                Toast.LENGTH_SHORT
-                                                                                                            ).show()
-                                                                                                            fetchCommentData()
+                                                                                                    urlDelete2,
+                                                                                                    { responseDelete2 ->
+                                                                                                        if (responseDelete2 != "comment delete2 fail") {
+                                                                                                            // 댓글 테이블에서 찾아서 삭제
+                                                                                                            val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
+                                                                                                            val requestDelete = Login_Request(
+                                                                                                                Request.Method.POST,
+                                                                                                                urlDelete,
+                                                                                                                { responseDelete ->
+                                                                                                                    if (responseDelete != "comment delete fail") {
+                                                                                                                        //board 테이블에서 댓글 개수 줄이기
+                                                                                                                        val urlCommentDeleteCount = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+                                                                                                                        val requestDeleteCount = Login_Request(
+                                                                                                                            Request.Method.POST,
+                                                                                                                            urlCommentDeleteCount,
+                                                                                                                            { requestDeleteCount ->
+                                                                                                                                if (requestDeleteCount != "update fail") {
+                                                                                                                                    Toast.makeText(
+                                                                                                                                        baseContext,
+                                                                                                                                        String.format("댓글이 삭제되었습니다."),
+                                                                                                                                        Toast.LENGTH_SHORT
+                                                                                                                                    ).show()
+
+//                                                                                                            for(i in 0 until comment_items.size){
+//                                                                                                                if(comment_items.get(i).comment_num == data.comment_num)
+//                                                                                                                    comment_items.removeAt(i)
+//                                                                                                            }
+//                                                                                                            findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() - 1).toString()
+//                                                                                                            Commentadapter =
+//                                                                                                                CommentListAdapter(comment_items)
+//                                                                                                            CommentRecyclerView.adapter =
+//                                                                                                                Commentadapter
+
+                                                                                                                                    fetchCommentData()
+                                                                                                                                }
+
+                                                                                                                            }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+                                                                                                                            hashMapOf(
+                                                                                                                                "board" to board,
+                                                                                                                                "post_num" to post_num,
+                                                                                                                                "flag" to "commentDOWN"
+                                                                                                                            )
+                                                                                                                        )
+                                                                                                                        val queue = Volley.newRequestQueue(applicationContext)
+                                                                                                                        queue.add(requestDeleteCount)
+                                                                                                                    }
+
+                                                                                                                }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+                                                                                                                hashMapOf(
+                                                                                                                    "board" to board,
+                                                                                                                    "post_num" to post_num,
+                                                                                                                    "comment_num" to data.comment_num.toString()
+                                                                                                                )
+                                                                                                            )
+                                                                                                            val queue = Volley.newRequestQueue(applicationContext)
+                                                                                                            queue.add(requestDelete)
+
                                                                                                         }
 
                                                                                                     }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
                                                                                                     hashMapOf(
                                                                                                         "board" to board,
                                                                                                         "post_num" to post_num,
-                                                                                                        "flag" to "commentDOWN"
+                                                                                                        "comment_num" to data.comment_num.toString()
                                                                                                     )
                                                                                                 )
                                                                                                 val queue = Volley.newRequestQueue(applicationContext)
-                                                                                                queue.add(requestDeleteCount)
+                                                                                                queue.add(requestDelete2)
+                                                                                            })
+                                                                                        .setNegativeButton("취소",
+                                                                                            DialogInterface.OnClickListener { dialog, id ->
 
-                                                                                            }
+                                                                                            })
 
-                                                                                        }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
-                                                                                        hashMapOf(
-                                                                                            "board" to board,
-                                                                                            "post_num" to post_num,
-                                                                                            "comment_num" to data.comment_num.toString()
-                                                                                        )
-                                                                                    )
-                                                                                    val queue = Volley.newRequestQueue(applicationContext)
-                                                                                    queue.add(requestDelete2)
+                                                                                    // 다이얼로그를 띄워주기
+                                                                                    builder.show()
                                                                                 }
 
 
@@ -1124,32 +1204,37 @@ class BoardDetail : AppCompatActivity() {
                                                                             data: CommentItem,
                                                                             pos: Int
                                                                         ) {
-                                                                            // 대댓글 테이블에서 찾아서 삭제
-                                                                            val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
-                                                                            val requestDelete2 = Login_Request(
-                                                                                Request.Method.POST,
-                                                                                urlDelete2,
-                                                                                { responseDelete2 ->
-                                                                                    if (responseDelete2 != "comment delete2 fail") {
-                                                                                        // 댓글 테이블에서 찾아서 삭제
-                                                                                        val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
-                                                                                        val requestDelete = Login_Request(
+                                                                            val builder = AlertDialog.Builder(this@BoardDetail)
+                                                                            builder.setTitle("댓글 삭제")
+                                                                                .setMessage("댓글을 삭제하시겠습니까?")
+                                                                                .setPositiveButton("삭제",
+                                                                                    DialogInterface.OnClickListener { dialog, id ->
+                                                                                        // 대댓글 테이블에서 찾아서 삭제
+                                                                                        val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
+                                                                                        val requestDelete2 = Login_Request(
                                                                                             Request.Method.POST,
-                                                                                            urlDelete,
-                                                                                            { responseDelete ->
-                                                                                                if (responseDelete != "comment delete fail") {
-                                                                                                    //board 테이블에서 댓글 개수 줄이기
-                                                                                                    val urlCommentDeleteCount = "http://seonho.dothome.co.kr/updateBoardCnt.php"
-                                                                                                    val requestDeleteCount = Login_Request(
+                                                                                            urlDelete2,
+                                                                                            { responseDelete2 ->
+                                                                                                if (responseDelete2 != "comment delete2 fail") {
+                                                                                                    // 댓글 테이블에서 찾아서 삭제
+                                                                                                    val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
+                                                                                                    val requestDelete = Login_Request(
                                                                                                         Request.Method.POST,
-                                                                                                        urlCommentDeleteCount,
-                                                                                                        { requestDeleteCount ->
-                                                                                                            if (requestDeleteCount != "update fail") {
-                                                                                                                Toast.makeText(
-                                                                                                                    baseContext,
-                                                                                                                    String.format("댓글이 삭제되었습니다."),
-                                                                                                                    Toast.LENGTH_SHORT
-                                                                                                                ).show()
+                                                                                                        urlDelete,
+                                                                                                        { responseDelete ->
+                                                                                                            if (responseDelete != "comment delete fail") {
+                                                                                                                //board 테이블에서 댓글 개수 줄이기
+                                                                                                                val urlCommentDeleteCount = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+                                                                                                                val requestDeleteCount = Login_Request(
+                                                                                                                    Request.Method.POST,
+                                                                                                                    urlCommentDeleteCount,
+                                                                                                                    { requestDeleteCount ->
+                                                                                                                        if (requestDeleteCount != "update fail") {
+                                                                                                                            Toast.makeText(
+                                                                                                                                baseContext,
+                                                                                                                                String.format("댓글이 삭제되었습니다."),
+                                                                                                                                Toast.LENGTH_SHORT
+                                                                                                                            ).show()
 
 //                                                                                                            for(i in 0 until comment_items.size){
 //                                                                                                                if(comment_items.get(i).comment_num == data.comment_num)
@@ -1161,18 +1246,30 @@ class BoardDetail : AppCompatActivity() {
 //                                                                                                            CommentRecyclerView.adapter =
 //                                                                                                                Commentadapter
 
-                                                                                                                fetchCommentData()
+                                                                                                                            fetchCommentData()
+                                                                                                                        }
+
+                                                                                                                    }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
+                                                                                                                    hashMapOf(
+                                                                                                                        "board" to board,
+                                                                                                                        "post_num" to post_num,
+                                                                                                                        "flag" to "commentDOWN"
+                                                                                                                    )
+                                                                                                                )
+                                                                                                                val queue = Volley.newRequestQueue(applicationContext)
+                                                                                                                queue.add(requestDeleteCount)
                                                                                                             }
 
                                                                                                         }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
                                                                                                         hashMapOf(
                                                                                                             "board" to board,
                                                                                                             "post_num" to post_num,
-                                                                                                            "flag" to "commentDOWN"
+                                                                                                            "comment_num" to data.comment_num.toString()
                                                                                                         )
                                                                                                     )
                                                                                                     val queue = Volley.newRequestQueue(applicationContext)
-                                                                                                    queue.add(requestDeleteCount)
+                                                                                                    queue.add(requestDelete)
+
                                                                                                 }
 
                                                                                             }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
@@ -1183,21 +1280,15 @@ class BoardDetail : AppCompatActivity() {
                                                                                             )
                                                                                         )
                                                                                         val queue = Volley.newRequestQueue(applicationContext)
-                                                                                        queue.add(requestDelete)
+                                                                                        queue.add(requestDelete2)
+                                                                                    })
+                                                                                .setNegativeButton("취소",
+                                                                                    DialogInterface.OnClickListener { dialog, id ->
 
-                                                                                    }
+                                                                                    })
 
-                                                                                }, { Log.d("Comment Failed", "error......${error(applicationContext)}") },
-                                                                                hashMapOf(
-                                                                                    "board" to board,
-                                                                                    "post_num" to post_num,
-                                                                                    "comment_num" to data.comment_num.toString()
-                                                                                )
-                                                                            )
-                                                                            val queue = Volley.newRequestQueue(applicationContext)
-                                                                            queue.add(requestDelete2)
-
-
+                                                                            // 다이얼로그를 띄워주기
+                                                                            builder.show()
                                                                             // board에서 comment count 줄이기
                                                                         }
                                                                     })
@@ -1427,6 +1518,7 @@ class BoardDetail : AppCompatActivity() {
                         Request.Method.POST,
                         deleteCommentHeart,
                         { responseCommentHeart ->
+                            Log.d("913123", responseCommentHeart)
                             if (!responseCommentHeart.equals("update fail")) {
 
                             } else {

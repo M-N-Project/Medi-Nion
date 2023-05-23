@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.example.medi_nion.R.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.*
@@ -66,16 +67,14 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         lastSelected = ""
     }
 
+    @SuppressLint("ResourceAsColor")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-
         // Inflate the layout for this fragment
-        var view =  inflater.inflate(R.layout.calendar, container, false)
+        var view =  inflater.inflate(layout.calendar, container, false)
 
         val darkOverlay = view.findViewById<View>(R.id.darkOverlay)
 
@@ -87,7 +86,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
         viewModel = ViewModelProvider(requireActivity()).get(CalendarViewModel::class.java)
 
-        viewModel.itemList.observe(viewLifecycleOwner, {
+        viewModel.itemList.observe(viewLifecycleOwner) {
             try {
                 Thread.sleep(1000)
             } catch (e: InterruptedException) {
@@ -95,7 +94,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             }
 
             fetchEvents(currentDate)
-        })
+        }
 
 
         //CalendarDay.today()를 가지고와서 오늘 날짜에 맞는 일정 가져와서 adapter 붙여주고 시작하기.
@@ -103,7 +102,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         val calendar = view.findViewById<MaterialCalendarView>(R.id.calendarView)
 
         val id = arguments?.getString("id").toString()
-        val colorList: Array<String> = resources.getStringArray(R.array.colors)
+        val colorList: Array<String> = resources.getStringArray(array.colors)
 
         calendar.setSelectedDate(CalendarDay.today())
         calendar.apply {
@@ -125,13 +124,17 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         //스케줄 만들기
         makeEventBtn.setOnClickListener {
             if (!isFABOpen) {
+                darkOverlay.visibility = View.VISIBLE
+                darkOverlay.bringToFront()
 
-                makeEventBtn.setImageResource(R.drawable.event_cancel_button_resize)
+                makeEventBtn.setImageResource(drawable.event_cancel_button_resize)
                 newEventTextView.visibility = View.VISIBLE
                 fixEventTextView.visibility = View.VISIBLE
 
                 showFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
                 makeEventBtn.bringToFront()
+                newEventTextView.bringToFront()
+                fixEventTextView.bringToFront()
 
                 newEventFAB.setOnClickListener{
                     val intent = Intent(context, Calendar_Add::class.java)
@@ -151,10 +154,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                     startActivity(intent)
                 }
             } else {
-                makeEventBtn.setImageResource(R.drawable.create_button_resize)
+                darkOverlay.visibility = View.GONE
+
+                makeEventBtn.setImageResource(drawable.create_button_resize)
                 newEventTextView.visibility = View.GONE
                 fixEventTextView.visibility = View.GONE
-                darkOverlay.visibility = View.GONE
+
 
                 closeFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
                 makeEventBtn.bringToFront()
@@ -290,7 +295,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             oldTitle = data.schedule_name
                             oldStartTime = data.schedule_start
                             //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
-                            val bottomSheetView = layoutInflater.inflate(R.layout.calendar_dialog, null)
+                            val bottomSheetView = layoutInflater.inflate(layout.calendar_dialog, null)
                             val bottomSheetDialog = BottomSheetDialog(requireContext())
                             bottomSheetDialog.setContentView(bottomSheetView)
 
@@ -422,7 +427,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                             // 스케줄 색상
                             val color =  bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
-                            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                            val drawable = ContextCompat.getDrawable(requireContext(), drawable.calendar_color)
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
                             } else {
@@ -446,7 +451,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             val alarmSpinner = bottomSheetView.findViewById<TextView>(R.id.alarm_spinner)
                             alarmSpinner.setText(data.schedule_alarm)
                             alarmSpinner.setOnClickListener{
-                                var alarmArray = resources.getStringArray(R.array.times)
+                                var alarmArray = resources.getStringArray(array.times)
                                 var alarmArrayList = ArrayList<String>()
                                 for(i in alarmArray){
                                     alarmArrayList.add(i)
@@ -457,7 +462,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             val repeatSpinner = bottomSheetView.findViewById<TextView>(R.id.repeat_spinner)
                             repeatSpinner.setText(data.schedule_repeat)
                             repeatSpinner.setOnClickListener{
-                                var repeatArray = resources.getStringArray(R.array.repeat)
+                                var repeatArray = resources.getStringArray(array.repeat)
                                 var repeatArrayList = ArrayList<String>()
                                 for(i in repeatArray){
                                     repeatArrayList.add(i)
@@ -618,7 +623,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         c, recyclerView, viewHolder,
                         dX, dY, actionState, isCurrentlyActive)
                         .addSwipeLeftBackgroundColor(Color.RED)
-                        .addSwipeLeftActionIcon(R.drawable.delete_schedule)
+                        .addSwipeLeftActionIcon(drawable.delete_schedule)
                         .addSwipeLeftLabel("삭제")
                         .setSwipeLeftLabelColor(Color.WHITE)
                         .create()
@@ -735,7 +740,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     }
 
     private fun setupColorSheet(data : CalendarItem, colorView : Button) {
-        val colors = resources.getIntArray(R.array.colors)
+        val colors = resources.getIntArray(array.colors)
         ColorSheet().cornerRadius(8)
             //colorPicker 설정
             .colorPicker(
@@ -746,7 +751,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
                     data.schedule_color =  ColorSheetUtils.colorToHex(selectedColor)
 
-                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                    val drawable = ContextCompat.getDrawable(requireContext(), drawable.calendar_color)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         drawable!!.colorFilter =
                             BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
@@ -773,10 +778,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private fun showFABMenu(newEventFAB : FloatingActionButton, newEventTextView :TextView , fixEventFAB : FloatingActionButton, fixEventTextView :TextView ) {
         isFABOpen = true
 
-        newEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
-        newEventTextView.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_120))
-        fixEventFAB.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
-        fixEventTextView.animate().translationY(-resources.getDimension(R.dimen.FABMoveTo_60))
+        newEventFAB.animate().translationY(-resources.getDimension(dimen.FABMoveTo_120))
+        newEventTextView.animate().translationY(-resources.getDimension(dimen.FABMoveTo_120))
+        fixEventFAB.animate().translationY(-resources.getDimension(dimen.FABMoveTo_60))
+        fixEventTextView.animate().translationY(-resources.getDimension(dimen.FABMoveTo_60))
 
         newEventFAB.bringToFront()
         newEventTextView.bringToFront()
@@ -794,8 +799,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     }
 
     private fun showBottomSheet(items : ArrayList<String> , type : String){
-        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
-        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.AppBottomSheetDialogTheme)
+        val bottomSheetView = layoutInflater.inflate(layout.normal_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), style.AppBottomSheetDialogTheme)
         bottomSheetDialog.setContentView(bottomSheetView)
 
         val alarmTextView = view?.findViewById<TextView>(R.id.alarm_spinner)

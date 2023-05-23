@@ -36,6 +36,7 @@ import com.islandparadise14.mintable.model.ScheduleEntity
 import com.prolificinteractive.materialcalendarview.*
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
+import kotlinx.android.synthetic.main.calendar.*
 import org.json.JSONArray
 import java.util.*
 
@@ -63,6 +64,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
 
         v =  inflater.inflate(R.layout.time_table, container, false)
         val table = v!!.findViewById<MinTimeTableView>(R.id.table)
+        val darkOverLay = v!!.findViewById<View>(R.id.darkOverlay1)
         table.initTable(weekDay)
 
         table.baseSetting(30, 20, 60) //default (20, 30, 50)
@@ -80,11 +82,17 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         //스케줄 만들기
         makeEventBtn.setOnClickListener {
             if (!isFABOpen) {
+                darkOverLay.visibility = View.VISIBLE
+                darkOverLay.bringToFront()
+
                 makeEventBtn.setImageResource(R.drawable.event_cancel_button_resize)
                 newEventTextView.visibility = View.VISIBLE
                 fixEventTextView.visibility = View.VISIBLE
 
                 showFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+                makeEventBtn.bringToFront()
+                newEventTextView.bringToFront()
+                fixEventTextView.bringToFront()
 
                 newEventFAB.setOnClickListener{
                     val intent = Intent(context, Calendar_Add::class.java)
@@ -115,12 +123,19 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                     intent.putExtra("day", CalendarDay.today().toString())
                     startActivity(intent)
                 }
+                
+                isFABOpen = true
+
             } else {
+                darkOverLay.visibility = View.GONE
+
                 makeEventBtn.setImageResource(R.drawable.create_button_resize)
                 newEventTextView.visibility = View.GONE
                 fixEventTextView.visibility = View.GONE
 
                 closeFABMenu(newEventFAB, newEventTextView, fixEventFAB, fixEventTextView)
+
+                isFABOpen = false
             }
         }
         return v

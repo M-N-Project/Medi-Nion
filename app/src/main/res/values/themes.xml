@@ -18,6 +18,17 @@
         <!-- Customize your theme here. -->
     </style>
 
+<!--    <style name="Theme.App.Starting" parent="Theme.SplashScreen">-->
+<!--        <item name="windowSplashScreenAnimatedIcon">@layout/activity_splash</item>-->
+<!--        <item name="windowSplashScreenAnimationDuration">200</item>-->
+<!--        <item name="postSplashScreenTheme">@style/Theme.App</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.App" parent="Theme.AppCompat.Light.DarkActionBar">-->
+<!--        &lt;!&ndash; 테마의 속성들을 정의해주세요 &ndash;&gt;-->
+<!--        &lt;!&ndash; ... &ndash;&gt;-->
+<!--    </style>-->
+
     <style name="ActionBarTheme" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleStyle</item>

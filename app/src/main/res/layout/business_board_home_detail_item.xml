@@ -72,22 +72,20 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
-                android:ellipsize="end"
                 android:fontFamily="@font/gothic_regular"
-                android:maxLines="4"
                 android:paddingBottom="5dp"
                 android:text="내용내용내용...\n내용내용내용"
                 android:textColor="#000000"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/viewMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
-                android:text="더보기"
-                android:visibility="gone" />
+<!--            <TextView-->
+<!--                android:id="@+id/viewMore"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="더보기"-->
+<!--                android:visibility="gone" />-->
 
             <HorizontalScrollView
                 android:id="@+id/businessMG_Img"

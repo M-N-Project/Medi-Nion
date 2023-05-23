@@ -39,16 +39,16 @@ class SearchActivity : AppCompatActivity() {
         var searchView: SearchView = findViewById(R.id.search_view)
 
         fetchData()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         // SearchView listener to filter posts
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             @RequiresApi(Build.VERSION_CODES.O)
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Do nothing when submit button is clicked
 
                 // 키보드를 자동으로 올립니다.
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()

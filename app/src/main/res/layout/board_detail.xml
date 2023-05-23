@@ -53,42 +53,6 @@
                             android:layout_height="wrap_content"
                             >
 
-                            <RadioGroup
-                                android:id="@+id/optionRadioGroup"
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:background="@drawable/selector_radio_button_group_opt"
-                                android:visibility="gone"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/titleLinearLayout">
-
-                                <RadioButton
-                                    android:id="@+id/postUpdate_RadioBtn"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="2dp"
-                                    android:layout_marginTop="2dp"
-                                    android:layout_marginRight="2dp"
-                                    android:background="@drawable/selector_radio_button_top_opt"
-                                    android:button="@null"
-                                    android:text="게시물 수정"
-                                    android:textAlignment="center" />
-
-                                <RadioButton
-                                    android:id="@+id/postDelete_RadioBtn"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="2dp"
-                                    android:layout_marginRight="2dp"
-                                    android:layout_marginBottom="2dp"
-                                    android:background="@drawable/selector_radio_button_bottom_opt"
-                                    android:button="@null"
-                                    android:text="게시물 삭제"
-                                    android:textAlignment="center" />
-
-                            </RadioGroup>
 
                             <LinearLayout
                                 android:id="@+id/titleLinearLayout"
@@ -166,16 +130,30 @@
                                             tools:layout_editor_absoluteY="77dp" />
                                     </LinearLayout>
 
-                                    <android.widget.Button
-                                        android:id="@+id/moreBtn"
+                                    <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="100dp"
-                                        android:background="@drawable/board_detail_more_btn"
-                                        android:textColor="@color/black"
-                                        android:visibility="gone"
-                                        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                                        android:text=""
+                                        android:layout_weight="1"/>
 
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp">
+
+                                        <android.widget.Button
+                                            android:id="@+id/moreBtn"
+                                            android:layout_width="24dp"
+                                            android:layout_height="20dp"
+                                            android:gravity="right"
+                                            android:layout_marginLeft="15dp"
+                                            android:layout_marginTop="3dp"
+                                            android:layout_marginRight="0dp"
+                                            android:background="@drawable/board_detail_more_btn"
+                                            android:textColor="@color/black"
+                                            android:visibility="gone"
+                                            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                                    </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
 
