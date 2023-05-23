@@ -272,7 +272,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val item = jsonArray.getJSONObject(i)
 
                         val schedule_name = item.getString("schedule_name")
-                        val schedule_date = item.getString("schedule_date")
+                        val start_date = item.getString("start_date")
+                        val end_date = item.getString("end_date")
                         val schedule_start = item.getString("schedule_start")
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
@@ -281,7 +282,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, schedule_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
+                        val CalendarItem = CalendarItem(id, schedule_name, start_date, end_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
                         items.add(CalendarItem)
                         viewModel.addItemList(CalendarItem)
                     }
@@ -320,7 +321,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             }
 
                             val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
-                            dialog_date.text = data.schedule_date
+                            dialog_date.text = data.start_date
 
                             val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                             schedule_title.setText(data.schedule_name) //스케줄 이름
@@ -508,7 +509,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                             date = "0${day.toString().substring(20, 21)}"
                                     }
 
-                                    Log.d("-=123", "${oldTitle}, ${data.schedule_name}, ${data.schedule_date} , ${data.schedule_start} , ${data.schedule_end}, ${data.schedule_color}, ${data.schedule_alarm}, ${data.schedule_memo}, ${data.schedule_isDone}")
+                                    Log.d("-=123", "${oldTitle}, ${data.schedule_name}, ${data.start_date} , ${data.schedule_start} , ${data.schedule_end}, ${data.schedule_color}, ${data.schedule_alarm}, ${data.schedule_memo}, ${data.schedule_isDone}")
 
                                     if(data.schedule_color == "#FFFFFF")
                                         data.schedule_color = "#BADFD2"
@@ -689,7 +690,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             mutableMapOf(
                 "id" to item.id,
                 "schedule_name" to item.schedule_name,
-                "schedule_date" to item.schedule_date,
+                "schedule_date" to item.start_date,
                 "schedule_start" to item.schedule_start
             )
         )
@@ -704,7 +705,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
         val updateScheduleUrl = "http://seonho.dothome.co.kr/updateCalendar.php"
 
-        Log.d("-=123", "${id} , ${oldTitle}, ${oldStartTime},${item.schedule_name}, ${item.schedule_date} , ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
+        Log.d("-=123", "${id} , ${oldTitle}, ${oldStartTime},${item.schedule_name}, ${item.start_date} , ${item.schedule_start} , ${item.schedule_end}, ${item.schedule_color}, ${item.schedule_alarm}, ${item.schedule_memo}, ${item.schedule_isDone}")
         val request = Upload_Request(
             Request.Method.POST,
             updateScheduleUrl,
@@ -723,7 +724,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 "oldTitle" to oldTitle,
                 "oldStartTime" to oldStartTime,
                 "schedule_name" to item.schedule_name,
-                "schedule_date" to item.schedule_date,
+                "schedule_date" to item.start_date,
                 "schedule_start" to item.schedule_start,
                 "schedule_end" to item.schedule_end,
                 "schedule_color" to item.schedule_color,

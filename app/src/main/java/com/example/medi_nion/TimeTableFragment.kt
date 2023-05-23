@@ -175,7 +175,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                         val item = jsonArray.getJSONObject(i)
 
                         val schedule_name = item.getString("schedule_name")
-                        val schedule_date = item.getString("schedule_date")
+                        val start_date = item.getString("start_date")
+                        val end_date = item.getString("end_date")
                         val schedule_start = item.getString("schedule_start")
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
@@ -187,7 +188,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                         val schedule = ScheduleEntity(
                             id,
                             schedule_name,
-                            schedule_date,
+//                            start_date,
+                            end_date,
                             schedule_start,
                             schedule_end,
                             schedule_color,
