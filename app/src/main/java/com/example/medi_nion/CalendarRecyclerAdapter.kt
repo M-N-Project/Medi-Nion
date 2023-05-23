@@ -92,7 +92,7 @@ class CalendarRecyclerAdapter(private val items: ArrayList<CalendarItem>) :
                     mutableMapOf(
                         "id" to item.id,
                         "schedule_name" to item.schedule_name,
-                        "schedule_date" to item.schedule_date,
+                        "schedule_date" to item.start_date,
                         "schedule_start" to item.schedule_start,
                         "isDone" to isChecked.toString()
                     )
