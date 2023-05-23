@@ -248,8 +248,38 @@ class BoardDetail : AppCompatActivity() {
 
             //게시물 옵션 버튼 눌렀을때 수정/삭제 버튼 visible / 다시 누르면 invisible
             optionBtn.setOnClickListener{
-                var optionArrayList = arrayListOf<String>("게시물 수정", "게시물 삭제")
-                showBottomSheet(optionArrayList, "boardOpt")
+                if(optionRadio.visibility == View.GONE)
+                    optionRadio.visibility = View.VISIBLE
+                else optionRadio.visibility = View.GONE
+            }
+
+            // 게시물 수정 버튼 클릭
+            val option_updatePost = findViewById<RadioButton>(R.id.postUpdate_RadioBtn)
+            option_updatePost.setOnClickListener{
+                // 글쓰기 화면으로 이동
+                val board = intent.getStringExtra("board")
+                var userType = intent.getStringExtra("userType")
+                var userDept = intent.getStringExtra("userDept")
+                val intent = Intent(applicationContext, BoardWrite::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("board", board)
+                intent.putExtra("post_num", post_num)
+                intent.putExtra("title", title)
+                intent.putExtra("content", content)
+                intent.putExtra("image", image)
+                intent.putExtra("update", 1)
+                intent.putExtra("userType", userType)
+                intent.putExtra("userDept", userDept)
+                intent.putExtra("userMedal", userMedal)
+
+                startActivity(intent)
+            }
+
+            // 게시물 삭제 버튼 클릭
+            val option_deletePost = findViewById<RadioButton>(R.id.postDelete_RadioBtn)
+            option_deletePost.setOnClickListener{
+                // 지우기.
+                PostDeleteRequest()
             }
         }
 
@@ -312,68 +342,6 @@ class BoardDetail : AppCompatActivity() {
         notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
-    private fun showBottomSheet(items : java.util.ArrayList<String>, type : String){
-        val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
-        bottomSheetView.setBackgroundColor(Color.parseColor("#00000000"))
-        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
-        bottomSheetDialog.setContentView(bottomSheetView)
-
-        var id = intent.getStringExtra("id") //접속한 유저의 아이디
-        var userMedal = intent.getIntExtra("userMedal", 0)
-        val post_num = intent?.getStringExtra("num").toString() //현재 상세보기 중인 게시물의 num
-        val title = intent.getStringExtra("title") // 게시물 제목
-        val content = intent.getStringExtra("content") // 게시물 내용
-        val image = intent.getStringExtra("image") // 게시물 사진
-
-        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
-        cancelBtn?.setOnClickListener{
-            bottomSheetDialog.dismiss()
-        }
-
-        val selectBtn = bottomSheetDialog.findViewById<TextView>(R.id.select)
-
-        selectBtn?.setOnClickListener{
-           if(lastSelected == "게시물 수정"){
-               val board = intent.getStringExtra("board")
-               var userType = intent.getStringExtra("userType")
-               var userDept = intent.getStringExtra("userDept")
-               val intent = Intent(applicationContext, BoardWrite::class.java)
-               intent.putExtra("id", id)
-               intent.putExtra("board", board)
-               intent.putExtra("post_num", post_num)
-               intent.putExtra("title", title)
-               intent.putExtra("content", content)
-               intent.putExtra("image", image)
-               intent.putExtra("update", 1)
-               intent.putExtra("userType", userType)
-               intent.putExtra("userDept", userDept)
-               intent.putExtra("userMedal", userMedal)
-
-               startActivity(intent)
-           }
-            else{
-               PostDeleteRequest()
-           }
-            bottomSheetDialog.dismiss()
-        }
-
-        val dialogRecyclerView = bottomSheetDialog.findViewById<RecyclerView>(R.id.dialog_recyclerView)
-        val dialogAdapter = DialogRecyclerAdapter(items, lastSelected)
-        dialogRecyclerView?.adapter = dialogAdapter
-
-
-        dialogAdapter.setOnItemClickListener(
-            object : DialogRecyclerAdapter.OnItemClickListener{
-                override fun onItemClick(v: View, data: String) {
-                    lastSelected = data
-
-                }
-
-            }
-        )
-
-        bottomSheetDialog.show()
-    }
 
 //fetch 함수들 ====================================================================================================================
     // emdal fetch ---------------------------------------------------------------------------
