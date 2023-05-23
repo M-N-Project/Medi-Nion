@@ -490,6 +490,7 @@ class Calendar_Add : AppCompatActivity() {
 //                    선택한 날짜 세팅
                     calendar.set(year, monthOfYear, dayOfMonth)
                     val date = calendar.time
+                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
                     val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
                     var dayName: String = simpledateformat.format(date)
                     when(dayName) {
@@ -537,6 +538,7 @@ class Calendar_Add : AppCompatActivity() {
 //                    선택한 날짜 세팅
                     calendar.set(year, monthOfYear, dayOfMonth)
                     val date = calendar.time
+                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
                     val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
                     var dayName: String = simpledateformat.format(date)
                     when(dayName) {
@@ -550,15 +552,15 @@ class Calendar_Add : AppCompatActivity() {
                     }
                     if (month < 10) {
                         if (dayOfMonth < 10) {
-                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName"
+                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
                         } else {
-                            end_date.text = "$year-0$month-$dayOfMonth-$dayName"
+                            end_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
                         }
                     } else {
                         if (dayOfMonth < 10) {
-                            end_date.text = "$year-$month-0$dayOfMonth-$dayName"
+                            end_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
                         } else {
-                            end_date.text = "$year-$month-$dayOfMonth-$dayName"
+                            end_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
                         }
                     }
                 },
@@ -711,6 +713,8 @@ class Calendar_Add : AppCompatActivity() {
                         val item = jsonArray.getJSONObject(i)
 
                         val schedule_name = item.getString("schedule_name")
+                        val start_date = item.getString("start_date")
+                        val end_date = item.getString("end_date")
                         val schedule_start = item.getString("schedule_start")
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
@@ -718,7 +722,9 @@ class Calendar_Add : AppCompatActivity() {
                         val schedule_repeat = item.getString("schedule_repeat")
                         val schedule_memo = item.getString("schedule_memo")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, "null", schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo, false)
+                        val CalendarItem = CalendarItem(id, schedule_name, start_date,
+                            end_date, schedule_start, schedule_end, schedule_color,
+                            schedule_alarm, schedule_repeat, schedule_memo, false)
                         items.add(CalendarItem)
                     }
 
@@ -976,7 +982,7 @@ class Calendar_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val item = CalendarItem(id, schedule_title ,presentDate,start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
+                    val item = CalendarItem(id, schedule_title, start_date, end_date, start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
                     CalendarFragment.viewModel.addItemLiveList(item)
 
                     this.finish()

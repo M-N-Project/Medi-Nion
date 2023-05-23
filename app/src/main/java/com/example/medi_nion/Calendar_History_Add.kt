@@ -135,6 +135,7 @@ class Calendar_History_Add : AppCompatActivity() {
 //                    선택한 날짜 세팅
                     calendar.set(year, monthOfYear, dayOfMonth)
                     val date = calendar.time
+                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
                     val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
                     var dayName: String = simpledateformat.format(date)
                     when(dayName) {
@@ -148,15 +149,15 @@ class Calendar_History_Add : AppCompatActivity() {
                     }
                     if (month < 10) {
                         if (dayOfMonth < 10) {
-                            start_date.text = "$year-0$month-0$dayOfMonth-$dayName"
+                            start_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
                         } else {
-                            start_date.text = "$year-0$month-$dayOfMonth-$dayName"
+                            start_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
                         }
                     } else {
                         if (dayOfMonth < 10) {
-                            start_date.text = "$year-$month-0$dayOfMonth-$dayName"
+                            start_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
                         } else {
-                            start_date.text = "$year-$month-$dayOfMonth-$dayName"
+                            start_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
                         }
                     }
                 },
@@ -182,6 +183,7 @@ class Calendar_History_Add : AppCompatActivity() {
 //                    선택한 날짜 세팅
                     calendar.set(year, monthOfYear, dayOfMonth)
                     val date = calendar.time
+                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
                     val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
                     var dayName: String = simpledateformat.format(date)
                     when(dayName) {
@@ -195,15 +197,15 @@ class Calendar_History_Add : AppCompatActivity() {
                     }
                     if (month < 10) {
                         if (dayOfMonth < 10) {
-                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName"
+                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
                         } else {
-                            end_date.text = "$year-0$month-$dayOfMonth-$dayName"
+                            end_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
                         }
                     } else {
                         if (dayOfMonth < 10) {
-                            end_date.text = "$year-$month-0$dayOfMonth-$dayName"
+                            end_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
                         } else {
-                            end_date.text = "$year-$month-$dayOfMonth-$dayName"
+                            end_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
                         }
                     }
                 },
@@ -442,7 +444,8 @@ class Calendar_History_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val item = CalendarItem(id, schedule_title ,presentDate,start_result ,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
+                    val item = CalendarItem(id, schedule_title ,start_date, end_date,
+                        start_result ,end_result, ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
                     CalendarFragment.viewModel.addItemLiveList(item)
 
                     this.finish()
