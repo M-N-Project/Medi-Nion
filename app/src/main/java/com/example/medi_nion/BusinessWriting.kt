@@ -156,6 +156,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                     updateUrl,
                     object : Response.Listener<String?> {
                         override fun onResponse(response: String?) {
+                            Log.d("7613213", response.toString())
                             var intent = Intent(
                                 applicationContext,
                                 BusinessManageActivity::class.java
@@ -182,6 +183,7 @@ class BusinessWriting : AppCompatActivity() { //비즈니스 글작성
                         map["Channel_Profile_Img2"] = image2
                         map["Channel_Profile_Img3"] = image3
                         map["num"] = intent.getStringExtra("num").toString()
+                        Log.d("0-123", map.toString())
                         return map
                     }
                 }
