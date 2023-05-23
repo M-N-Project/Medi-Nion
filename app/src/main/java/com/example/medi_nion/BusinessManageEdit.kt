@@ -51,24 +51,21 @@ class BusinessManageEdit : AppCompatActivity() {
         val chanDesc = intent.getStringExtra("chanDesc")
         val chanImgUrl = intent.getStringExtra("chanImg")
         val isFirst = intent.getBooleanExtra("isFirst", false)
+
+        val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
+        val editName = findViewById<EditText>(R.id.editChanName)
+        val editDesc = findViewById<EditText>(R.id.editChanDesc)
         Log.d("비즈니스 수정1-1", "$chanName $chanDesc $chanImgUrl")
 
-        if(!chanImgUrl.equals("")) {
-            val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
+        if(!isFirst) {
             val task = ImageLoadTask(chanImgUrl, chanProfileImg)
             task.execute()
             roundAll(chanProfileImg, 100.0f)
-        }
 
-        val editName = findViewById<EditText>(R.id.editChanName)
-        val editDesc = findViewById<EditText>(R.id.editChanDesc)
-        if (isFirst){
-            editName.setText("채널 이름을 설정하세요.")
-            editDesc.setText("채널 소개글을 설정하세요.")
-        }
-        else {
             editName.setText(chanName)
             editDesc.setText(chanDesc)
+        } else{
+            chanProfileImg.setImageResource(R.drawable.person_filled)
         }
 
         chanProfileImg.setOnClickListener {
