@@ -26,6 +26,7 @@ class BusinessProfileService : Service() {
     private var channel_name : String = ""
     private var channel_desc : String = ""
     private var profile_img : String = ""
+    private var isProfileChanged : Boolean = true
 
     // 메인 스레드로부터 메세지를 전달받을 핸들러 선언
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
@@ -42,12 +43,12 @@ class BusinessProfileService : Service() {
                     val request: StringRequest =
                         object : StringRequest(Method.POST, urlBusinessProfileInsert, object : Response.Listener<String?> {
                             override fun onResponse(response: String?) {
-                                Log.d("bussine123", response.toString())
+                                Log.d("비즈니스 수정2", response.toString())
 
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
-                                Log.d("bussine123", error.toString())
+                                Log.d("비즈니스 수정3", error.toString())
                             }
                         }) {
                             @Throws(AuthFailureError::class)
@@ -74,15 +75,18 @@ class BusinessProfileService : Service() {
                 }
                 else{
                     val request: StringRequest =
-                        object : StringRequest(Method.POST, urlBusinessProfileUpdate, object : Response.Listener<String?> {
+                        object : StringRequest(
+                            Method.POST,
+                            urlBusinessProfileUpdate,
+                            object : Response.Listener<String?>
+                            {
                             override fun onResponse(response: String?) {
-                                Log.d("bussine123", response.toString())
-
-
+                                Log.d("비즈니스 수정 4-0", "$id $channel_name $channel_desc $profile_img $isProfileChanged")
+                                Log.d("비즈니스 수정4", response.toString())
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
-                                Log.d("bussine123", error.toString())
+                                Log.d("비즈니스 수정5", error.toString())
                             }
                         }) {
                             @Throws(AuthFailureError::class)
@@ -93,6 +97,7 @@ class BusinessProfileService : Service() {
                                 map["Channel_Name"] = channel_name
                                 map["Channel_Desc"] = channel_desc
                                 map["Channel_Profile_Img"] = profile_img
+                                map["profileChanged"] = isProfileChanged.toString()
                                 return map
                             }
                         }
@@ -138,6 +143,9 @@ class BusinessProfileService : Service() {
         channel_name = intent.getStringExtra("channel_name").toString()
         channel_desc = intent.getStringExtra("channel_desc").toString()
         profile_img = intent.getStringExtra("profile_img").toString()
+        if(profile_img.equals("")) isProfileChanged = false
+
+        Log.d("비즈니스 수정6", "$id $isFirst $channel_name $channel_desc $profile_img")
 
 
         // For each start request, send a message to start a job and deliver the

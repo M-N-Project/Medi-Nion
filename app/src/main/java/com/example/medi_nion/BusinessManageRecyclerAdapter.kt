@@ -113,9 +113,11 @@ class BusinessManageRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
             if(item.isWriter) {
                 view.busi_moreBtn.visibility = View.VISIBLE
 
-                view.busi_moreBtn.setOnClickListener{
-                    if(view.busi_optionRadioGroup.visibility == View.GONE)
+                view.busi_moreBtn.setOnClickListener {
+                    if (view.busi_optionRadioGroup.visibility == View.GONE){
                         view.busi_optionRadioGroup.visibility = View.VISIBLE
+                        view.busi_optionRadioGroup.bringToFront()
+                    }
                     else view.busi_optionRadioGroup.visibility = View.GONE
                 }
 

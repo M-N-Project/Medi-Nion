@@ -70,8 +70,10 @@ class BusinessManageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-        val id: String? = this.intent.getStringExtra("id")
+        val id: String? = intent.getStringExtra("id")
         var isFirst = intent.getBooleanExtra("isFirst", true)
+        Log.d("비즈니스 수정0-0", "$id $isFirst")
+
 
         items.clear()
         all_items.clear()
@@ -127,80 +129,10 @@ class BusinessManageActivity : AppCompatActivity() {
             intent.putExtra("chanName", editName.text)
             intent.putExtra("chanDesc", editDesc.text)
             intent.putExtra("chanImg", profileImgUrl)
-            intent.putExtra("id", intent.getStringExtra("id").toString())
-            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.putExtra("isFirst", isFirst)
+            intent.putExtra("id", this.intent.getStringExtra("id").toString())
+            Log.d("비즈니스 수정0", "$id $isFirst $editName.text $editDesc.text $profileEncoded")
             startActivity(intent)
-
-//            val setting_RadioGroup = findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
-//
-//            val editProfile_RadioBtn = findViewById<RadioButton>(R.id.edit_profile)
-//            val editName_RadioBtn = findViewById<RadioButton>(R.id.edit_chanName)
-//            val editDesc_RadioBtn = findViewById<RadioButton>(R.id.edit_chanDesc)
-//
-//            setting_RadioGroup.bringToFront()
-//
-//            if (setting_RadioGroup.visibility == View.VISIBLE) setting_RadioGroup.visibility =
-//                View.GONE
-//            else setting_RadioGroup.visibility = View.VISIBLE
-//
-//            editProfile_RadioBtn.setOnClickListener {
-//                isEditProfile = true
-//                openGallery()
-////                showFileChooser()
-//            }
-//
-//            editName_RadioBtn.setOnClickListener {
-//                isEditName = true
-//                setting_RadioGroup.visibility = View.GONE
-//                editName.isEnabled = true
-//                editName.setFocusableInTouchMode(true);
-//                editName.setFocusable(true);
-//                editName.requestFocus();
-//                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.showSoftInput(editName, InputMethodManager.SHOW_IMPLICIT)
-//
-//                editName_RadioBtn.isSelected = false
-//                editName_RadioBtn.isChecked = false
-//
-//            }
-//
-//            editName.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-//                override fun onFocusChange(view: View, hasFocus: Boolean) {
-//                    if (hasFocus) {
-//                        //  .. 포커스시
-//                    } else {
-//                        requestBusinessName()
-//                    }
-//                }
-//            })
-//
-//
-//            editDesc_RadioBtn.setOnClickListener {
-//                isEditDesc = true
-//                setting_RadioGroup.visibility = View.GONE
-//                editDesc.isEnabled = true
-//                editDesc.setFocusableInTouchMode(true);
-//                editDesc.setFocusable(true);
-//                editDesc.requestFocus();
-//                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.showSoftInput(editDesc, InputMethodManager.SHOW_IMPLICIT)
-////                editDesc.setSelection(editDesc.length()); //커서를 끝에 위치!
-//
-//                editDesc_RadioBtn.isSelected = false
-//                editDesc_RadioBtn.isChecked = false
-//
-//
-//            }
-//
-//            editDesc.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-//                override fun onFocusChange(view: View, hasFocus: Boolean) {
-//                    if (hasFocus) {
-//                        //  .. 포커스시
-//                    } else {
-//                        requestBusinessDesc()
-//                    }
-//                }
-//            })
         }
 
             if (image_profile != null) {
@@ -368,7 +300,7 @@ class BusinessManageActivity : AppCompatActivity() {
         queue.add(request)
     }
 
-    private lateinit var profileImgUrl : String
+    private var profileImgUrl : String=""
     @SuppressLint("SetTextI18n")
     fun fetchProfileImg() {
         var id = intent.getStringExtra("id")!!

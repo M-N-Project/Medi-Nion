@@ -61,7 +61,7 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
-            setViewMore(view.content, view.viewMore)
+//            setViewMore(view.content, view.viewMore)
 
             view.content.text = item.content
             bookmark.isChecked = item.isBookm
@@ -109,9 +109,6 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
 
             val pos = absoluteAdapterPosition
-//            profileImg.setOnClickListener {
-//                listener?.onProfileClick(itemView,item,pos)
-//            }
 
 
             if(pos!= RecyclerView.NO_POSITION) {
@@ -128,7 +125,7 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
         private fun setViewMore(contentTextView: TextView, viewMoreTextView: TextView){
             // getEllipsisCount()을 통한 더보기 표시 및 구현
-            contentTextView.post{
+                        contentTextView.post{
                 val lineCount = contentTextView.layout.lineCount
                 if (lineCount > 0) {
                     if (contentTextView.layout.getEllipsisCount(lineCount - 1) > 0) {
@@ -137,6 +134,7 @@ class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardIt
 
                         // 더보기 클릭 이벤트
                         viewMoreTextView.setOnClickListener {
+                            Log.d("8912321", "rkrkrk")
                             if(viewMoreTextView.text == "더보기"){
                                 contentTextView.maxLines = Int.MAX_VALUE
                                 viewMoreTextView.text = "간략히 보기"

@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -81,8 +82,6 @@ class BoardWrite : AppCompatActivity() {
         var cancelbtn = findViewById<TextView>(R.id.cancel_Btn)
         var board_select = findViewById<TextView>(R.id.board_select)
 
-        val url_Post = "http://seonho.dothome.co.kr/createBoard.php"
-
         imgbtn.setOnClickListener { //imageButton_gallery 클릭시 갤러리로 이동
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*" //intent.setType("image/*)
@@ -123,7 +122,8 @@ class BoardWrite : AppCompatActivity() {
 
     private fun showBottomSheet(items : ArrayList<String> , type : String){
         val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
-        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetView.setBackgroundColor(Color.parseColor("#00000000"))
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
         bottomSheetDialog.setContentView(bottomSheetView)
 
         var board_select = findViewById<TextView>(R.id.board_select)
@@ -183,13 +183,13 @@ class BoardWrite : AppCompatActivity() {
         }
 
         if(flagUpdate == "true"){
-            Log.d("456", "456")
-            val post_num = intent.getStringExtra("post_num").toString()
 
+            val post_num = intent.getStringExtra("post_num").toString()
             val request = Upload_Request(
                 Request.Method.POST,
                 updateUrl,
                 { response ->
+                    Log.d("89712312", response)
                     if (!response.equals("update fail")) {
                         Toast.makeText(
                             baseContext,
@@ -222,7 +222,6 @@ class BoardWrite : AppCompatActivity() {
                     "post_num" to post_num,
                     "title" to postTitle,
                     "content" to postContent,
-                    "time" to currentTime.toString(),
                     "image1" to img1,
                     "image2" to img2
                 )

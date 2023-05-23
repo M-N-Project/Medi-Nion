@@ -1,6 +1,8 @@
 package com.example.medi_nion
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : RecyclerView.Adapter<CommentListAdapter.ViewHolder>() {
 
@@ -83,16 +86,16 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                 itemCommentMore.visibility = View.VISIBLE
 
                 itemCommentMore.setOnClickListener{
-                    val comment_more = itemView.findViewById<RadioGroup>(R.id.optionRadioGroup)
-                    if(comment_more.visibility == 8) comment_more.visibility = View.VISIBLE
-                    else comment_more.visibility = View.GONE
-
-                    val comment_delete = itemView.findViewById<RadioButton>(R.id.commDelete_RadioBtn)
+//                    val comment_more = itemView.findViewById<RadioGroup>(R.id.optionRadioGroup)
+//                    if(comment_more.visibility == 8) comment_more.visibility = View.VISIBLE
+//                    else comment_more.visibility = View.GONE
+//
+//                    val comment_delete = itemView.findViewById<RadioButton>(R.id.commDelete_RadioBtn)
 
                     //댓글 삭제 이벤트
-                    comment_delete.setOnClickListener{
+//                    comment_delete.setOnClickListener{
                         listener?.onItemDelete(itemView, item, pos)
-                    }
+//                    }
                 }
 
             }
