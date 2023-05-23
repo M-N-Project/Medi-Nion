@@ -476,7 +476,6 @@ class Calendar_Add : AppCompatActivity() {
         val year = cal.get(Calendar.YEAR)
         val month = cal.get(Calendar.MONTH)
         val day = cal.get(Calendar.DAY_OF_MONTH)
-        val week = cal.get(Calendar.WEEK_OF_MONTH)
 
         start_date.setOnClickListener {
             val startDatePicker = DatePickerDialog(
@@ -792,12 +791,16 @@ class Calendar_Add : AppCompatActivity() {
                         }
 
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
+                            val start_date = findViewById<TextView>(R.id.start_date_pick)
+                            val end_date = findViewById<TextView>(R.id.end_date_pick)
                             val alarmSpinner = findViewById<TextView>(R.id.alarm_spinner)
                             val repeatSpinner = findViewById<TextView>(R.id.repeat_spinner)
 
                             Log.d("DFSDFD4", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
+                            start_date.setText(data.start_date)
+                            end_date.setText(data.end_date)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
 //                            when (data.schedule_alarm) {

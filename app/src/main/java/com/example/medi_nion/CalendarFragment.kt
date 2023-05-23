@@ -238,6 +238,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         var month = day.toString().substring(17,19)
         var date = ""
         var week = day.date.toString().substring(0,3)
+
         if(month.substring(1,2) == "-"){
             month = "0${(day.toString().substring(17,18)).toInt() + 1}"
             date = day.toString().substring(19,21)
@@ -245,7 +246,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             if(date.substring(1,2) == "}")
                 date = "0${day.toString().substring(19,20)}"
 
-
+            Log.d("Year", "$day, $year, $month, $date, $week")
         }
         else{
             month = (month.toInt()+1).toString()
@@ -254,7 +255,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
             if(date.substring(1,2) == "}")
                 date = "0${day.toString().substring(20, 21)}"
-
+            Log.d("Year2", "$day, $year, $month, $date, $week")
         }
 
         val presentDate = "$year-$month-$date-$week"
@@ -724,7 +725,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 "oldTitle" to oldTitle,
                 "oldStartTime" to oldStartTime,
                 "schedule_name" to item.schedule_name,
-                "schedule_date" to item.start_date,
+                "start_date" to item.start_date,
+                "end_date" to item.end_date,
                 "schedule_start" to item.schedule_start,
                 "schedule_end" to item.schedule_end,
                 "schedule_color" to item.schedule_color,
