@@ -179,6 +179,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".Profile_opencv"
             android:screenOrientation="portrait"/>
+        <activity android:name=".MembershipActivity"
+            android:screenOrientation="portrait"/>
 
 
         <activity android:name=".Calendar_Add"

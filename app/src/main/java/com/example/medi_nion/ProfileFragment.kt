@@ -17,7 +17,9 @@ import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.example.medi_nion.databinding.ProfileBinding
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.android.synthetic.main.business_board_item.*
 import org.json.JSONArray
+import java.lang.reflect.Member
 
 class ProfileFragment : Fragment(R.layout.profile) {
 
@@ -350,6 +352,11 @@ class ProfileFragment : Fragment(R.layout.profile) {
             OssLicensesMenuActivity.setActivityTitle("오픈소스 라이센스 목록")
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
             startActivity(intent)
+        }
+
+        //회원등급 안내
+        binding.profileItem11.setOnClickListener {
+            startActivity(Intent(context, MembershipActivity::class.java))
         }
 
         return binding.root

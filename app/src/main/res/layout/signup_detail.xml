@@ -187,10 +187,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/color3"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/login_round_button"
+        android:backgroundTint="@color/color3"
         android:text="자격증 또는 학생증으로 본인인증하기"
         android:textColor="@color/white" />
 

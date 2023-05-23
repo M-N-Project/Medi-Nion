@@ -43,6 +43,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
 import com.googlecode.tesseract.android.TessBaseAPI
+import kotlinx.android.synthetic.main.business_writing_img_item.*
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.*
@@ -590,15 +591,15 @@ class SignUP : AppCompatActivity() {
 
         //3-3 사각형인지 판별 -> 신분증은 사각형이므로..
         // 사각형 판별
-        if (approxCandidate.rows() != 4) {
-            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
-            openCamera()
-        }
-        // 컨벡스(볼록한 도형)인지 판별
-        if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
-            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
-            openCamera()
-        }
+//        if (approxCandidate.rows() != 4) {
+//            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
+//            openCamera()
+//        }
+//        // 컨벡스(볼록한 도형)인지 판별
+//        if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
+//            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
+//            openCamera()
+//        }
 
         //4. 투시변환
         // 좌상단부터 시계 반대 방향으로 정점을 정렬한다.
@@ -682,8 +683,8 @@ class SignUP : AppCompatActivity() {
         with(TessBaseAPI()) {
             val result = findViewById<TextView>(R.id.text_result)
             dataPath = "$filesDir/tesseracts/"
-            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-            checkFile(File(dataPath + "tessdata/"), "eng")
+            checkFile(File(dataPath + "testdata/"), "kor") //사용할 언어파일의 이름 지정
+            checkFile(File(dataPath + "testdata/"), "eng")
             init(dataPath, "kor+eng")
 
             // Improve image quality by adjusting brightness and contrast
@@ -704,16 +705,16 @@ class SignUP : AppCompatActivity() {
             //val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
             val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
             pageSegMode = ocrEngineMode
-            val tessdataDir = File("$filesDir/tessdata/")
-            val engTrainedData = File(tessdataDir, "eng.traineddata")
-            val korTrainedData = File(tessdataDir, "kor.traineddata")
+            val tessdataDir = File("$filesDir/testdata/")
+            val engTrainedData = File(tessdataDir, "eng.trained")
+            val korTrainedData = File(tessdataDir, "kor.trained")
             if (engTrainedData.exists() && korTrainedData.exists()) {
                 val lang = "kor+eng"
                 setVariable(
                     TessBaseAPI.VAR_CHAR_WHITELIST,
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 )
-                init(filesDir.absolutePath + "/tessdata/", lang)
+                init(filesDir.absolutePath + "/testdata/", lang)
             } else {
                 Log.e("printOCRResult", "Trained data files are missing")
             }
@@ -722,6 +723,17 @@ class SignUP : AppCompatActivity() {
             bitmap = resize(bitmap)!!
             image = BitMapToString(bitmap)
             result.text = utF8Text
+
+//            setImage(bitmap)
+//            bitmap = resize(bitmap)!!
+//            val image = BitMapToString(bitmap)
+//            val decodedBitmap: Bitmap = BitmapFactory.decodeByteArray(
+//                Base64.decode(image, Base64.DEFAULT),
+//                0,
+//                Base64.decode(image, Base64.DEFAULT).size
+//            )
+//            idImgView.setImageBitmap(decodedBitmap)
+//            result.text = utF8Text
 
         }
     }

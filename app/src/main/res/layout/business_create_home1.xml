@@ -42,6 +42,8 @@
         android:text="채널 생성하기"
         android:textSize="20dp"
         android:textStyle="bold"
+        android:backgroundTint="@color/color3"
+        android:background="@drawable/login_round_button"
         android:textColor="@color/white"/>
 
 </LinearLayout>
