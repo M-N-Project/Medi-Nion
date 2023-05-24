@@ -284,7 +284,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, start_date,schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
+                        val CalendarItem = CalendarItem(id, schedule_name, start_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
                         items.add(CalendarItem)
                         viewModel.addItemList(CalendarItem)
                     }
@@ -297,6 +297,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         override fun onEventClick(v: View, data: CalendarItem, pos: Int) {
                             oldTitle = data.schedule_name
                             oldStartTime = data.schedule_start
+
                             //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
                             val bottomSheetView = layoutInflater.inflate(layout.calendar_dialog, null)
                             val bottomSheetDialog = BottomSheetDialog(requireContext())
@@ -310,7 +311,12 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                     .setMessage("일정을 삭제하시겠습니까?")
                                     .setPositiveButton("삭제",
                                         DialogInterface.OnClickListener { dialog, id ->
-                                            deleteSchedule(data)
+                                            val item = items.get(pos)
+                                            items.removeAt(pos)
+
+                                            //db에서 삭제.
+                                            deleteSchedule(item)
+
                                         })
                                     .setNegativeButton("취소",
                                         DialogInterface.OnClickListener { dialog, id ->
@@ -674,6 +680,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
     private fun deleteSchedule(item : CalendarItem){
         val deleteSchedule = "http://seonho.dothome.co.kr/deleteSchedule.php"
 
+        Log.d("1873123", "${item.id} / ${item.schedule_name} / ${item.start_date}/ ${item.schedule_start}")
         val request = Upload_Request(
             Request.Method.POST,
             deleteSchedule,
@@ -694,7 +701,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             mutableMapOf(
                 "id" to item.id,
                 "schedule_name" to item.schedule_name,
-                "schedule_date" to item.start_date,
+                "start_date" to item.start_date,
                 "schedule_start" to item.schedule_start
             )
         )
