@@ -72,8 +72,8 @@ class Calendar_History_Add : AppCompatActivity() {
         Log.d("iviosidf_add", CalendarFragment.viewModel.toString())
 
         val schedule_title = findViewById<EditText>(R.id.schedule_title)
-        val start_date = findViewById<TextView>(R.id.start_date_pick)
-        val end_date = findViewById<TextView>(R.id.end_date_pick)
+//        val start_date = findViewById<TextView>(R.id.start_date_pick)
+//        val end_date = findViewById<TextView>(R.id.end_date_pick)
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
         val start_result = findViewById<TextView>(R.id.start_result)
         val end_result = findViewById<TextView>(R.id.end_result)
@@ -123,100 +123,100 @@ class Calendar_History_Add : AppCompatActivity() {
         val month = cal.get(Calendar.MONTH)
         val day = cal.get(Calendar.DAY_OF_MONTH)
 
-        start_date.setOnClickListener {
-            val startDatePicker = DatePickerDialog(
-                this@Calendar_History_Add,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                { _, year, monthOfYear, dayOfMonth ->
-//                  월이 0부터 시작하여 1을 더해주어야함
-                    val month = monthOfYear + 1
-//                   선택한 날짜의 요일을 구하기 위한 calendar
-                    val calendar = Calendar.getInstance()
-//                    선택한 날짜 세팅
-                    calendar.set(year, monthOfYear, dayOfMonth)
-                    val date = calendar.time
-                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
-                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
-                    var dayName: String = simpledateformat.format(date)
-                    when(dayName) {
-                        "일요일" -> dayName = "Sun"
-                        "월요일" -> dayName = "Mon"
-                        "화요일" -> dayName = "Tue"
-                        "수요일" -> dayName = "Wed"
-                        "목요일" -> dayName = "Thu"
-                        "금요일" -> dayName = "Fri"
-                        "토요일" -> dayName = "Sat"
-                    }
-                    if (month < 10) {
-                        if (dayOfMonth < 10) {
-                            start_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            start_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
-                        }
-                    } else {
-                        if (dayOfMonth < 10) {
-                            start_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            start_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
-                        }
-                    }
-                },
-                year,
-                month,
-                day
-            )
-//           최소 날짜를 현재 시각 이후로
-            startDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
-            startDatePicker.show()
-        }
-
-
-        end_date.setOnClickListener {
-            val endDatePicker = DatePickerDialog(
-                this@Calendar_History_Add,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                { _, year, monthOfYear, dayOfMonth ->
-//                  월이 0부터 시작하여 1을 더해주어야함
-                    val month = monthOfYear + 1
-//                   선택한 날짜의 요일을 구하기 위한 calendar
-                    val calendar = Calendar.getInstance()
-//                    선택한 날짜 세팅
-                    calendar.set(year, monthOfYear, dayOfMonth)
-                    val date = calendar.time
-                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
-                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
-                    var dayName: String = simpledateformat.format(date)
-                    when(dayName) {
-                        "일요일" -> dayName = "Sun"
-                        "월요일" -> dayName = "Mon"
-                        "화요일" -> dayName = "Tue"
-                        "수요일" -> dayName = "Wed"
-                        "목요일" -> dayName = "Thu"
-                        "금요일" -> dayName = "Fri"
-                        "토요일" -> dayName = "Sat"
-                    }
-                    if (month < 10) {
-                        if (dayOfMonth < 10) {
-                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            end_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
-                        }
-                    } else {
-                        if (dayOfMonth < 10) {
-                            end_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            end_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
-                        }
-                    }
-                },
-                year,
-                month,
-                day
-            )
-//           최소 날짜를 현재 시각 이후로
-            endDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
-            endDatePicker.show()
-        }
+//        start_date.setOnClickListener {
+//            val startDatePicker = DatePickerDialog(
+//                this@Calendar_History_Add,
+//                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+//                { _, year, monthOfYear, dayOfMonth ->
+////                  월이 0부터 시작하여 1을 더해주어야함
+//                    val month = monthOfYear + 1
+////                   선택한 날짜의 요일을 구하기 위한 calendar
+//                    val calendar = Calendar.getInstance()
+////                    선택한 날짜 세팅
+//                    calendar.set(year, monthOfYear, dayOfMonth)
+//                    val date = calendar.time
+//                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
+//                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
+//                    var dayName: String = simpledateformat.format(date)
+//                    when(dayName) {
+//                        "일요일" -> dayName = "Sun"
+//                        "월요일" -> dayName = "Mon"
+//                        "화요일" -> dayName = "Tue"
+//                        "수요일" -> dayName = "Wed"
+//                        "목요일" -> dayName = "Thu"
+//                        "금요일" -> dayName = "Fri"
+//                        "토요일" -> dayName = "Sat"
+//                    }
+//                    if (month < 10) {
+//                        if (dayOfMonth < 10) {
+//                            start_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            start_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    } else {
+//                        if (dayOfMonth < 10) {
+//                            start_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            start_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    }
+//                },
+//                year,
+//                month,
+//                day
+//            )
+////           최소 날짜를 현재 시각 이후로
+//            startDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
+//            startDatePicker.show()
+//        }
+//
+//
+//        end_date.setOnClickListener {
+//            val endDatePicker = DatePickerDialog(
+//                this@Calendar_History_Add,
+//                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+//                { _, year, monthOfYear, dayOfMonth ->
+////                  월이 0부터 시작하여 1을 더해주어야함
+//                    val month = monthOfYear + 1
+////                   선택한 날짜의 요일을 구하기 위한 calendar
+//                    val calendar = Calendar.getInstance()
+////                    선택한 날짜 세팅
+//                    calendar.set(year, monthOfYear, dayOfMonth)
+//                    val date = calendar.time
+//                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
+//                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
+//                    var dayName: String = simpledateformat.format(date)
+//                    when(dayName) {
+//                        "일요일" -> dayName = "Sun"
+//                        "월요일" -> dayName = "Mon"
+//                        "화요일" -> dayName = "Tue"
+//                        "수요일" -> dayName = "Wed"
+//                        "목요일" -> dayName = "Thu"
+//                        "금요일" -> dayName = "Fri"
+//                        "토요일" -> dayName = "Sat"
+//                    }
+//                    if (month < 10) {
+//                        if (dayOfMonth < 10) {
+//                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            end_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    } else {
+//                        if (dayOfMonth < 10) {
+//                            end_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            end_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    }
+//                },
+//                year,
+//                month,
+//                day
+//            )
+////           최소 날짜를 현재 시각 이후로
+//            endDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
+//            endDatePicker.show()
+//        }
 
         start.setOnClickListener {
             val dialog = TimePickerDialog(
@@ -371,8 +371,8 @@ class Calendar_History_Add : AppCompatActivity() {
         var day = intent?.getStringExtra("day").toString()
         val postUrl = "http://seonho.dothome.co.kr/createCalendarHistory.php"
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
-        val start_date = findViewById<TextView>(R.id.start_date_pick).text.toString()
-        val end_date = findViewById<TextView>(R.id.end_date_pick).text.toString()
+//        val start_date = findViewById<TextView>(R.id.start_date_pick).text.toString()
+//        val end_date = findViewById<TextView>(R.id.end_date_pick).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
         val alarm_spinner = findViewById<TextView>(R.id.alarm_spinner)
@@ -385,6 +385,7 @@ class Calendar_History_Add : AppCompatActivity() {
 
 //        date = date.substring(12 until 21)
 
+        Log.d("89731231", day)
         val year = day.toString().substring(12,16)
         var month = day.toString().substring(17,19)
         var date = ""
@@ -405,6 +406,13 @@ class Calendar_History_Add : AppCompatActivity() {
 
         Log.d("dsa", "$id , $year , $month, $date")
 
+        val calendar = Calendar.getInstance()
+        calendar.set(year.toInt(), month.toInt(), date.toInt())
+        val dayOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
+
+        Log.d("8712321", "${year.toInt()} // ${month.toInt()} // ${date.toInt()} //${dayOfMonth}")
+
+//        val presentDate = "$year-$month-$date-$week-$dayOfMonth"
         val presentDate = "$year-$month-$date"
 
         var alarm_hour = start_result.substring(0, 2).toInt()
@@ -444,7 +452,7 @@ class Calendar_History_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val item = CalendarItem(id, schedule_title ,start_date, end_date,
+                    val item = CalendarItem(id, schedule_title ,presentDate,
                         start_result ,end_result, ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
                     CalendarFragment.viewModel.addItemLiveList(item)
 
@@ -463,8 +471,8 @@ class Calendar_History_Add : AppCompatActivity() {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
-                    "start_date" to start_date,
-                    "end_date" to end_date,
+                    "start_date" to presentDate,
+                    "end_date" to "",
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
@@ -476,8 +484,8 @@ class Calendar_History_Add : AppCompatActivity() {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
-                    "start_date" to start_date,
-                    "end_date" to end_date,
+                    "start_date" to presentDate,
+                    "end_date" to "",
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),

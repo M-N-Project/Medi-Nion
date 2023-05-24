@@ -162,9 +162,13 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val id = arguments?.getString("id").toString()
         val table = v.findViewById<MinTimeTableView>(R.id.table)
         val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR).toString()
+        var month = (cal.get(Calendar.MONTH)+1).toString()
+        if(month.length == 1) month = "0$month"
         val week = cal.get(Calendar.WEEK_OF_MONTH)
         val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
 
+        Log.d("89273123", "$year, $month")
         scheduleList.clear()
         val request = Board_Request(
             Request.Method.POST,
@@ -191,7 +195,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                             id,
                             schedule_name,
                             start_date,
-                            end_date,
                             schedule_start,
                             schedule_end,
                             schedule_color,
@@ -234,7 +237,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                             val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
                             val calendar = Calendar.getInstance()
 //                            dialog_date.text = schedule.schedule_date
-                            dialog_date.text = calendar.toString()
+                            dialog_date.text = start_date
 
                             val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                             schedule_title.setText(schedule.schedule_name) //스케줄 이름
@@ -373,7 +376,6 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                                 color.background = drawable
                             }
 
-
                             val alarmSpinner = bottomSheetView.findViewById<TextView>(R.id.alarm_spinner)
                             Log.d("8972123", schedule.schedule_alarm)
                             alarmSpinner.setText(schedule.schedule_alarm)
@@ -463,6 +465,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
             }, { Log.d("login failed", "error......${error(this)}") },
             hashMapOf(
                 "id" to id,
+                "year" to year,
+                "month" to month,
                 "week" to week.toString()
             )
         )
@@ -495,8 +499,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 "oldTitle" to oldTitle,
                 "oldStartTime" to oldStartTime,
                 "schedule_name" to item.schedule_name,
-                "start_date" to item.start_date,
-                "end_date" to item.end_date,
+                "start_date" to item.schedule_date,
+                "end_date" to "",
                 "schedule_start" to item.schedule_start,
                 "schedule_end" to item.schedule_end,
                 "schedule_color" to if(item.schedule_color == "") "#BADFD2" else item.schedule_color,
@@ -533,8 +537,8 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
             mutableMapOf(
                 "id" to item.id,
                 "schedule_name" to item.schedule_name,
-                "start_date" to item.start_date,
-                "end_date" to item.end_date,
+                "start_date" to item.schedule_date,
+                "end_date" to "",
                 "schedule_start" to item.schedule_start
             )
         )

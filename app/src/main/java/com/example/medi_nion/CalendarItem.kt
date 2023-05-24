@@ -8,7 +8,7 @@ class CalendarItem(
     val id : String,
     var schedule_name : String,
     var start_date : String,
-    var end_date: String,
+//    var end_date: String,
     var schedule_start : String,
     var schedule_end : String,
     var schedule_color : String,

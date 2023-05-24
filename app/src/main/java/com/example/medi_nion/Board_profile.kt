@@ -2,6 +2,7 @@ package com.example.medi_nion
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -828,7 +829,8 @@ class Board_profile : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showBottomSheet(items : ArrayList<String>, type : String){
         val bottomSheetView = layoutInflater.inflate(R.layout.normal_dialog, null)
-        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetView.setBackgroundColor(Color.parseColor("#00000000"))
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
         bottomSheetDialog.setContentView(bottomSheetView)
 
         var profileType = intent.getStringExtra("profileMenuType")

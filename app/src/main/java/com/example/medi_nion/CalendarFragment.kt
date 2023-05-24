@@ -64,6 +64,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
 
     override fun onPause() {
         super.onPause()
+        currentDate  = CalendarDay.today()
         lastSelected = ""
     }
 
@@ -283,7 +284,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                         val schedule_memo = item.getString("schedule_memo")
                         val isDone = item.getString("isDone")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, start_date, end_date, schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
+                        val CalendarItem = CalendarItem(id, schedule_name, start_date,schedule_start, schedule_end, schedule_color, schedule_alarm, schedule_repeat, schedule_memo,  if(isDone == "0") false else true)
                         items.add(CalendarItem)
                         viewModel.addItemList(CalendarItem)
                     }
@@ -726,7 +727,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                 "oldStartTime" to oldStartTime,
                 "schedule_name" to item.schedule_name,
                 "start_date" to item.start_date,
-                "end_date" to item.end_date,
+                "end_date" to "",
                 "schedule_start" to item.schedule_start,
                 "schedule_end" to item.schedule_end,
                 "schedule_color" to item.schedule_color,

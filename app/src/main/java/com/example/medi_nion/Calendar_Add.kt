@@ -7,10 +7,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
-import android.graphics.Color
-import android.graphics.PorterDuff
+import android.graphics.*
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -25,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -33,11 +32,11 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dev.sasikanth.colorsheet.ColorPickerListener
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import kotlinx.android.synthetic.main.calendar_add.*
 import org.json.JSONArray
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -51,6 +50,9 @@ class Calendar_Add : AppCompatActivity() {
     lateinit var notificationPermission: ActivityResultLauncher<String>
     
     private var lastSelected = ""
+
+    private var start_date_request = ""
+    private var end_date_request = ""
 
     //히스토리 스피너에 들어갈 요소들
     private lateinit var calendarHistoryView : RecyclerView
@@ -81,8 +83,8 @@ class Calendar_Add : AppCompatActivity() {
         calendarHistoryView.adapter = adapter
 
         val schedule_title = findViewById<EditText>(R.id.schedule_title)
-        val start_date = findViewById<TextView>(R.id.start_date_pick)
-        val end_date = findViewById<TextView>(R.id.end_date_pick)
+//        val start_date = findViewById<TextView>(R.id.start_date_pick)
+//        val end_date = findViewById<TextView>(R.id.end_date_pick)
         val start = findViewById<LinearLayout>(R.id.start_time_linear)
         val start_result = findViewById<TextView>(R.id.start_result)
         val end_result = findViewById<TextView>(R.id.end_result)
@@ -477,100 +479,112 @@ class Calendar_Add : AppCompatActivity() {
         val month = cal.get(Calendar.MONTH)
         val day = cal.get(Calendar.DAY_OF_MONTH)
 
-        start_date.setOnClickListener {
-            val startDatePicker = DatePickerDialog(
-                this@Calendar_Add,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                { _, year, monthOfYear, dayOfMonth ->
-//                  월이 0부터 시작하여 1을 더해주어야함
-                    val month = monthOfYear + 1
-//                   선택한 날짜의 요일을 구하기 위한 calendar
-                    val calendar = Calendar.getInstance()
-//                    선택한 날짜 세팅
-                    calendar.set(year, monthOfYear, dayOfMonth)
-                    val date = calendar.time
-                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
-                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
-                    var dayName: String = simpledateformat.format(date)
-                    when(dayName) {
-                        "일요일" -> dayName = "Sun"
-                        "월요일" -> dayName = "Mon"
-                        "화요일" -> dayName = "Tue"
-                        "수요일" -> dayName = "Wed"
-                        "목요일" -> dayName = "Thu"
-                        "금요일" -> dayName = "Fri"
-                        "토요일" -> dayName = "Sat"
-                    }
-                    if (month < 10) {
-                        if (dayOfMonth < 10) {
-                            start_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            start_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
-                        }
-                    } else {
-                        if (dayOfMonth < 10) {
-                            start_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            start_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
-                        }
-                    }
-                },
-                year,
-                month,
-                day
-            )
-//           최소 날짜를 현재 시각 이후로
-            startDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
-            startDatePicker.show()
-        }
-
-
-        end_date.setOnClickListener {
-            val endDatePicker = DatePickerDialog(
-                this@Calendar_Add,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                { _, year, monthOfYear, dayOfMonth ->
-//                  월이 0부터 시작하여 1을 더해주어야함
-                    val month = monthOfYear + 1
-//                   선택한 날짜의 요일을 구하기 위한 calendar
-                    val calendar = Calendar.getInstance()
-//                    선택한 날짜 세팅
-                    calendar.set(year, monthOfYear, dayOfMonth)
-                    val date = calendar.time
-                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
-                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
-                    var dayName: String = simpledateformat.format(date)
-                    when(dayName) {
-                        "일요일" -> dayName = "Sun"
-                        "월요일" -> dayName = "Mon"
-                        "화요일" -> dayName = "Tue"
-                        "수요일" -> dayName = "Wed"
-                        "목요일" -> dayName = "Thu"
-                        "금요일" -> dayName = "Fri"
-                        "토요일" -> dayName = "Sat"
-                    }
-                    if (month < 10) {
-                        if (dayOfMonth < 10) {
-                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            end_date.text = "$year-0$month-$dayOfMonth-$dayName-$week"
-                        }
-                    } else {
-                        if (dayOfMonth < 10) {
-                            end_date.text = "$year-$month-0$dayOfMonth-$dayName-$week"
-                        } else {
-                            end_date.text = "$year-$month-$dayOfMonth-$dayName-$week"
-                        }
-                    }
-                },
-                year,
-                month,
-                day
-            )
-//           최소 날짜를 현재 시각 이후로
-            endDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
-            endDatePicker.show()
-        }
+        //사랑해.... 선호야...
+//        start_date.setOnClickListener {
+//            val startDatePicker = DatePickerDialog(
+//                this@Calendar_Add,
+//                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+//                { _, year, monthOfYear, dayOfMonth ->
+////                  월이 0부터 시작하여 1을 더해주어야함
+//                    val month = monthOfYear + 1
+////                   선택한 날짜의 요일을 구하기 위한 calendar
+//                    val calendar = Calendar.getInstance()
+////                    선택한 날짜 세팅
+//                    calendar.set(year, monthOfYear, dayOfMonth)
+//                    val date = calendar.time
+//                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
+//                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
+//                    var dayName: String = simpledateformat.format(date)
+//                    when(dayName) {
+//                        "일요일" -> dayName = "Sun"
+//                        "월요일" -> dayName = "Mon"
+//                        "화요일" -> dayName = "Tue"
+//                        "수요일" -> dayName = "Wed"
+//                        "목요일" -> dayName = "Thu"
+//                        "금요일" -> dayName = "Fri"
+//                        "토요일" -> dayName = "Sat"
+//                    }
+//                    if (month < 10) {
+//                        if (dayOfMonth < 10) {
+//                            start_date.text = "$year-0$month-0$dayOfMonth-$dayName"
+//                            start_date_request= "$year-0$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            start_date.text = "$year-0$month-$dayOfMonth-$dayName"
+//                            start_date_request = "$year-0$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    } else {
+//                        if (dayOfMonth < 10) {
+//                            start_date.text = "$year-$month-0$dayOfMonth-$dayName"
+//                            start_date_request = "$year-$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            start_date.text = "$year-$month-$dayOfMonth-$dayName"
+//                            start_date_request = "$year-$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    }
+//                },
+//                year,
+//                month,
+//                day
+//            )
+//
+//
+////           최소 날짜를 현재 시각 이후로
+////            startDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
+//            startDatePicker.show()
+//        }
+//
+//
+//        end_date.setOnClickListener {
+//            val endDatePicker = DatePickerDialog(
+//                this@Calendar_Add,
+//                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+//                { _, year, monthOfYear, dayOfMonth ->
+////                  월이 0부터 시작하여 1을 더해주어야함
+//                    val month = monthOfYear + 1
+////                   선택한 날짜의 요일을 구하기 위한 calendar
+//                    val calendar = Calendar.getInstance()
+////                    선택한 날짜 세팅
+//                    calendar.set(year, monthOfYear, dayOfMonth)
+//                    val date = calendar.time
+//                    val week = calendar.get(Calendar.WEEK_OF_MONTH)
+//                    val simpledateformat = SimpleDateFormat("EEEE", Locale.getDefault())
+//                    var dayName: String = simpledateformat.format(date)
+//                    when(dayName) {
+//                        "일요일" -> dayName = "Sun"
+//                        "월요일" -> dayName = "Mon"
+//                        "화요일" -> dayName = "Tue"
+//                        "수요일" -> dayName = "Wed"
+//                        "목요일" -> dayName = "Thu"
+//                        "금요일" -> dayName = "Fri"
+//                        "토요일" -> dayName = "Sat"
+//                    }
+//                    if (month < 10) {
+//                        if (dayOfMonth < 10) {
+//                            end_date.text = "$year-0$month-0$dayOfMonth-$dayName"
+//                            end_date_request = "$year-0$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            end_date.text = "$year-0$month-$dayOfMonth-$dayName"
+//                            end_date_request = "$year-0$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    } else {
+//                        if (dayOfMonth < 10) {
+//                            end_date.text = "$year-$month-0$dayOfMonth-$dayName"
+//                            end_date_request = "$year-$month-0$dayOfMonth-$dayName-$week"
+//                        } else {
+//                            end_date.text = "$year-$month-$dayOfMonth-$dayName"
+//                            end_date_request = "$year-$month-$dayOfMonth-$dayName-$week"
+//                        }
+//                    }
+//                },
+//                year,
+//                month,
+//                day
+//            )
+//
+////           최소 날짜를 현재 시각 이후로
+////            endDatePicker.datePicker.minDate = System.currentTimeMillis() - 1000;
+//            endDatePicker.show()
+//        }
 
         //시간 설정
         start.setOnClickListener {
@@ -713,7 +727,7 @@ class Calendar_Add : AppCompatActivity() {
 
                         val schedule_name = item.getString("schedule_name")
                         val start_date = item.getString("start_date")
-                        val end_date = item.getString("end_date")
+//                        val end_date = item.getString("end_date")
                         val schedule_start = item.getString("schedule_start")
                         val schedule_end = item.getString("schedule_end")
                         val schedule_color = item.getString("schedule_color")
@@ -721,8 +735,7 @@ class Calendar_Add : AppCompatActivity() {
                         val schedule_repeat = item.getString("schedule_repeat")
                         val schedule_memo = item.getString("schedule_memo")
 
-                        val CalendarItem = CalendarItem(id, schedule_name, start_date,
-                            end_date, schedule_start, schedule_end, schedule_color,
+                        val CalendarItem = CalendarItem(id, schedule_name, start_date, schedule_start, schedule_end, schedule_color,
                             schedule_alarm, schedule_repeat, schedule_memo, false)
                         items.add(CalendarItem)
                     }
@@ -791,16 +804,16 @@ class Calendar_Add : AppCompatActivity() {
                         }
 
                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
-                            val start_date = findViewById<TextView>(R.id.start_date_pick)
-                            val end_date = findViewById<TextView>(R.id.end_date_pick)
+//                            val start_date = findViewById<TextView>(R.id.start_date_pick)
+//                            val end_date = findViewById<TextView>(R.id.end_date_pick)
                             val alarmSpinner = findViewById<TextView>(R.id.alarm_spinner)
                             val repeatSpinner = findViewById<TextView>(R.id.repeat_spinner)
 
                             Log.d("DFSDFD4", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
-                            start_date.setText(data.start_date)
-                            end_date.setText(data.end_date)
+//                            start_date.setText(data.start_date.substring(0, 14))
+//                            end_date.setText(data.end_date.substring(0, 14))
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
 //                            when (data.schedule_alarm) {
@@ -813,6 +826,8 @@ class Calendar_Add : AppCompatActivity() {
 
                             val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.calendar_color_oval)
 
+
+
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor(data.schedule_color), BlendMode.SRC_ATOP)
                             } else {
@@ -821,6 +836,7 @@ class Calendar_Add : AppCompatActivity() {
                             color.background = drawable
                             colorStr = data.schedule_color
 
+                            Log.d("colorss", "${color} // ${colorStr } // ${data.schedule_color}")
 
                             alarmSpinner.text = data.schedule_alarm
                             repeatSpinner.text = data.schedule_repeat
@@ -855,7 +871,7 @@ class Calendar_Add : AppCompatActivity() {
 
     private fun setupColorSheet(colorView : Button) {
         val colors = resources.getIntArray(R.array.colors)
-        ColorSheet().cornerRadius(8)
+        ColorSheet().cornerRadius(10)
             //colorPicker 설정
             .colorPicker(
                 colors = colors,
@@ -874,8 +890,8 @@ class Calendar_Add : AppCompatActivity() {
 
                 })
             .show(supportFragmentManager)
-
     }
+
 
     private fun setColor(@ColorInt color: Int) {
         val color_picker = findViewById<Button>(R.id.schedule_color_imageView)
@@ -896,8 +912,8 @@ class Calendar_Add : AppCompatActivity() {
         val flag = intent.getStringExtra("flag")
         val postUrl = "http://seonho.dothome.co.kr/createCalendar.php"
         val schedule_title = findViewById<EditText>(R.id.schedule_title).text.toString()
-        val start_date = findViewById<TextView>(R.id.start_date_pick).text.toString()
-        val end_date = findViewById<TextView>(R.id.end_date_pick).text.toString()
+//        val start_date = findViewById<TextView>(R.id.start_date_pick).text.toString()
+//        val end_date = findViewById<TextView>(R.id.end_date_pick).text.toString()
         var start_result = findViewById<TextView>(R.id.start_result).text.toString()
         var end_result = findViewById<TextView>(R.id.end_result).text.toString()
         val alarm_spinner = findViewById<TextView>(R.id.alarm_spinner)
@@ -905,6 +921,9 @@ class Calendar_Add : AppCompatActivity() {
         val repeat_spinner = findViewById<TextView>(R.id.repeat_spinner)
         var repeat = repeat_spinner.text.toString()
         val schedule_memo = findViewById<EditText>(R.id.schedule_memo_textView).text.toString()
+        val color = findViewById<AppCompatButton>(R.id.schedule_color_imageView)
+
+
         start_result = start_result.replace(" ", "")
         end_result = end_result.replace(" ", "")
 
@@ -914,6 +933,7 @@ class Calendar_Add : AppCompatActivity() {
 
         val year = day.toString().substring(12,16)
         var month = day.toString().substring(17,19)
+
         var date = ""
         var week = ""
         if(month.substring(1,2) == "-"){
@@ -946,7 +966,13 @@ class Calendar_Add : AppCompatActivity() {
 
         Log.d("dsa", "$id , $year , $month, $date, $week")
 
-        val presentDate = "$year-$month-$date-$week"
+        val calendar = Calendar.getInstance()
+        calendar.set(year.toInt(), month.toInt(), date.toInt())
+        val dayOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
+
+        Log.d("8712321", "${year.toInt()} // ${month.toInt()} // ${date.toInt()} //${dayOfMonth}")
+
+        val presentDate = "$year-$month-$date-$week-$dayOfMonth"
 
         var alarm_hour = start_result.substring(0, 2).toInt()
         var alarm_minute = start_result.substring(3, 5)
@@ -971,13 +997,13 @@ class Calendar_Add : AppCompatActivity() {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
 
-        Log.d("-0-9231","$id , ${schedule_title}, ${presentDate}, ${start_result}, ${end_result}, ${alarm}, ${repeat}, ${schedule_memo}")
-
+        Log.d("-0-9231","$id , ${schedule_title}, ${presentDate}, ${color} ${start_result}, ${end_result}, ${alarm}, ${repeat}, ${schedule_memo}")
 
         val request = Upload_Request(
             Request.Method.POST,
             postUrl,
             { response ->
+                Log.d("o8723123", response)
                 if (!response.equals("schedule fail")) {
                     Toast.makeText(
                         baseContext,
@@ -985,7 +1011,7 @@ class Calendar_Add : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val item = CalendarItem(id, schedule_title, start_date, end_date, start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
+                    val item = CalendarItem(id, schedule_title, presentDate, start_result,end_result,ColorSheetUtils.colorToHex(selectedColor),alarm, repeat, schedule_memo, false)
                     CalendarFragment.viewModel.addItemLiveList(item)
 
                     this.finish()
@@ -1003,8 +1029,9 @@ class Calendar_Add : AppCompatActivity() {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
-                    "start_date" to start_date,
-                    "end_date" to end_date,
+//                    "start_date" to start_date_request,
+                    "start_date" to presentDate,
+                    "end_date" to end_date_request,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to "#BADFD2",
@@ -1017,8 +1044,9 @@ class Calendar_Add : AppCompatActivity() {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
-                    "start_date" to start_date,
-                    "end_date" to end_date,
+//                    "start_date" to start_date_request,
+                    "start_date" to presentDate,
+                    "end_date" to end_date_request,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
                     "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
@@ -1043,6 +1071,8 @@ class Calendar_Add : AppCompatActivity() {
     private fun setAlarm(time: String, alarm_code: Int, content: String){
         AlarmFunctions(applicationContext).callAlarm(time, alarmCode, content)
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun createNotificationChannel() {
@@ -1101,4 +1131,5 @@ class Calendar_Add : AppCompatActivity() {
 
         bottomSheetDialog.show()
     }
+
 }
