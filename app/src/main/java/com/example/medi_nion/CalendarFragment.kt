@@ -323,7 +323,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             }
 
                             val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
-                            dialog_date.text = data.start_date
+                            dialog_date.text = data.start_date.substring(0,14)
 
                             val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
                             schedule_title.setText(data.schedule_name) //스케줄 이름
@@ -339,6 +339,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             var start_sec = start_result.text.substring(3,5)
                             Log.d("start..", "${start_min}, ${start_sec}")
                             day_night1.setText("오전") //스케줄 시작 오전/오후
+                            if(start_min.toInt() >= 12) day_night1.setText("오후")
                             start_result.setText("${start_min}   :   ${start_sec}") //스케줄 시작 시간
                             Log.d("start..", start_result.text.toString())
 
@@ -389,6 +390,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                             var end_min = end_result.text.substring(0,2)
                             var end_sec = end_result.text.substring(3,5)
                             day_night2.setText("오전") //스케줄 시작 오전/오후
+                            if(end_min.toInt() >= 12) day_night2.setText("오후")
                             end_result.setText("${end_min}   :   ${end_sec}") //스케줄 시작 시간
 
                             end.setOnClickListener {
