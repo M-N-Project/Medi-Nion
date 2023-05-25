@@ -42,7 +42,7 @@ import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
-    private val weekDay = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+    private val weekDay = arrayOf("일", "월", "화", "수", "목", "금", "토")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
     private var selectedColor: Int = ColorSheet.NO_COLOR

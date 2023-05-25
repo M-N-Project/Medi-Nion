@@ -399,7 +399,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                                 startString = "0${HourOfDay}   :   0${Minutes}"
                                             }
                                         }
-                                        start_result.setText(startString)
+                                        start_result.text = startString
                                         start_result.text = start_result.text.toString().replace(" ", "")
                                         data.schedule_start = start_result.text.toString()
                                         start_result.setText(startString)
