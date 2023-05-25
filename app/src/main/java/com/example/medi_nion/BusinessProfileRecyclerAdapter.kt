@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
 import kotlinx.android.synthetic.main.business_board_item.view.titleName
-import kotlinx.android.synthetic.main.business_board_item.view.viewMore
 
 class BusinessProfileRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessProfileRecyclerAdapter.ViewHolder>() {
@@ -61,7 +60,6 @@ class BusinessProfileRecyclerAdapter(private val items: ArrayList<BusinessBoardI
 
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
-            setViewMore(view.content, view.viewMore)
 
             view.titleName.text = item.title
             view.deadline.text = item.time
@@ -128,32 +126,6 @@ class BusinessProfileRecyclerAdapter(private val items: ArrayList<BusinessBoardI
 
         }
 
-        private fun setViewMore(contentTextView: TextView, viewMoreTextView: TextView){
-            // getEllipsisCount()을 통한 더보기 표시 및 구현
-            contentTextView.post{
-                val lineCount = contentTextView.layout.lineCount
-                if (lineCount > 0) {
-                    if (contentTextView.layout.getEllipsisCount(lineCount - 1) > 0) {
-                        // 더보기 표시
-                        viewMoreTextView.visibility = View.VISIBLE
-
-                        // 더보기 클릭 이벤트
-                        viewMoreTextView.setOnClickListener {
-                            if(viewMoreTextView.text == "더보기"){
-                                contentTextView.maxLines = Int.MAX_VALUE
-                                viewMoreTextView.text = "간략히 보기"
-                            }
-                            else{
-                                contentTextView.maxLines = Int.MIN_VALUE
-                                viewMoreTextView.text = "더보기"
-                            }
-
-                        }
-
-                    }
-                }
-            }
-        }
 
         fun roundAll(iv: ImageView, curveRadius : Float)  : ImageView {
 
