@@ -63,7 +63,6 @@ class SignUP : AppCompatActivity() {
     var userDept = ""
 
 //    private var selectCheck: HashMap<String, Int> = arrayListOf()
-
     lateinit var cameraPermission: ActivityResultLauncher<String>
     lateinit var storagePermission: ActivityResultLauncher<String>
     lateinit var cameraLauncher: ActivityResultLauncher<Uri>
@@ -683,8 +682,8 @@ class SignUP : AppCompatActivity() {
         with(TessBaseAPI()) {
             val result = findViewById<TextView>(R.id.text_result)
             dataPath = "$filesDir/tesseracts/"
-            checkFile(File(dataPath + "testdata/"), "kor") //사용할 언어파일의 이름 지정
-            checkFile(File(dataPath + "testdata/"), "eng")
+            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+            checkFile(File(dataPath + "tessdata/"), "eng")
             init(dataPath, "kor+eng")
 
             // Improve image quality by adjusting brightness and contrast
@@ -705,16 +704,16 @@ class SignUP : AppCompatActivity() {
             //val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
             val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
             pageSegMode = ocrEngineMode
-            val tessdataDir = File("$filesDir/testdata/")
-            val engTrainedData = File(tessdataDir, "eng.trained")
-            val korTrainedData = File(tessdataDir, "kor.trained")
+            val tessdataDir = File("$filesDir/tessdata/")
+            val engTrainedData = File(tessdataDir, "eng.traineddata")
+            val korTrainedData = File(tessdataDir, "kor.traineddata")
             if (engTrainedData.exists() && korTrainedData.exists()) {
                 val lang = "kor+eng"
                 setVariable(
                     TessBaseAPI.VAR_CHAR_WHITELIST,
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 )
-                init(filesDir.absolutePath + "/testdata/", lang)
+                init(filesDir.absolutePath + "/tessdata/", lang)
             } else {
                 Log.e("printOCRResult", "Trained data files are missing")
             }

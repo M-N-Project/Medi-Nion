@@ -182,31 +182,9 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         override fun decorate(view: DayViewFacade?) {
             view?.addSpan(StyleSpan(Typeface.BOLD))
             view?.addSpan(RelativeSizeSpan(1.0f))
+            //view?.addSpan(DotSpan(5F, color.color1))
         }
     }
-
-    inner class Decorator : DayViewDecorator {
-        private var date = CalendarDay.today()
-
-        override fun shouldDecorate(day: CalendarDay?): Boolean {
-            return day?.equals(date)!!
-        }
-
-        override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(DotSpan(5F, color.color1))
-        }
-    }
-
-//    inner class EventDecorator(dates: CalendarDay): DayViewDecorator {
-//
-//        override fun shouldDecorate(day: CalendarDay?): Boolean {
-//            return dates.contains(day)
-//        }
-//
-//        override fun decorate(view: DayViewFacade?) {
-//            view?.addSpan(DotSpan(5F, color.color1))
-//        }
-//    }
 
     //선택 날짜가 달라지면 그에 맞는 일정들 가져와서 adapter붙여주기.
     inner class MyDaySelected : OnDateSelectedListener{
@@ -283,10 +261,6 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         }
 
         val presentDate = "$year-$month-$date-$week"
-        val calendar = view?.findViewById<MaterialCalendarView>(R.id.calendarView)
-        calendar.apply {
-//            calendar?.addDecorators(EventDecorator(presentDate))
-        }
 
         val request = Board_Request(
             Request.Method.POST,
