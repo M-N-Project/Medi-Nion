@@ -64,126 +64,117 @@
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp">
+        <LinearLayout
+            android:id="@+id/linearLayout18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <EditText
                 android:id="@+id/schedule_title"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="18dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="18dp"
                 android:background="#ffffff"
                 android:ems="1"
-                android:hint="일정 이름"
+                android:hint="일정을 입력해주세요."
                 android:inputType="textPersonName"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 tools:ignore="TouchTargetSizeCheck"
                 tools:layout_editor_absoluteX="1dp"
                 tools:layout_editor_absoluteY="16dp" />
 
-            <!--        <Spinner-->
-            <!--            android:id="@+id/schedule_history_spinner"-->
-            <!--            android:visibility="gone"-->
+
+            <!--        <View-->
+            <!--            android:id="@+id/view1"-->
+            <!--            android:layout_width="387dp"-->
+            <!--            android:layout_height="1dp"-->
+            <!--            android:layout_marginStart="11dp"-->
+            <!--            android:layout_marginTop="5dp"-->
+            <!--            android:layout_marginEnd="20dp"-->
+            <!--            android:background="#8085AFD6" />-->
+
+            <!--        <LinearLayout-->
             <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="48dp"-->
-            <!--            android:layout_marginLeft="5dp"-->
-            <!--            android:layout_marginRight="5dp"-->
-            <!--            android:ems="5"-->
-            <!--            android:spinnerMode="dropdown"/>-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_marginTop="6dp"-->
+            <!--            android:layout_marginBottom="6dp"-->
+            <!--            android:orientation="horizontal">-->
+
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/start_date_linear"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:orientation="horizontal">-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/start_date_pick"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginTop="10dp"-->
+            <!--                    android:layout_weight="2"-->
+            <!--                    android:gravity="center"-->
+            <!--                    android:text="0000-00-00"-->
+            <!--                    android:textSize="16sp" />-->
+
+            <!--            </LinearLayout>-->
 
 
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="5dp"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:layout_marginEnd="5dp"-->
+            <!--                android:orientation="horizontal">-->
 
-<!--            <View-->
-<!--                android:id="@+id/view1"-->
-<!--                android:layout_width="387dp"-->
-<!--                android:layout_height="1dp"-->
-<!--                android:layout_marginStart="11dp"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:background="#8085AFD6" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/textView4"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:gravity="center"-->
+            <!--                    android:text="~  " />-->
+            <!--            </LinearLayout>-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="6dp"-->
-<!--                android:layout_marginBottom="6dp"-->
-<!--                android:orientation="horizontal">-->
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/end_date_linear"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:orientation="horizontal">-->
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/start_date_linear"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:orientation="horizontal">-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/end_date_pick"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="2"-->
+            <!--                    android:gravity="center"-->
+            <!--                    android:text="0000-00-00"-->
+            <!--                    android:textSize="16sp" />-->
+            <!--            </LinearLayout>-->
+            <!--        </LinearLayout>-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/start_date_pick"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_weight="2"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="0000-00-00"-->
-<!--                        android:textSize="16sp" />-->
-
-<!--                </LinearLayout>-->
-
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="5dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="5dp"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/textView4"-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="~  " />-->
-<!--                </LinearLayout>-->
-
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/end_date_linear"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/end_date_pick"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="2"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="0000-00-00"-->
-<!--                        android:textSize="16sp" />-->
-<!--                </LinearLayout>-->
-<!--            </LinearLayout>-->
-
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="387dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="#97DFDFDF" />
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/color6" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
@@ -202,7 +193,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="오전"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/start_result"
@@ -212,7 +203,7 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="00   :   00"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -249,7 +240,7 @@
                         android:layout_weight="0.5"
                         android:gravity="center"
                         android:text="오전"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/end_result"
@@ -258,70 +249,66 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="00   :   00"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="387dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="#97DFDFDF" />
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/color6" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/schedule_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="15dp"
                     android:gravity="center"
                     android:text="색상"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/schedule_color_imageView"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="280dp"
+                    android:layout_marginStart="267dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/calendar_color"
                     android:backgroundTint="#BADFD2"
                     android:gravity="center" />
 
             </LinearLayout>
 
-                <View
-                    android:id="@+id/view3"
-                    android:layout_width="387dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="11dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="#97DFDFDF" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/schedule_alarm_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="18dp"
                     android:layout_marginTop="15dp"
                     android:layout_weight="1"
                     android:text="알람"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <!--            <TextView-->
                 <!--                android:id="@+id/schedule_alarm"-->
@@ -336,75 +323,27 @@
                     android:id="@+id/alarm_linearLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15dp">
-                <TextView
-                    android:id="@+id/alarm_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="설정 안함"/>
-
-                <android.widget.Button
-                    android:id="@+id/alarm_btn"
-                    android:layout_width="12dp"
-                    android:layout_height="11dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="36dp"
-                    android:background="@drawable/arrow_resize"
-                    android:rotation="-270"/>
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-                <View
-                    android:id="@+id/view4"
-                    android:layout_width="387dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="11dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="#97DFDFDF" />
+                    android:layout_weight="0"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/repeatLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/schedule_repeat_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_weight="1"
-                    android:text="반복"
-                    android:textSize="16sp" />
-
-
-                <LinearLayout
-                    android:id="@+id/repeat_linearLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15dp">
                     <TextView
-                        android:id="@+id/repeat_spinner"
+                        android:id="@+id/alarm_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="설정 안함"/>
+                        android:text="설정 안함"
+                        android:textStyle="bold" />
 
                     <android.widget.Button
-                        android:id="@+id/repeat_btn"
+                        android:id="@+id/alarm_btn"
                         android:layout_width="12dp"
                         android:layout_height="11dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="36dp"
+                        android:backgroundTint="@color/color3"
                         android:background="@drawable/arrow_resize"
-                        android:rotation="-270"/>
+                        android:rotation="-270" />
                 </LinearLayout>
 
                 <!--            <Spinner-->
@@ -419,17 +358,62 @@
 
             </LinearLayout>
 
-                <View
-                    android:id="@+id/view5"
-                    android:layout_width="387dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="11dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/schedule_repeat_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="#97DFDFDF" />
+                    android:layout_weight="1"
+                    android:text="반복"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/schedule_alarm"-->
+                <!--                android:layout_width="wrap_content"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_weight="0"-->
+                <!--                android:layout_marginTop="15dp"-->
+                <!--                android:text="설정 안함"-->
+                <!--                android:textSize="16sp"/>-->
+
+                <LinearLayout
+                    android:id="@+id/repeat_linearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/repeat_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="설정 안함"
+                        android:textStyle="bold" />
+
+                    <android.widget.Button
+                        android:id="@+id/repeat_btn"
+                        android:layout_width="12dp"
+                        android:layout_height="11dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="36dp"
+                        android:backgroundTint="@color/color3"
+                        android:background="@drawable/arrow_resize"
+                        android:rotation="-270" />
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/memo_leanearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -437,17 +421,401 @@
                 <EditText
                     android:id="@+id/schedule_memo_textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="14dp"
                     android:layout_marginTop="15dp"
-                    android:layout_weight="2"
+                    android:layout_marginEnd="14dp"
+                    android:layout_weight="1"
                     android:backgroundTint="#00000000"
                     android:hint="메모"
-                    android:textColor="#757575"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
 
-            </LinearLayout>
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginLeft="16dp"-->
+<!--                android:layout_marginRight="16dp">-->
+<!--            <EditText-->
+<!--                android:id="@+id/schedule_title"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:background="#ffffff"-->
+<!--                android:ems="1"-->
+<!--                android:hint="일정 이름"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:textSize="16sp"-->
+<!--                tools:ignore="TouchTargetSizeCheck"-->
+<!--                tools:layout_editor_absoluteX="1dp"-->
+<!--                tools:layout_editor_absoluteY="16dp" />-->
+
+<!--            &lt;!&ndash;        <Spinner&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:id="@+id/schedule_history_spinner"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:visibility="gone"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:layout_height="48dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:layout_marginLeft="5dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:layout_marginRight="5dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:ems="5"&ndash;&gt;-->
+<!--            &lt;!&ndash;            android:spinnerMode="dropdown"/>&ndash;&gt;-->
+
+
+
+<!--&lt;!&ndash;            <View&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/view1"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="387dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="1dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginStart="11dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginTop="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginEnd="20dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:background="#8085AFD6" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginTop="6dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginBottom="6dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:orientation="horizontal">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/start_date_linear"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:orientation="horizontal">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:id="@+id/start_date_pick"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_marginTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_weight="2"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:text="0000-00-00"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:textSize="16sp" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;                </LinearLayout>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;                <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginStart="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginEnd="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:orientation="horizontal">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:id="@+id/textView4"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:text="~  " />&ndash;&gt;-->
+<!--&lt;!&ndash;                </LinearLayout>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/end_date_linear"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:orientation="horizontal">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:id="@+id/end_date_pick"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_weight="2"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:text="0000-00-00"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:textSize="16sp" />&ndash;&gt;-->
+<!--&lt;!&ndash;                </LinearLayout>&ndash;&gt;-->
+<!--&lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
+
+
+<!--                <View-->
+<!--                    android:id="@+id/view"-->
+<!--                    android:layout_width="387dp"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginStart="11dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="#97DFDFDF" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/start_time_linear"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/day_night1"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="오전"-->
+<!--                        android:textSize="16sp" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/start_result"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_weight="2"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="00   :   00"-->
+<!--                        android:textSize="16sp" />-->
+
+<!--                </LinearLayout>-->
+
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="5dp"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView2"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="~  " />-->
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/end_time_linear"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/day_night2"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="0.5"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="오전"-->
+<!--                        android:textSize="16sp" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/end_result"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="2"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="00   :   00"-->
+<!--                        android:textSize="16sp" />-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view2"-->
+<!--                    android:layout_width="387dp"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginStart="11dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="#97DFDFDF" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/schedule_color"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="색상"-->
+<!--                    android:textSize="16sp" />-->
+
+<!--                <androidx.appcompat.widget.AppCompatButton-->
+<!--                    android:id="@+id/schedule_color_imageView"-->
+<!--                    android:layout_width="22dp"-->
+<!--                    android:layout_height="22dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="280dp"-->
+<!--                    android:background="@drawable/calendar_color"-->
+<!--                    android:backgroundTint="#BADFD2"-->
+<!--                    android:gravity="center" />-->
+
+<!--            </LinearLayout>-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view3"-->
+<!--                    android:layout_width="387dp"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginStart="11dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="#97DFDFDF" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/schedule_alarm_textView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="알람"-->
+<!--                    android:textSize="16sp" />-->
+
+<!--                &lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:id="@+id/schedule_alarm"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_weight="0"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_marginTop="15dp"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:text="설정 안함"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:textSize="16sp"/>&ndash;&gt;-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/alarm_linearLayout"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_marginTop="15dp">-->
+<!--                <TextView-->
+<!--                    android:id="@+id/alarm_spinner"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="설정 안함"/>-->
+
+<!--                <android.widget.Button-->
+<!--                    android:id="@+id/alarm_btn"-->
+<!--                    android:layout_width="12dp"-->
+<!--                    android:layout_height="11dp"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginEnd="36dp"-->
+<!--                    android:background="@drawable/arrow_resize"-->
+<!--                    android:rotation="-270"/>-->
+<!--                </LinearLayout>-->
+
+
+<!--            </LinearLayout>-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view4"-->
+<!--                    android:layout_width="387dp"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginStart="11dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="#97DFDFDF" />-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/repeatLinearLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/schedule_repeat_textView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="반복"-->
+<!--                    android:textSize="16sp" />-->
+
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/repeat_linearLayout"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_marginTop="15dp">-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/repeat_spinner"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="설정 안함"/>-->
+
+<!--                    <android.widget.Button-->
+<!--                        android:id="@+id/repeat_btn"-->
+<!--                        android:layout_width="12dp"-->
+<!--                        android:layout_height="11dp"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:layout_marginStart="16dp"-->
+<!--                        android:layout_marginEnd="36dp"-->
+<!--                        android:background="@drawable/arrow_resize"-->
+<!--                        android:rotation="-270"/>-->
+<!--                </LinearLayout>-->
+
+<!--                &lt;!&ndash;            <Spinner&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:id="@+id/alarm_spinner"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_width="40dp"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_weight="0"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:layout_marginTop="15dp"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:spinnerMode="dropdown"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:ems="1"&ndash;&gt;-->
+<!--                &lt;!&ndash;                android:entries="@array/times"/>&ndash;&gt;-->
+
+<!--            </LinearLayout>-->
+
+<!--                <View-->
+<!--                    android:id="@+id/view5"-->
+<!--                    android:layout_width="387dp"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginStart="11dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="#97DFDFDF" />-->
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/memo_leanearLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <EditText-->
+<!--                    android:id="@+id/schedule_memo_textView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="15dp"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:backgroundTint="#00000000"-->
+<!--                    android:hint="메모"-->
+<!--                    android:textColor="#757575"-->
+<!--                    android:textSize="16sp" />-->
+
+<!--            </LinearLayout>-->
+<!--            </LinearLayout>-->
         </LinearLayout>
 
         <Button

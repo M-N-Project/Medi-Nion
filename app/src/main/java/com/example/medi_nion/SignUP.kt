@@ -63,6 +63,7 @@ class SignUP : AppCompatActivity() {
     var userDept = ""
 
 //    private var selectCheck: HashMap<String, Int> = arrayListOf()
+
     lateinit var cameraPermission: ActivityResultLauncher<String>
     lateinit var storagePermission: ActivityResultLauncher<String>
     lateinit var cameraLauncher: ActivityResultLauncher<Uri>
@@ -705,8 +706,8 @@ class SignUP : AppCompatActivity() {
             val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
             pageSegMode = ocrEngineMode
             val tessdataDir = File("$filesDir/tessdata/")
-            val engTrainedData = File(tessdataDir, "eng.traineddata")
-            val korTrainedData = File(tessdataDir, "kor.traineddata")
+            val engTrainedData = File(tessdataDir, "eng.trained")
+            val korTrainedData = File(tessdataDir, "kor.trained")
             if (engTrainedData.exists() && korTrainedData.exists()) {
                 val lang = "kor+eng"
                 setVariable(

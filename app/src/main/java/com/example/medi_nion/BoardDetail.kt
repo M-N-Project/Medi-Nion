@@ -1779,8 +1779,6 @@ class BoardDetail : AppCompatActivity() {
                     queue_noti.add(request_noti)
 
 
-
-
                     UpdateGrade()
 
                     Log.d(

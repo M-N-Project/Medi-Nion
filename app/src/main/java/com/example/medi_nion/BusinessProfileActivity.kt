@@ -153,6 +153,7 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         }
                                     }
 
+                                    Log.d("비즈니스 fetch", channel_name)
                                     fetchBusinessPost(channel_img)
 
                                 }
