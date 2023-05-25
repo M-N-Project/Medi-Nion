@@ -45,12 +45,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
         val passwd = arguments?.getString("passwd").toString()
         val nickname = arguments?.getString("nickname").toString()
 
-        Log.d("profileFragment", "id: $id")
-        Log.d("profileFragment", "passwd: $passwd")
-        Log.d("profileFragment", "nickname: $nickname")
-        Log.d("profileFragment", "userType: $userType")
-        Log.d("profileFragment", "userDept: $userDept")
-        Log.d("profileFragment", "userGrade: $userGrade")
 
         binding.textViewNickname.text = nickname
         binding.textViewDept.text = userDept
@@ -163,7 +157,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
                         dialogText_pwd_new = dialogView.findViewById<EditText>(R.id.password_new_editText).text.toString()
                         dialogText_pwd_newcheck = dialogView.findViewById<EditText>(R.id.password_check_editText).text.toString()
 
-                        Log.d("456456", "$dialogText_pwd_now, $dialogText_pwd_new")
+
                         if (passwd == dialogText_pwd_now) {
                             val request = Login_Request(
                                 Request.Method.POST,
@@ -174,13 +168,8 @@ class ProfileFragment : Fragment(R.layout.profile) {
                                             Request.Method.POST,
                                             userUpdateUrl,
                                             { responseUser ->
-                                                Log.d("dfdfd", responseUser)
                                                 if (dialogText_pwd_new == dialogText_pwd_newcheck) {
                                                     if (!responseUser.equals("updateUser fail")) {
-                                                        Log.d(
-                                                            "AAAAAA",
-                                                            "$id, $dialogText_pwd_new, $dialogText_pwd_now"
-                                                        )
                                                         Toast.makeText(
                                                             context,
                                                             String.format("비밀번호를 변경했습니다."),
@@ -193,7 +182,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
                                                             String.format("userUpdatefail"),
                                                             Toast.LENGTH_SHORT
                                                         ).show()
-                                                        Log.d("userUpdate", "Failed")
                                                     }
                                                 } else {
                                                     Toast.makeText(
@@ -363,7 +351,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             userDeleteUrl,
             { response ->
-                Log.d("456", id.toString())
                 if (!response.equals("Delete Fail")) {
                     Toast.makeText(
                         context,
@@ -397,7 +384,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
             { response ->
-                Log.d("fetchifChan", response)
                 if (!response.equals("Channel Name Fail")) {
                     isChan = !response.equals("no Channel Name")
 
@@ -435,8 +421,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             gradeurl,
             { response ->
-                Log.d("gradedkd", response)
-
                 when (response) {
                     "berry" -> {
                         gradeImage.setImageResource(R.drawable.berry)
@@ -482,7 +466,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
                     val id = item.getString("id")
                     val identity_check = item.getString("identity_check")
-                    Log.d("identititi", "$id, $identity_check")
 
                     when(identity_check) {
                         "false" -> {
@@ -501,7 +484,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
                             identity_warning_img.setOnClickListener {
                                 Toast.makeText(context, "신분증이 인증되었습니다.", Toast.LENGTH_SHORT).show()
                             }
-                            Log.d("identity", "true")
                         }
                     }
 

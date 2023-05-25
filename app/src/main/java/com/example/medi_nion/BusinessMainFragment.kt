@@ -197,7 +197,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         Request.Method.POST,
                         urlRandProfile,
                         { responseRand ->
-                            Log.d("0712312", responseRand)
                             if (responseRand != "no BusinessProfile"){
                                 hotListItems.clear()
                                 val jsonArray = JSONArray(responseRand)
@@ -419,7 +418,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
             Request.Method.POST,
             urlSubProfile,
             { response ->
-                Log.d("908312", response)
                 if (response != "business sub list no Item"){
                     val jsonArray = JSONArray(response)
 
@@ -467,7 +465,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                         Request.Method.POST,
                         urlRandProfile,
                         { responseRand ->
-                            Log.d("0712312", responseRand)
                             if (responseRand != "no BusinessProfile"){
                                 subListItems.clear()
                                 val jsonArray = JSONArray(responseRand)
@@ -650,11 +647,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 )
                                                             BusinessBoardHomeRecyclerView.adapter =
                                                                 home_adapter
-
-                                                            Log.d(
-                                                                "90812312",
-                                                                detail_items.toString()
-                                                            )
                                                             home_adapter.setOnItemClickListener(
                                                                 object :
                                                                     BusinessHomeRecyclerAdapter.OnItemClickListener {
@@ -738,10 +730,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                         BusinessBoardHomeRecyclerView.adapter =
                                             home_adapter
 
-                                        Log.d(
-                                            "90812312",
-                                            detail_items.toString()
-                                        )
                                         home_adapter.setOnItemClickListener(
                                             object :
                                                 BusinessHomeRecyclerAdapter.OnItemClickListener {

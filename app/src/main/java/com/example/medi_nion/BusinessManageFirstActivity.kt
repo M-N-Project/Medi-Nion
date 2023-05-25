@@ -33,7 +33,6 @@ class BusinessManageFirstActivity : AppCompatActivity() {
         val id: String = this.intent.getStringExtra("id").toString()
         val urlBusinessProfileInsert = "http://seonho.dothome.co.kr/BusinessProfileInsert.php"
 
-        Log.d("비즈니스 채널 만들기 1", id)
         findViewById<Button>(R.id.createBusinessChan_btn1).setOnClickListener{
             val intent = Intent(this, BusinessManageEdit::class.java)
             intent.putExtra("id", id)

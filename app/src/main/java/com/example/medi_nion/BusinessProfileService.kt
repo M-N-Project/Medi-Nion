@@ -43,14 +43,11 @@ class BusinessProfileService : Service() {
                     val request: StringRequest =
                         object : StringRequest(Method.POST, urlBusinessProfileInsert, object : Response.Listener<String?> {
                             override fun onResponse(response: String?) {
-                                Log.d("비즈니스 수정2", response.toString())
 
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
                                 error.printStackTrace()
-                                Log.d("비즈니스 수정 3-0", "$id $channel_name $channel_desc $profile_img $isProfileChanged")
-                                Log.d("비즈니스 수정3", error.toString())
                             }
                         }) {
                             @Throws(AuthFailureError::class)
@@ -83,8 +80,6 @@ class BusinessProfileService : Service() {
                             object : Response.Listener<String?>
                             {
                             override fun onResponse(response: String?) {
-                                Log.d("비즈니스 수정 4-0", "$id $channel_name $channel_desc $profile_img $isProfileChanged")
-                                Log.d("비즈니스 수정4", response.toString())
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
@@ -146,8 +141,6 @@ class BusinessProfileService : Service() {
         channel_desc = intent.getStringExtra("channel_desc").toString()
         profile_img = intent.getStringExtra("profile_img").toString()
         if(profile_img.equals("")) isProfileChanged = false
-
-        Log.d("비즈니스 수정6", "$id $isFirst $channel_name $channel_desc $profile_img")
 
 
         // For each start request, send a message to start a job and deliver the
