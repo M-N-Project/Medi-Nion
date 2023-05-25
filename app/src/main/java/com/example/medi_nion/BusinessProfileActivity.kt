@@ -108,21 +108,16 @@ class BusinessProfileActivity : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
-                Log.d("json...", response)
                 if (response != "business profile fail") {
                     val jsonArray = JSONArray(response)
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
-
-                        Log.d("json...", item.toString())
 
                         val id = item.getString("id")
                         val channel_name = item.getString("Channel_Name")
                         val channel_desc = item.getString("Channel_Message")
                         val chanSub_num = item.getString("subscribe_count")
                         val channel_img = item.getString("Channel_Profile_Img")
-
-
 
                         chanName.text = channel_name
                         chanDesc.text = channel_desc
@@ -153,7 +148,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         }
                                     }
 
-                                    Log.d("비즈니스 fetch", channel_name)
                                     fetchBusinessPost(channel_img)
 
                                 }
@@ -435,9 +429,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                 Request.Method.POST,
                 urlBusinessProfileInsert,
                 { response ->
-                    Log.d("09123", response)
-
-
                 },
                 {
                     Log.d(
@@ -463,8 +454,6 @@ class BusinessProfileActivity : AppCompatActivity() {
                 Request.Method.POST,
                 urlBusinessProfileUpdate,
                 { response ->
-                    Log.d("09123", response)
-
                     loadingText.visibility = View.GONE
                     progressBar.visibility = View.GONE
 
@@ -561,7 +550,6 @@ class BusinessProfileActivity : AppCompatActivity() {
 
         bitmap =
             Bitmap.createScaledBitmap(bitmap!!, bitmap_width!!, bitmap_height!!, true)
-        Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap
     }
 

@@ -55,7 +55,6 @@ class BusinessManageEdit : AppCompatActivity() {
         val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
         val editName = findViewById<EditText>(R.id.editChanName)
         val editDesc = findViewById<EditText>(R.id.editChanDesc)
-        Log.d("비즈니스 수정1-1", "$isFirst $chanName $chanDesc $chanImgUrl")
 
         if(!isFirst) {
             val task = ImageLoadTask(chanImgUrl, chanProfileImg)
@@ -103,7 +102,6 @@ class BusinessManageEdit : AppCompatActivity() {
             intent.putExtra("channel_name", channel_name)
             intent.putExtra("channel_desc", channel_desc)
             intent.putExtra("profile_img", profileEncoded)
-            Log.d("비즈니스 수정1-2", "$id $isFirst $channel_name $channel_desc $profileEncoded")
 
             startService(intent)
         }
@@ -185,7 +183,6 @@ class BusinessManageEdit : AppCompatActivity() {
                 intent.putExtra("chanName", chanName.text)
                 intent.putExtra("isFirst", false)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                Log.d("비즈니스 수정777777", "$id ${chanName.text}")
                 startActivity(intent)
                 true
             }
@@ -231,9 +228,6 @@ class BusinessManageEdit : AppCompatActivity() {
                 bitmap = Bitmap.createScaledBitmap(bitmap!!, ratio, resize_size, true)
             }
         }
-
-//    bitmap = Bitmap.createScaledBitmap(bitmap!!, 300, 300, true)
-        Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap!!
     }
 
