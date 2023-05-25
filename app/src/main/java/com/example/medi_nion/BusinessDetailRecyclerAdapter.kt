@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.business_board_item.view.*
 import kotlinx.android.synthetic.main.business_board_item.view.titleName
-import kotlinx.android.synthetic.main.business_board_item.view.viewMore
 
 class BusinessDetailRecyclerAdapter(private val items: ArrayList<BusinessBoardItem>) :
     RecyclerView.Adapter<BusinessDetailRecyclerAdapter.ViewHolder>() {
