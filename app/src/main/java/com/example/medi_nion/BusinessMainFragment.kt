@@ -150,7 +150,6 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
             Request.Method.POST,
             urlNewProfile,
             { response ->
-                Log.d("099812312", response)
                 if (response != "no BusinessProfile"){
                     hotListItems.clear()
                     val jsonArray = JSONArray(response)

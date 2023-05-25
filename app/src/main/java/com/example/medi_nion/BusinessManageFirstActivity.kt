@@ -38,7 +38,7 @@ class BusinessManageFirstActivity : AppCompatActivity() {
             val intent = Intent(this, BusinessManageEdit::class.java)
             intent.putExtra("id", id)
             intent.putExtra("isFirst", true)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
             finish()
             startActivity(intent)
 
