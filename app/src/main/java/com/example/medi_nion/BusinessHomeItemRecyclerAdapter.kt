@@ -1,10 +1,16 @@
 package com.example.medi_nion
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
@@ -43,9 +49,10 @@ class BusinessHomeItemRecyclerAdapter(private val items: ArrayList<BusinessBoard
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
+        private val context = v.context
         private var title = v.findViewById<TextView>(R.id.business_home_title)
         private var time = v.findViewById<TextView>(R.id.business_home_time)
-        private var linearLayout = v.findViewById<LinearLayout>(R.id.linearLayout12)
+        private var linearLayout = v.findViewById<LinearLayout>(R.id.linearLayout19)
 
         private var businessDetailRecyclerView =
             v.findViewById<RecyclerView>(R.id.BusinessBoardDetailRecyclerView)
@@ -63,6 +70,17 @@ class BusinessHomeItemRecyclerAdapter(private val items: ArrayList<BusinessBoard
 
                 var tempArray = ArrayList<BusinessBoardItem>()
                 if (flag == true) {
+                    val drawable = ContextCompat.getDrawable(context, R.drawable.main_border_gray)
+
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                        drawable!!.colorFilter = BlendModeColorFilter(Color.parseColor("#40AEAEAE"), BlendMode.SRC_ATOP)
+//                    } else {
+//                        drawable!!.setColorFilter(Color.parseColor("#40AEAEAE"), PorterDuff.Mode.SRC_ATOP)
+//                    }
+                    linearLayout.background = drawable
+//                    linearLayout.setBackgroundColor(Color.parseColor("#40AEAEAE"))
+
+
                     businessDetailRecyclerView.visibility = View.VISIBLE
                     tempArray.add(item)
                     var BusinessDetailAdapter = BusinessDetailRecyclerAdapter(tempArray)
@@ -172,6 +190,7 @@ class BusinessHomeItemRecyclerAdapter(private val items: ArrayList<BusinessBoard
                         })
                 } else {
                     businessDetailRecyclerView.visibility = View.GONE
+                    linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     tempArray.clear()
                     var BusinessDetailAdapter = BusinessDetailRecyclerAdapter(tempArray)
                     businessDetailRecyclerView.adapter = BusinessDetailAdapter
