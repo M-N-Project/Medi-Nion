@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.prolificinteractive.materialcalendarview.*
 import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
+import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -184,6 +185,28 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         }
     }
 
+    inner class Decorator : DayViewDecorator {
+        private var date = CalendarDay.today()
+
+        override fun shouldDecorate(day: CalendarDay?): Boolean {
+            return day?.equals(date)!!
+        }
+
+        override fun decorate(view: DayViewFacade?) {
+            view?.addSpan(DotSpan(5F, color.color1))
+        }
+    }
+
+//    inner class EventDecorator(dates: CalendarDay): DayViewDecorator {
+//
+//        override fun shouldDecorate(day: CalendarDay?): Boolean {
+//            return dates.contains(day)
+//        }
+//
+//        override fun decorate(view: DayViewFacade?) {
+//            view?.addSpan(DotSpan(5F, color.color1))
+//        }
+//    }
 
     //선택 날짜가 달라지면 그에 맞는 일정들 가져와서 adapter붙여주기.
     inner class MyDaySelected : OnDateSelectedListener{
@@ -260,6 +283,10 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         }
 
         val presentDate = "$year-$month-$date-$week"
+        val calendar = view?.findViewById<MaterialCalendarView>(R.id.calendarView)
+        calendar.apply {
+//            calendar?.addDecorators(EventDecorator(presentDate))
+        }
 
         val request = Board_Request(
             Request.Method.POST,
@@ -372,7 +399,7 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
                                                 startString = "0${HourOfDay}   :   0${Minutes}"
                                             }
                                         }
-                                        start_result.setText(startString)
+                                        start_result.text = startString
                                         start_result.text = start_result.text.toString().replace(" ", "")
                                         data.schedule_start = start_result.text.toString()
                                         start_result.setText(startString)

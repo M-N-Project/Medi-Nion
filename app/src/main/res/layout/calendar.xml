@@ -44,6 +44,8 @@
                 android:id="@+id/calendarRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/calendar_item" />
         </androidx.core.widget.NestedScrollView>
@@ -65,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="35dp"
-        app:maxImageSize="25dp"
+        app:maxImageSize="40dp"
         app:fabSize="normal"
         app:tint="@null"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
@@ -76,7 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:text="새로운 일정"
+            android:text="새로운 일정 만들기"
+            android:textStyle="bold"
+            android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/newEvent"
             app:layout_constraintEnd_toStartOf="@+id/newEvent" />
@@ -90,7 +94,7 @@
         android:backgroundTint="#84C7C4"
         android:clickable="true"
         android:elevation="8dp"
-        android:src="@drawable/new_event_button_resize"
+        android:src="@drawable/existing_event_button_resize"
         app:borderWidth="0dp"
         app:fabCustomSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -108,7 +112,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:text="고정 일정"
+            android:text="일정 템플릿 만들기"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/newEvent"
             app:layout_constraintEnd_toStartOf="@+id/newEvent" />
