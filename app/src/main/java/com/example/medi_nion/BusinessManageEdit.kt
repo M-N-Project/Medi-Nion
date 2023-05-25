@@ -55,7 +55,7 @@ class BusinessManageEdit : AppCompatActivity() {
         val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
         val editName = findViewById<EditText>(R.id.editChanName)
         val editDesc = findViewById<EditText>(R.id.editChanDesc)
-        Log.d("비즈니스 수정1-1", "$chanName $chanDesc $chanImgUrl")
+        Log.d("비즈니스 수정1-1", "$isFirst $chanName $chanDesc $chanImgUrl")
 
         if(!isFirst) {
             val task = ImageLoadTask(chanImgUrl, chanProfileImg)
@@ -107,50 +107,6 @@ class BusinessManageEdit : AppCompatActivity() {
 
             startService(intent)
         }
-
-        GlobalScope.launch {
-            val request: StringRequest =
-                object : StringRequest(
-                    Method.POST,
-                    urlBusinessProfileUpdate,
-                    object : Response.Listener<String?> {
-                        override fun onResponse(response: String?) {
-                            Log.d("bussine123", response.toString())
-
-                            //loadingText.visibility = View.GONE
-                            //progressBar.visibility = View.GONE
-
-                        }
-                    },
-                    object : Response.ErrorListener {
-                        override fun onErrorResponse(error: VolleyError) {
-                            Log.d("비즈니스 수정", error.toString())
-                        }
-                    }) {
-                    @Throws(AuthFailureError::class)
-                    override fun getParams(): Map<String, String>? {
-                        val map: MutableMap<String, String> = HashMap()
-                        // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
-                        map["id"] = id
-                        map["Channel_Name"] = channel_name
-                        map["Channel_Desc"] = channel_desc
-                        map["Channel_Profile_Img"] = profileEncoded
-                        return map
-                    }
-                }
-
-            request.setRetryPolicy(
-                DefaultRetryPolicy(
-                    40000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                )
-            )
-            val queue = Volley.newRequestQueue(applicationContext)
-            queue.add(request)
-        }
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

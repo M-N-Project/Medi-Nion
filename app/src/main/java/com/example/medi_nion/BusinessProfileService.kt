@@ -48,6 +48,8 @@ class BusinessProfileService : Service() {
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
+                                error.printStackTrace()
+                                Log.d("비즈니스 수정 3-0", "$id $channel_name $channel_desc $profile_img $isProfileChanged")
                                 Log.d("비즈니스 수정3", error.toString())
                             }
                         }) {

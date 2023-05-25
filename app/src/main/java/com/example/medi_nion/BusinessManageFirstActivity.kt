@@ -33,36 +33,9 @@ class BusinessManageFirstActivity : AppCompatActivity() {
         val id: String = this.intent.getStringExtra("id").toString()
         val urlBusinessProfileInsert = "http://seonho.dothome.co.kr/BusinessProfileInsert.php"
 
-        Log.d("0173213", id)
+        Log.d("비즈니스 채널 만들기 1", id)
         findViewById<Button>(R.id.createBusinessChan_btn1).setOnClickListener{
-            //비즈니스 채널 관리로 넘어가기.
-            val request = Login_Request(
-                Request.Method.POST,
-                urlBusinessProfileInsert,
-                { response ->
-                    Log.d("bussinesssssss", response.toString())
-                    if(!response.equals("business profile insert fail")) {
-                        Toast.makeText(this, "비즈니스 채널 프로필 생성 완료", Toast.LENGTH_SHORT).show()
-
-
-                    } else {
-                        Toast.makeText(this, "비즈니스 채널 프로필 생성 실패", Toast.LENGTH_SHORT).show()
-                    }
-
-                }, { Log.d("business profile failed", "error......${error(this)}") },
-                hashMapOf(
-                    "id" to id
-                )
-            )
-            request.retryPolicy = DefaultRetryPolicy(
-                0,
-                -1,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-            )
-            val queue = Volley.newRequestQueue(this)
-            queue.add(request)
-
-            val intent = Intent(this, BusinessManageActivity::class.java)
+            val intent = Intent(this, BusinessManageEdit::class.java)
             intent.putExtra("id", id)
             intent.putExtra("isFirst", true)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
