@@ -27,16 +27,20 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.toolbox.Volley
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.sasikanth.colorsheet.ColorPickerListener
 import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import kotlinx.android.synthetic.main.calendar_add.*
 import org.json.JSONArray
+import ru.ifr0z.timepickercompact.TimePickerCompact
 import java.util.*
 
 
@@ -80,6 +84,12 @@ class Calendar_Add : AppCompatActivity() {
 
         var calendarHistoryScrollView = findViewById<ScrollView>(R.id.calendarHistoryScrollView)
         calendarHistoryView = findViewById(R.id.calendarHistoryRecyclerView)
+        
+        val layoutManager = FlexboxLayoutManager(this)
+        layoutManager.flexDirection = FlexDirection.ROW
+        calendarHistoryView.layoutManager = layoutManager
+        
+//        calendarHistoryView.layoutManager = GridLayoutManager(this,4)
         calendarHistoryView.adapter = adapter
 
         val schedule_title = findViewById<EditText>(R.id.schedule_title)
@@ -586,74 +596,14 @@ class Calendar_Add : AppCompatActivity() {
 //            endDatePicker.show()
 //        }
 
-        //시간 설정
         start.setOnClickListener {
-            val dialog = TimePickerDialog(
-                this,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                { view, HourOfDay, Minutes ->
-                    if (HourOfDay >= 12)
-                        day_night1.text = "오후"
-                    else
-                        day_night1.text = "오전"
-
-                    if (HourOfDay>= 10) {
-                        if(Minutes >= 10) {
-                            startString = "${HourOfDay}   :   ${Minutes}"
-                        } else {
-                            startString = "${HourOfDay}   :   0${Minutes}"
-                        }
-                    } else {
-                        if(Minutes >= 10) {
-                            startString = "0${HourOfDay}   :   ${Minutes}"
-                        } else {
-                            startString = "0${HourOfDay}   :   0${Minutes}"
-                        }
-                    }
-                    start_result.text = startString
-                },
-                0,
-                0,
-                false
-            )
-            dialog.setTitle("시작 시간")
-            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-            dialog.show()
+            showBottomSheet_eventAdd("start_time")
         }
 
         end.setOnClickListener {
-            val dialog1 = TimePickerDialog(
-                this,
-                android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                { view, HourOfDay, Minutes ->
-                    if (HourOfDay >= 12)
-                        day_night2.text = "오후"
-                    else
-                        day_night2.text = "오전"
-                    if (HourOfDay>= 10) {
-                        if(Minutes >= 10) {
-                            endString = "${HourOfDay}   :   ${Minutes}"
-                        } else {
-                            endString = "${HourOfDay}   :   0${Minutes}"
-                        }
-                    } else {
-                        if(Minutes >= 10) {
-                            endString = "0${HourOfDay}   :   ${Minutes}"
-                        } else {
-                            endString = "0${HourOfDay}   :   0${Minutes}"
-                        }
-                    }
-                    end_result.text = endString
-                },
-                0,
-                0,
-                false
-            )
-            dialog1.setTitle("종료 시간")
-            dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-            dialog1.show()
-            Log.d("iowfds", endString)
+            showBottomSheet_eventAdd("end_time")
         }
+
 
         color.setOnClickListener {
             val color =  findViewById<Button>(R.id.schedule_color_imageView)
@@ -808,14 +758,25 @@ class Calendar_Add : AppCompatActivity() {
 //                            val end_date = findViewById<TextView>(R.id.end_date_pick)
                             val alarmSpinner = findViewById<TextView>(R.id.alarm_spinner)
                             val repeatSpinner = findViewById<TextView>(R.id.repeat_spinner)
+                            val day_night1 = findViewById<TextView>(R.id.day_night1)
+                            val day_night2 = findViewById<TextView>(R.id.day_night2)
+
 
                             Log.d("DFSDFD4", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
 //                            start_date.setText(data.start_date.substring(0, 14))
 //                            end_date.setText(data.end_date.substring(0, 14))
-                            start_result.setText(data.schedule_start)
-                            end_result.setText(data.schedule_end)
+                            val startString = "${data.schedule_start.substring(0,2)}   :   ${data.schedule_start.substring(3,5)}"
+                            start_result.setText(startString)
+
+                            day_night1.setText("오전")
+                            if(data.schedule_start.substring(0,2).toInt() >= 12) day_night1.setText("오후")
+
+                            val endString = "${data.schedule_end.substring(0,2)}   :   ${data.schedule_end.substring(3,5)}"
+                            end_result.setText(endString)
+                            day_night2.setText("오전")
+                            if(data.schedule_end.substring(0,2).toInt() >= 12) day_night2.setText("오후")
 //                            when (data.schedule_alarm) {
 //                                "1시간 전" -> spinner.setSelection(1)
 //                                "2시간 전" -> spinner.setSelection(2)
@@ -967,10 +928,10 @@ class Calendar_Add : AppCompatActivity() {
         Log.d("dsa", "$id , $year , $month, $date, $week")
 
         val calendar = Calendar.getInstance()
-        calendar.set(year.toInt(), month.toInt(), date.toInt())
+        calendar.set(year.toInt(), month.toInt()-1, date.toInt())
         val dayOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
 
-        Log.d("8712321", "${year.toInt()} // ${month.toInt()} // ${date.toInt()} //${dayOfMonth}")
+        Log.d("8712321", "${year.toInt()} // ${month.toInt()} // ${date.toInt()} //${dayOfMonth} // ${Calendar.getInstance().get(Calendar.WEEK_OF_MONTH)}")
 
         val presentDate = "$year-$month-$date-$week-$dayOfMonth"
 
@@ -1128,6 +1089,67 @@ class Calendar_Add : AppCompatActivity() {
 
             }
         )
+
+        bottomSheetDialog.show()
+    }
+
+    private fun showBottomSheet_eventAdd(type : String){
+        val bottomSheetView = layoutInflater.inflate(R.layout.calendar_add_dialog, null)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        val timePicker = bottomSheetDialog?.findViewById<TimePickerCompact>(R.id.time_picker)
+        val cancelBtn = bottomSheetDialog.findViewById<TextView>(R.id.cancel)
+        cancelBtn?.setOnClickListener{
+            bottomSheetDialog.dismiss()
+        }
+        val selectBtn = bottomSheetDialog?.findViewById<TextView>(R.id.select)
+
+        selectBtn?.setOnClickListener{
+            if(type=="start_time"){
+                var start_hour=""
+                var start_min=""
+                var start_time=""
+
+                if(timePicker?.hour!! < 10) start_hour =  "0${timePicker?.hour}"
+                else start_hour =  "${timePicker?.hour}"
+                if(timePicker?.minute!! < 10) start_min =  "0${timePicker?.minute}"
+                else start_min =  "${timePicker?.minute}"
+
+                start_time = "${start_hour}:${start_min}" //set/get hour and minute with support all API
+                Log.d("timemmee","${start_hour}:${start_min}")
+
+                val start_result = findViewById<TextView>(R.id.start_result)
+                val startString = "${start_hour}   :   ${start_min}"
+                start_result.setText(startString)
+
+                day_night1.setText("오전")
+                if(start_hour.toInt() >= 12) day_night1.setText("오후")
+            }
+            else{
+                var end_hour=""
+                var end_min=""
+                var end_time=""
+
+                if(timePicker?.hour!! < 10) end_hour =  "0${timePicker?.hour}"
+                else end_hour =  "${timePicker?.hour}"
+                if(timePicker?.minute!! < 10) end_min =  "0${timePicker?.minute}"
+                else end_min =  "${timePicker?.minute}"
+
+                end_time = "${end_hour}:${end_min}" //set/get hour and minute with support all API
+                Log.d("timemmee","${end_hour}:${end_min}")
+
+                val end_result = findViewById<TextView>(R.id.end_result)
+                val endString = "${end_hour}   :   ${end_min}"
+                end_result.setText(endString)
+
+                day_night2.setText("오전")
+                if(end_hour.toInt() >= 12) day_night2.setText("오후")
+            }
+
+            bottomSheetDialog.dismiss()
+        }
+
 
         bottomSheetDialog.show()
     }

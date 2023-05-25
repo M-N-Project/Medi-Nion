@@ -131,6 +131,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.1'
     implementation 'androidx.core:core-splashscreen:1.0.0-alpha01'
 
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    implementation 'com.github.ifr0z:timepickercompact:1.0'
+
 //    implementation 'com.github.nestoleh:bottomsheet-spinner:1.0.5'
 
 //    implementation 'com.getbase:floatingactionbutton:1.10.1'

@@ -26,20 +26,21 @@
                 android:layout_marginTop="16dp"
                 android:text="자주 쓰는 일정 사용하기"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <ScrollView
                 android:id="@+id/calendarHistoryScrollView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="5dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/calendarHistoryRecyclerView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/calendar_history_item" />
@@ -61,7 +62,15 @@
                 android:layout_marginTop="16dp"
                 android:text="새로운 일정 등록하기"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
             <EditText
                 android:id="@+id/schedule_title"
                 android:layout_width="match_parent"
@@ -163,14 +172,14 @@
 <!--            </LinearLayout>-->
 
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="387dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:background="#8085AFD6" />
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="387dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#97DFDFDF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -253,14 +262,14 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <View
-                android:id="@+id/view2"
-                android:layout_width="387dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
-                android:background="#8085AFD6" />
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="387dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#97DFDFDF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -290,14 +299,14 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/view3"
-                android:layout_width="387dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
-                android:background="#8085AFD6" />
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="387dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#97DFDFDF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -349,14 +358,14 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/view4"
-                android:layout_width="387dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
-                android:background="#8085AFD6" />
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="387dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#97DFDFDF" />
 
             <LinearLayout
                 android:id="@+id/repeatLinearLayout"
@@ -410,14 +419,14 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/view5"
-                android:layout_width="387dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
-                android:background="#8085AFD6" />
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="387dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="11dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#97DFDFDF" />
 
             <LinearLayout
                 android:id="@+id/memo_leanearLayout"
@@ -437,6 +446,7 @@
                     android:textColor="#757575"
                     android:textSize="16sp" />
 
+            </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
