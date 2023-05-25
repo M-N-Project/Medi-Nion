@@ -24,7 +24,7 @@ import java.lang.reflect.Member
 class ProfileFragment : Fragment(R.layout.profile) {
 
     private var mBinding: ProfileBinding? = null
-    private var isChan: Boolean = false
+
 
     // 매번 null 체크를 할 필요 없이 편의성을 위해 바인딩 변수 재 선언
     private val binding get() = mBinding!!
@@ -123,24 +123,11 @@ class ProfileFragment : Fragment(R.layout.profile) {
             startActivity(intent)
         }
 
-        // 채널 있는지 검사
-        fetchifChan(id.toString())
-
         binding.myactBusinesssubmanage.setOnClickListener{
+            // 채널 있는지 검사
+            fetchifChan(id.toString())
             //businessChan이 0이면 (비즈니스 채널 없음) -> 신규 생성
-            if(!isChan) {
-                val intent = Intent(context, BusinessManageFirstActivity::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("userType", userType)
-                intent.putExtra("userDept", userDept)
-                startActivity(intent)
-            } else { //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
-                val intent = Intent(context, BusinessManageActivity::class.java)
-                intent.putExtra("id", id)
-                intent.putExtra("isFirst", false)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
-                startActivity(intent)
-            }
+
         }
 
         //알림 추가하기
@@ -401,6 +388,11 @@ class ProfileFragment : Fragment(R.layout.profile) {
     }
 
     fun fetchifChan(id:String) {
+        var isChan: Boolean = false
+        val id = arguments?.getString("id").toString()
+        val userType = arguments?.getString("userType").toString()
+        val userDept = arguments?.getString("userDept").toString()
+
         val chanNamerequest = Login_Request(
             Request.Method.POST,
             "http://seonho.dothome.co.kr/BusinessChanName.php",
@@ -408,6 +400,20 @@ class ProfileFragment : Fragment(R.layout.profile) {
                 Log.d("fetchifChan", response)
                 if (!response.equals("Channel Name Fail")) {
                     isChan = !response.equals("no Channel Name")
+
+                    if(!isChan) {
+                        val intent = Intent(context, BusinessManageFirstActivity::class.java)
+                        intent.putExtra("id", id)
+                        intent.putExtra("userType", userType)
+                        intent.putExtra("userDept", userDept)
+                        startActivity(intent)
+                    } else { //businessChan이 1이면 (비즈니스 채널 있음) -> 관리
+                        val intent = Intent(context, BusinessManageActivity::class.java)
+                        intent.putExtra("id", id)
+                        intent.putExtra("isFirst", false)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //뒤로가기 눌렀을때 글쓰기 화면으로 다시 오지 않게 하기위해.
+                        startActivity(intent)
+                    }
                 }
             },
             { Log.d("failed", "error......${activity?.applicationContext?.let { it1 -> error(it1) }}") },
