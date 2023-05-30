@@ -132,6 +132,27 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         fetchHotPost()
         fetchNewBusi()
         fetchHotProfile()
+
+        val basicBoard = view?.findViewById<View>(R.id.home_favorite_basic)
+        if (basicBoard != null) {
+            fetchNewFavorite("자유 게시판", basicBoard)
+        }
+        val jobBoard = view?.findViewById<View>(R.id.home_favorite_type)
+        if (jobBoard != null) {
+            fetchNewFavorite("직종별 게시판", jobBoard)
+        }
+        val deptBoard = view?.findViewById<View>(R.id.home_favorite_dept)
+        if (deptBoard != null) {
+            fetchNewFavorite("진료과별 게시판", deptBoard)
+        }
+        val marketBoard = view?.findViewById<View>(R.id.home_favorite_market)
+        if (marketBoard != null) {
+            fetchNewFavorite("장터 게시판", marketBoard)
+        }
+        val qnaBoard = view?.findViewById<View>(R.id.home_favorite_qna)
+        if (qnaBoard != null) {
+            fetchNewFavorite("QnA 게시판", qnaBoard)
+        }
     }
 
     override fun onResume() {
@@ -159,14 +180,24 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
     ): View? {
         val view = inflater.inflate(R.layout.home, container, false)
 
-        val basicBoard = view.findViewById<TextView>(R.id.home_boardList1)
-        val jobBoard = view.findViewById<TextView>(R.id.home_boardList2)
-        val secBoard = view.findViewById<TextView>(R.id.home_boardList3)
-        val marketBoard = view.findViewById<TextView>(R.id.home_boardList4)
-        val qnaBoard = view.findViewById<TextView>(R.id.home_boardList5)
-        val acadamy_info = view.findViewById<TextView>(R.id.home_boardList6)
-        val employee_info = view.findViewById<TextView>(R.id.home_boardList7)
-        val medi_news = view.findViewById<TextView>(R.id.home_boardList8)
+        val basicBoard = view.findViewById<View>(R.id.home_favorite_basic)
+        fetchNewFavorite("자유 게시판", basicBoard)
+        val jobBoard = view.findViewById<View>(R.id.home_favorite_type)
+        fetchNewFavorite("직종별 게시판", jobBoard)
+        val deptBoard = view.findViewById<View>(R.id.home_favorite_dept)
+        fetchNewFavorite("진료과별 게시판", deptBoard)
+        val marketBoard = view.findViewById<View>(R.id.home_favorite_market)
+        fetchNewFavorite("장터 게시판", marketBoard)
+        val qnaBoard = view.findViewById<View>(R.id.home_favorite_qna)
+        fetchNewFavorite("QnA 게시판", qnaBoard)
+
+        val academy_info = view.findViewById<View>(R.id.home_favorite_academy)
+        fetchNewFavorite("학회 및 세미나 게시판", academy_info)
+        val employee_info = view.findViewById<View>(R.id.home_favorite_employee)
+        fetchNewFavorite("채용정보 게시판", employee_info)
+        val medi_news = view.findViewById<View>(R.id.home_favorite_news)
+        fetchNewFavorite("의료뉴스 게시판", medi_news)
+
         val hot_more = view.findViewById<LinearLayout>(R.id.boardList_more)
 
         val business_nickname = view.findViewById<TextView>(R.id.home_business_nickname)
@@ -364,7 +395,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             }
         }
 
-        secBoard.setOnClickListener {
+        deptBoard.setOnClickListener {
             activity?.let {
                 val intent = Intent(context, Board::class.java)
                 intent.putExtra("id", id)
@@ -402,7 +433,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             }
         }
 
-        acadamy_info.setOnClickListener{ // 학회 및 세미나 정보로 이동
+        academy_info.setOnClickListener{ // 학회 및 세미나 정보로 이동
             activity?.let {
                 val intent = Intent(context, MedicalSeminar::class.java)
                 startActivity(intent)
@@ -573,6 +604,46 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             R.drawable.big_ad3,
             R.drawable.big_ad4
         )
+    }
+
+    ///////////////////////// 즐겨찾는 게시판에 새 post 가져오는 fetch 함수 ///////////////////////////////////////////////
+
+    fun fetchNewFavorite(board:String, boardView: View) {
+        val urlFavorite = "http://seonho.dothome.co.kr/FavoriteNew_list.php"
+
+        val userType = arguments?.getString("userType").toString()
+        val userDept = arguments?.getString("userDept").toString()
+
+        if(board.equals("학회 및 세미나 게시판") or board.equals("채용정보 게시판") or board.equals("의료뉴스 게시판")) {
+            boardView.findViewById<TextView>(R.id.board_title).text = board
+            boardView.findViewById<TextView>(R.id.post_title).text = ""
+        }
+        else {
+            val request = Board_Request(
+                Request.Method.POST,
+                urlFavorite,
+                { response ->
+                    val jsonArray = JSONArray(response)
+                    for (i in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(i)
+                        val title = item.getString("title")
+
+                        boardView.findViewById<TextView>(R.id.board_title).text = board
+                        boardView.findViewById<TextView>(R.id.post_title).text = title
+                        Log.d("즐겨찾는 게시판1", response)
+                        Log.d("즐겨찾는 게시판", "$board ${boardView.toString()} $title")
+                    }
+                }, { Log.d("login failed", "error......${activity?.applicationContext}") },
+                hashMapOf(
+                    "board" to board,
+                    "userType" to userType,
+                    "userDept" to userDept
+                )
+            )
+
+            val queue = Volley.newRequestQueue(activity?.applicationContext)
+            queue.add(request)
+        }
     }
     ///////////////////////// viewPager에 넣을 QnA 게시판 최신글 가져오는 fetch 함수 //////////////////////////////////////
 
