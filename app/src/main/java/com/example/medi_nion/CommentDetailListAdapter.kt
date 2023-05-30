@@ -50,21 +50,6 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
             itemCommentNum.text = item.writerNum.toString()
             itemCommentHeartCnt.text = item.heart.toString()
 
-//            when (item.comment2_medal) {
-//                "king" -> {
-//                    itemCommentMedal.setImageResource(R.drawable.king_medal)
-//                }
-//                "gold" -> {
-//                    itemCommentMedal.setImageResource(R.drawable.gold_medal)
-//                }
-//                "silver" -> {
-//                    itemCommentMedal.setImageResource(R.drawable.silver_medal)
-//                }
-//                else -> {
-//                    itemCommentMedal.setImageResource(R.drawable.bronze_medal)
-//                }
-//            }
-
             when (item.comment2_medal) {
                 "king" -> {
                     itemCommentMedal.setImageResource(R.drawable.grade_diamond1)

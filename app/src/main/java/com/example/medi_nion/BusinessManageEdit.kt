@@ -10,7 +10,6 @@ import android.graphics.Outline
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -28,8 +27,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
 class BusinessManageEdit : AppCompatActivity() {
@@ -37,6 +34,7 @@ class BusinessManageEdit : AppCompatActivity() {
     var image_profile: String = "null"
     lateinit var bitmap: Bitmap
     var profileEncoded: String = ""
+    private var isImgSelected :Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +66,7 @@ class BusinessManageEdit : AppCompatActivity() {
         }
 
         chanProfileImg.setOnClickListener {
+            isImgSelected = true
             openGallery()
         }
 
@@ -101,6 +100,8 @@ class BusinessManageEdit : AppCompatActivity() {
                             Log.d("비즈니스 삭제", response)
                         }
                         // profile Fragment로 이동
+                        val returnIntent = Intent()
+                        setResult(Activity.RESULT_OK, returnIntent)
                         finish()
                     }
                 },
@@ -159,6 +160,7 @@ class BusinessManageEdit : AppCompatActivity() {
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(
         requestCode: Int,
@@ -167,48 +169,35 @@ class BusinessManageEdit : AppCompatActivity() {
     ) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
 
-        var profileImg = findViewById<ImageView>(R.id.chanProfileImg)
-        val id: String? = this.intent.getStringExtra("id")
-        //val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
-        //val loadingText = findViewById<TextView>(R.id.loading_textView_business)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY) {
-                val currentImgUri: Uri? = data?.data
+        if(isImgSelected) {
+            var profileImg = findViewById<ImageView>(R.id.chanProfileImg)
+            val id: String? = this.intent.getStringExtra("id")
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == GALLERY) {
+                    val currentImgUri: Uri? = data?.data
 
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
-                    profileImg.setImageBitmap(bitmap)
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+                        profileImg.setImageBitmap(bitmap)
 
-                    bitmap = resizeProfile(bitmap)
-                    image_profile = BitMapToString(bitmap)
-                    encodeBitmapImage(bitmap)
+                        bitmap = resizeProfile(bitmap)
+                        image_profile = BitMapToString(bitmap)
+                        encodeBitmapImage(bitmap)
 
-                    roundAll(profileImg, 70.0f)
+                        roundAll(profileImg, 70.0f)
 
-                    var source: ImageDecoder.Source? =
-                        currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
-                    bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
+                        var source: ImageDecoder.Source? =
+                            currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
+                        bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
 
-//                    val setting_RadioGroup =
-//                        findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
-//                    setting_RadioGroup.visibility = View.GONE
-
-//                    loadingText.visibility = View.VISIBLE
-//                    loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
-//                    loadingText.bringToFront()
-//                    progressBar.visibility = View.VISIBLE
-//                    progressBar.bringToFront()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
 
 
-                    //uploadDataToDB()
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } else {
+                    Log.d("activity result", "wrong")
                 }
-
-
-            } else {
-                Log.d("activity result", "wrong")
             }
         }
     }
@@ -233,13 +222,17 @@ class BusinessManageEdit : AppCompatActivity() {
                 if(isFirst) {
                     if (chanName.text.isNotEmpty() && chanDesc.text.isNotEmpty() && profileEncoded.length > 0) {
                         uploadDataToDB()
+                        Toast.makeText(this, "사진 업로드는 최대 2분 소요됩니다.", Toast.LENGTH_SHORT).show()
+
                         val intent = Intent(this, BusinessManageActivity::class.java)
                         val id = this.intent.getStringExtra("id").toString()
                         intent.putExtra("id", id)
                         intent.putExtra("chanName", chanName.text)
                         intent.putExtra("isFirst", false)
+                        intent.putExtra("loading", true)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                         startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(
                             applicationContext,

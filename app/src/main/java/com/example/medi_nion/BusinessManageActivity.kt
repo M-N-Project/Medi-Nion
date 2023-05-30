@@ -30,10 +30,10 @@ import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.business_manage_create.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.bytedeco.javacpp.RealSense.context
 import org.json.JSONArray
 import java.io.*
 
+var _Busi_Manage: Activity? = null
 
 class BusinessManageActivity : AppCompatActivity() {
     //해야할일: 이미지 가져와서 띄울때 프사 및 배경사진에 맞게 크기조절, uri->bitmap으로 바꿔서 DB에 넣기
@@ -45,6 +45,8 @@ class BusinessManageActivity : AppCompatActivity() {
     var isEditProfile: Boolean = false
     var isEditName: Boolean = false
     var isEditDesc: Boolean = false
+
+    val SUBACTIITY_REQUEST_CODE = 100
 
     private var boardProfileMap = HashMap<String, Bitmap>()
 
@@ -70,9 +72,21 @@ class BusinessManageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.business_manage_create)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        _Busi_Manage = this
+
         val id: String? = intent.getStringExtra("id")
         var isFirst = intent.getBooleanExtra("isFirst", true)
-        Log.d("비즈니스 수정0-0", "$id $isFirst")
+
+        val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
+        val loadingText = findViewById<TextView>(R.id.loading_textView_business)
+
+        if(intent.getBooleanExtra("loading", false)){
+                    loadingText.visibility = View.VISIBLE
+                    loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
+                    loadingText.bringToFront()
+                    progressBar.visibility = View.VISIBLE
+                    progressBar.bringToFront()
+        }
 
 
         items.clear()
@@ -131,8 +145,8 @@ class BusinessManageActivity : AppCompatActivity() {
             intent.putExtra("chanImg", profileImgUrl)
             intent.putExtra("isFirst", isFirst)
             intent.putExtra("id", this.intent.getStringExtra("id").toString())
-            Log.d("비즈니스 수정0", "$id $isFirst $editName.text $editDesc.text $profileEncoded")
-            startActivity(intent)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivityForResult(intent, SUBACTIITY_REQUEST_CODE)
         }
 
             if (image_profile != null) {
@@ -171,7 +185,6 @@ class BusinessManageActivity : AppCompatActivity() {
                     urlBusinessProfileUpdate,
                     object : Response.Listener<String?> {
                         override fun onResponse(response: String?) {
-                            Log.d("bussine123", response.toString())
 
                             loadingText.visibility = View.GONE
                             progressBar.visibility = View.GONE
@@ -672,6 +685,8 @@ class BusinessManageActivity : AppCompatActivity() {
         startActivityForResult(intent, GALLERY)
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(
         requestCode: Int,
@@ -685,7 +700,10 @@ class BusinessManageActivity : AppCompatActivity() {
         val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
         val loadingText = findViewById<TextView>(R.id.loading_textView_business)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY) {
+            if (requestCode == SUBACTIITY_REQUEST_CODE) {
+                finish()
+            }
+            else if (requestCode == GALLERY) {
                 val currentImgUri: Uri? = data?.data
                 Log.d("sel IMGGG", "sel2")
 
@@ -890,4 +908,5 @@ class BusinessManageActivity : AppCompatActivity() {
     fun deletePost() {
 
     }
+
 }
