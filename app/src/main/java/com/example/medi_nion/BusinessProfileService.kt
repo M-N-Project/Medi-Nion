@@ -2,13 +2,9 @@ package com.example.medi_nion
 
 import android.app.Service
 import android.content.Intent
-import android.os.IBinder
-
 import android.os.*
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
@@ -43,7 +39,15 @@ class BusinessProfileService : Service() {
                     val request: StringRequest =
                         object : StringRequest(Method.POST, urlBusinessProfileInsert, object : Response.Listener<String?> {
                             override fun onResponse(response: String?) {
-
+                                val showIntent = Intent(
+                                    applicationContext,
+                                    BusinessManageActivity::class.java
+                                )
+                                showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                showIntent.putExtra("id", id)
+                                showIntent.putExtra("chanName", channel_name)
+                                showIntent.putExtra("isFirst", false)
+                                startActivity(showIntent)
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
@@ -80,6 +84,18 @@ class BusinessProfileService : Service() {
                             object : Response.Listener<String?>
                             {
                             override fun onResponse(response: String?) {
+                                val activity:BusinessManageActivity = _Busi_Manage as BusinessManageActivity
+                                activity.finish()
+                                val showIntent = Intent(
+                                    applicationContext,
+                                    BusinessManageActivity::class.java
+                                )
+                                showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                showIntent.putExtra("id", id)
+                                showIntent.putExtra("chanName", channel_name)
+                                showIntent.putExtra("isFirst", false)
+                                Log.d("비즈니스수정", "재시작입니다")
+                                startActivity(showIntent)
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
