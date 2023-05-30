@@ -356,18 +356,33 @@ class BoardDetail : AppCompatActivity() {
             { response ->
                 Log.d("medlaSele", response)
 
+//                when (response) {
+//                    "king" -> {
+//                        medalImage.setImageResource(R.drawable.king_medal)
+//                    }
+//                    "gold" -> {
+//                        medalImage.setImageResource(R.drawable.gold_medal)
+//                    }
+//                    "silver" -> {
+//                        medalImage.setImageResource(R.drawable.silver_medal)
+//                    }
+//                    else -> {
+//                        medalImage.setImageResource(R.drawable.bronze_medal)
+//                    }
+//                }
+
                 when (response) {
                     "king" -> {
-                        medalImage.setImageResource(R.drawable.king_medal)
+                        medalImage.setImageResource(R.drawable.grade_diamond)
                     }
                     "gold" -> {
-                        medalImage.setImageResource(R.drawable.gold_medal)
+                        medalImage.setImageResource(R.drawable.grade_gold)
                     }
                     "silver" -> {
-                        medalImage.setImageResource(R.drawable.silver_medal)
+                        medalImage.setImageResource(R.drawable.grade_silver)
                     }
                     else -> {
-                        medalImage.setImageResource(R.drawable.bronze_medal)
+                        medalImage.setImageResource(R.drawable.grade_bronze)
                     }
                 }
 

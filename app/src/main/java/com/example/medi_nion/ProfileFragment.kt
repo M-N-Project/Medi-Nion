@@ -421,18 +421,33 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             gradeurl,
             { response ->
+//                when (response) {
+//                    "berry" -> {
+//                        gradeImage.setImageResource(R.drawable.berry)
+//                    }
+//                    "flower" -> {
+//                        gradeImage.setImageResource(R.drawable.flower)
+//                    }
+//                    "branch" -> {
+//                        gradeImage.setImageResource(R.drawable.branch)
+//                    }
+//                    else -> {
+//                        gradeImage.setImageResource(R.drawable.sprout)
+//                    }
+//                }
+
                 when (response) {
                     "berry" -> {
-                        gradeImage.setImageResource(R.drawable.berry)
+                        gradeImage.setImageResource(R.drawable.flower4)
                     }
                     "flower" -> {
-                        gradeImage.setImageResource(R.drawable.flower)
+                        gradeImage.setImageResource(R.drawable.flower3)
                     }
                     "branch" -> {
-                        gradeImage.setImageResource(R.drawable.branch)
+                        gradeImage.setImageResource(R.drawable.flower2)
                     }
                     else -> {
-                        gradeImage.setImageResource(R.drawable.sprout)
+                        gradeImage.setImageResource(R.drawable.flower1)
                     }
                 }
 
