@@ -1681,8 +1681,6 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getStringExtra("num").toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
-        Log.d("as456", post_num)
-
         val url = "http://seonho.dothome.co.kr/Comment.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
@@ -1724,7 +1722,6 @@ class BoardDetail : AppCompatActivity() {
                     val queue = Volley.newRequestQueue(this)
                     queue.add(requestCnt)
 
-                    Log.d("Commentcnednfd", board.toString())
                     Toast.makeText(
                         baseContext,
                         String.format("댓글이 등록되었습니다."),
@@ -2007,8 +2004,6 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             medalurl,
             { response ->
-                Log.d("gradeeeeeeeeeee", response)
-                Log.d("gradeNickname", nickname)
                 if(response != "grade fail") {
                     Log.d("userGraade", "up")
                 }
