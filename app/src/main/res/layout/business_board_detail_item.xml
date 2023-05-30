@@ -30,18 +30,12 @@
                 android:id="@+id/business_home_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:ellipsize="end"
-                android:singleLine="true"
                 android:fontFamily="@font/gothic_regular"
+                android:singleLine="true"
                 android:text="최신 게시물 제목"
                 android:textColor="#616161"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/business_home_view"
-                android:layout_width="0dp"
-                android:layout_weight="12"
-                android:layout_height="wrap_content"
                 android:textSize="12sp" />
 
             <TextView
