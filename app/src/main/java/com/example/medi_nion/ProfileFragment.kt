@@ -438,16 +438,16 @@ class ProfileFragment : Fragment(R.layout.profile) {
 
                 when (response) {
                     "berry" -> {
-                        gradeImage.setImageResource(R.drawable.flower4)
+                        gradeImage.setImageResource(R.drawable.flower44)
                     }
                     "flower" -> {
-                        gradeImage.setImageResource(R.drawable.flower3)
+                        gradeImage.setImageResource(R.drawable.flower33)
                     }
                     "branch" -> {
-                        gradeImage.setImageResource(R.drawable.flower2)
+                        gradeImage.setImageResource(R.drawable.flower22)
                     }
                     else -> {
-                        gradeImage.setImageResource(R.drawable.flower1)
+                        gradeImage.setImageResource(R.drawable.flower11)
                     }
                 }
 

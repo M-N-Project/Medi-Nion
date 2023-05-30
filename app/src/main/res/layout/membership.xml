@@ -215,7 +215,7 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="11dp"
-                    android:src="@drawable/flower1" />
+                    android:src="@drawable/flower11" />
 
             </LinearLayout>
 
@@ -242,7 +242,7 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="11dp"
-                    android:src="@drawable/flower2" />
+                    android:src="@drawable/flower22" />
 
             </LinearLayout>
 
@@ -269,7 +269,7 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="11dp"
-                    android:src="@drawable/flower3" />
+                    android:src="@drawable/flower33" />
 
             </LinearLayout>
 
@@ -297,7 +297,7 @@
                     android:layout_height="15dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="11dp"
-                    android:src="@drawable/flower4" />
+                    android:src="@drawable/flower44" />
 
             </LinearLayout>
 
