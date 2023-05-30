@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="TextView"
+        android:textColor="@color/black"
         android:textAlignment="center"
         android:textSize="12sp" />
 </LinearLayout>

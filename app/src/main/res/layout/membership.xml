@@ -50,7 +50,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="11dp"
                 android:layout_marginRight="20dp"
-                android:text="· 회원 등급은 브론즈에서 다이아까지 5개 등급이 있습니다."
+                android:text="· 회원 등급은 브론즈에서 다이아까지 4개 등급이 있습니다."
                 android:textSize="13sp" />
 
             <TextView
@@ -67,101 +67,239 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:text="회원 등급"
+                android:text="신뢰 지수"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 브론즈: 좋아요 0~50개"
-                android:textSize="13sp" />
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 실버: 좋아요 50~100개"
-                android:textSize="13sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="17dp"
+                    android:text="· 브론즈: 좋아요 0~50개"
+                    android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 골드: 좋아요 100~200개"
-                android:textSize="13sp" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/grade_bronze" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 플레티넘: 좋아요 200~500개"
-                android:textSize="13sp" />
+            </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 다이아: 좋아요 500개 이상"
-                android:textSize="13sp" />
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="16dp"
+                    android:text="· 실버: 좋아요 50~100개"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/grade_silver" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="9dp"
+                    android:text="· 골드: 좋아요 100~200개"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/grade_gold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="3dp"
+                    android:text="· 다이아: 좋아요 500개 이상"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/grade_diamond" />
+
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
-                android:text="내 활동 등급(게시물 +1, 댓글 +1)"
+                android:text="내 활동 지수(게시물 +1, 댓글 +1)"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 새싹: 0~20"
-                android:textSize="13sp" />
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 가지: 21~100"
-                android:textSize="13sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 꽃: 101~200"
-                android:textSize="13sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="17dp"
+                    android:text="· 새싹: 0~20점"
+                    android:textSize="13sp" />
 
-            <TextView
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/flower1" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="11dp"
-                android:layout_marginRight="20dp"
-                android:text="· 열매: 201~"
-                android:textSize="13sp" />
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="3dp"
+                    android:text="· 가지: 21~100점"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/flower2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="8dp"
+                    android:text="· 꽃: 101~200점"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/flower3" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginRight="17dp"
+                    android:text="· 나무: 201점~"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@drawable/flower4" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
