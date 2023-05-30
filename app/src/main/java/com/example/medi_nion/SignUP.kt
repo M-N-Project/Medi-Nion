@@ -722,6 +722,7 @@ class SignUP : AppCompatActivity() {
             setImage(bitmap)
             bitmap = resize(bitmap)!!
             image = BitMapToString(bitmap)
+
             result.text = utF8Text
 
 //            setImage(bitmap)
@@ -756,26 +757,27 @@ class SignUP : AppCompatActivity() {
         var identity_opencv = ""
         val identity_before = findViewById<TextView>(R.id.text_result).text.toString()
         var identity_check = ""
-        var identity1 = ""
-        var identity2 = ""
         var idimgView = findViewById<ImageView>(R.id.idImgView)
         var identity_image1 = ""
         var identity_image2 = ""
+        var identity_image3 = ""
+        var identity_image4 = ""
 
         var token = "sdfdsf"
 
         identity_opencv = identity_before.replace("\n", "")
         identity_opencv = identity_opencv.replace(" ", "")
-        identity1 = identity_opencv.substring(0, identity_opencv.length/2+1)
-        identity2 = identity_opencv.substring(identity_opencv.length/2+1, identity_opencv.length)
         identity_check = identity_opencv.contains(identity).toString()
-        identity_image1 = image.substring(0,image.length/2+1)
-        identity_image2 = image.substring(image.length/2+1,image.length)
+        identity_image1 = image.substring(0, image.length*1/4+1)
+        identity_image2 = image.substring(image.length*1/4+1, image.length*2/4+1)
+        identity_image3 = image.substring(image.length*2/4+1, image.length*3/4+1)
+        identity_image4 = image.substring(image.length*3/4+1, image.length)
 
-        Log.d("identity", "$identity, $identity_opencv, $identity_check")
-
-        val android_id = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-        Log.d("ANDROID_ID", android_id)
+        Log.d("IMGAE", image.length.toString())
+        Log.d("image1", identity_image1.length.toString())
+        Log.d("imgae2", identity_image2.length.toString())
+        Log.d("imgae3", identity_image3.length.toString())
+        Log.d("imgae4", identity_image4.length.toString())
 
         userDept = selectedUserDept
         if (userDept.equals("내과 (심장내과, 혈액내과, 호흡기내과, 소화기내과 등)")) {
@@ -831,11 +833,11 @@ class SignUP : AppCompatActivity() {
                     "userType" to basicUserBtn.text.toString(),
                     "userDept" to userDept,
                     "identity" to identity,
-                    "identity_opencv1" to identity1,
-                    "identity_opencv2" to identity2,
                     "identity_check" to identity_check,
                     "identity_image1" to identity_image1,
-                    "identity_image2" to identity_image2
+                    "identity_image2" to identity_image2,
+                    "identity_image3" to identity_image3,
+                    "identity_image4" to identity_image4
                 )
             } else {
                 hashMapOf(
@@ -846,11 +848,11 @@ class SignUP : AppCompatActivity() {
                     "userType" to corpUserBtn.text.toString(),
                     "userDept" to corpUserBtn.text.toString(),
                     "identity" to identity,
-                    "identity_opencv1" to identity1,
-                    "identity_opencv2" to identity2,
                     "identity_check" to identity_check,
                     "identity_image1" to identity_image1,
-                    "identity_image2" to identity_image2
+                    "identity_image2" to identity_image2,
+                    "identity_image3" to identity_image3,
+                    "identity_image4" to identity_image4
                 )
             }
 

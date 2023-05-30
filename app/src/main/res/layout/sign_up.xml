@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="58dp"
+        android:layout_marginStart="38dp"
         android:text="회원 종류"
         android:textColor="#000000"
         android:textSize="16sp"
