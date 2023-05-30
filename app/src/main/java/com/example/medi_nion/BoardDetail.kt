@@ -544,6 +544,7 @@ class BoardDetail : AppCompatActivity() {
                                                         Request.Method.POST,
                                                         urlDetail,
                                                         { response ->
+                                                            Log.d("대댓ㄱ2", response)
                                                             commentDetail_items.clear()
                                                             if (response != "Comment2 Fetch fail") {
                                                                 val jsonArrayComment2 =
@@ -873,7 +874,6 @@ class BoardDetail : AppCompatActivity() {
 
                                                             }
 
-
                                                                 if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                                                                     comment_user.size + 1
 
@@ -922,6 +922,7 @@ class BoardDetail : AppCompatActivity() {
                                                                     commentDetailAdapterMap[comment_num]
                                                                 )
                                                                 comment_items.add(commentItem)
+                                                                        Log.d("대댓글 어댑터", commentDetailAdapterMap[comment_num].toString())
 
                                                                 // 댓글에 대댓글 붙이기 000000000000000000000000000000000000000000000000000
                                                                 //각 댓글마다..
@@ -1644,17 +1645,7 @@ class BoardDetail : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
     }
-//    /** DynamicLink */
-//    private fun initDynamicLink() {
-//        val dynamicLinkData = intent.extras
-//        if (dynamicLinkData != null) {
-//            var dataStr = "DynamicLink 수신받은 값\n"
-//            for (key in dynamicLinkData.keySet()) {
-//                dataStr += "key: $key / value: ${dynamicLinkData.getString(key)}\n"
-//            }
-//
-//        }
-//    }
+
     // 댓글 request ------------------------------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.O)
     fun CommentRequest(comment_num : Int) {

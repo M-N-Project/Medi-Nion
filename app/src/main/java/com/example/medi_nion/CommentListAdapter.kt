@@ -112,7 +112,6 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                 if (pos != RecyclerView.NO_POSITION) {
                     itemView.setOnClickListener {
                         listener?.onItemClick(itemView, item, pos)
-                        Log.d("ItemClick1", "Event1")
                     }
                     itemComment.setOnClickListener {
                         listener?.onItemClick(itemView, item, pos)
