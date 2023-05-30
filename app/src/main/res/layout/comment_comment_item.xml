@@ -25,7 +25,7 @@
 
             <LinearLayout
                 android:layout_width="247dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -43,11 +43,11 @@
                     android:layout_width="32dp"
                     android:layout_height="28dp"
                     android:src="@drawable/profile_mous"
-                    app:riv_corner_radius="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.065"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:riv_corner_radius="10dp" />
 
                 <TextView
                     android:id="@+id/comment2_name"

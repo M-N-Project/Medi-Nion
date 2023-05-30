@@ -116,7 +116,7 @@
         android:layout_marginLeft="40dp"
         android:ems="5"
         android:hint="숫자, 문자, 특수문자 중 2가지 포함(8~15자)"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColor="#676767" />
 
@@ -147,7 +147,7 @@
         android:layout_marginLeft="40dp"
         android:ems="5"
         android:hint="비밀번호를 한 번 더 입력하세요."
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColor="#676767" />
 
@@ -216,8 +216,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="5dp"
-        android:text=""
-        />
+        android:text="" />
+
 
 
 </LinearLayout>

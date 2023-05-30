@@ -68,16 +68,16 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
 
             when (item.comment_medal) {
                 "king" -> {
-                    itemCommentMedal.setImageResource(R.drawable.king_medal)
+                    itemCommentMedal.setImageResource(R.drawable.grade_diamond)
                 }
                 "gold" -> {
-                    itemCommentMedal.setImageResource(R.drawable.gold_medal)
+                    itemCommentMedal.setImageResource(R.drawable.grade_gold)
                 }
                 "silver" -> {
-                    itemCommentMedal.setImageResource(R.drawable.silver_medal)
+                    itemCommentMedal.setImageResource(R.drawable.grade_silver)
                 }
                 else -> {
-                    itemCommentMedal.setImageResource(R.drawable.bronze_medal)
+                    itemCommentMedal.setImageResource(R.drawable.grade_bronze)
                 }
             }
 

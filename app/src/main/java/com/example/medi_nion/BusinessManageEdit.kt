@@ -10,7 +10,6 @@ import android.graphics.Outline
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -28,8 +27,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 
 class BusinessManageEdit : AppCompatActivity() {
@@ -37,6 +34,7 @@ class BusinessManageEdit : AppCompatActivity() {
     var image_profile: String = "null"
     lateinit var bitmap: Bitmap
     var profileEncoded: String = ""
+    private var isImgSelected :Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +53,6 @@ class BusinessManageEdit : AppCompatActivity() {
         val chanProfileImg = findViewById<ImageView>(R.id.chanProfileImg)
         val editName = findViewById<EditText>(R.id.editChanName)
         val editDesc = findViewById<EditText>(R.id.editChanDesc)
-        Log.d("비즈니스 수정1-1", "$isFirst $chanName $chanDesc $chanImgUrl")
 
         if(!isFirst) {
             val task = ImageLoadTask(chanImgUrl, chanProfileImg)
@@ -69,13 +66,68 @@ class BusinessManageEdit : AppCompatActivity() {
         }
 
         chanProfileImg.setOnClickListener {
+            isImgSelected = true
             openGallery()
         }
 
         val chanDelete = findViewById<Button>(R.id.chanDelete)
         chanDelete.setOnClickListener {
-            // 채널 삭제
+            // 다이얼로그 띄우고 OK 누르면
+            val dialog = CustomDialog(this)
+            dialog.showDialog()
+            dialog.setOnClickListener(object : CustomDialog.OnDialogClickListener {
+                override fun onClicked()
+                {
+                    // 채널 삭제
+                    deleteFromDB()
+                }
+
+            })
         }
+    }
+
+    private fun deleteFromDB() {
+        var id = intent.getStringExtra("id")!!
+        val urlBusinessProfileDelete = "http://seonho.dothome.co.kr/BusinessProfileDelete.php"
+
+        val request: StringRequest =
+            object : StringRequest(
+                Method.POST,
+                urlBusinessProfileDelete,
+                object : Response.Listener<String?> {
+                    override fun onResponse(response: String?) {
+                        if (response != null) {
+                            Log.d("비즈니스 삭제", response)
+                        }
+                        // profile Fragment로 이동
+                        val returnIntent = Intent()
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        finish()
+                    }
+                },
+                object : Response.ErrorListener {
+                    override fun onErrorResponse(error: VolleyError) {
+                        error.printStackTrace()
+                    }
+                }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String>? {
+                    val map: MutableMap<String, String> = HashMap()
+                    // 1번 인자는 PHP 파일의 $_POST['']; 부분과 똑같이 해줘야 한다
+                    map["id"] = id
+                    return map
+                }
+            }
+
+        request.setRetryPolicy(
+            DefaultRetryPolicy(
+                40000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+        )
+        val queue = Volley.newRequestQueue(applicationContext)
+        queue.add(request)
     }
 
     private fun openGallery() {
@@ -103,11 +155,11 @@ class BusinessManageEdit : AppCompatActivity() {
             intent.putExtra("channel_name", channel_name)
             intent.putExtra("channel_desc", channel_desc)
             intent.putExtra("profile_img", profileEncoded)
-            Log.d("비즈니스 수정1-2", "$id $isFirst $channel_name $channel_desc $profileEncoded")
 
             startService(intent)
         }
     }
+
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(
@@ -117,48 +169,35 @@ class BusinessManageEdit : AppCompatActivity() {
     ) { //uri -> bitmap
         super.onActivityResult(requestCode, resultCode, data)
 
-        var profileImg = findViewById<ImageView>(R.id.chanProfileImg)
-        val id: String? = this.intent.getStringExtra("id")
-        //val progressBar = findViewById<ProgressBar>(R.id.progressbarBusiness)
-        //val loadingText = findViewById<TextView>(R.id.loading_textView_business)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY) {
-                val currentImgUri: Uri? = data?.data
+        if(isImgSelected) {
+            var profileImg = findViewById<ImageView>(R.id.chanProfileImg)
+            val id: String? = this.intent.getStringExtra("id")
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == GALLERY) {
+                    val currentImgUri: Uri? = data?.data
 
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
-                    profileImg.setImageBitmap(bitmap)
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(contentResolver, currentImgUri)
+                        profileImg.setImageBitmap(bitmap)
 
-                    bitmap = resizeProfile(bitmap)
-                    image_profile = BitMapToString(bitmap)
-                    encodeBitmapImage(bitmap)
+                        bitmap = resizeProfile(bitmap)
+                        image_profile = BitMapToString(bitmap)
+                        encodeBitmapImage(bitmap)
 
-                    roundAll(profileImg, 70.0f)
+                        roundAll(profileImg, 70.0f)
 
-                    var source: ImageDecoder.Source? =
-                        currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
-                    bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
+                        var source: ImageDecoder.Source? =
+                            currentImgUri?.let { ImageDecoder.createSource(contentResolver, it) }
+                        bitmap = source?.let { ImageDecoder.decodeBitmap(it) }!!
 
-//                    val setting_RadioGroup =
-//                        findViewById<RadioGroup>(R.id.businessSetting_RadioGroup)
-//                    setting_RadioGroup.visibility = View.GONE
-
-//                    loadingText.visibility = View.VISIBLE
-//                    loadingText.text = "프로필 사진 업로드는 최대 2분 소요될 수 있습니다."
-//                    loadingText.bringToFront()
-//                    progressBar.visibility = View.VISIBLE
-//                    progressBar.bringToFront()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
 
 
-                    //uploadDataToDB()
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } else {
+                    Log.d("activity result", "wrong")
                 }
-
-
-            } else {
-                Log.d("activity result", "wrong")
             }
         }
     }
@@ -170,7 +209,9 @@ class BusinessManageEdit : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle presses on the action bar items
         var id = intent.getStringExtra("id")
+        var isFirst = intent.getBooleanExtra("isFirst", true)
         var chanName = findViewById<EditText>(R.id.editChanName)
+        var chanDesc = findViewById<EditText>(R.id.editChanDesc)
 
         return when(item.itemId){
             android.R.id.home -> {
@@ -178,15 +219,46 @@ class BusinessManageEdit : AppCompatActivity() {
                 true
             }
             R.id.done -> {
-                uploadDataToDB()
-                val intent = Intent(this, BusinessManageActivity::class.java)
-                val id = this.intent.getStringExtra("id").toString()
-                intent.putExtra("id", id)
-                intent.putExtra("chanName", chanName.text)
-                intent.putExtra("isFirst", false)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                Log.d("비즈니스 수정777777", "$id ${chanName.text}")
-                startActivity(intent)
+                if(isFirst) {
+                    if (chanName.text.isNotEmpty() && chanDesc.text.isNotEmpty() && profileEncoded.length > 0) {
+                        uploadDataToDB()
+                        Toast.makeText(this, "사진 업로드는 최대 2분 소요됩니다.", Toast.LENGTH_SHORT).show()
+
+                        val intent = Intent(this, BusinessManageActivity::class.java)
+                        val id = this.intent.getStringExtra("id").toString()
+                        intent.putExtra("id", id)
+                        intent.putExtra("chanName", chanName.text)
+                        intent.putExtra("isFirst", false)
+                        intent.putExtra("loading", true)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "채널 이름과 소개글 모두 작성해주세요",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                } else{
+                    if (chanName.text.isNotEmpty() && chanDesc.text.isNotEmpty()) {
+                        uploadDataToDB()
+                        val intent = Intent(this, BusinessManageActivity::class.java)
+                        val id = this.intent.getStringExtra("id").toString()
+                        intent.putExtra("id", id)
+                        intent.putExtra("chanName", chanName.text)
+                        intent.putExtra("isFirst", false)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "채널 이름과 소개글 모두 작성해주세요",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+                }
                 true
             }
             else -> {super.onOptionsItemSelected(item)}
@@ -231,9 +303,6 @@ class BusinessManageEdit : AppCompatActivity() {
                 bitmap = Bitmap.createScaledBitmap(bitmap!!, ratio, resize_size, true)
             }
         }
-
-//    bitmap = Bitmap.createScaledBitmap(bitmap!!, 300, 300, true)
-        Log.d("please", "$bitmap_height, $bitmap_width")
         return bitmap!!
     }
 

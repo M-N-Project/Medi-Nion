@@ -17,8 +17,8 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
 
             <LinearLayout
@@ -407,8 +407,8 @@
                         android:id="@+id/Comment_Btn"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_button"
                         android:layout_marginLeft="10dp"
+                        android:background="@drawable/rounded_button"
                         android:backgroundTint="#86C9C6"
                         android:text="등록"
                         android:textColor="@color/white"
@@ -423,3 +423,4 @@
 <!--        </GridLayout>-->
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
+

@@ -2,13 +2,9 @@ package com.example.medi_nion
 
 import android.app.Service
 import android.content.Intent
-import android.os.IBinder
-
 import android.os.*
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
@@ -43,14 +39,19 @@ class BusinessProfileService : Service() {
                     val request: StringRequest =
                         object : StringRequest(Method.POST, urlBusinessProfileInsert, object : Response.Listener<String?> {
                             override fun onResponse(response: String?) {
-                                Log.d("비즈니스 수정2", response.toString())
-
+                                val showIntent = Intent(
+                                    applicationContext,
+                                    BusinessManageActivity::class.java
+                                )
+                                showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                showIntent.putExtra("id", id)
+                                showIntent.putExtra("chanName", channel_name)
+                                showIntent.putExtra("isFirst", false)
+                                startActivity(showIntent)
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
                                 error.printStackTrace()
-                                Log.d("비즈니스 수정 3-0", "$id $channel_name $channel_desc $profile_img $isProfileChanged")
-                                Log.d("비즈니스 수정3", error.toString())
                             }
                         }) {
                             @Throws(AuthFailureError::class)
@@ -83,8 +84,18 @@ class BusinessProfileService : Service() {
                             object : Response.Listener<String?>
                             {
                             override fun onResponse(response: String?) {
-                                Log.d("비즈니스 수정 4-0", "$id $channel_name $channel_desc $profile_img $isProfileChanged")
-                                Log.d("비즈니스 수정4", response.toString())
+                                val activity:BusinessManageActivity = _Busi_Manage as BusinessManageActivity
+                                activity.finish()
+                                val showIntent = Intent(
+                                    applicationContext,
+                                    BusinessManageActivity::class.java
+                                )
+                                showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                showIntent.putExtra("id", id)
+                                showIntent.putExtra("chanName", channel_name)
+                                showIntent.putExtra("isFirst", false)
+                                Log.d("비즈니스수정", "재시작입니다")
+                                startActivity(showIntent)
                             }
                         }, object : Response.ErrorListener {
                             override fun onErrorResponse(error: VolleyError) {
@@ -146,8 +157,6 @@ class BusinessProfileService : Service() {
         channel_desc = intent.getStringExtra("channel_desc").toString()
         profile_img = intent.getStringExtra("profile_img").toString()
         if(profile_img.equals("")) isProfileChanged = false
-
-        Log.d("비즈니스 수정6", "$id $isFirst $channel_name $channel_desc $profile_img")
 
 
         // For each start request, send a message to start a job and deliver the
