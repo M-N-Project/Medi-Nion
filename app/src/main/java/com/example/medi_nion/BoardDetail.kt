@@ -219,7 +219,7 @@ class BoardDetail : AppCompatActivity() {
 
 
         title_textView.setText(title) // 제목
-        content_textView.setText(content) // 내용
+        content_textView.setText(content) //내용
         time_textView.setText(time) //시간
         comment_count.setText(commentCnt.toString())
 

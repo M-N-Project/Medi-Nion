@@ -46,7 +46,7 @@
             android:layout_width="10dp"
             android:layout_height="20dp"
             android:layout_weight="0.5"
-            android:src="@drawable/favorite_border" />
+            android:src="@drawable/favorite_border1" />
 
         <TextView
             android:id="@+id/home_hot_like"
