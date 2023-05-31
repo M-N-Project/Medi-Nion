@@ -174,7 +174,7 @@
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginRight="10dp">
+                                        android:layout_marginRight="35dp">
 
                                         <android.widget.Button
                                             android:id="@+id/moreBtn"
@@ -390,37 +390,38 @@
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/writingKeyboardLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:foregroundGravity="bottom"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/Comment_editText"
                         android:layout_width="270dp"
                         android:layout_height="wrap_content"
                         android:hint="댓글을 입력해주세요."
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/Comment_Btn" />
 
                     <Button
                         android:id="@+id/Comment_Btn"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
                         android:background="@drawable/rounded_button"
                         android:backgroundTint="#86C9C6"
                         android:text="등록"
                         android:textColor="@color/white"
                         app:strokeColor="#FFFFFF"
-                        tools:ignore="TextContrastCheck" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </LinearLayout>
             </LinearLayout>
 
 
