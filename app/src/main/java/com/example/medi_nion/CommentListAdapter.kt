@@ -95,6 +95,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                     //댓글 삭제 이벤트
 //                    comment_delete.setOnClickListener{
                         listener?.onItemDelete(itemView, item, pos)
+
 //                    }
                 }
 
