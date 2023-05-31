@@ -61,7 +61,6 @@ class BoardDetail : AppCompatActivity() {
 
     var comment_num = 0
     var comment2_count = HashMap<Int, Int>()
-    var comment2_num = 0
     var comment_comment_num = 0
     var comment_comment_flag = false // 댓글창에 입력할때, 댓글 입력하는 건지/ 대댓글 입력하는건지
     var comment_comment_posPresent = -1 //대댓글 인덱스
@@ -856,10 +855,11 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     } else {
                                                                                                         comment_comment_flag =
                                                                                                             true
+//                                                                                                        comment_comment_posPresent =
+//                                                                                                            data.comment_num
                                                                                                         comment_comment_posPresent =
-                                                                                                            data.comment_num
+                                                                                                            pos
                                                                                                         Log.d("llllss", data.comment_num.toString())
-                                                                                                        comment2_num = data.comment_num
                                                                                                         findViewById<LinearLayout>(
                                                                                                             R.id.comment_linearLayout
                                                                                                         ).setBackgroundColor(
@@ -2296,6 +2296,7 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             url,
             { response ->
+                Log.d("comment...", response)
                 if (!response.equals("Comment fail")) {
                     val requestCnt = Login_Request(
                         Request.Method.POST,
