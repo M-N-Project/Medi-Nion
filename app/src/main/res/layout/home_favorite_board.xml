@@ -40,5 +40,6 @@
         android:layout_height="15dp"
         android:layout_gravity="right|center_vertical"
         android:layout_marginRight="15dp"
+        android:visibility="invisible"
         app:srcCompat="@drawable/new_red" />
 </LinearLayout>
