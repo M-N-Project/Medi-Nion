@@ -221,7 +221,6 @@ class BoardDetail : AppCompatActivity() {
         title_textView.setText(title) // 제목
         content_textView.setText(content) //내용
         time_textView.setText(time) //시간
-        comment_count.setText(commentCnt.toString())
 
         //이미지 fetch
         if (image != null) {
@@ -235,6 +234,7 @@ class BoardDetail : AppCompatActivity() {
                 postImg.visibility = View.GONE
             }
         }
+        fetchCommentCnt()
 
         fetchMedalData() // 메달 fetch
         fetchLikeData() // 좋아요 fetch
@@ -381,6 +381,42 @@ class BoardDetail : AppCompatActivity() {
         queue.add(request)
     }
 
+    fun fetchCommentCnt() {
+        val url = "http://seonho.dothome.co.kr/Comment_cnt.php"
+        var post_num = intent?.getStringExtra("num").toString()
+        var id = intent?.getStringExtra("id").toString() //하트를 누른 유저의 아이디
+
+        val board = intent?.getStringExtra("board").toString()
+        val comment_cnt = findViewById<TextView>(R.id.textView_commentcount2)
+
+        val request = Login_Request(
+            Request.Method.POST,
+            url,
+            { response ->
+                Log.d("DFSDFSD", response.toString())
+                    val jsonArray = JSONArray(response)
+
+                    for (i in 0 until jsonArray.length()) {
+
+                        val item = jsonArray.getJSONObject(i)
+
+                        val commentCnt = item.getString("comment")
+
+                        comment_cnt.text = commentCnt
+
+                    }
+
+
+
+            }, { Log.d("comment Failed", "error......${error(applicationContext)}") },
+            hashMapOf(
+                "board" to board,
+                "post_num" to post_num
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
 
     // 좋아요 fetch ----------------------------------------------------------------------------
     fun fetchLikeData() {
@@ -461,6 +497,7 @@ class BoardDetail : AppCompatActivity() {
                         val jsonArray = JSONArray(response)
 
                         val comment_count = jsonArray.length()
+
                         comment_num = comment_count
 
                         var comment_user = HashMap<String, Int>()
@@ -609,12 +646,13 @@ class BoardDetail : AppCompatActivity() {
                                                                     var comment2_medal_text: String =
                                                                         "bronze"
                                                                     val comment2medalidurl =
-                                                                        "http://seonho.dothome.co.kr/Medal_Comment.php"
+                                                                        "http://seonho.dothome.co.kr/Medal_Comment2.php"
 
                                                                     val request1 = SignUP_Request(
                                                                         Request.Method.POST,
                                                                         comment2medalidurl,
                                                                         { response ->
+                                                                            commentDetail_items.clear()
                                                                             val jsonArray =
                                                                                 JSONArray(response)
                                                                             for (i in 0 until jsonArray.length()) {
@@ -622,12 +660,12 @@ class BoardDetail : AppCompatActivity() {
                                                                                     jsonArray.getJSONObject(
                                                                                         i
                                                                                     )
-                                                                                val id_comment =
+                                                                                val id_comment2 =
                                                                                     item.getString("id")
 
                                                                                 Log.d(
                                                                                     "ometnt_idid",
-                                                                                    id_comment.toString()
+                                                                                    id_comment2.toString()
                                                                                 )
 
 
@@ -1004,7 +1042,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                             )
                                                                                         },
                                                                                         hashMapOf(
-                                                                                            "id" to id_comment
+                                                                                            "id" to id_comment2
                                                                                         )
                                                                                     )
                                                                                 val queue =
@@ -1026,8 +1064,9 @@ class BoardDetail : AppCompatActivity() {
                                                                             )
                                                                         },
                                                                         hashMapOf(
+                                                                            "board" to board,
                                                                             "post_num" to post_num,
-                                                                            "comment_num" to comment_num.toString()
+                                                                            "comment2_num" to comment2_num.toString()
                                                                         )
                                                                     )
                                                                     request1.retryPolicy =
@@ -1051,13 +1090,14 @@ class BoardDetail : AppCompatActivity() {
                                                                 val medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
                                                                 var comment_medal_text : String = "bronze"
 
-                                                                val comment2medalidurl =
+                                                                val commentmedalidurl =
                                                                     "http://seonho.dothome.co.kr/Medal_Comment.php"
 
                                                                 val request1 = SignUP_Request(
                                                                     Request.Method.POST,
-                                                                    comment2medalidurl,
+                                                                    commentmedalidurl,
                                                                     { response ->
+                                                                        comment_items.clear()
                                                                         val jsonArray =
                                                                             JSONArray(response)
                                                                         for (i in 0 until jsonArray.length()) {
@@ -1471,6 +1511,7 @@ class BoardDetail : AppCompatActivity() {
                                                                 )
                                                             },
                                                             hashMapOf(
+                                                                "board" to board,
                                                                 "post_num" to post_num,
                                                                 "comment_num" to comment_num.toString()
                                                             )
