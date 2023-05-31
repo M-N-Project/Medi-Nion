@@ -71,6 +71,8 @@ class BusinessProfileActivity : AppCompatActivity() {
         var channel_name = intent.getStringExtra("channel_name")!!
         val channelPlusBtn = findViewById<CheckBox>(R.id.channelPlusBtn)
         channelPlusBtn.setOnClickListener {
+            Toast.makeText(applicationContext, "구독목록에 추가되었습니다", Toast.LENGTH_SHORT).show()
+
             //구독 php
             val request = Board_Request(
                 Request.Method.POST,
