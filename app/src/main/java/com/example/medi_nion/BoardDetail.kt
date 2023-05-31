@@ -359,16 +359,16 @@ class BoardDetail : AppCompatActivity() {
 
                 when (response) {
                     "king" -> {
-                        medalImage.setImageResource(R.drawable.grade_diamond)
+                        medalImage.setImageResource(R.drawable.grade_diamond1)
                     }
                     "gold" -> {
-                        medalImage.setImageResource(R.drawable.grade_gold)
+                        medalImage.setImageResource(R.drawable.grade_gold1)
                     }
                     "silver" -> {
-                        medalImage.setImageResource(R.drawable.grade_silver)
+                        medalImage.setImageResource(R.drawable.grade_silver1)
                     }
                     else -> {
-                        medalImage.setImageResource(R.drawable.grade_bronze)
+                        medalImage.setImageResource(R.drawable.grade_bronze1)
                     }
                 }
 
@@ -610,12 +610,13 @@ class BoardDetail : AppCompatActivity() {
                                                                     var comment2_medal_text: String =
                                                                         "bronze"
                                                                     val comment2medalidurl =
-                                                                        "http://seonho.dothome.co.kr/Medal_Comment.php"
+                                                                        "http://seonho.dothome.co.kr/Medal_Comment2.php"
 
                                                                     val request1 = SignUP_Request(
                                                                         Request.Method.POST,
                                                                         comment2medalidurl,
                                                                         { response ->
+                                                                            commentDetail_items.clear()
                                                                             val jsonArray =
                                                                                 JSONArray(response)
                                                                             for (i in 0 until jsonArray.length()) {
@@ -623,12 +624,12 @@ class BoardDetail : AppCompatActivity() {
                                                                                     jsonArray.getJSONObject(
                                                                                         i
                                                                                     )
-                                                                                val id_comment =
+                                                                                val id_comment2 =
                                                                                     item.getString("id")
 
                                                                                 Log.d(
                                                                                     "ometnt_idid",
-                                                                                    id_comment.toString()
+                                                                                    id_comment2.toString()
                                                                                 )
 
 
@@ -1005,7 +1006,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                             )
                                                                                         },
                                                                                         hashMapOf(
-                                                                                            "id" to id_comment
+                                                                                            "id" to id_comment2
                                                                                         )
                                                                                     )
                                                                                 val queue =
@@ -1027,8 +1028,9 @@ class BoardDetail : AppCompatActivity() {
                                                                             )
                                                                         },
                                                                         hashMapOf(
+                                                                            "board" to board,
                                                                             "post_num" to post_num,
-                                                                            "comment_num" to comment_num.toString()
+                                                                            "comment2_num" to comment2_num.toString()
                                                                         )
                                                                     )
                                                                     request1.retryPolicy =
@@ -1051,13 +1053,14 @@ class BoardDetail : AppCompatActivity() {
                                                                 val medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
                                                                 var comment_medal_text : String = "bronze"
 
-                                                                val comment2medalidurl =
+                                                                val commentmedalidurl =
                                                                     "http://seonho.dothome.co.kr/Medal_Comment.php"
 
                                                                 val request1 = SignUP_Request(
                                                                     Request.Method.POST,
-                                                                    comment2medalidurl,
+                                                                    commentmedalidurl,
                                                                     { response ->
+                                                                        comment_items.clear()
                                                                         val jsonArray =
                                                                             JSONArray(response)
                                                                         for (i in 0 until jsonArray.length()) {
@@ -1472,6 +1475,7 @@ class BoardDetail : AppCompatActivity() {
                                                                 )
                                                             },
                                                             hashMapOf(
+                                                                "board" to board,
                                                                 "post_num" to post_num,
                                                                 "comment_num" to comment_num.toString()
                                                             )
