@@ -39,7 +39,6 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="@id/home_boardList"
                     app:layout_constraintStart_toStartOf="@id/home_boardList"
@@ -70,7 +69,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="10dp"
                             android:text="더 보기"
-                            android:textColor="@color/black"
+                            android:textColor="@color/color3"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -87,119 +86,66 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/titleView1">
 
-                    <LinearLayout
+                    <include
+                        android:id="@+id/home_favorite_basic"
+                        layout="@layout/home_favorite_board"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content" />
 
-
-                        <TextView
-                            android:id="@+id/home_boardList1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="자유 게시판"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/home_boardList2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="직종별 게시판"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/home_boardList3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="진료과별 게시판"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/home_boardList4"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="장터 게시판"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
-
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
+                    <include
+                        android:id="@+id/home_favorite_type"
+                        layout="@layout/home_favorite_board"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:id="@+id/home_boardList5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="QnA 게시판"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                    <include
+                        android:id="@+id/home_favorite_dept"
+                        layout="@layout/home_favorite_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:id="@+id/home_boardList6"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="학회 및 세미나 정보"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                    <include
+                        android:id="@+id/home_favorite_market"
+                        layout="@layout/home_favorite_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:id="@+id/home_boardList7"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="채용 정보"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                    <include
+                        android:id="@+id/home_favorite_qna"
+                        layout="@layout/home_favorite_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:id="@+id/home_boardList8"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:text="의료 뉴스"
-                            android:textColor="@color/black"
-                            android:textSize="12sp" />
+                    <include
+                        android:id="@+id/home_favorite_academy"
+                        layout="@layout/home_favorite_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <include
+                        android:id="@+id/home_favorite_employee"
+                        layout="@layout/home_favorite_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    =
+
+                    <include
+                        android:id="@+id/home_favorite_news"
+                        layout="@layout/home_favorite_board"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
 
-                    </LinearLayout>
                 </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- 구독 채널 새소식 -->
@@ -265,7 +211,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="10dp"
                                 android:text="더 보기"
-                                android:textColor="@color/black"
+                                android:textColor="@color/color3"
                                 android:textSize="10sp" />
 
                             <ImageView
@@ -350,7 +296,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="10dp"
                                 android:text="더 보기"
-                                android:textColor="@color/black"
+                                android:textColor="@color/color3"
                                 android:textSize="10sp" />
 
                             <ImageView
@@ -435,7 +381,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="10dp"
                                 android:text="더 보기"
-                                android:textColor="@color/black"
+                                android:textColor="@color/color3"
                                 android:textSize="10sp" />
 
                             <ImageView
