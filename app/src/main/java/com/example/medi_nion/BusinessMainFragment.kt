@@ -166,8 +166,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                     }
                     hotListItems.reverse()
                     hotAdapter = BusinessHotListAdapter(hotListItems)
-                    hotAdapter.notifyDataSetChanged()
                     BusinessHotRecycler.adapter = hotAdapter
+                    hotAdapter.notifyDataSetChanged()
 
                     hotAdapter.setOnItemClickListener(object :
                         BusinessHotListAdapter.OnItemClickListener {
@@ -213,8 +213,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                 }
                                 hotListItems.reverse()
                                 var hotAdapter = BusinessHotListAdapter(hotListItems)
-                                hotAdapter.notifyDataSetChanged()
                                 BusinessHotRecycler.adapter = hotAdapter
+                                hotAdapter.notifyDataSetChanged()
 
                                 hotAdapter.setOnItemClickListener(object :
                                     BusinessHotListAdapter.OnItemClickListener {
@@ -434,8 +434,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                     }
                     subListItems.reverse()
                     subAdapter = BusinessSubListAdapter(subListItems)
-                    subAdapter.notifyDataSetChanged()
                     BusinessSubRecycler.adapter = subAdapter
+                    subAdapter.notifyDataSetChanged()
 
                     subAdapter.setOnItemClickListener(object :
                         BusinessSubListAdapter.OnItemClickListener {
@@ -481,8 +481,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                 }
                                 subListItems.reverse()
                                 var subAdapter = BusinessSubListAdapter(subListItems)
-                                subAdapter.notifyDataSetChanged()
                                 BusinessSubRecycler.adapter = subAdapter
+                                subAdapter.notifyDataSetChanged()
 
                                 subAdapter.setOnItemClickListener(object :
                                     BusinessSubListAdapter.OnItemClickListener {
@@ -561,8 +561,8 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                 if (response != "business sub list no Item") {
                     val jsonArray = JSONArray(response)
 
-                    for (i in jsonArray.length() - 1 downTo 0) {
-                        val item = jsonArray.getJSONObject(i)
+                    for (f in jsonArray.length() - 1 downTo 0) {
+                        val item = jsonArray.getJSONObject(f)
 
                         val id = item.getString("id")
                         val channel_name = item.getString("Channel_name")
@@ -638,41 +638,43 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                                                 BusinessItem
                                                             )
 
-                                                            home_adapter =
-                                                                BusinessHomeRecyclerAdapter(
-                                                                    appUser,
-                                                                    items,
-                                                                    info_items,
-                                                                    detail_items
-                                                                )
-                                                            BusinessBoardHomeRecyclerView.adapter =
-                                                                home_adapter
-                                                            home_adapter.setOnItemClickListener(
-                                                                object :
-                                                                    BusinessHomeRecyclerAdapter.OnItemClickListener {
-                                                                    override fun onProfileClick(
-                                                                        v: View,
-                                                                        data: String,
-                                                                        pos: Int
-                                                                    ) {
-                                                                        val intent =
-                                                                            Intent(
-                                                                                context,
-                                                                                BusinessProfileActivity::class.java
+                                                            if(i==0) {
+                                                                home_adapter =
+                                                                    BusinessHomeRecyclerAdapter(
+                                                                        appUser,
+                                                                        items,
+                                                                        info_items,
+                                                                        detail_items
+                                                                    )
+                                                                BusinessBoardHomeRecyclerView.adapter =
+                                                                    home_adapter
+                                                                home_adapter.notifyDataSetChanged()
+                                                                home_adapter.setOnItemClickListener(
+                                                                    object :
+                                                                        BusinessHomeRecyclerAdapter.OnItemClickListener {
+                                                                        override fun onProfileClick(
+                                                                            v: View,
+                                                                            data: String,
+                                                                            pos: Int
+                                                                        ) {
+                                                                            val intent =
+                                                                                Intent(
+                                                                                    context,
+                                                                                    BusinessProfileActivity::class.java
+                                                                                )
+                                                                            intent.putExtra(
+                                                                                "appUser",
+                                                                                appUser
                                                                             )
-                                                                        intent.putExtra(
-                                                                            "appUser",
-                                                                            appUser
-                                                                        )
-                                                                        intent.putExtra(
-                                                                            "channel_name",
-                                                                            data
-                                                                        )
-                                                                        startActivity(intent)
-                                                                    }
+                                                                            intent.putExtra(
+                                                                                "channel_name",
+                                                                                data
+                                                                            )
+                                                                            startActivity(intent)
+                                                                        }
 
-                                                                })
-
+                                                                    })
+                                                            }
                                                         },
                                                         {
                                                             Log.d(
@@ -729,7 +731,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
                                             )
                                         BusinessBoardHomeRecyclerView.adapter =
                                             home_adapter
-
+                                        home_adapter.notifyDataSetChanged()
                                         home_adapter.setOnItemClickListener(
                                             object :
                                                 BusinessHomeRecyclerAdapter.OnItemClickListener {

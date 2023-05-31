@@ -26,7 +26,6 @@ import com.android.volley.toolbox.Volley
 import com.example.medi_nion.VolleyMultipartRequest2.DataPart
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.board_home.*
-import kotlinx.android.synthetic.main.business_home.*
 import kotlinx.android.synthetic.main.business_manage_create.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -452,53 +451,48 @@ class BusinessManageActivity : AppCompatActivity() {
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
 
-                                    var recyclerViewState =
-                                        BusinessBoardRecyclerView.layoutManager?.onSaveInstanceState()
-                                    var new_items = ArrayList<BusinessBoardItem>()
-                                    new_items.addAll(items)
-                                    adapter = BusinessManageRecyclerAdapter(new_items)
-                                    BusinessBoardRecyclerView.adapter = adapter
-                                    adapter.stateRestorationPolicy =
-                                        RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                    BusinessBoardRecyclerView.layoutManager?.onRestoreInstanceState(
-                                        recyclerViewState
-                                    );
+                                    if(i==0){
+                                        var new_items = ArrayList<BusinessBoardItem>()
+                                        new_items.addAll(items)
+                                        adapter = BusinessManageRecyclerAdapter(new_items)
+                                        BusinessBoardRecyclerView.adapter = adapter
 
-                                    // 수정 삭제 ItemClick 이벤트
-                                    adapter.setOnItemClickListener(object :
-                                        BusinessManageRecyclerAdapter.OnItemClickListener {
-                                        override fun onUpdateClick(
-                                            v: View,
-                                            data: BusinessBoardItem,
-                                            pos: Int
-                                        ) {
-                                            // 글쓰기 화면으로 이동
-                                            var intent = Intent(
-                                                applicationContext,
-                                                BusinessWriting::class.java
-                                            ) //비즈니스 글쓰기 액티비티
-                                            intent.putExtra("id", data.id)
-                                            intent.putExtra("chanName", data.channel_name)
-                                            intent.putExtra("num", data.post_num.toString())
-                                            intent.putExtra("title", data.title)
-                                            intent.putExtra("content", data.content)
-                                            intent.putExtra("image1", data.image1)
-                                            intent.putExtra("image2", data.image2)
-                                            intent.putExtra("image3", data.image3)
-                                            intent.putExtra("time", data.time)
-                                            intent.putExtra("update", 1)
-                                            startActivity(intent)
-                                        }
+                                        // 수정 삭제 ItemClick 이벤트
+                                        adapter.setOnItemClickListener(object :
+                                            BusinessManageRecyclerAdapter.OnItemClickListener {
+                                            override fun onUpdateClick(
+                                                v: View,
+                                                data: BusinessBoardItem,
+                                                pos: Int
+                                            ) {
+                                                // 글쓰기 화면으로 이동
+                                                var intent = Intent(
+                                                    applicationContext,
+                                                    BusinessWriting::class.java
+                                                ) //비즈니스 글쓰기 액티비티
+                                                intent.putExtra("id", data.id)
+                                                intent.putExtra("chanName", data.channel_name)
+                                                intent.putExtra("num", data.post_num.toString())
+                                                intent.putExtra("title", data.title)
+                                                intent.putExtra("content", data.content)
+                                                intent.putExtra("image1", data.image1)
+                                                intent.putExtra("image2", data.image2)
+                                                intent.putExtra("image3", data.image3)
+                                                intent.putExtra("time", data.time)
+                                                intent.putExtra("update", 1)
+                                                startActivity(intent)
+                                            }
 
-                                        override fun onDeleteClick(
-                                            v: View,
-                                            data: BusinessBoardItem,
-                                            pos: Int
-                                        ) {
-                                            PostDeleteRequest(channel_name, num.toString())
-                                        }
+                                            override fun onDeleteClick(
+                                                v: View,
+                                                data: BusinessBoardItem,
+                                                pos: Int
+                                            ) {
+                                                PostDeleteRequest(channel_name, num.toString())
+                                            }
 
-                                    })
+                                        })
+                                    }
                                 }
                             }
 

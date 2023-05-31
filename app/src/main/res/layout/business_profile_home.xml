@@ -239,7 +239,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/business_item_recycler" />
+                tools:listitem="@layout/business_board_item" />
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
