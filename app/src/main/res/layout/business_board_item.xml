@@ -10,14 +10,76 @@
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="5dp">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/main_border_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout81"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:background="@drawable/business_profile2"
+                android:id="@+id/layout_img_border"
+                android:layout_margin="8dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/profileImg2"
+                    android:layout_width="60dp"
+                    android:layout_height="62dp"
+                    android:background="@drawable/business_profile2"
+                    android:padding="12dp"
+                    android:scaleType="centerInside"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toTopOf="@+id/profileName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/titleName1"
+                    android:layout_width="283dp"
+                    android:layout_height="33dp"
+                    android:fontFamily="@font/gothic_bold"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="채널 이름"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/profileImg2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
         <RadioGroup
             android:id="@+id/busi_optionRadioGroup"
@@ -63,7 +125,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout81">
 
 
             <LinearLayout
@@ -137,15 +199,15 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
+                android:overScrollMode="never"
                 android:visibility="gone"
-                tools:ignore="SpeakableTextPresentCheck"
-                android:overScrollMode="never">
+                tools:ignore="SpeakableTextPresentCheck">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/BusinessBoardImgRecyclerView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/business_image_item"/>
+                    tools:listitem="@layout/business_image_item" />
 
 
             </HorizontalScrollView>
@@ -153,10 +215,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -208,8 +270,8 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginRight="10dp"
-                        android:button="@null"
                         android:background="@drawable/bookmark_checkbox"
+                        android:button="@null"
                         tools:ignore="TouchTargetSizeCheck" />
 
                     <TextView

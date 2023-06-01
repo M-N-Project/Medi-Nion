@@ -28,7 +28,9 @@ class Business_bookmark__profile : AppCompatActivity() {
     var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     var new_items = ArrayList<BusinessBoardItem>()
-    var adapter = BusinessProfileRecyclerAdapter(items)
+    var adapter = BusinessProfileRecyclerAdapter(items)  //문제야 문제~
+
+    var profileImg = "" //프로필 이미지
 
     var num = 0 //비즈니스 채널 번호
     var writerId = ""
