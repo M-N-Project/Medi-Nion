@@ -51,7 +51,8 @@ class BusinessProfileRecyclerAdapter(private val items: ArrayList<BusinessBoardI
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
         private var view: View = v
-
+        private var profileImg : ImageView = v.findViewById<ImageView>(R.id.profileImg2)
+        private var channelName : TextView = v.findViewById<TextView>(R.id.titleName1)
         private var bookmark = v.findViewById<CheckBox>(R.id.checkBox)
         private var heart = v.findViewById<CheckBox>(R.id.checkBox2)
 
@@ -60,13 +61,20 @@ class BusinessProfileRecyclerAdapter(private val items: ArrayList<BusinessBoardI
 
         fun bind(item: BusinessBoardItem) {
              //뒤는 item class 변수명을 입력하면 된다,,,
-
+            channelName.text = item.channel_name
             view.titleName.text = item.title
             view.deadline.text = item.time
             view.content.text = item.content
             bookmark.isChecked = item.isBookm
             heart.isChecked = item.isHeart
 
+            if(item.profileImg.length >= 5){
+                if(item.profileImg.substring((item.profileImg).length-4, (item.profileImg).length) == ".jpg"){
+                    val imgUrl = "http://seonho.dothome.co.kr/images/businessProfile/${item.profileImg}"
+                    val task = ImageLoadTask(imgUrl, profileImg)
+                    task.execute()
+                }
+            }
 
             var imgItems = ArrayList<BusinessPostImgItem>()
             var BusinessImgAdapter = BusinessPostImgRecyclerAdapter(imgItems)
