@@ -701,7 +701,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                             comment_comment_flag =
                                                                                                                 false
                                                                                                             CommentRecyclerView.get(
-                                                                                                                comment_comment_posPresent
+                                                                                                                pos
                                                                                                             )
                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                     R.id.comment_linearLayout
@@ -714,7 +714,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                         } else {
 
                                                                                                             CommentRecyclerView.get(
-                                                                                                                comment_comment_posBefore
+                                                                                                                pos
                                                                                                             )
                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                     R.id.comment_linearLayout
@@ -725,7 +725,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     )
                                                                                                                 )
                                                                                                             CommentRecyclerView.get(
-                                                                                                                comment_comment_posPresent
+                                                                                                                pos
                                                                                                             )
                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                     R.id.comment_linearLayout
@@ -768,7 +768,11 @@ class BoardDetail : AppCompatActivity() {
                                                                                                 }
 
                                                                                                 //댓글 좋아요 눌렀을때.
-                                                                                                override fun onItemHeart(
+
+
+
+
+                                                                                              override fun onItemHeart(
                                                                                                     v: View,
                                                                                                     data: CommentItem,
                                                                                                     pos: Int
@@ -1558,7 +1562,7 @@ class BoardDetail : AppCompatActivity() {
 
                                                                                                                             Log.d("9013213-1",comment_comment_posPresent.toString())
                                                                                                                             CommentRecyclerView.get(
-                                                                                                                                comment_comment_posPresent-2
+                                                                                                                                pos
                                                                                                                             )
                                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                                     R.id.comment_linearLayout
@@ -1571,7 +1575,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                         } else {
                                                                                                                             Log.d("9013213-2",comment_comment_posPresent.toString())
                                                                                                                             CommentRecyclerView.get(
-                                                                                                                                comment_comment_posBefore-2
+                                                                                                                                pos
                                                                                                                             )
                                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                                     R.id.comment_linearLayout
@@ -1582,7 +1586,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                     )
                                                                                                                                 )
                                                                                                                             CommentRecyclerView.get(
-                                                                                                                                comment_comment_posPresent-2
+                                                                                                                                pos
                                                                                                                             )
                                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                                     R.id.comment_linearLayout
@@ -1608,7 +1612,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                             data.comment_num-1
                                                                                                                         Log.d("9013213-3",comment_comment_posPresent.toString())
                                                                                                                         CommentRecyclerView.get(
-                                                                                                                            comment_comment_posBefore-2
+                                                                                                                            pos
                                                                                                                         )
                                                                                                                             .findViewById<LinearLayout>(
                                                                                                                                 R.id.comment_linearLayout
