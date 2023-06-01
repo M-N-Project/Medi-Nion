@@ -50,7 +50,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val itemComment: TextView = itemView.findViewById(R.id.comment_content)
         private val itemCommentTime: TextView = itemView.findViewById(R.id.comment_time)
-        private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num)
+        private val itemCommentNum: TextView = itemView.findViewById(R.id.comment_num) //익명 1, 익명 2
         private val itemCommentHeart: CheckBox = itemView.findViewById(R.id.imageView_comment_like)
         private val itemCommentHeartCnt: TextView = itemView.findViewById(R.id.comment_heart_count)
         private val itemCommentMedal: ImageView = itemView.findViewById(R.id.comment_medal)
