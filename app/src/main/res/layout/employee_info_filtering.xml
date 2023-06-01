@@ -933,14 +933,25 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:text="검 색"
-        android:background="@drawable/login_round_button"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/login_round_button"
+            android:text="검 색"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
+
+
+    </LinearLayout>
+
+
 </LinearLayout>

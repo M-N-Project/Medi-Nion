@@ -82,6 +82,7 @@ class BoardWrite : AppCompatActivity() {
         var cancelbtn = findViewById<TextView>(R.id.cancel_Btn)
         var board_select = findViewById<TextView>(R.id.board_select)
 
+
         imgbtn.setOnClickListener { //imageButton_gallery 클릭시 갤러리로 이동
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*" //intent.setType("image/*)
@@ -116,7 +117,7 @@ class BoardWrite : AppCompatActivity() {
         }
 
         cancelbtn.setOnClickListener{
-
+            onBackPressed()
         }
     }
 
