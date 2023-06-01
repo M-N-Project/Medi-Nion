@@ -118,6 +118,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                         listener?.onItemClick(itemView, item, pos)
                     }
 
+                    //
                     itemCommentHeart.setOnClickListener {
                         listener?.onItemHeart(itemView, item, pos)
                     }
