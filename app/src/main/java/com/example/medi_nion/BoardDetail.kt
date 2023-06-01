@@ -303,7 +303,7 @@ class BoardDetail : AppCompatActivity() {
         Comment_Btn.setOnClickListener {
             //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
             if(comment_comment_flag == true){ //대댓글
-                //comment_comment_num = if(comment2_count.containsKey(comment_comment_posPresent+1)) comment2_count[comment_comment_posPresent+1]!! else 1
+                comment_comment_num = if(comment2_count.containsKey(comment_comment_posPresent+1)) comment2_count[comment_comment_posPresent+1]!! else 1
 //                Comment2Request(comment_comment_posPresent+1 , ++comment_comment_num)
                 Log.d("103123", (comment_comment_posPresent+1).toString())
                 Comment2Request(comment_comment_posPresent+1 , ++comment_comment_num)
@@ -1357,8 +1357,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                                             )
                                                                                                                                                                 .show()
 
-                                                                                                                                                            if(comment2_count[data.comment_num] == null) comment2_count[data.comment_num] = 0
-                                                                                                                                                            else comment2_count[data.comment_num] = comment2_count[data.comment_num]!! -1
+//                                                                                                                                                            if(comment2_count[data.comment_num] == null) comment2_count[data.comment_num] = 0
+//                                                                                                                                                            else comment2_count[data.comment_num] = comment2_count[data.comment_num]!! -1
 
                                                                                                                                                             findViewById<TextView>(R.id.textView_commentcount2).text = (findViewById<TextView>(R.id.textView_commentcount2).text.toString().toInt() - 1).toString()
                                                                                                                                                             Log.d("098213", commentFlagHash[comment_num].toString())
@@ -1556,6 +1556,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     comment_comment_posPresent =
                                                                                                                         data.comment_num-1
                                                                                                                     if (comment_comment_flag == true) {
+                                                                                                                        Log.d("01983123-**", comment_comment_flag.toString())
                                                                                                                         if (comment_comment_posPresent == comment_comment_posBefore) {
                                                                                                                             comment_comment_flag =
                                                                                                                                 false
@@ -1575,7 +1576,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                         } else {
                                                                                                                             Log.d("9013213-2",comment_comment_posPresent.toString())
                                                                                                                             CommentRecyclerView.get(
-                                                                                                                                pos
+                                                                                                                                comment_comment_posBefore
                                                                                                                             )
                                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                                     R.id.comment_linearLayout
@@ -1603,7 +1604,6 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                         //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
                                                                                                                         //자동 키보드 내리기
                                                                                                                     } else {
-
                                                                                                                         comment_comment_flag =
                                                                                                                             true
                                                                                                                         comment_comment_posBefore =
@@ -2692,6 +2692,8 @@ class BoardDetail : AppCompatActivity() {
         var board = intent?.getStringExtra("board").toString()
         var comment2 = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
+        Log.d(":::?2", comment_num.toString())
+        Log.d(":::?2--", comment2_num.toString())
 
         val current: LocalDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
