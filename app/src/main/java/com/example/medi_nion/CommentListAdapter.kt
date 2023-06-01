@@ -95,6 +95,7 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                     //댓글 삭제 이벤트
 //                    comment_delete.setOnClickListener{
                         listener?.onItemDelete(itemView, item, pos)
+
 //                    }
                 }
 
@@ -112,12 +113,12 @@ class CommentListAdapter(private var itemList : ArrayList<CommentItem>) : Recycl
                 if (pos != RecyclerView.NO_POSITION) {
                     itemView.setOnClickListener {
                         listener?.onItemClick(itemView, item, pos)
-                        Log.d("ItemClick1", "Event1")
                     }
                     itemComment.setOnClickListener {
                         listener?.onItemClick(itemView, item, pos)
                     }
 
+                    //
                     itemCommentHeart.setOnClickListener {
                         listener?.onItemHeart(itemView, item, pos)
                     }

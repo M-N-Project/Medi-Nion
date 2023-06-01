@@ -63,7 +63,7 @@ class DialogRecyclerAdapter(private val itemList : ArrayList<String>, private va
             if (selectCheck[absoluteAdapterPosition] == 0) {
                 layout.setBackgroundColor(Color.WHITE)
             } else {
-                layout.setBackgroundColor(Color.LTGRAY)
+                layout.setBackgroundColor(Color.parseColor("#70DDDDDD"))
             }
 
             radioItem.text = item

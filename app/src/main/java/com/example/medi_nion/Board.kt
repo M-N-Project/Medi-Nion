@@ -163,54 +163,55 @@ class Board : AppCompatActivity() {
                             }
                         }
 
-                    } else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
-                        //로딩
-                        if(all_items.size > 20){
-                            scrollFlag = true
-
-                            Log.d("attention", "let it be")
-                            var progressBar : ProgressBar = findViewById(R.id.progressBar2)
-                            progressBar.visibility = View.VISIBLE
-
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                progressBar.visibility = View.INVISIBLE
-                            }, 2500)
-
-
-                            if((all_items.size - item_count*scroll_count) > 20){
-                                for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
-                                    items.add(all_items[i])
-                                    itemIndex.add(all_items[i].num.toInt()) //앞에다가 추가.
-                                }
-
-                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                                var new_items = ArrayList<BoardItem>()
-                                new_items.addAll(items)
-                                adapter = BoardListAdapter(new_items)
-                                boardRecyclerView.adapter = adapter
-                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-
-                                scrollFlag = false
-                            }
-                            else{
-                                for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
-                                    items.add(all_items[i])
-                                    itemIndex.add(all_items[i].num.toInt()) //앞에다가 추가.
-
-                                }
-                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
-                                var new_items = ArrayList<BoardItem>()
-                                new_items.addAll(items)
-                                adapter = BoardListAdapter(new_items)
-                                boardRecyclerView.adapter = adapter
-                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
-                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
-                            }
-
-                            scroll_count ++
-                        }
                     }
+//                    else if (!boardRecyclerView.canScrollVertically(1)) { //맨 아래
+//                        //로딩
+//                        if(all_items.size > 20){
+//                            scrollFlag = true
+//
+//                            Log.d("attention", "let it be")
+//                            var progressBar : ProgressBar = findViewById(R.id.progressBar2)
+//                            progressBar.visibility = View.VISIBLE
+//
+//                            Handler(Looper.getMainLooper()).postDelayed({
+//                                progressBar.visibility = View.INVISIBLE
+//                            }, 2500)
+//
+//
+//                            if((all_items.size - item_count*scroll_count) > 20){
+//                                for (i in (item_count * scroll_count) + (item_count-1)  downTo   (item_count * scroll_count) + 0) {
+//                                    items.add(all_items[i])
+//                                    itemIndex.add(all_items[i].num.toInt()) //앞에다가 추가.
+//                                }
+//
+//                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+//                                var new_items = ArrayList<BoardItem>()
+//                                new_items.addAll(items)
+//                                adapter = BoardListAdapter(new_items)
+//                                boardRecyclerView.adapter = adapter
+//                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+//                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+//
+//                                scrollFlag = false
+//                            }
+//                            else{
+//                                for (i  in all_items.size-1  downTo   (item_count* scroll_count)) {
+//                                    items.add(all_items[i])
+//                                    itemIndex.add(all_items[i].num.toInt()) //앞에다가 추가.
+//
+//                                }
+//                                var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
+//                                var new_items = ArrayList<BoardItem>()
+//                                new_items.addAll(items)
+//                                adapter = BoardListAdapter(new_items)
+//                                boardRecyclerView.adapter = adapter
+//                                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+//                                boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
+//                            }
+//
+//                            scroll_count ++
+//                        }
+//                    }
                 }
             }
         })
@@ -262,7 +263,8 @@ class Board : AppCompatActivity() {
                 var recyclerViewState = boardRecyclerView.layoutManager?.onSaveInstanceState()
                 var new_items = ArrayList<BoardItem>()
                 new_items.addAll(items)
-                adapter = BoardListAdapter(new_items)
+//                adapter = BoardListAdapter(new_items)
+                adapter = BoardListAdapter(all_items)
                 boardRecyclerView.adapter = adapter
                 adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT
                 boardRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
