@@ -399,13 +399,13 @@ class BusinessManageActivity : AppCompatActivity() {
             Request.Method.POST,
             urlBoard,
             { response ->
-                val jsonArray = JSONArray(response)
+                val jsonArray1 = JSONArray(response)
 
-                if (jsonArray.length() == 0) noPostView.visibility = View.VISIBLE
+                if (jsonArray1.length() == 0) noPostView.visibility = View.VISIBLE
                 items.clear()
                 all_items.clear()
-                for (i in jsonArray.length() - 1 downTo 0) {
-                    val item = jsonArray.getJSONObject(i)
+                for (i in jsonArray1.length() - 1 downTo 0) {
+                    val item = jsonArray1.getJSONObject(i)
 
                     val num = item.getInt("num")
                     val id = item.getString("id")
@@ -448,10 +448,11 @@ class BusinessManageActivity : AppCompatActivity() {
                                         true
                                     )
 
+                                    Log.d("비즈니스1", title)
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
 
-                                    if(i==0){
+                                    if(items.size == jsonArray1.length()){
                                         var new_items = ArrayList<BusinessBoardItem>()
                                         new_items.addAll(items)
                                         adapter = BusinessManageRecyclerAdapter(new_items)
@@ -488,7 +489,7 @@ class BusinessManageActivity : AppCompatActivity() {
                                                 data: BusinessBoardItem,
                                                 pos: Int
                                             ) {
-                                                PostDeleteRequest(channel_name, num.toString())
+                                                PostDeleteRequest(data.channel_name, data.post_num.toString())
                                             }
 
                                         })

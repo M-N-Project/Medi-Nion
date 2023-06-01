@@ -250,11 +250,13 @@ class BusinessProfileActivity : AppCompatActivity() {
                                         false
                                     )
 
-                                    items.add(BusinessItem)
-                                    all_items.add(BusinessItem)
-                                    Log.d("비즈니스 리사이클러1" , items.toString())
-                                    Log.d("비즈니스 리사이클러2", BusinessItem.toString())
-                                    if(i==0) setAdapter()
+                                    Log.d("비즈니스1", title)
+
+                                    if(items.add(BusinessItem)){
+                                        if(items.size == jsonArray.length()) {
+                                            setAdapter()
+                                        }
+                                    }
                                 },
                                 {
                                     Log.d(
