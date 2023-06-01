@@ -52,16 +52,16 @@ class CommentDetailListAdapter(private var itemList : ArrayList<CommentDetailIte
 
             when (item.comment2_medal) {
                 "king" -> {
-                    itemCommentMedal.setImageResource(R.drawable.grade_diamond1)
+                    itemCommentMedal.setImageResource(R.drawable.grade_diamond2)
                 }
                 "gold" -> {
-                    itemCommentMedal.setImageResource(R.drawable.grade_gold1)
+                    itemCommentMedal.setImageResource(R.drawable.grade_gold2)
                 }
                 "silver" -> {
-                    itemCommentMedal.setImageResource(R.drawable.grade_silver1)
+                    itemCommentMedal.setImageResource(R.drawable.grade_silver2)
                 }
                 else -> {
-                    itemCommentMedal.setImageResource(R.drawable.grade_bronze1)
+                    itemCommentMedal.setImageResource(R.drawable.grade_bronze2)
                 }
             }
 

@@ -44,7 +44,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
     private var subListItems = ArrayList<BusinessHotListItem>()
     var subAdapter = BusinessSubListAdapter(hotListItems)
 
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var myFragment: Fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +62,15 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 //            swipeRefreshLayout.isRefreshing = false
 //        }
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.setColorSchemeResources(R.color.color5)
+            refreshFragment()
+            swipeRefreshLayout?.isRefreshing = false
+        }
+
+
         home_adapter = BusinessHomeRecyclerAdapter(appUser, items,info_items, detail_items)
 //        BusinessBoardRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardRecyclerView)
         BusinessBoardHomeRecyclerView = view.findViewById<RecyclerView>(R.id.BusinessBoardHomeRecyclerView)
@@ -75,6 +84,23 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
 
         return view
     }
+
+    private fun refreshFragment() {
+        swipeRefreshLayout?.let {
+            it.isRefreshing = true
+
+            // 프래그먼트를 재갱신하는 작업을 수행합니다.
+//            val fragmentTransaction = parentFragmentManager.beginTransaction()
+//            fragmentTransaction.detach(this)
+//            fragmentTransaction.attach(this)
+//            fragmentTransaction.commitAllowingStateLoss()
+            fetchHotProfile()
+            fetchData()
+
+            it.isRefreshing = false
+        }
+    }
+
 
     var num = 0 //비즈니스 채널 번호
     var writerId = ""
@@ -101,6 +127,7 @@ class BusinessMainFragment : Fragment() { //bussiness 체널 보여주는 프레
         fetchHotProfile()
 //        fetchSubProfile()
         fetchData()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

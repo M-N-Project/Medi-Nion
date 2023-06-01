@@ -65,10 +65,13 @@
         android:id="@+id/home_business_title"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="포스트 제목"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/home_business_box_title"
+        app:layout_constraintStart_toEndOf="@+id/layout_img_border"
         app:layout_constraintTop_toBottomOf="@+id/home_business_box_title" />
 
 <!--    <TextView-->

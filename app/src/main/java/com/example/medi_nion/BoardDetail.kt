@@ -367,16 +367,16 @@ class BoardDetail : AppCompatActivity() {
 
                 when (response) {
                     "king" -> {
-                        medalImage.setImageResource(R.drawable.grade_diamond1)
+                        medalImage.setImageResource(R.drawable.grade_diamond2)
                     }
                     "gold" -> {
-                        medalImage.setImageResource(R.drawable.grade_gold1)
+                        medalImage.setImageResource(R.drawable.grade_gold2)
                     }
                     "silver" -> {
-                        medalImage.setImageResource(R.drawable.grade_silver1)
+                        medalImage.setImageResource(R.drawable.grade_silver2)
                     }
                     else -> {
-                        medalImage.setImageResource(R.drawable.grade_bronze1)
+                        medalImage.setImageResource(R.drawable.grade_bronze2)
                     }
                 }
 
