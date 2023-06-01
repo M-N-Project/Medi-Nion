@@ -56,6 +56,7 @@
         android:text="종근당건강"
         android:layout_marginTop="8dp"
         android:textSize="10sp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/layout_img_border"
         app:layout_constraintStart_toStartOf="@+id/layout_img_border"
         app:layout_constraintTop_toBottomOf="@+id/layout_img_border" />
@@ -70,19 +71,37 @@
         app:layout_constraintStart_toEndOf="@+id/home_business_box_title"
         app:layout_constraintTop_toBottomOf="@+id/home_business_box_title" />
 
+<!--    <TextView-->
+<!--        android:id="@+id/home_business_detail"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:ellipsize="end"-->
+<!--        android:maxLines="3"-->
+<!--        android:text="종근당, ‘첨단 기술 기반 신성장 동력 발굴’ 다짐.. 2023년도 시무식 거행…디지털 경영 통해 지속가능한 성장기반 마련 이장한 회장은 신년사를 통해 올해 경영 목표를 ‘첨단 기술 기반의 신성장 동력 발굴’로 제시"-->
+<!--        android:textSize="12sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/layout_img_border"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/home_business_title" />-->
+
     <TextView
         android:id="@+id/home_business_detail"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="7dp"
         android:ellipsize="end"
         android:maxLines="3"
         android:text="종근당, ‘첨단 기술 기반 신성장 동력 발굴’ 다짐.. 2023년도 시무식 거행…디지털 경영 통해 지속가능한 성장기반 마련 이장한 회장은 신년사를 통해 올해 경영 목표를 ‘첨단 기술 기반의 신성장 동력 발굴’로 제시"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/home_business_title"
-        app:layout_constraintTop_toBottomOf="@+id/home_business_title" />
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/layout_img_border"
+        app:layout_constraintTop_toBottomOf="@+id/home_business_title"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintWidth_max="250dp" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

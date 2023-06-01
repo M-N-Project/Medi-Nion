@@ -245,7 +245,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="9dp"
                             android:layout_marginTop="15dp"
-                            android:text="·  내가 북마크 한 글"
+                            android:text="·  내가 북마크한 비즈니스 게시물"
                             android:textSize="13sp" />
 
 

@@ -35,7 +35,11 @@ import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.home.*
 import kotlinx.android.synthetic.main.home_busi_new.*
 import kotlinx.android.synthetic.main.home_qna.*
+import okhttp3.internal.notify
 import org.json.JSONArray
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class qnaNewItem(val num: String, val title: String, val content: String, val comment: Int) {
 }
@@ -143,7 +147,9 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
         }
         val deptBoard = view?.findViewById<View>(R.id.home_favorite_dept)
         if (deptBoard != null) {
-            fetchNewFavorite("진료과별 게시판", deptBoard)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                fetchNewFavorite("진료과별 게시판", deptBoard)
+            }
         }
         val marketBoard = view?.findViewById<View>(R.id.home_favorite_market)
         if (marketBoard != null) {
@@ -608,14 +614,15 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
 
     ///////////////////////// 즐겨찾는 게시판에 새 post 가져오는 fetch 함수 ///////////////////////////////////////////////
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchNewFavorite(board:String, boardView: View) {
         val urlFavorite = "http://seonho.dothome.co.kr/FavoriteNew_list.php"
 
         val userType = arguments?.getString("userType").toString()
         val userDept = arguments?.getString("userDept").toString()
 
+        boardView.findViewById<TextView>(R.id.board_title).text = board
         if(board.equals("학회 및 세미나 게시판") or board.equals("채용정보 게시판") or board.equals("의료뉴스 게시판")) {
-            boardView.findViewById<TextView>(R.id.board_title).text = board
             boardView.findViewById<TextView>(R.id.post_title).text = ""
         }
         else {
@@ -627,11 +634,13 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     for (i in jsonArray.length() - 1 downTo 0) {
                         val item = jsonArray.getJSONObject(i)
                         val title = item.getString("title")
+                        val board_time = item.getString("time")
 
-                        boardView.findViewById<TextView>(R.id.board_title).text = board
+                        val isNew = timeDiff(board_time, board)
+                        if(isNew){
+                            boardView.findViewById<ImageView>(R.id.new_icon).visibility = View.VISIBLE
+                        }
                         boardView.findViewById<TextView>(R.id.post_title).text = title
-                        Log.d("즐겨찾는 게시판1", response)
-                        Log.d("즐겨찾는 게시판", "$board ${boardView.toString()} $title")
                     }
                 }, { Log.d("login failed", "error......${activity?.applicationContext}") },
                 hashMapOf(
@@ -644,6 +653,44 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
             val queue = Volley.newRequestQueue(activity?.applicationContext)
             queue.add(request)
         }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun Millis(postTime : String) : Long {
+        // YY-MM-DD HH:MM:SS
+
+        //val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd, hh:mm:ss")
+        //val date = LocalDateTime.parse(dateString, formatter)
+
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date1: Date = simpleDateFormat.parse(postTime)
+        Log.d("시간", "Millis1 - $date1")
+        Log.d("시간", "Millis2 - ${date1.time}")
+        return date1.time
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun timeDiff(postTime : String, board : String): Boolean {
+        Log.d("시간", "timeDiff1 - $board")
+        var SEC = 60
+        var MIN = 60
+        var HOUR = 24
+        var DAY = 30
+        var MONTH = 12
+
+        val curTime = System.currentTimeMillis()
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("ko", "KR"))
+        val cur: String = simpleDateFormat.format(Date(curTime))
+
+        val newPostTime = Millis(postTime)
+        var diffTime = (curTime - newPostTime)/1000
+        var msg: String = ""
+        Log.d("시간", "timeDiff2 - $newPostTime")
+        Log.d("시간","timeDiff3 - $diffTime")
+
+        if (((diffTime / SEC) / MIN) < HOUR) {
+            Log.d("시간", "timeDiff4 - ${(diffTime / SEC) / MIN}")
+            return true
+        }
+        return false
     }
     ///////////////////////// viewPager에 넣을 QnA 게시판 최신글 가져오는 fetch 함수 //////////////////////////////////////
 
@@ -1068,6 +1115,7 @@ class HomeFragment : Fragment(R.layout.home) { //피드 보여주는 홈화면 �
                     homeBusiNew.adapter = adapter2
                     // ViewPager의 Paging 방향은 Horizontal
                     homeBusiNew.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                    adapter2.notifyDataSetChanged()
 
                     var detailId: String = ""
                     var detailTitle: String = ""

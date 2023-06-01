@@ -15,14 +15,17 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="15dp"
             android:text="내가 북마크 한 비즈니스 게시물 목록" />
 
         <View
             android:id="@+id/view5"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="0dp"

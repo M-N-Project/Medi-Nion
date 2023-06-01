@@ -68,6 +68,9 @@ class BoardDetail : AppCompatActivity() {
     var comment_comment_posBefore = -1 //대댓글 인덱스
     var commentFlagHash =  HashMap<Int, Boolean>()
 
+    var posBefore = -1
+    var posPresent = -1
+
     var lastSelected = ""
     var commentHeartFlag = "false"
     var comment2HeartFlag = "false"
@@ -222,7 +225,7 @@ class BoardDetail : AppCompatActivity() {
 
 
         title_textView.setText(title) // 제목
-        content_textView.setText(content) // 내용
+        content_textView.setText(content) //내용
         time_textView.setText(time) //시간
 
         //이미지 fetch
@@ -317,6 +320,7 @@ class BoardDetail : AppCompatActivity() {
                 Log.d("CONNENE", findViewById<TextView>(R.id.textView_commentcount2).text.toString())
             }
             else{ //댓글
+                Log.d("8173123", comment_num.toString())
                 CommentRequest(++comment_num)
                 ///헤헤헤
                 val manager: InputMethodManager =
@@ -579,7 +583,6 @@ class BoardDetail : AppCompatActivity() {
 //                                                        var comment2HeartArray = comment2HeartMap[item1]
                                                             if(!comment2HeartMap.containsKey(item1)) comment2HeartMap[item1] = ArrayList<Int>()
                                                             comment2HeartMap[item1]!!.add(item2)
-
                                                         }
                                                     }
 
@@ -613,21 +616,21 @@ class BoardDetail : AppCompatActivity() {
                                                                     val commentmedalidurl =
                                                                         "http://seonho.dothome.co.kr/Medal_Comment.php"
 
-                                                                    val request1 = SignUP_Request(
-                                                                        Request.Method.POST,
-                                                                        commentmedalidurl,
-                                                                        { response ->
-                                                                            Log.d("**!댓글 메달", response)
-//                                                                        comment_items.clear()
-                                                                            val jsonArray =
-                                                                                JSONArray(response)
-                                                                            for (i in 0 until jsonArray.length()) {
-                                                                                val item =
-                                                                                    jsonArray.getJSONObject(
-                                                                                        i
-                                                                                    )
-                                                                                val id_comment =
-                                                                                    item.getString("id")
+//                                                                    val request1 = SignUP_Request(
+//                                                                        Request.Method.POST,
+//                                                                        commentmedalidurl,
+//                                                                        { response ->
+//                                                                            Log.d("**!댓글 메달", response)
+////                                                                        comment_items.clear()
+//                                                                            val jsonArray =
+//                                                                                JSONArray(response)
+//                                                                            for (i in 0 until jsonArray.length()) {
+//                                                                                val item =
+//                                                                                    jsonArray.getJSONObject(
+//                                                                                        i
+//                                                                                    )
+//                                                                                val id_comment =
+//                                                                                    item.getString("id")
 
                                                                                 val request = Login_Request(
                                                                                     Request.Method.POST,
@@ -692,6 +695,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     //댓글 눌렀을때. -> 대댓글
 //                                                                                                    comment_comment_posPresent =
 //                                                                                                        pos
+                                                                                                    posPresent = pos
 
                                                                                                     comment_comment_posPresent =
                                                                                                         data.comment_num-1
@@ -711,9 +715,9 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     )
                                                                                                                 )
                                                                                                         } else {
-
+                                                                                                            Log.d("al;sdfs", comment_comment_posBefore.toString())
                                                                                                             CommentRecyclerView.get(
-                                                                                                                comment_comment_posBefore
+                                                                                                                posBefore
                                                                                                             )
                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                     R.id.comment_linearLayout
@@ -736,6 +740,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 )
 //                                                                                                            comment_comment_posBefore =
 //                                                                                                                pos
+                                                                                                            posBefore = pos
                                                                                                             comment_comment_posBefore =
                                                                                                                 data.comment_num-1
                                                                                                         }
@@ -745,11 +750,13 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     } else {
                                                                                                         comment_comment_flag =
                                                                                                             true
+                                                                                                        posBefore = pos
+                                                                                                        posPresent = pos
                                                                                                         comment_comment_posBefore =
                                                                                                             data.comment_num-1
                                                                                                         comment_comment_posPresent =
                                                                                                             data.comment_num-1
-
+                                                                                                        Log.d("al;sdfs", "$comment_comment_posBefore // $comment_comment_posPresent // $pos")
                                                                                                         CommentRecyclerView.get(
                                                                                                             pos
                                                                                                         )
@@ -768,7 +775,7 @@ class BoardDetail : AppCompatActivity() {
 
                                                                                                 //댓글 좋아요 눌렀을때.
 
-                                                                                                override fun onItemHeart(
+                                                                                              override fun onItemHeart(
                                                                                                     v: View,
                                                                                                     data: CommentItem,
                                                                                                     pos: Int
@@ -1008,6 +1015,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                     Request.Method.POST,
                                                                                                                                     urlDelete2,
                                                                                                                                     { responseDelete2 ->
+                                                                                                                                        Log.d("8931231", responseDelete2)
                                                                                                                                         if (responseDelete2 != "comment delete2 fail") {
                                                                                                                                             // 댓글 테이블에서 찾아서 삭제
                                                                                                                                             val urlDelete =
@@ -1208,40 +1216,40 @@ class BoardDetail : AppCompatActivity() {
                                                                                             })
                                                                                     }, { Log.d("like Failed", "error......${error(applicationContext)}") },
                                                                                     hashMapOf(
-                                                                                        "id" to id_comment
+                                                                                        "id" to writerId
                                                                                     )
                                                                                 )
                                                                                 val queue = Volley.newRequestQueue(this)
                                                                                 queue.add(request)
 
-                                                                            }
-
-                                                                        },
-                                                                        {
-                                                                            Log.d(
-                                                                                "failed",
-                                                                                "error......${
-                                                                                    error(
-                                                                                        applicationContext
-                                                                                    )
-                                                                                }"
-                                                                            )
-                                                                        },
-                                                                        hashMapOf(
-                                                                            "board" to board,
-                                                                            "post_num" to post_num,
-                                                                            "comment_num" to comment_num.toString()
-                                                                        )
-                                                                    )
-                                                                    request1.retryPolicy =
-                                                                        DefaultRetryPolicy(
-                                                                            0,
-                                                                            -1,
-                                                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                                                                        )
-                                                                    val queue1 =
-                                                                        Volley.newRequestQueue(this)
-                                                                    queue1.add(request1)
+//                                                                            }
+//
+//                                                                        },
+//                                                                        {
+//                                                                            Log.d(
+//                                                                                "failed",
+//                                                                                "error......${
+//                                                                                    error(
+//                                                                                        applicationContext
+//                                                                                    )
+//                                                                                }"
+//                                                                            )
+//                                                                        },
+//                                                                        hashMapOf(
+//                                                                            "board" to board,
+//                                                                            "post_num" to post_num,
+//                                                                            "comment_num" to comment_num.toString()
+//                                                                        )
+//                                                                    )
+//                                                                    request1.retryPolicy =
+//                                                                        DefaultRetryPolicy(
+//                                                                            0,
+//                                                                            -1,
+//                                                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//                                                                        )
+//                                                                    val queue1 =
+//                                                                        Volley.newRequestQueue(this)
+//                                                                    queue1.add(request1)
                                                                 }
                                                                 //바로 여기야 여기!!
                                                                 //대댓글 있으면 -> 대댓글이 다 더해진 후에 CommentItem add 하게끔 만들기
@@ -1745,90 +1753,96 @@ class BoardDetail : AppCompatActivity() {
                                                                                                 commentFlagHash[comment_num] = true
 
 
-                                                                                                //댓글 클릭 리스너 ++++++++++++++++++++++++++++++++++++++++++++++++
-                                                                                                Commentadapter.setOnItemClickListener(
-                                                                                                    object :
-                                                                                                        CommentListAdapter.OnItemClickListener {
-                                                                                                        override fun onItemClick(
-                                                                                                            v: View,
-                                                                                                            data: CommentItem,
-                                                                                                            pos: Int
-                                                                                                        ) {
-                                                                                                            Log.d("01983123", "대댓글 있을때 댓글 click")
-                                                                                                            //댓글 눌렀을때. -> 대댓글
-                                                                                                            comment_comment_posPresent =
-                                                                                                                data.comment_num-1
-                                                                                                            if (comment_comment_flag == true) {
-                                                                                                                Log.d("01983123-**", comment_comment_flag.toString())
-                                                                                                                if (comment_comment_posPresent == comment_comment_posBefore) {
-                                                                                                                    comment_comment_flag =
-                                                                                                                        false
+                                                                                                        //댓글 클릭 리스너 ++++++++++++++++++++++++++++++++++++++++++++++++
+                                                                                                        Commentadapter.setOnItemClickListener(
+                                                                                                            object :
+                                                                                                                CommentListAdapter.OnItemClickListener {
+                                                                                                                override fun onItemClick(
+                                                                                                                    v: View,
+                                                                                                                    data: CommentItem,
+                                                                                                                    pos: Int
+                                                                                                                ) {
+                                                                                                                    Log.d("01983123", "대댓글 있을때 댓글 click")
+                                                                                                                    //댓글 눌렀을때. -> 대댓글
+//                                                                                                    comment_comment_posPresent =
+//                                                                                                        pos
+                                                                                                                    posPresent = pos
 
-                                                                                                                    Log.d("9013213-1",comment_comment_posPresent.toString())
-                                                                                                                    CommentRecyclerView.get(
-                                                                                                                        pos
-                                                                                                                    )
-                                                                                                                        .findViewById<LinearLayout>(
-                                                                                                                            R.id.comment_linearLayout
-                                                                                                                        )
-                                                                                                                        .setBackgroundColor(
-                                                                                                                            Color.parseColor(
-                                                                                                                                "#ffffff"
-                                                                                                                            )
-                                                                                                                        )
-                                                                                                                } else {
-                                                                                                                    Log.d("9013213-2",comment_comment_posPresent.toString())
-                                                                                                                    CommentRecyclerView.get(
-                                                                                                                        comment_comment_posBefore
-                                                                                                                    )
-                                                                                                                        .findViewById<LinearLayout>(
-                                                                                                                            R.id.comment_linearLayout
-                                                                                                                        )
-                                                                                                                        .setBackgroundColor(
-                                                                                                                            Color.parseColor(
-                                                                                                                                "#ffffff"
-                                                                                                                            )
-                                                                                                                        )
-                                                                                                                    CommentRecyclerView.get(
-                                                                                                                        pos
-                                                                                                                    )
-                                                                                                                        .findViewById<LinearLayout>(
-                                                                                                                            R.id.comment_linearLayout
-                                                                                                                        )
-                                                                                                                        .setBackgroundColor(
-                                                                                                                            Color.parseColor(
-                                                                                                                                "#308BE0C4"
-                                                                                                                            )
-                                                                                                                        )
-                                                                                                                    comment_comment_posBefore =
+                                                                                                                    comment_comment_posPresent =
                                                                                                                         data.comment_num-1
-                                                                                                                }
+                                                                                                                    if (comment_comment_flag == true) {
+                                                                                                                        if (comment_comment_posPresent == comment_comment_posBefore) {
+                                                                                                                            comment_comment_flag =
+                                                                                                                                false
+                                                                                                                            CommentRecyclerView.get(
+                                                                                                                                pos
+                                                                                                                            )
+                                                                                                                                .findViewById<LinearLayout>(
+                                                                                                                                    R.id.comment_linearLayout
+                                                                                                                                )
+                                                                                                                                .setBackgroundColor(
+                                                                                                                                    Color.parseColor(
+                                                                                                                                        "#ffffff"
+                                                                                                                                    )
+                                                                                                                                )
+                                                                                                                        } else {
+                                                                                                                            Log.d("al;sdfs", comment_comment_posBefore.toString())
+                                                                                                                            CommentRecyclerView.get(
+                                                                                                                                posBefore
+                                                                                                                            )
+                                                                                                                                .findViewById<LinearLayout>(
+                                                                                                                                    R.id.comment_linearLayout
+                                                                                                                                )
+                                                                                                                                .setBackgroundColor(
+                                                                                                                                    Color.parseColor(
+                                                                                                                                        "#ffffff"
+                                                                                                                                    )
+                                                                                                                                )
+                                                                                                                            CommentRecyclerView.get(
+                                                                                                                                pos
+                                                                                                                            )
+                                                                                                                                .findViewById<LinearLayout>(
+                                                                                                                                    R.id.comment_linearLayout
+                                                                                                                                )
+                                                                                                                                .setBackgroundColor(
+                                                                                                                                    Color.parseColor(
+                                                                                                                                        "#308BE0C4"
+                                                                                                                                    )
+                                                                                                                                )
+//                                                                                                            comment_comment_posBefore =
+//                                                                                                                pos
+                                                                                                                            posBefore = pos
+                                                                                                                            comment_comment_posBefore =
+                                                                                                                                data.comment_num-1
+                                                                                                                        }
 
-                                                                                                                //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
-                                                                                                                //자동 키보드 내리기
-                                                                                                            } else {
-                                                                                                                comment_comment_flag =
-                                                                                                                    true
-                                                                                                                comment_comment_posBefore =
-                                                                                                                    data.comment_num-1
-                                                                                                                comment_comment_posPresent =
-                                                                                                                    data.comment_num-1
-                                                                                                                Log.d("9013213-3",comment_comment_posPresent.toString())
-                                                                                                                CommentRecyclerView.get(
-                                                                                                                    pos
-                                                                                                                )
-                                                                                                                    .findViewById<LinearLayout>(
-                                                                                                                        R.id.comment_linearLayout
-                                                                                                                    )
-                                                                                                                    .setBackgroundColor(
-                                                                                                                        Color.parseColor(
-                                                                                                                            "#308BE0C4"
+                                                                                                                        //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#ffffff"))
+                                                                                                                        //자동 키보드 내리기
+                                                                                                                    } else {
+                                                                                                                        comment_comment_flag =
+                                                                                                                            true
+                                                                                                                        posBefore = pos
+                                                                                                                        posPresent = pos
+                                                                                                                        comment_comment_posBefore =
+                                                                                                                            data.comment_num-1
+                                                                                                                        comment_comment_posPresent =
+                                                                                                                            data.comment_num-1
+                                                                                                                        Log.d("al;sdfs", "$comment_comment_posBefore // $comment_comment_posPresent // $pos")
+                                                                                                                        CommentRecyclerView.get(
+                                                                                                                            pos
                                                                                                                         )
-                                                                                                                    )
-                                                                                                                //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
-                                                                                                                //자동 키보드 올리기
-                                                                                                            }
-                                                                                                        }
+                                                                                                                            .findViewById<LinearLayout>(
+                                                                                                                                R.id.comment_linearLayout
+                                                                                                                            )
+                                                                                                                            .setBackgroundColor(
+                                                                                                                                Color.parseColor(
+                                                                                                                                    "#308BE0C4"
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                        //                                    findViewById<LinearLayout>(R.id.comment_linearLayout).setBackgroundColor(Color.parseColor("#5085D6A4"))
+                                                                                                                        //자동 키보드 올리기
+                                                                                                                    }
+                                                                                                                }
 
                                                                                                         //댓글 좋아요 눌렀을때.
                                                                                                         override fun onItemHeart(
