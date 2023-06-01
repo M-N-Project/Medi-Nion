@@ -448,13 +448,14 @@ class BusinessManageActivity : AppCompatActivity() {
                                         true
                                     )
 
-                                    Log.d("비즈니스1", title)
                                     items.add(BusinessItem)
                                     all_items.add(BusinessItem)
 
                                     if(items.size == jsonArray1.length()){
                                         var new_items = ArrayList<BusinessBoardItem>()
                                         new_items.addAll(items)
+                                        new_items.sortBy { it.time }
+                                        new_items.reverse()
                                         adapter = BusinessManageRecyclerAdapter(new_items)
                                         BusinessBoardRecyclerView.adapter = adapter
 

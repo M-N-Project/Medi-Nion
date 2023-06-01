@@ -305,6 +305,8 @@ class BusinessProfileActivity : AppCompatActivity() {
         // 여기에서 adapter 설정
         var new_items = ArrayList<BusinessBoardItem>()
         new_items.addAll(items)
+        new_items.sortBy { it.time }
+        new_items.reverse()
         Log.d("비즈니스 리사이클러3", new_items.toString())
         adapter = BusinessProfileRecyclerAdapter(new_items)
         BusinessBoardRecyclerView.adapter = adapter
