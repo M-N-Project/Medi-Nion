@@ -375,7 +375,7 @@ class SignUP : AppCompatActivity() {
                 TextUtils.isEmpty(passwd_editText.text.toString()) ||
                 TextUtils.isEmpty(passwdCheck_editText.text.toString()) ||
                 TextUtils.isEmpty(passwdCheck_editText.text.toString())||
-                TextUtils.isEmpty(identity.text.toString())||
+//                TextUtils.isEmpty(identity.text.toString())||
                 (!basicUserBtn.isChecked && !corpUserBtn.isChecked)
             ) {
 
@@ -429,7 +429,7 @@ class SignUP : AppCompatActivity() {
                 idImgView.colorFilter = filter
                 idImgView.setImageURI(photoUri)
 
-                doOCR()
+//                doOCR()
 
             }
         }
@@ -514,230 +514,230 @@ class SignUP : AppCompatActivity() {
         bottomSheetDialog.show()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun doOCR() {
-        try {
-            bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val source = ImageDecoder.createSource(
-                    contentResolver,
-                    photoUri!!
-                )
-
-                ImageDecoder.decodeBitmap(
-                    source
-                ) { decoder: ImageDecoder, _: ImageInfo?, _: ImageDecoder.Source? ->
-                    decoder.isMutableRequired = true
-                }
-            } else {
-                MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        val mat = Mat()
-        Utils.bitmapToMat(bitmap, mat)
-
-        //흑백 영상으로 전환
-        val graySrc = Mat()
-        Imgproc.cvtColor(mat, graySrc, Imgproc.COLOR_RGB2GRAY)
-
-        //2.이진화
-        val binarySrc = Mat()
-        Imgproc.threshold(graySrc, binarySrc, 0.0, 255.0, Imgproc.THRESH_OTSU)
-        Log.d("binary", binarySrc.toString())
-
-        //3. 윤곽선 검출
-        // 윤곽선 찾기
-        val contours = ArrayList<MatOfPoint>()
-        val hierarchy = Mat()
-        Imgproc.findContours(
-            binarySrc,
-            contours,
-            hierarchy,
-            Imgproc.RETR_EXTERNAL,
-            Imgproc.CHAIN_APPROX_NONE
-        )
-
-        //3-1 가장 면적이 큰 윤곽선 검충 (검출하고자 하는 문서가 가장 큰 피사체)
-        // 가장 면적이 큰 윤곽선 찾기
-        var biggestContour: MatOfPoint? = null
-        var biggestContourArea: Double = 0.0
-        for (contour in contours) {
-            val area = Imgproc.contourArea(contour)
-            if (area > biggestContourArea) {
-                biggestContour = contour
-                biggestContourArea = area
-            }
-        }
-
-        if (biggestContour == null) {
-            throw IllegalArgumentException("No Contour")
-        }
-        // 너무 작아도 안됨
-        if (biggestContourArea < 400) {
-            throw IllegalArgumentException("too small")
-        }
-
-        //3-2 근사화하기 (도형의 꼭짓점을 더 명확하게 찾기)
-        val candidate2f = MatOfPoint2f(*biggestContour.toArray())
-        val approxCandidate = MatOfPoint2f()
-        Imgproc.approxPolyDP(
-            candidate2f,
-            approxCandidate,
-            Imgproc.arcLength(candidate2f, true) * 0.02,
-            true
-        )
-
-        //3-3 사각형인지 판별 -> 신분증은 사각형이므로..
-        // 사각형 판별
-//        if (approxCandidate.rows() != 4) {
-//            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
-//            openCamera()
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun doOCR() {
+//        try {
+//            bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                val source = ImageDecoder.createSource(
+//                    contentResolver,
+//                    photoUri!!
+//                )
+//
+//                ImageDecoder.decodeBitmap(
+//                    source
+//                ) { decoder: ImageDecoder, _: ImageInfo?, _: ImageDecoder.Source? ->
+//                    decoder.isMutableRequired = true
+//                }
+//            } else {
+//                MediaStore.Images.Media.getBitmap(contentResolver, photoUri)
+//            }
+//        } catch (e: IOException) {
+//            e.printStackTrace()
 //        }
-//        // 컨벡스(볼록한 도형)인지 판별
-//        if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
-//            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
-//            openCamera()
+//
+//        val mat = Mat()
+//        Utils.bitmapToMat(bitmap, mat)
+//
+//        //흑백 영상으로 전환
+//        val graySrc = Mat()
+//        Imgproc.cvtColor(mat, graySrc, Imgproc.COLOR_RGB2GRAY)
+//
+//        //2.이진화
+//        val binarySrc = Mat()
+//        Imgproc.threshold(graySrc, binarySrc, 0.0, 255.0, Imgproc.THRESH_OTSU)
+//        Log.d("binary", binarySrc.toString())
+//
+//        //3. 윤곽선 검출
+//        // 윤곽선 찾기
+//        val contours = ArrayList<MatOfPoint>()
+//        val hierarchy = Mat()
+//        Imgproc.findContours(
+//            binarySrc,
+//            contours,
+//            hierarchy,
+//            Imgproc.RETR_EXTERNAL,
+//            Imgproc.CHAIN_APPROX_NONE
+//        )
+//
+//        //3-1 가장 면적이 큰 윤곽선 검충 (검출하고자 하는 문서가 가장 큰 피사체)
+//        // 가장 면적이 큰 윤곽선 찾기
+//        var biggestContour: MatOfPoint? = null
+//        var biggestContourArea: Double = 0.0
+//        for (contour in contours) {
+//            val area = Imgproc.contourArea(contour)
+//            if (area > biggestContourArea) {
+//                biggestContour = contour
+//                biggestContourArea = area
+//            }
 //        }
-
-        //4. 투시변환
-        // 좌상단부터 시계 반대 방향으로 정점을 정렬한다.
-        val points = arrayListOf(
-            org.opencv.core.Point(approxCandidate.get(0, 0)[0],
-                approxCandidate.get(0, 0)[1]
-            ),
-            org.opencv.core.Point(approxCandidate.get(1, 0)[0],
-                approxCandidate.get(1, 0)[1]
-            ),
-            org.opencv.core.Point(approxCandidate.get(2, 0)[0],
-                approxCandidate.get(2, 0)[1]
-            ),
-            org.opencv.core.Point(approxCandidate.get(3, 0)[0],
-                approxCandidate.get(3, 0)[1]
-            ),
-        )
-        points.sortBy { it.x } // x좌표 기준으로 먼저 정렬
-
-        if (points[0].y > points[1].y) {
-            val temp = points[0]
-            points[0] = points[1]
-            points[1] = temp
-        }
-
-        if (points[2].y < points[3].y) {
-            val temp = points[2]
-            points[2] = points[3]
-            points[3] = temp
-        }
-        // 원본 영상 내 정점들
-        val srcQuad = MatOfPoint2f().apply { fromList(points) }
-
-        val maxSize = calculateMaxWidthHeight(
-            tl = points[0],
-            bl = points[1],
-            br = points[2],
-            tr = points[3]
-        )
-        val dw = maxSize.width
-        val dh = dw * maxSize.height/maxSize.width
-        val dstQuad = MatOfPoint2f(
-            org.opencv.core.Point(0.0, 0.0),
-            org.opencv.core.Point(0.0, dh),
-            org.opencv.core.Point(dw, dh),
-            org.opencv.core.Point(dw, 0.0)
-        )
-
-        // 투시변환 매트릭스 구하기
-        val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
-
-        // 투시변환 된 결과 영상 얻기
-        val dst = Mat()
-        Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
-
-        Toast.makeText(applicationContext, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
-        printOCRResult(dst)
-    }
-
-    // 사각형 꼭짓점 정보로 사각형 최대 사이즈 구하기
-// 평면상 두 점 사이의 거리는 직각삼각형의 빗변길이 구하기와 동일
-    private fun calculateMaxWidthHeight(
-        tl:org.opencv.core.Point,
-        tr:org.opencv.core.Point,
-        br:org.opencv.core.Point,
-        bl:org.opencv.core.Point,
-    ): Size {
-        // Calculate width
-        val widthA = sqrt(((tl.x - tr.x) * (tl.x - tr.x) + (tl.y - tr.y) * (tl.y - tr.y)))
-        val widthB = sqrt(((bl.x - br.x) * (bl.x - br.x) + (bl.y - br.y) * (bl.y - br.y)))
-        val maxWidth = max(widthA, widthB)
-        // Calculate height
-        val heightA = sqrt(((tl.x - bl.x) * (tl.x - bl.x) + (tl.y - bl.y) * (tl.y - bl.y)))
-        val heightB = sqrt(((tr.x - br.x) * (tr.x - br.x) + (tr.y - br.y) * (tr.y - br.y)))
-        val maxHeight = max(heightA, heightB)
-        return Size(maxWidth, maxHeight)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun printOCRResult(src: Mat) {
-        with(TessBaseAPI()) {
-            val result = findViewById<TextView>(R.id.text_result)
-            dataPath = "$filesDir/tesseracts/"
-            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
-            checkFile(File(dataPath + "tessdata/"), "eng")
-            init(dataPath, "kor+eng")
-
-            // Improve image quality by adjusting brightness and contrast
-            val contrast = 1.5
-            val brightness = 20.0
-            Core.addWeighted(src, contrast, Mat.zeros(src.size(), src.type()), 0.0, brightness, src)
-
-            // Apply image preprocessing techniques
-            Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2GRAY)
-            Imgproc.GaussianBlur(src, src, Size(5.0, 5.0), 0.0)
-            Imgproc.threshold(src, src, 0.0, 255.0, Imgproc.THRESH_BINARY_INV + Imgproc.THRESH_OTSU)
-            Imgproc.medianBlur(src, src, 3)
-
-            // Set page segmentation mode to treat the image as a single block of text
-            pageSegMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
-
-            // Set OCR engine mode to use LSTM-based OCR engine for better accuracy
-            //val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
-            val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
-            pageSegMode = ocrEngineMode
-            val tessdataDir = File("$filesDir/tessdata/")
-            val engTrainedData = File(tessdataDir, "eng.trained")
-            val korTrainedData = File(tessdataDir, "kor.trained")
-            if (engTrainedData.exists() && korTrainedData.exists()) {
-                val lang = "kor+eng"
-                setVariable(
-                    TessBaseAPI.VAR_CHAR_WHITELIST,
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-                )
-                init(filesDir.absolutePath + "/tessdata/", lang)
-            } else {
-                Log.e("printOCRResult", "Trained data files are missing")
-            }
-
-            setImage(bitmap)
-            bitmap = resize(bitmap)!!
-            image = BitMapToString(bitmap)
-
-            result.text = utF8Text
-
+//
+//        if (biggestContour == null) {
+//            throw IllegalArgumentException("No Contour")
+//        }
+//        // 너무 작아도 안됨
+//        if (biggestContourArea < 400) {
+//            throw IllegalArgumentException("too small")
+//        }
+//
+//        //3-2 근사화하기 (도형의 꼭짓점을 더 명확하게 찾기)
+//        val candidate2f = MatOfPoint2f(*biggestContour.toArray())
+//        val approxCandidate = MatOfPoint2f()
+//        Imgproc.approxPolyDP(
+//            candidate2f,
+//            approxCandidate,
+//            Imgproc.arcLength(candidate2f, true) * 0.02,
+//            true
+//        )
+//
+//        //3-3 사각형인지 판별 -> 신분증은 사각형이므로..
+//        // 사각형 판별
+////        if (approxCandidate.rows() != 4) {
+////            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
+////            openCamera()
+////        }
+////        // 컨벡스(볼록한 도형)인지 판별
+////        if (!Imgproc.isContourConvex(MatOfPoint(*approxCandidate.toArray()))) {
+////            Toast.makeText(applicationContext, "신분증 인식이 명확하지 않습니다\n다시 시도해주세요", Toast.LENGTH_SHORT).show()
+////            openCamera()
+////        }
+//
+//        //4. 투시변환
+//        // 좌상단부터 시계 반대 방향으로 정점을 정렬한다.
+//        val points = arrayListOf(
+//            org.opencv.core.Point(approxCandidate.get(0, 0)[0],
+//                approxCandidate.get(0, 0)[1]
+//            ),
+//            org.opencv.core.Point(approxCandidate.get(1, 0)[0],
+//                approxCandidate.get(1, 0)[1]
+//            ),
+//            org.opencv.core.Point(approxCandidate.get(2, 0)[0],
+//                approxCandidate.get(2, 0)[1]
+//            ),
+//            org.opencv.core.Point(approxCandidate.get(3, 0)[0],
+//                approxCandidate.get(3, 0)[1]
+//            ),
+//        )
+//        points.sortBy { it.x } // x좌표 기준으로 먼저 정렬
+//
+//        if (points[0].y > points[1].y) {
+//            val temp = points[0]
+//            points[0] = points[1]
+//            points[1] = temp
+//        }
+//
+//        if (points[2].y < points[3].y) {
+//            val temp = points[2]
+//            points[2] = points[3]
+//            points[3] = temp
+//        }
+//        // 원본 영상 내 정점들
+//        val srcQuad = MatOfPoint2f().apply { fromList(points) }
+//
+//        val maxSize = calculateMaxWidthHeight(
+//            tl = points[0],
+//            bl = points[1],
+//            br = points[2],
+//            tr = points[3]
+//        )
+//        val dw = maxSize.width
+//        val dh = dw * maxSize.height/maxSize.width
+//        val dstQuad = MatOfPoint2f(
+//            org.opencv.core.Point(0.0, 0.0),
+//            org.opencv.core.Point(0.0, dh),
+//            org.opencv.core.Point(dw, dh),
+//            org.opencv.core.Point(dw, 0.0)
+//        )
+//
+//        // 투시변환 매트릭스 구하기
+//        val perspectiveTransform = Imgproc.getPerspectiveTransform(srcQuad, dstQuad)
+//
+//        // 투시변환 된 결과 영상 얻기
+//        val dst = Mat()
+//        Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
+//
+//        Toast.makeText(applicationContext, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+//        printOCRResult(dst)
+//    }
+//
+//    // 사각형 꼭짓점 정보로 사각형 최대 사이즈 구하기
+//// 평면상 두 점 사이의 거리는 직각삼각형의 빗변길이 구하기와 동일
+//    private fun calculateMaxWidthHeight(
+//        tl:org.opencv.core.Point,
+//        tr:org.opencv.core.Point,
+//        br:org.opencv.core.Point,
+//        bl:org.opencv.core.Point,
+//    ): Size {
+//        // Calculate width
+//        val widthA = sqrt(((tl.x - tr.x) * (tl.x - tr.x) + (tl.y - tr.y) * (tl.y - tr.y)))
+//        val widthB = sqrt(((bl.x - br.x) * (bl.x - br.x) + (bl.y - br.y) * (bl.y - br.y)))
+//        val maxWidth = max(widthA, widthB)
+//        // Calculate height
+//        val heightA = sqrt(((tl.x - bl.x) * (tl.x - bl.x) + (tl.y - bl.y) * (tl.y - bl.y)))
+//        val heightB = sqrt(((tr.x - br.x) * (tr.x - br.x) + (tr.y - br.y) * (tr.y - br.y)))
+//        val maxHeight = max(heightA, heightB)
+//        return Size(maxWidth, maxHeight)
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun printOCRResult(src: Mat) {
+//        with(TessBaseAPI()) {
+//            val result = findViewById<TextView>(R.id.text_result)
+//            dataPath = "$filesDir/tesseracts/"
+//            checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
+//            checkFile(File(dataPath + "tessdata/"), "eng")
+//            init(dataPath, "kor+eng")
+//
+//            // Improve image quality by adjusting brightness and contrast
+//            val contrast = 1.5
+//            val brightness = 20.0
+//            Core.addWeighted(src, contrast, Mat.zeros(src.size(), src.type()), 0.0, brightness, src)
+//
+//            // Apply image preprocessing techniques
+//            Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2GRAY)
+//            Imgproc.GaussianBlur(src, src, Size(5.0, 5.0), 0.0)
+//            Imgproc.threshold(src, src, 0.0, 255.0, Imgproc.THRESH_BINARY_INV + Imgproc.THRESH_OTSU)
+//            Imgproc.medianBlur(src, src, 3)
+//
+//            // Set page segmentation mode to treat the image as a single block of text
+//            pageSegMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+//
+//            // Set OCR engine mode to use LSTM-based OCR engine for better accuracy
+//            //val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK
+//            val ocrEngineMode = TessBaseAPI.PageSegMode.PSM_SINGLE_COLUMN
+//            pageSegMode = ocrEngineMode
+//            val tessdataDir = File("$filesDir/tessdata/")
+//            val engTrainedData = File(tessdataDir, "eng.trained")
+//            val korTrainedData = File(tessdataDir, "kor.trained")
+//            if (engTrainedData.exists() && korTrainedData.exists()) {
+//                val lang = "kor+eng"
+//                setVariable(
+//                    TessBaseAPI.VAR_CHAR_WHITELIST,
+//                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+//                )
+//                init(filesDir.absolutePath + "/tessdata/", lang)
+//            } else {
+//                Log.e("printOCRResult", "Trained data files are missing")
+//            }
+//
 //            setImage(bitmap)
 //            bitmap = resize(bitmap)!!
-//            val image = BitMapToString(bitmap)
-//            val decodedBitmap: Bitmap = BitmapFactory.decodeByteArray(
-//                Base64.decode(image, Base64.DEFAULT),
-//                0,
-//                Base64.decode(image, Base64.DEFAULT).size
-//            )
-//            idImgView.setImageBitmap(decodedBitmap)
+//            image = BitMapToString(bitmap)
+//
 //            result.text = utF8Text
-
-        }
-    }
+//
+////            setImage(bitmap)
+////            bitmap = resize(bitmap)!!
+////            val image = BitMapToString(bitmap)
+////            val decodedBitmap: Bitmap = BitmapFactory.decodeByteArray(
+////                Base64.decode(image, Base64.DEFAULT),
+////                0,
+////                Base64.decode(image, Base64.DEFAULT).size
+////            )
+////            idImgView.setImageBitmap(decodedBitmap)
+////            result.text = utF8Text
+//
+//        }
+//    }
 
 
     //db 연동 시작
@@ -768,10 +768,10 @@ class SignUP : AppCompatActivity() {
         identity_opencv = identity_before.replace("\n", "")
         identity_opencv = identity_opencv.replace(" ", "")
         identity_check = identity_opencv.contains(identity).toString()
-        identity_image1 = image.substring(0, image.length*1/4+1)
-        identity_image2 = image.substring(image.length*1/4+1, image.length*2/4+1)
-        identity_image3 = image.substring(image.length*2/4+1, image.length*3/4+1)
-        identity_image4 = image.substring(image.length*3/4+1, image.length)
+//        identity_image1 = image.substring(0, image.length*1/2+1)
+//        identity_image2 = image.substring(image.length*1/2+1, image.length)
+//        identity_image3 = image.substring(image.length*2/4+1, image.length*3/4+1)
+//        identity_image4 = image.substring(image.length*3/4+1, image.length)
 
         Log.d("IMGAE", image.length.toString())
         Log.d("image1", identity_image1.length.toString())
@@ -833,11 +833,12 @@ class SignUP : AppCompatActivity() {
                     "userType" to basicUserBtn.text.toString(),
                     "userDept" to userDept,
                     "identity" to identity,
-                    "identity_check" to identity_check,
-                    "identity_image1" to identity_image1,
-                    "identity_image2" to identity_image2,
-                    "identity_image3" to identity_image3,
-                    "identity_image4" to identity_image4
+                    "identity_check" to "false",
+                    "identity_image" to ""
+//                    "identity_image1" to identity_image1,
+//                    "identity_image2" to identity_image2,
+//                    "identity_image3" to identity_image3,
+//                    "identity_image4" to identity_image4
                 )
             } else {
                 hashMapOf(
@@ -848,11 +849,12 @@ class SignUP : AppCompatActivity() {
                     "userType" to corpUserBtn.text.toString(),
                     "userDept" to corpUserBtn.text.toString(),
                     "identity" to identity,
-                    "identity_check" to identity_check,
-                    "identity_image1" to identity_image1,
-                    "identity_image2" to identity_image2,
-                    "identity_image3" to identity_image3,
-                    "identity_image4" to identity_image4
+                    "identity_check" to "false",
+                    "identity_image" to ""
+//                    "identity_image1" to identity_image1,
+//                    "identity_image2" to identity_image2,
+//                    "identity_image3" to identity_image3,
+//                    "identity_image4" to identity_image4
                 )
             }
 
@@ -960,24 +962,24 @@ class SignUP : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun BitMapToString(bitmap: Bitmap): String {
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
-        val arr = baos.toByteArray()
-        val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
-        try {
-
-        } catch (e: Exception) {
-            Log.e("exception", e.toString())
-        }
-        return base64Image
-    }
-
-    private fun resize(bitmap: Bitmap): Bitmap? {
-        var bitmap: Bitmap? = bitmap
-
-        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
-        return bitmap
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun BitMapToString(bitmap: Bitmap): String {
+//        val baos = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos) //bitmap compress
+//        val arr = baos.toByteArray()
+//        val base64Image = Base64.encodeToString(arr, Base64.DEFAULT)
+//        try {
+//
+//        } catch (e: Exception) {
+//            Log.e("exception", e.toString())
+//        }
+//        return base64Image
+//    }
+//
+//    private fun resize(bitmap: Bitmap): Bitmap? {
+//        var bitmap: Bitmap? = bitmap
+//
+//        bitmap = Bitmap.createScaledBitmap(bitmap!!, 240, 480, true)
+//        return bitmap
+//    }
 }
