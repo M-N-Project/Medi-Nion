@@ -989,7 +989,7 @@ class Calendar_Add : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            if (ColorSheetUtils.colorToHex(selectedColor) == "#FFFFFF") {
+            if (colorString == "") {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
@@ -1013,7 +1013,7 @@ class Calendar_Add : AppCompatActivity() {
                     "end_date" to end_date_request,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
-                    "schedule_color" to ColorSheetUtils.colorToHex(selectedColor),
+                    "schedule_color" to colorString,
                     "schedule_alarm" to alarm,
                     "schedule_repeat" to repeat,
                     "schedule_memo" to schedule_memo,

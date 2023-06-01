@@ -23,6 +23,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -42,12 +43,25 @@ import java.util.*
 
 
 class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 어케하누,,) -> 어케든 하고있는 멋진 혹은 불쌍한 우리;
+    companion object {
+        fun newInstance() : TimeTableFragment{
+            val fragment = TimeTableFragment()
+            val bundle = Bundle().apply {
+            }
+            fragment.arguments = bundle
+            return fragment
+        }
+        private var currentDate : CalendarDay = CalendarDay.today()
+    }
+
+
     private val weekDay = arrayOf("일", "월", "화", "수", "목", "금", "토")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
     private var oldTitle : String = ""
     private var oldStartTime : String = ""
+
 
     var isFABOpen : Boolean = false
     var lastSelected = ""
@@ -157,18 +171,28 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         ft.detach(fragment)
     }
 
+    fun setCurrentDate(day : CalendarDay){
+        currentDate = day
+    }
+
     @SuppressLint("UseRequireInsteadOfGet")
     fun fetchEvent(v: View) {
         val id = arguments?.getString("id").toString()
+
+        Log.d("kahhaf", currentDate.toString())
         val table = v.findViewById<MinTimeTableView>(R.id.table)
         val cal = Calendar.getInstance()
-        val year = cal.get(Calendar.YEAR).toString()
-        var month = (cal.get(Calendar.MONTH)+1).toString()
+
+        val year = currentDate.year.toString()
+        var month = ((currentDate.month)+1).toString()
         if(month.length == 1) month = "0$month"
-        val week = cal.get(Calendar.WEEK_OF_MONTH)
+        var date = (currentDate.date).toString()
+        if(date.length == 1) date = "0$date"
+        val week = currentDate.calendar.get(Calendar.WEEK_OF_MONTH)
+
         val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
 
-        Log.d("89273123", "$year, $month")
+        Log.d("89273123", "$year, $month, $week")
         scheduleList.clear()
         val request = Board_Request(
             Request.Method.POST,
@@ -470,6 +494,7 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                 "id" to id,
                 "year" to year,
                 "month" to month,
+                "date" to date,
                 "week" to week.toString()
             )
         )

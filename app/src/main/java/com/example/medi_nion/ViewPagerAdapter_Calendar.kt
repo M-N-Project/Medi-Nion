@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.prolificinteractive.materialcalendarview.CalendarDay
 
 class ViewPagerAdapter_Calendar(fragment: FragmentActivity, infomap: HashMap<String, String>): FragmentStateAdapter(fragment) {
     var fragments : ArrayList<Fragment> = ArrayList()
@@ -18,7 +19,8 @@ class ViewPagerAdapter_Calendar(fragment: FragmentActivity, infomap: HashMap<Str
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> {
-                val timeTableFragment = TimeTableFragment()
+//                val timeTableFragment = TimeTableFragment()
+                val timeTableFragment = TimeTableFragment.newInstance()
                 val bundle = Bundle()
                 bundle.putString("id", id)
                 timeTableFragment.arguments = bundle
@@ -29,6 +31,7 @@ class ViewPagerAdapter_Calendar(fragment: FragmentActivity, infomap: HashMap<Str
                 val bundle = Bundle()
                 bundle.putString("id", id)
                 calendarFragment.arguments = bundle
+
                 return calendarFragment
             }
         }

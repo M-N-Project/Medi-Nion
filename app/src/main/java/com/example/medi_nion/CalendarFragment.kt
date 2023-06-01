@@ -40,6 +40,7 @@ import dev.sasikanth.colorsheet.ColorSheet
 import dev.sasikanth.colorsheet.utils.ColorSheetUtils
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import org.json.JSONArray
+import java.sql.Time
 import java.util.*
 
 
@@ -63,10 +64,13 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
         private const val COLOR_SELECTED = "selectedColor"
     }
 
+
     override fun onPause() {
         super.onPause()
         currentDate  = CalendarDay.today()
         lastSelected = ""
+
+        fetchEvents(currentDate)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -194,6 +198,8 @@ class CalendarFragment : Fragment() { //간호사 스케쥴표 화면(구현 어
             selected: Boolean
         ) {
             currentDate = date
+            TimeTableFragment().setCurrentDate(currentDate)
+
             fetchEvents(date)
 
         }

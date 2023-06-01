@@ -1231,6 +1231,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                 Request.Method.POST,
                                                                                 comment2medalurl,
                                                                                 { medal2response ->
+                                                                                    Log.d("82019312", "$medal2response")
                                                                                     when (medal2response) {
                                                                                         "king" -> {
                                                                                             comment2_medal_text =
@@ -1550,7 +1551,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                     )
                                                                                 },
                                                                                 hashMapOf(
-                                                                                    "id" to writerId
+                                                                                    "id" to id
                                                                                 )
                                                                             )
                                                                         val queue =
