@@ -146,7 +146,7 @@
                     android:layout_height="13dp"
                     android:gravity="right"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginRight="0dp"
                     android:background="@drawable/cancel2"
                     android:textColor="@color/black"
@@ -192,14 +192,11 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/view3"
+            android:id="@+id/view4"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:layout_marginTop="10dp"
-            android:background="#85AFD6"
-            android:backgroundTint="#B8B8B8"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_comment"
-            tools:layout_editor_absoluteX="16dp" />
+            android:background="#B8B8B8" />
 
     </LinearLayout>
 
