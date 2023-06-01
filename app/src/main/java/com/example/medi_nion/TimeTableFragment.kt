@@ -193,207 +193,195 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
         val url = "http://seonho.dothome.co.kr/timeTableEvents.php"
 
         Log.d("89273123", "$year, $month, $week")
-        scheduleList.clear()
+//        scheduleList.clear()
         val request = Board_Request(
             Request.Method.POST,
             url,
             { response ->
                 Log.d("ㅇㄹㅇㄴ", response)
                 if(response != "Event fetch Fail") {
+                    scheduleList.clear()
                     val jsonArray = JSONArray(response)
-                    for (i in 0 until jsonArray.length()) {
-                        val item = jsonArray.getJSONObject(i)
+                    Log.d("sfsdf", jsonArray.length().toString())
+                    if(jsonArray.length() == 0){
+                        table.initTable(weekDay)
+                    }
+                    else{
+                        val table = v.findViewById<MinTimeTableView>(R.id.table)
+                        for (i in 0 until jsonArray.length()) {
+                            val item = jsonArray.getJSONObject(i)
 
-                        val schedule_name = item.getString("schedule_name")
-                        val start_date = item.getString("start_date")
-                        val end_date = item.getString("end_date")
-                        val schedule_start = item.getString("schedule_start")
-                        val schedule_end = item.getString("schedule_end")
-                        val schedule_color = item.getString("schedule_color")
-                        val schedule_alarm = item.getString("schedule_alarm")
-                        val schedule_repeat = item.getString("schedule_repeat")
-                        val schedule_memo = item.getString("schedule_memo")
-                        val isDone = item.getString("isDone").toBoolean()
+                            val schedule_name = item.getString("schedule_name")
+                            val start_date = item.getString("start_date")
+                            val end_date = item.getString("end_date")
+                            val schedule_start = item.getString("schedule_start")
+                            val schedule_end = item.getString("schedule_end")
+                            val schedule_color = item.getString("schedule_color")
+                            val schedule_alarm = item.getString("schedule_alarm")
+                            val schedule_repeat = item.getString("schedule_repeat")
+                            val schedule_memo = item.getString("schedule_memo")
+                            val isDone = item.getString("isDone").toBoolean()
 
-                        val schedule = ScheduleEntity(
-                            id,
-                            schedule_name,
-                            start_date,
-                            schedule_start,
-                            schedule_end,
-                            schedule_color,
-                            schedule_alarm,
-                            schedule_repeat,
-                            schedule_memo,
-                            isDone
-                        )
+                            val schedule = ScheduleEntity(
+                                id,
+                                schedule_name,
+                                start_date,
+                                schedule_start,
+                                schedule_end,
+                                schedule_color,
+                                schedule_alarm,
+                                schedule_repeat,
+                                schedule_memo,
+                                isDone
+                            )
 
-                        //일정 클릭시 클릭이벤트
-                        schedule.setOnClickListener {
-                            oldTitle = schedule.schedule_name
-                            oldStartTime = schedule.schedule_start
-                            //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
-                            val bottomSheetView = layoutInflater.inflate(R.layout.calendar_dialog, null)
-                            val bottomSheetDialog = BottomSheetDialog(requireContext())
-                            bottomSheetDialog.setContentView(bottomSheetView)
+                            //일정 클릭시 클릭이벤트
+                            schedule.setOnClickListener {
+                                oldTitle = schedule.schedule_name
+                                oldStartTime = schedule.schedule_start
+                                //이벤트 하나 누르면 그에 맞는 alert 팝업 창 -> 이벤트 정보들.
+                                val bottomSheetView = layoutInflater.inflate(R.layout.calendar_dialog, null)
+                                val bottomSheetDialog = BottomSheetDialog(requireContext())
+                                bottomSheetDialog.setContentView(bottomSheetView)
 
-                            val deleteScheduleBtn = bottomSheetView.findViewById<ImageView>(R.id.deleteScheduleBtn)
-                            deleteScheduleBtn.setOnClickListener {
-                                //삭제하시겠습니까??
-                                val builder = AlertDialog.Builder(requireContext())
-                                builder.setTitle("일정 삭제")
-                                    .setMessage("일정을 삭제하시겠습니까?")
-                                    .setPositiveButton("삭제",
-                                        DialogInterface.OnClickListener { dialog, id ->
+                                val deleteScheduleBtn = bottomSheetView.findViewById<ImageView>(R.id.deleteScheduleBtn)
+                                deleteScheduleBtn.setOnClickListener {
+                                    //삭제하시겠습니까??
+                                    val builder = AlertDialog.Builder(requireContext())
+                                    builder.setTitle("일정 삭제")
+                                        .setMessage("일정을 삭제하시겠습니까?")
+                                        .setPositiveButton("삭제",
+                                            DialogInterface.OnClickListener { dialog, id ->
 //                            var item = CalendarItem(schedule.id, schedule.schedule_name, schedule.schedule_date, schedule.schedule_start, schedule.schedule_end, schedule.schedule_color, schedule.schedule_alarm, schedule.schedule_repeat, schedule.schedule_memo, schedule.schedule_isDone)
-                                            deleteSchedule(schedule)
-                                        })
-                                    .setNegativeButton("취소",
-                                        DialogInterface.OnClickListener { dialog, id ->
+                                                deleteSchedule(schedule)
+                                            })
+                                        .setNegativeButton("취소",
+                                            DialogInterface.OnClickListener { dialog, id ->
 
-                                        })
+                                            })
 
-                                // 다이얼로그를 띄워주기
-                                builder.show()
+                                    // 다이얼로그를 띄워주기
+                                    builder.show()
 
-                            }
+                                }
 
-                            val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
-                            val calendar = Calendar.getInstance()
+                                val dialog_date = bottomSheetView.findViewById<TextView>(R.id.dateTextView)
+                                val calendar = Calendar.getInstance()
 //                            dialog_date.text = schedule.schedule_date
-                            dialog_date.text = start_date.substring(0,14)
+                                dialog_date.text = start_date.substring(0,14)
 
-                            val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
-                            schedule_title.setText(schedule.schedule_name) //스케줄 이름
+                                val schedule_title = bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
+                                schedule_title.setText(schedule.schedule_name) //스케줄 이름
 
-                            val day_night1 = bottomSheetView.findViewById<TextView>(R.id.start_day_night)
-                            val start = bottomSheetView.findViewById<LinearLayout>(R.id.start_time_linear)
-                            val start_result = bottomSheetView.findViewById<TextView>(R.id.start_time)
-                            var startString = ""
+                                val day_night1 = bottomSheetView.findViewById<TextView>(R.id.start_day_night)
+                                val start = bottomSheetView.findViewById<LinearLayout>(R.id.start_time_linear)
+                                val start_result = bottomSheetView.findViewById<TextView>(R.id.start_time)
+                                var startString = ""
 
-                            start_result.text = schedule.schedule_start.replace(" ", "")
+                                start_result.text = schedule.schedule_start.replace(" ", "")
 
-                            var start_min = start_result.text.substring(0, 2)
-                            var start_sec = start_result.text.substring(3, 5)
-                            Log.d("start..", "${start_min}, ${start_sec}")
-                            day_night1.setText("오전") //스케줄 시작 오전/오후
-                            if(start_min.toInt() >= 12) day_night1.setText("오후")
-                            
-                            start_result.setText("${start_min}   :   ${start_sec}") //스케줄 시작 시간
-                            Log.d("start..", start_result.text.toString())
+                                var start_min = start_result.text.substring(0, 2)
+                                var start_sec = start_result.text.substring(3, 5)
+                                Log.d("start..", "${start_min}, ${start_sec}")
+                                day_night1.setText("오전") //스케줄 시작 오전/오후
+                                if(start_min.toInt() >= 12) day_night1.setText("오후")
 
-                            start.setOnClickListener {
-                                val dialog = TimePickerDialog(
-                                    requireContext(),
-                                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                                    { view, HourOfDay, Minutes ->
-                                        if (HourOfDay >= 12)
-                                            day_night1.text = "오후"
-                                        else
-                                            day_night1.text = "오전"
+                                start_result.setText("${start_min}   :   ${start_sec}") //스케줄 시작 시간
+                                Log.d("start..", start_result.text.toString())
 
-                                        if (HourOfDay >= 10) {
-                                            if (Minutes >= 10) {
-                                                startString = "${HourOfDay}   :   ${Minutes}"
+                                start.setOnClickListener {
+                                    val dialog = TimePickerDialog(
+                                        requireContext(),
+                                        android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+                                        { view, HourOfDay, Minutes ->
+                                            if (HourOfDay >= 12)
+                                                day_night1.text = "오후"
+                                            else
+                                                day_night1.text = "오전"
+
+                                            if (HourOfDay >= 10) {
+                                                if (Minutes >= 10) {
+                                                    startString = "${HourOfDay}   :   ${Minutes}"
+                                                } else {
+                                                    startString = "${HourOfDay}   :   0${Minutes}"
+                                                }
                                             } else {
-                                                startString = "${HourOfDay}   :   0${Minutes}"
+                                                if (Minutes >= 10) {
+                                                    startString = "0${HourOfDay}   :   ${Minutes}"
+                                                } else {
+                                                    startString = "0${HourOfDay}   :   0${Minutes}"
+                                                }
                                             }
-                                        } else {
-                                            if (Minutes >= 10) {
-                                                startString = "0${HourOfDay}   :   ${Minutes}"
-                                            } else {
-                                                startString = "0${HourOfDay}   :   0${Minutes}"
-                                            }
-                                        }
-                                        start_result.setText(startString)
-                                        start_result.text = start_result.text.toString().replace(" ", "")
-                                        schedule.schedule_start = start_result.text.toString()
-                                        start_result.setText(startString)
-                                    },
-                                    0,
-                                    0,
-                                    false
-                                )
-
-                                dialog.setTitle("시작 시간")
-                                dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-                                dialog.show()
-                            }
-
-                            val day_night2 = bottomSheetView.findViewById<TextView>(R.id.end_day_night)
-                            val end = bottomSheetView.findViewById<LinearLayout>(R.id.end_time_linear)
-                            val end_result = bottomSheetView.findViewById<TextView>(R.id.end_time)
-                            var endString = ""
-                            end_result.text = schedule.schedule_end.replace(" ", "")
-
-                            var end_min = end_result.text.substring(0, 2)
-                            var end_sec = end_result.text.substring(3, 5)
-                            day_night2.setText("오전") //스케줄 시작 오전/오후
-                            if(end_min.toInt() >= 12) day_night2.setText("오후")
-                            end_result.setText("${end_min}   :   ${end_sec}") //스케줄 시작 시간
-
-                            end.setOnClickListener {
-                                val dialog1 = TimePickerDialog(
-                                    requireContext(),
-                                    android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                                    { view, HourOfDay, Minutes ->
-                                        if (HourOfDay >= 12)
-                                            day_night2.text = "오후"
-                                        else
-                                            day_night2.text = "오전"
-                                        if (HourOfDay >= 10) {
-                                            if (Minutes >= 10) {
-                                                endString = "${HourOfDay}   :   ${Minutes}"
-                                            } else {
-                                                endString = "${HourOfDay}   :   0${Minutes}"
-                                            }
-                                        } else {
-                                            if (Minutes >= 10) {
-                                                endString = "0${HourOfDay}   :   ${Minutes}"
-                                            } else {
-                                                endString = "0${HourOfDay}   :   0${Minutes}"
-                                            }
-                                        }
-                                        end_result.text = endString
-                                        end_result.text = end_result.text.toString().replace(" ", "")
-                                        schedule.schedule_start = end_result.text.toString()
-                                        end_result.text = endString
-                                    },
-                                    0,
-                                    0,
-                                    false
-                                )
-
-                                dialog1.setTitle("종료 시간")
-                                dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-                                dialog1.show()
-                            }
-
-                            // 스케줄 색상
-                            val color = bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
-                            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                drawable!!.colorFilter =
-                                    BlendModeColorFilter(Color.parseColor(schedule.schedule_color), BlendMode.SRC_ATOP)
-                            } else {
-                                drawable!!.setColorFilter(
-                                    Color.parseColor(schedule.schedule_color),
-                                    PorterDuff.Mode.SRC_ATOP
-                                )
-                            }
-                            color.background = drawable
-
-                            color.setOnClickListener {
-                                val color = bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
-                                setupColorSheet(schedule, color)
-
-                                val drawable =
-                                    ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                    drawable!!.colorFilter = BlendModeColorFilter(
-                                        Color.parseColor(schedule.schedule_color),
-                                        BlendMode.SRC_ATOP
+                                            start_result.setText(startString)
+                                            start_result.text = start_result.text.toString().replace(" ", "")
+                                            schedule.schedule_start = start_result.text.toString()
+                                            start_result.setText(startString)
+                                        },
+                                        0,
+                                        0,
+                                        false
                                     )
+
+                                    dialog.setTitle("시작 시간")
+                                    dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                                    dialog.show()
+                                }
+
+                                val day_night2 = bottomSheetView.findViewById<TextView>(R.id.end_day_night)
+                                val end = bottomSheetView.findViewById<LinearLayout>(R.id.end_time_linear)
+                                val end_result = bottomSheetView.findViewById<TextView>(R.id.end_time)
+                                var endString = ""
+                                end_result.text = schedule.schedule_end.replace(" ", "")
+
+                                var end_min = end_result.text.substring(0, 2)
+                                var end_sec = end_result.text.substring(3, 5)
+                                day_night2.setText("오전") //스케줄 시작 오전/오후
+                                if(end_min.toInt() >= 12) day_night2.setText("오후")
+                                end_result.setText("${end_min}   :   ${end_sec}") //스케줄 시작 시간
+
+                                end.setOnClickListener {
+                                    val dialog1 = TimePickerDialog(
+                                        requireContext(),
+                                        android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
+                                        { view, HourOfDay, Minutes ->
+                                            if (HourOfDay >= 12)
+                                                day_night2.text = "오후"
+                                            else
+                                                day_night2.text = "오전"
+                                            if (HourOfDay >= 10) {
+                                                if (Minutes >= 10) {
+                                                    endString = "${HourOfDay}   :   ${Minutes}"
+                                                } else {
+                                                    endString = "${HourOfDay}   :   0${Minutes}"
+                                                }
+                                            } else {
+                                                if (Minutes >= 10) {
+                                                    endString = "0${HourOfDay}   :   ${Minutes}"
+                                                } else {
+                                                    endString = "0${HourOfDay}   :   0${Minutes}"
+                                                }
+                                            }
+                                            end_result.text = endString
+                                            end_result.text = end_result.text.toString().replace(" ", "")
+                                            schedule.schedule_start = end_result.text.toString()
+                                            end_result.text = endString
+                                        },
+                                        0,
+                                        0,
+                                        false
+                                    )
+
+                                    dialog1.setTitle("종료 시간")
+                                    dialog1.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                                    dialog1.show()
+                                }
+
+                                // 스케줄 색상
+                                val color = bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
+                                val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                    drawable!!.colorFilter =
+                                        BlendModeColorFilter(Color.parseColor(schedule.schedule_color), BlendMode.SRC_ATOP)
                                 } else {
                                     drawable!!.setColorFilter(
                                         Color.parseColor(schedule.schedule_color),
@@ -401,93 +389,114 @@ class TimeTableFragment : Fragment() { //간호사 스케쥴표 화면(구현 �
                                     )
                                 }
                                 color.background = drawable
-                            }
 
-                            val alarmSpinner = bottomSheetView.findViewById<TextView>(R.id.alarm_spinner)
-                            Log.d("8972123", schedule.schedule_alarm)
-                            alarmSpinner.setText(schedule.schedule_alarm)
-                            alarmSpinner.setOnClickListener{
-                                var alarmArray = resources.getStringArray(R.array.times)
-                                var alarmArrayList = ArrayList<String>()
-                                for(i in alarmArray){
-                                    alarmArrayList.add(i)
+                                color.setOnClickListener {
+                                    val color = bottomSheetView.findViewById<Button>(R.id.schedule_color_view)
+                                    setupColorSheet(schedule, color)
+
+                                    val drawable =
+                                        ContextCompat.getDrawable(requireContext(), R.drawable.calendar_color)
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                        drawable!!.colorFilter = BlendModeColorFilter(
+                                            Color.parseColor(schedule.schedule_color),
+                                            BlendMode.SRC_ATOP
+                                        )
+                                    } else {
+                                        drawable!!.setColorFilter(
+                                            Color.parseColor(schedule.schedule_color),
+                                            PorterDuff.Mode.SRC_ATOP
+                                        )
+                                    }
+                                    color.background = drawable
                                 }
-                                showBottomSheet(alarmArrayList, "alarm")
-                            }
-                            Log.d("8972123", schedule.schedule_repeat)
-                            val repeatSpinner = bottomSheetView.findViewById<TextView>(R.id.repeat_spinner)
-                            repeatSpinner.setText(schedule.schedule_repeat)
-                            repeatSpinner.setOnClickListener{
-                                Toast.makeText(requireContext(),
-                                    "주간 일정에서는 매주 반복되는 일정만 적용됩니다.", Toast.LENGTH_SHORT).show()
-                            }
+
+                                val alarmSpinner = bottomSheetView.findViewById<TextView>(R.id.alarm_spinner)
+                                Log.d("8972123", schedule.schedule_alarm)
+                                alarmSpinner.setText(schedule.schedule_alarm)
+                                alarmSpinner.setOnClickListener{
+                                    var alarmArray = resources.getStringArray(R.array.times)
+                                    var alarmArrayList = ArrayList<String>()
+                                    for(i in alarmArray){
+                                        alarmArrayList.add(i)
+                                    }
+                                    showBottomSheet(alarmArrayList, "alarm")
+                                }
+                                Log.d("8972123", schedule.schedule_repeat)
+                                val repeatSpinner = bottomSheetView.findViewById<TextView>(R.id.repeat_spinner)
+                                repeatSpinner.setText(schedule.schedule_repeat)
+                                repeatSpinner.setOnClickListener{
+                                    Toast.makeText(requireContext(),
+                                        "주간 일정에서는 매주 반복되는 일정만 적용됩니다.", Toast.LENGTH_SHORT).show()
+                                }
 
 
-                            bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
-                                .setText(schedule.schedule_memo) //스케줄 메모
+                                bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
+                                    .setText(schedule.schedule_memo) //스케줄 메모
 
-                            val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
-                            doneBtn.setOnClickListener {
-                                hideKeyboard()
-                                val schedule_title_2 =
-                                    bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
-                                val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
-                                var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
-                                var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
-                                if (TextUtils.isEmpty(schedule_title_2.text.toString())) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    schedule.schedule_name = schedule_title_2.text.toString()
+                                val doneBtn = bottomSheetView.findViewById<ImageView>(R.id.doneBtn)
+                                doneBtn.setOnClickListener {
+                                    hideKeyboard()
+                                    val schedule_title_2 =
+                                        bottomSheetView.findViewById<EditText>(R.id.editText_scheduleName)
+                                    val schedule_memo_2 = bottomSheetView.findViewById<EditText>(R.id.schedule_memo_textView)
+                                    var start_result = bottomSheetView.findViewById<TextView>(R.id.start_time).text.toString()
+                                    var end_result = bottomSheetView.findViewById<TextView>(R.id.end_time).text.toString()
+                                    if (TextUtils.isEmpty(schedule_title_2.text.toString())) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "일정 이름을 입력해주세요.", Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        schedule.schedule_name = schedule_title_2.text.toString()
 
 //                                    start_result.text = start_result.text.toString().replace(" ", "")
 //                                    end_result.text = end_result.text.toString().replace(" ", "")
 
-                                    Log.d(
-                                        "-=123",
-                                        "${oldTitle}, ${schedule.schedule_name}, ${schedule.schedule_start} , ${schedule.schedule_end}, ${schedule.schedule_color}, ${schedule.schedule_alarm}, ${schedule.schedule_memo}, ${schedule.schedule_isDone}"
-                                    )
+                                        Log.d(
+                                            "-=123",
+                                            "${oldTitle}, ${schedule.schedule_name}, ${schedule.schedule_start} , ${schedule.schedule_end}, ${schedule.schedule_color}, ${schedule.schedule_alarm}, ${schedule.schedule_memo}, ${schedule.schedule_isDone}"
+                                        )
 
-                                    if (schedule.schedule_color == "#FFFFFF")
-                                        schedule.schedule_color = "#BADFD2"
-                                    else
-                                        ColorSheetUtils.colorToHex(selectedColor)
+                                        if (schedule.schedule_color == "#FFFFFF")
+                                            schedule.schedule_color = "#BADFD2"
+                                        else
+                                            ColorSheetUtils.colorToHex(selectedColor)
 
-                                    schedule.schedule_start = start_result.replace(" ", "")
-                                    schedule.schedule_end = end_result.replace(" ", "")
-                                    schedule.schedule_alarm = alarmSpinner.text.toString()
-                                    schedule.schedule_repeat = "매주"
-                                    schedule.schedule_memo = schedule_memo_2.text.toString()
-                                    TimeTableRequest(schedule)
+                                        schedule.schedule_start = start_result.replace(" ", "")
+                                        schedule.schedule_end = end_result.replace(" ", "")
+                                        schedule.schedule_alarm = alarmSpinner.text.toString()
+                                        schedule.schedule_repeat = "매주"
+                                        schedule.schedule_memo = schedule_memo_2.text.toString()
+                                        TimeTableRequest(schedule)
 
-                                    fetchEvent(v!!)
+                                        fetchEvent(v!!)
 
-                                    Toast.makeText(
-                                        requireContext(),
-                                        String.format("스케줄 수정이 완료되었습니다."),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                        Toast.makeText(
+                                            requireContext(),
+                                            String.format("스케줄 수정이 완료되었습니다."),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
 
 
+                                    }
                                 }
+
+                                bottomSheetDialog.show()
                             }
 
-                            bottomSheetDialog.show()
+                            scheduleList.add(schedule)
+                            table.updateSchedules(scheduleList)
+
+                            val ft = fragmentManager!!.beginTransaction()
+                            if (Build.VERSION.SDK_INT >= 26) {
+                                ft.setReorderingAllowed(false)
+                            }
+                            Log.d("SDFDF", "SDF6")
+                            ft.detach(this).attach(this).commit()
+
                         }
-
-                        scheduleList.add(schedule)
-                        table.updateSchedules(scheduleList)
-
-                        val ft = fragmentManager!!.beginTransaction()
-                        if (Build.VERSION.SDK_INT >= 26) {
-                            ft.setReorderingAllowed(false)
-                        }
-                        Log.d("SDFDF", "SDF6")
-                        ft.detach(this).attach(this).commit()
-
                     }
+
                 }
             }, { Log.d("login failed", "error......${error(this)}") },
             hashMapOf(
