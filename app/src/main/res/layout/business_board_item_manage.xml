@@ -27,8 +27,7 @@
             android:background="@drawable/selector_radio_button_group_opt"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout13"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout13"
-            >
+            app:layout_constraintTop_toTopOf="@+id/linearLayout13">
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/busi_postUpdate_RadioBtn"
@@ -92,31 +91,31 @@
                     app:layout_constraintStart_toEndOf="@+id/profileImg2"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <TextView
-                    android:id="@+id/deadline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="16dp"
-                    android:text="게시물 등록 시간"
-                    android:textSize="10sp"
-                    app:layout_constraintStart_toEndOf="@+id/profileImg2"
-                    app:layout_constraintTop_toBottomOf="@+id/titleName" />
-
-
-                <Button
+                <ImageButton
                     android:id="@+id/busi_moreBtn"
-                    android:layout_width="20dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/board_detail_more_btn"
-                    android:textColor="@color/black"
+                    android:background="@android:color/transparent"
+                    android:scaleType="center"
                     android:visibility="gone"
+                    app:srcCompat="@drawable/board_detail_more_resize"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/deadline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:text="게시물 등록 시간"
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/content"
