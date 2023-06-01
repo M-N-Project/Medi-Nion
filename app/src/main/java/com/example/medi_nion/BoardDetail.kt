@@ -1764,15 +1764,16 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 ) {
                                                                                                                     Log.d("01983123", "대댓글 있을때 댓글 click")
                                                                                                                     //댓글 눌렀을때. -> 대댓글
+//                                                                                                    comment_comment_posPresent =
+//                                                                                                        pos
+                                                                                                                    posPresent = pos
+
                                                                                                                     comment_comment_posPresent =
                                                                                                                         data.comment_num-1
                                                                                                                     if (comment_comment_flag == true) {
-                                                                                                                        Log.d("01983123-**", comment_comment_flag.toString())
                                                                                                                         if (comment_comment_posPresent == comment_comment_posBefore) {
                                                                                                                             comment_comment_flag =
                                                                                                                                 false
-
-                                                                                                                            Log.d("9013213-1",comment_comment_posPresent.toString())
                                                                                                                             CommentRecyclerView.get(
                                                                                                                                 pos
                                                                                                                             )
@@ -1785,9 +1786,9 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                     )
                                                                                                                                 )
                                                                                                                         } else {
-                                                                                                                            Log.d("9013213-2",comment_comment_posPresent.toString())
+                                                                                                                            Log.d("al;sdfs", comment_comment_posBefore.toString())
                                                                                                                             CommentRecyclerView.get(
-                                                                                                                                comment_comment_posBefore
+                                                                                                                                posBefore
                                                                                                                             )
                                                                                                                                 .findViewById<LinearLayout>(
                                                                                                                                     R.id.comment_linearLayout
@@ -1808,6 +1809,9 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                         "#308BE0C4"
                                                                                                                                     )
                                                                                                                                 )
+//                                                                                                            comment_comment_posBefore =
+//                                                                                                                pos
+                                                                                                                            posBefore = pos
                                                                                                                             comment_comment_posBefore =
                                                                                                                                 data.comment_num-1
                                                                                                                         }
@@ -1817,11 +1821,13 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     } else {
                                                                                                                         comment_comment_flag =
                                                                                                                             true
+                                                                                                                        posBefore = pos
+                                                                                                                        posPresent = pos
                                                                                                                         comment_comment_posBefore =
                                                                                                                             data.comment_num-1
                                                                                                                         comment_comment_posPresent =
                                                                                                                             data.comment_num-1
-                                                                                                                        Log.d("9013213-3",comment_comment_posPresent.toString())
+                                                                                                                        Log.d("al;sdfs", "$comment_comment_posBefore // $comment_comment_posPresent // $pos")
                                                                                                                         CommentRecyclerView.get(
                                                                                                                             pos
                                                                                                                         )
