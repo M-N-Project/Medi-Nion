@@ -1048,6 +1048,9 @@ class BoardDetail : AppCompatActivity() {
                                                                             )
                                                                         val writerId =
                                                                             item.getString("id")
+
+                                                                        Log.d("WriterID", writerId.toString())
+
                                                                         if (!comment_user.containsKey(
                                                                                 writerId
                                                                             )
