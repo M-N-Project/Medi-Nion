@@ -99,7 +99,7 @@ class Profile_opencv: AppCompatActivity() {
                 Log.d("01503", "oepn Cmaera")
                 openCamera()
             } else {
-                Toast.makeText(applicationContext, "권한을 승인해야 카메라를 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "권한을 승인해야 카메라를 사용할 수 있습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -123,10 +123,6 @@ class Profile_opencv: AppCompatActivity() {
             Log.d("phto", "uri")
         }
         storagePermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-//        button_opencv.setOnClickListener {
-//            updateIdentity()
-//        }
 
     }
 
@@ -221,16 +217,16 @@ class Profile_opencv: AppCompatActivity() {
         //4. 투시변환
         // 좌상단부터 시계 반대 방향으로 정점을 정렬한다.
         val points = arrayListOf(
-            org.opencv.core.Point(approxCandidate.get(0, 0)[0],
+            Point(approxCandidate.get(0, 0)[0],
                 approxCandidate.get(0, 0)[1]
             ),
-            org.opencv.core.Point(approxCandidate.get(1, 0)[0],
+            Point(approxCandidate.get(1, 0)[0],
                 approxCandidate.get(1, 0)[1]
             ),
-            org.opencv.core.Point(approxCandidate.get(2, 0)[0],
+            Point(approxCandidate.get(2, 0)[0],
                 approxCandidate.get(2, 0)[1]
             ),
-            org.opencv.core.Point(approxCandidate.get(3, 0)[0],
+            Point(approxCandidate.get(3, 0)[0],
                 approxCandidate.get(3, 0)[1]
             ),
         )
@@ -272,20 +268,18 @@ class Profile_opencv: AppCompatActivity() {
         val dst = Mat()
         Imgproc.warpPerspective(mat, dst, perspectiveTransform, Size(dw, dh))
 
-        Toast.makeText(applicationContext, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "신분증 인식에 2~3분정도\n소요됩니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show()
         printOCRResult(dst)
 
-        updateIdentity()
-        Log.d("update????", "update????")
     }
 
     // 사각형 꼭짓점 정보로 사각형 최대 사이즈 구하기
 // 평면상 두 점 사이의 거리는 직각삼각형의 빗변길이 구하기와 동일
     private fun calculateMaxWidthHeight(
-        tl:org.opencv.core.Point,
-        tr:org.opencv.core.Point,
-        br:org.opencv.core.Point,
-        bl:org.opencv.core.Point,
+        tl: Point,
+        tr: Point,
+        br: Point,
+        bl: Point,
     ): Size {
         // Calculate width
         val widthA = sqrt(((tl.x - tr.x) * (tl.x - tr.x) + (tl.y - tr.y) * (tl.y - tr.y)))
@@ -343,6 +337,10 @@ class Profile_opencv: AppCompatActivity() {
             bitmap = resize(bitmap)!!
             image = BitMapToString(bitmap)
 
+            Log.d("imagegae", image.length.toString())
+
+            updateIdentity()
+            Log.d("update????", "update????")
         }
     }
 
@@ -353,7 +351,8 @@ class Profile_opencv: AppCompatActivity() {
         var img1 : String = ""
         var img2 : String = ""
 
-        if(image != "null"){
+        if(image != "null") {
+            Log.d("imagegae11", image.length.toString())
             img1 = image.substring(0,image.length/2+1)
             img2 = image.substring(image.length/2+1,image.length)
         }
@@ -376,10 +375,10 @@ class Profile_opencv: AppCompatActivity() {
 //                    profileFragment.arguments = bundle
 
                 } else {
-                    Toast.makeText(applicationContext, "신분증을 다시 촬영해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "신분증을 다시 촬영해주세요.", Toast.LENGTH_SHORT).show()
                 }
             },
-            { Log.d("failed", "error......${error(applicationContext)}") },
+            { Log.d("failed", "error......${error(this)}") },
             hashMapOf(
                 "id" to id,
                 "identity_image1" to img1,
@@ -389,27 +388,6 @@ class Profile_opencv: AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
 
-    }
-
-    fun hasPermission(context: FragmentActivity?, permission: String): Boolean {
-        val cameraPermissionCheck = context?.let { it1 ->
-            ContextCompat.checkSelfPermission(
-                it1,
-                android.Manifest.permission.CAMERA
-            )
-        }
-        return if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
-            Log.d("LDF", "DLF")
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.CAMERA),
-                1000
-            )
-            false
-        } else { //권한이 있는 경우
-            Log.d("dsfs","dfs")
-            true
-        }
     }
 
     private fun copyFile(lang: String) {
@@ -493,25 +471,6 @@ class Profile_opencv: AppCompatActivity() {
         }
         cameraLauncher.launch(photoUri)
 
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun ImageuriToBitmap(photouri: Uri): Bitmap {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                bitmap = this.let {
-                    ImageDecoder.createSource(
-                        it.contentResolver,
-                        photoUri!!
-                    )
-                }?.let { ImageDecoder.decodeBitmap(it) }!!
-            } else {
-                MediaStore.Images.Media.getBitmap(this.contentResolver, photoUri)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return bitmap
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -421,21 +421,6 @@ class ProfileFragment : Fragment(R.layout.profile) {
             Request.Method.POST,
             gradeurl,
             { response ->
-//                when (response) {
-//                    "berry" -> {
-//                        gradeImage.setImageResource(R.drawable.berry)
-//                    }
-//                    "flower" -> {
-//                        gradeImage.setImageResource(R.drawable.flower)
-//                    }
-//                    "branch" -> {
-//                        gradeImage.setImageResource(R.drawable.branch)
-//                    }
-//                    else -> {
-//                        gradeImage.setImageResource(R.drawable.sprout)
-//                    }
-//                }
-
                 when (response) {
                     "berry" -> {
                         gradeImage.setImageResource(R.drawable.flower44)
@@ -497,7 +482,7 @@ class ProfileFragment : Fragment(R.layout.profile) {
                         else -> {
                             identity_warning_img.setImageResource(R.drawable.identity_check)
                             identity_warning_img.setOnClickListener {
-                                Toast.makeText(context, "신분증이 인증되었습니다.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "신분증 인증이 완료되었으므로\n\n 자유롭게 이용가능합니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
