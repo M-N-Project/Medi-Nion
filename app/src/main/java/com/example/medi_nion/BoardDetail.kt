@@ -616,21 +616,21 @@ class BoardDetail : AppCompatActivity() {
                                                                     val commentmedalidurl =
                                                                         "http://seonho.dothome.co.kr/Medal_Comment.php"
 
-                                                                    val request1 = SignUP_Request(
-                                                                        Request.Method.POST,
-                                                                        commentmedalidurl,
-                                                                        { response ->
-                                                                            Log.d("**!댓글 메달", response)
-//                                                                        comment_items.clear()
-                                                                            val jsonArray =
-                                                                                JSONArray(response)
-                                                                            for (i in 0 until jsonArray.length()) {
-                                                                                val item =
-                                                                                    jsonArray.getJSONObject(
-                                                                                        i
-                                                                                    )
-                                                                                val id_comment =
-                                                                                    item.getString("id")
+//                                                                    val request1 = SignUP_Request(
+//                                                                        Request.Method.POST,
+//                                                                        commentmedalidurl,
+//                                                                        { response ->
+//                                                                            Log.d("**!댓글 메달", response)
+////                                                                        comment_items.clear()
+//                                                                            val jsonArray =
+//                                                                                JSONArray(response)
+//                                                                            for (i in 0 until jsonArray.length()) {
+//                                                                                val item =
+//                                                                                    jsonArray.getJSONObject(
+//                                                                                        i
+//                                                                                    )
+//                                                                                val id_comment =
+//                                                                                    item.getString("id")
 
                                                                                 val request = Login_Request(
                                                                                     Request.Method.POST,
@@ -1216,40 +1216,40 @@ class BoardDetail : AppCompatActivity() {
                                                                                             })
                                                                                     }, { Log.d("like Failed", "error......${error(applicationContext)}") },
                                                                                     hashMapOf(
-                                                                                        "id" to id_comment
+                                                                                        "id" to writerId
                                                                                     )
                                                                                 )
                                                                                 val queue = Volley.newRequestQueue(this)
                                                                                 queue.add(request)
 
-                                                                            }
-
-                                                                        },
-                                                                        {
-                                                                            Log.d(
-                                                                                "failed",
-                                                                                "error......${
-                                                                                    error(
-                                                                                        applicationContext
-                                                                                    )
-                                                                                }"
-                                                                            )
-                                                                        },
-                                                                        hashMapOf(
-                                                                            "board" to board,
-                                                                            "post_num" to post_num,
-                                                                            "comment_num" to comment_num.toString()
-                                                                        )
-                                                                    )
-                                                                    request1.retryPolicy =
-                                                                        DefaultRetryPolicy(
-                                                                            0,
-                                                                            -1,
-                                                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                                                                        )
-                                                                    val queue1 =
-                                                                        Volley.newRequestQueue(this)
-                                                                    queue1.add(request1)
+//                                                                            }
+//
+//                                                                        },
+//                                                                        {
+//                                                                            Log.d(
+//                                                                                "failed",
+//                                                                                "error......${
+//                                                                                    error(
+//                                                                                        applicationContext
+//                                                                                    )
+//                                                                                }"
+//                                                                            )
+//                                                                        },
+//                                                                        hashMapOf(
+//                                                                            "board" to board,
+//                                                                            "post_num" to post_num,
+//                                                                            "comment_num" to comment_num.toString()
+//                                                                        )
+//                                                                    )
+//                                                                    request1.retryPolicy =
+//                                                                        DefaultRetryPolicy(
+//                                                                            0,
+//                                                                            -1,
+//                                                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//                                                                        )
+//                                                                    val queue1 =
+//                                                                        Volley.newRequestQueue(this)
+//                                                                    queue1.add(request1)
                                                                 }
                                                                 //바로 여기야 여기!!
                                                                 //대댓글 있으면 -> 대댓글이 다 더해진 후에 CommentItem add 하게끔 만들기
