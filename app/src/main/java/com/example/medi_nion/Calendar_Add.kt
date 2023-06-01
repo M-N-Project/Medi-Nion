@@ -52,6 +52,8 @@ class Calendar_Add : AppCompatActivity() {
     private lateinit var manager: NotificationManager
     private lateinit var builder: NotificationCompat.Builder
     lateinit var notificationPermission: ActivityResultLauncher<String>
+
+    private var addFlag = "new" //new / history
     
     private var lastSelected = ""
 
@@ -139,6 +141,7 @@ class Calendar_Add : AppCompatActivity() {
                                         override fun onHistoryClick(v: View, data: CalendarItem, pos: Int) {
                                             Log.d("DFSDFD1", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
+                                            addFlag = "history"
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
@@ -247,6 +250,7 @@ class Calendar_Add : AppCompatActivity() {
                                             Log.d("DFSDFD2", data.schedule_alarm)
                                             schedule_title.setText(data.schedule_name)
                                             val color = findViewById<Button>(R.id.schedule_color_imageView)
+                                            addFlag = "history"
                                             start_result.setText(data.schedule_start)
                                             end_result.setText(data.schedule_end)
 
@@ -362,6 +366,7 @@ class Calendar_Add : AppCompatActivity() {
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
                             start_result.setText(data.schedule_start)
                             end_result.setText(data.schedule_end)
+                            addFlag = "history"
 
 //                            when (data.schedule_alarm) {
 //                                "1시간 전" -> spinner.setSelection(1)
@@ -761,7 +766,7 @@ class Calendar_Add : AppCompatActivity() {
                             val day_night1 = findViewById<TextView>(R.id.day_night1)
                             val day_night2 = findViewById<TextView>(R.id.day_night2)
 
-
+                            addFlag = "history"
                             Log.d("DFSDFD4", data.schedule_alarm)
                             schedule_title.setText(data.schedule_name)
                             val color = findViewById<Button>(R.id.schedule_color_imageView)
@@ -842,6 +847,8 @@ class Calendar_Add : AppCompatActivity() {
                 listener = { color ->
                     selectedColor = color
                     val selColor = ColorSheetUtils.colorToHex(selectedColor)
+                    addFlag = "new"
+                    //colorString = ColorSheetUtils.colorToHex(selectedColor)
 
                     val drawable = ContextCompat.getDrawable(this, R.drawable.calendar_color_oval)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -961,7 +968,11 @@ class Calendar_Add : AppCompatActivity() {
             setAlarm(alarm_setting, alarmCode, schedule_title)
         }
 
-        Log.d("-0-9231","$id , ${schedule_title}, ${presentDate}, ${color} ${start_result}, ${end_result}, ${alarm}, ${repeat}, ${schedule_memo}")
+        Log.d("-0-9231","$id , ${schedule_title}, ${presentDate}, ${color} ${start_result}, ${end_result}, ${alarm}, ${repeat}, ${schedule_memo}, $addFlag")
+
+        var scheduleColor = ""
+        if(addFlag == "new") scheduleColor = ColorSheetUtils.colorToHex(selectedColor)
+        else scheduleColor = colorString
 
         val request = Upload_Request(
             Request.Method.POST,
@@ -989,7 +1000,7 @@ class Calendar_Add : AppCompatActivity() {
                 }
             },
             { Log.d("failed", "error......${error(applicationContext)}") },
-            if (colorString == "") {
+            if (scheduleColor == "" || scheduleColor == "#FFFFFF") {
                 mutableMapOf(
                     "id" to id,
                     "schedule_name" to schedule_title,
@@ -1013,7 +1024,7 @@ class Calendar_Add : AppCompatActivity() {
                     "end_date" to end_date_request,
                     "schedule_start" to start_result,
                     "schedule_end" to end_result,
-                    "schedule_color" to colorString,
+                    "schedule_color" to scheduleColor,
                     "schedule_alarm" to alarm,
                     "schedule_repeat" to repeat,
                     "schedule_memo" to schedule_memo,

@@ -179,6 +179,22 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             backPressedTime = System.currentTimeMillis()
             Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         } else {
+            var id = intent.getStringExtra("id")
+            val url = "http://seonho.dothome.co.kr/finishDeviceId.php"
+            val request = Login_Request(
+                Request.Method.POST,
+                url,
+                { response ->
+                    Log.d("finishDevice", response)
+
+                }, { Log.d("notification Failed", "error......${error(applicationContext)}") },
+                hashMapOf(
+                    "id" to id.toString()
+                )
+            )
+            val queue = Volley.newRequestQueue(this)
+            queue.add(request)
+
             finishAffinity()
         }
     }
