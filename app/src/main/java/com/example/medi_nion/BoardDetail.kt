@@ -475,9 +475,11 @@ class BoardDetail : AppCompatActivity() {
     // 댓글 fetch -------------------------------------------------------------------------------
     @SuppressLint("SuspiciousIndentation")
     fun fetchCommentData() {
-        val url = "http://seonho.dothome.co.kr/Comment_list.php"
+//        val url = "http://seonho.dothome.co.kr/Comment_list.php"
+        val url = "http://seonho.dothome.co.kr/CommentTestList.php"
         val urlCommentHeart = "http://seonho.dothome.co.kr/commentHeart.php"
-        val urlCommentHeartFetch = "http://seonho.dothome.co.kr/commentHeart_list.php"
+//        val urlCommentHeartFetch = "http://seonho.dothome.co.kr/commentHeart_list.php"
+        val urlCommentHeartFetch = "http://seonho.dothome.co.kr/commentHeartTestList.php"
 
         var id = intent?.getStringExtra("id").toString()
         var post_num = intent?.getStringExtra("num").toString()
@@ -485,6 +487,8 @@ class BoardDetail : AppCompatActivity() {
 
         comment_items.clear()
         commentFlagHash.clear()
+
+
 
         // "http://seonho.dothome.co.kr/Comment_list.php" - comment fetch ------------------------------------------
         val request = Login_Request(
@@ -500,7 +504,6 @@ class BoardDetail : AppCompatActivity() {
                             CommentListAdapter(comment_items)
                         CommentRecyclerView.adapter =
                             Commentadapter
-
                     }
                     else{
                         val jsonArray = JSONArray(response)
@@ -517,12 +520,13 @@ class BoardDetail : AppCompatActivity() {
                             val comment = item.getString("comment")
                             val comment_time = item.getString("comment_time")
                             val comment_num = item.getInt("comment_num")
-                            val heart = item.getInt("heart")
+                            val heart_num = item.getInt("heart")
                             var isHeartMap = HashMap<String, Boolean>()
 
 
                             if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                                 comment_user.size + 1
+
 
                             //댓글 좋아요 가져오기...
                             val requestCommentLike = Login_Request(
@@ -540,7 +544,7 @@ class BoardDetail : AppCompatActivity() {
                                                 val itemHeart = jsonArrayHeart.getJSONObject(i)
 
                                                 val heartId = itemHeart.getString("id")
-                                                val heart_num = itemHeart.getString("count")
+                                                val heart = itemHeart.getString("count")
 
                                                 heartUserList.add(heartId)
                                             }
@@ -551,7 +555,8 @@ class BoardDetail : AppCompatActivity() {
 
                                         // 해당되는 대댓글들 가져오기
                                         //대댓글 fetch --------------------------------------------------------
-                                        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
+//                                        val urlDetail = "http://seonho.dothome.co.kr/Comment2_list.php"
+                                        val urlDetail = "http://seonho.dothome.co.kr/Comment2TestList.php"
                                         val urlComment2Heartfetch = "http://seonho.dothome.co.kr/comment2Heart_list2.php"
                                         val commentDetailAdapterMap = HashMap<Int, CommentDetailListAdapter>()
                                         val commentDetailItemsMap = HashMap<Int, ArrayList<CommentDetailItem>>()
@@ -616,21 +621,6 @@ class BoardDetail : AppCompatActivity() {
                                                                     val commentmedalidurl =
                                                                         "http://seonho.dothome.co.kr/Medal_Comment.php"
 
-//                                                                    val request1 = SignUP_Request(
-//                                                                        Request.Method.POST,
-//                                                                        commentmedalidurl,
-//                                                                        { response ->
-//                                                                            Log.d("**!댓글 메달", response)
-////                                                                        comment_items.clear()
-//                                                                            val jsonArray =
-//                                                                                JSONArray(response)
-//                                                                            for (i in 0 until jsonArray.length()) {
-//                                                                                val item =
-//                                                                                    jsonArray.getJSONObject(
-//                                                                                        i
-//                                                                                    )
-//                                                                                val id_comment =
-//                                                                                    item.getString("id")
 
                                                                                 val request = Login_Request(
                                                                                     Request.Method.POST,
@@ -655,6 +645,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     "bronze"
                                                                                             }
                                                                                         }
+                                                                                        Log.d("haha", comment_user[writerId].toString())
                                                                                         val commentItem = CommentItem(
                                                                                             id,
                                                                                             writerId,
@@ -663,7 +654,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                             comment_medal_text,
                                                                                             comment_num,
                                                                                             comment_time,
-                                                                                            heart,
+                                                                                            heart_num,
                                                                                             isHeart,
                                                                                             commentDetailAdapterMap[comment_num]
                                                                                         )
@@ -780,8 +771,11 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     data: CommentItem,
                                                                                                     pos: Int
                                                                                                 ) {
-                                                                                                    var urlUpdateCommentCnt =
-                                                                                                        "http://seonho.dothome.co.kr/updateCommentCnt.php"
+                                                                                                  Log.d("하트하트", "대댓글 없을때 하트")
+//                                                                                                    var urlUpdateCommentCnt =
+//                                                                                                        "http://seonho.dothome.co.kr/updateCommentCnt.php"
+                                                                                                  var urlUpdateCommentCnt =
+                                                                                                      "http://seonho.dothome.co.kr/updateCommentCntTest.php"
                                                                                                     var id =
                                                                                                         intent?.getStringExtra("id")
                                                                                                             .toString()
@@ -813,6 +807,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                         Request.Method.POST,
                                                                                                         urlCommentHeart,
                                                                                                         { response ->
+                                                                                                            Log.d("하트하트2", data.comment_num.toString())
                                                                                                             var commentHeartFlag =
                                                                                                                 ""
                                                                                                             if (commentHeart.isChecked) commentHeartFlag =
@@ -825,6 +820,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     Request.Method.POST,
                                                                                                                     urlUpdateCommentCnt,
                                                                                                                     { responseLike ->
+                                                                                                                        Log.d("하트하트3", responseLike)
                                                                                                                         if (!responseLike.equals(
                                                                                                                                 "update fail"
                                                                                                                             )
@@ -854,7 +850,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     hashMapOf(
                                                                                                                         "board" to board,
                                                                                                                         "post_num" to post_num,
-                                                                                                                        "comment_num" to (pos + 1).toString(),
+                                                                                                                        "comment_num" to data.comment_num.toString(),
                                                                                                                         "flag" to commentHeartFlag
                                                                                                                     )
                                                                                                                 )
@@ -882,7 +878,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                             "id" to id,
                                                                                                             "post_num" to post_num,
                                                                                                             "board" to board,
-                                                                                                            "comment_num" to (pos + 1).toString(),
+                                                                                                            "comment_num" to data.comment_num.toString(),
                                                                                                             "flag" to commentHeartFlag.toString()
                                                                                                         )
                                                                                                     )
@@ -939,7 +935,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                         .setPositiveButton("삭제",
                                                                                                             DialogInterface.OnClickListener { dialog, id ->
                                                                                                                 // 대댓글 테이블에서 찾아서 삭제
-                                                                                                                val urlComment2Count = "http://seonho.dothome.co.kr/Comment2Count.php"
+//                                                                                                                val urlComment2Count = "http://seonho.dothome.co.kr/Comment2Count.php"
+                                                                                                                val urlComment2Count = "http://seonho.dothome.co.kr/Comment2CountTest.php"
                                                                                                                 val requestComment2Count = Login_Request(
                                                                                                                     Request.Method.POST,
                                                                                                                     urlComment2Count,
@@ -952,7 +949,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                             Log.d("commm11", comment2Count.toString())
 
                                                                                                                             if(comment2Count == 0){
-                                                                                                                                val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
+//                                                                                                                                val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
+                                                                                                                                val urlDelete = "http://seonho.dothome.co.kr/CommentDeleteTest.php"
                                                                                                                                 val requestDelete = Login_Request(
                                                                                                                                     Request.Method.POST,
                                                                                                                                     urlDelete,
@@ -1010,7 +1008,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                             }
 
                                                                                                                             else {
-                                                                                                                                val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
+//                                                                                                                                val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
+                                                                                                                                val urlDelete2 = "http://seonho.dothome.co.kr/Comment2DeleteTest.php"
                                                                                                                                 val requestDelete2 = Login_Request(
                                                                                                                                     Request.Method.POST,
                                                                                                                                     urlDelete2,
@@ -1018,8 +1017,10 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                         Log.d("8931231", responseDelete2)
                                                                                                                                         if (responseDelete2 != "comment delete2 fail") {
                                                                                                                                             // 댓글 테이블에서 찾아서 삭제
+//                                                                                                                                            val urlDelete =
+//                                                                                                                                                "http://seonho.dothome.co.kr/CommentDelete.php"
                                                                                                                                             val urlDelete =
-                                                                                                                                                "http://seonho.dothome.co.kr/CommentDelete.php"
+                                                                                                                                                "http://seonho.dothome.co.kr/CommentDeleteTest.php"
                                                                                                                                             val requestDelete =
                                                                                                                                                 Login_Request(
                                                                                                                                                     Request.Method.POST,
@@ -1125,70 +1126,6 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                 )
                                                                                                                                 val queue = Volley.newRequestQueue(applicationContext)
                                                                                                                                 queue.add(requestDelete2)
-
-
-//                                                                                                                                                for (i in 0 until comment2Count) {
-//                                                                                                                                                    val urlCommentDeleteCount =
-//                                                                                                                                                        "http://seonho.dothome.co.kr/updateBoardCnt.php"
-//                                                                                                                                                    val requestDeleteCount =
-//                                                                                                                                                        Login_Request(
-//                                                                                                                                                            Request.Method.POST,
-//                                                                                                                                                            urlCommentDeleteCount,
-//                                                                                                                                                            { requestDeleteCount ->
-//                                                                                                                                                                if (requestDeleteCount != "update fail") {
-//                                                                                                                                                                    if (i == comment2Count-1) {
-//                                                                                                                                                                        Toast.makeText(
-//                                                                                                                                                                            baseContext,
-//                                                                                                                                                                            String.format(
-//                                                                                                                                                                                "댓글이 삭제되었습니다."
-//                                                                                                                                                                            ),
-//                                                                                                                                                                            Toast.LENGTH_SHORT
-//                                                                                                                                                                        )
-//                                                                                                                                                                            .show()
-//
-//                                                                                                                                                                        comment_comment_flag =
-//                                                                                                                                                                            false
-//                                                                                                                                                                        findViewById<TextView>(
-//                                                                                                                                                                            R.id.textView_commentcount2
-//                                                                                                                                                                        ).text =
-//                                                                                                                                                                            (findViewById<TextView>(
-//                                                                                                                                                                                R.id.textView_commentcount2
-//                                                                                                                                                                            ).text.toString()
-//                                                                                                                                                                                .toInt() - comment2_count[data.comment_num]!!).toString()
-//
-//                                                                                                                                                                        comment2_count[data.comment_num] = 0
-//
-//                                                                                                                                                                    }
-//                                                                                                                                                                    fetchCommentData()
-//
-//                                                                                                                                                                }
-//
-//                                                                                                                                                            },
-//                                                                                                                                                            {
-//                                                                                                                                                                Log.d(
-//                                                                                                                                                                    "Comment Failed",
-//                                                                                                                                                                    "error......${
-//                                                                                                                                                                        error(
-//                                                                                                                                                                            applicationContext
-//                                                                                                                                                                        )
-//                                                                                                                                                                    }"
-//                                                                                                                                                                )
-//                                                                                                                                                            },
-//                                                                                                                                                            hashMapOf(
-//                                                                                                                                                                "board" to board,
-//                                                                                                                                                                "post_num" to post_num,
-//                                                                                                                                                                "flag" to "commentDOWN"
-//                                                                                                                                                            )
-//                                                                                                                                                        )
-//                                                                                                                                                    val queue =
-//                                                                                                                                                        Volley.newRequestQueue(
-//                                                                                                                                                            applicationContext
-//                                                                                                                                                        )
-//                                                                                                                                                    queue.add(
-//                                                                                                                                                        requestDeleteCount
-//                                                                                                                                                    )
-//                                                                                                                                                }
-
                                                                                                                             }
 
 
@@ -1221,35 +1158,6 @@ class BoardDetail : AppCompatActivity() {
                                                                                 )
                                                                                 val queue = Volley.newRequestQueue(this)
                                                                                 queue.add(request)
-
-//                                                                            }
-//
-//                                                                        },
-//                                                                        {
-//                                                                            Log.d(
-//                                                                                "failed",
-//                                                                                "error......${
-//                                                                                    error(
-//                                                                                        applicationContext
-//                                                                                    )
-//                                                                                }"
-//                                                                            )
-//                                                                        },
-//                                                                        hashMapOf(
-//                                                                            "board" to board,
-//                                                                            "post_num" to post_num,
-//                                                                            "comment_num" to comment_num.toString()
-//                                                                        )
-//                                                                    )
-//                                                                    request1.retryPolicy =
-//                                                                        DefaultRetryPolicy(
-//                                                                            0,
-//                                                                            -1,
-//                                                                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-//                                                                        )
-//                                                                    val queue1 =
-//                                                                        Volley.newRequestQueue(this)
-//                                                                    queue1.add(request1)
                                                                 }
                                                                 //바로 여기야 여기!!
                                                                 //대댓글 있으면 -> 대댓글이 다 더해진 후에 CommentItem add 하게끔 만들기
@@ -1260,16 +1168,18 @@ class BoardDetail : AppCompatActivity() {
                                                                             jsonArrayComment2.getJSONObject(
                                                                                 i
                                                                             )
-                                                                        val writerId =
+                                                                        val writerId2 =
                                                                             item.getString("id")
 
-                                                                        Log.d("WriterID", writerId.toString())
+                                                                        Log.d("writerId2", writerId2.toString())
 
                                                                         if (!comment_user.containsKey(
-                                                                                writerId
+                                                                                writerId2
                                                                             )
-                                                                        ) comment_user[writerId] =
+                                                                        ) comment_user[writerId2] =
                                                                             comment_user.size + 1
+
+                                                                        Log.d("comment_userr1", comment_user.toString())
 
                                                                         val comment_num =
                                                                             item.getInt("comment_num")
@@ -1283,8 +1193,8 @@ class BoardDetail : AppCompatActivity() {
                                                                         val heart = item.getInt("heart")
 
                                                                         val writerUser =
-                                                                            comment_user[writerId]!!
-                                                                        var isHeart = false
+                                                                            comment_user[writerId2]!!
+                                                                        var isHeart2 = false
                                                                         //여기서 이상함.. 대댓글 하나만 칠해지고 하나는 안칠해짐
 //                                                                if(comment2HeartMap[comment_num] == comment2_num) isHeart = true
 
@@ -1296,7 +1206,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                     comment2_num
                                                                                 )
                                                                             ) {
-                                                                                isHeart = true
+                                                                                isHeart2 = true
 
                                                                             }
                                                                         }
@@ -1311,32 +1221,16 @@ class BoardDetail : AppCompatActivity() {
                                                                                 .toString()
                                                                         var comment2_medal_text: String =
                                                                             "bronze"
+//                                                                        val comment2medalidurl =
+//                                                                            "http://seonho.dothome.co.kr/Medal_Comment2.php"
                                                                         val comment2medalidurl =
-                                                                            "http://seonho.dothome.co.kr/Medal_Comment2.php"
-
-                                                                        //여기서......문제임 노트북 꺼진다 ㅁㅊ
-//                                                                        val request1 = SignUP_Request(
-//                                                                            Request.Method.POST,
-//                                                                            comment2medalidurl,
-//                                                                            { response ->
-//                                                                                Log.d("**!대댓글 메달", response)
-//                                                                                commentDetail_items.clear()
-//                                                                                val jsonArray =
-//                                                                                    JSONArray(response)
-//                                                                                for (i in 0 until jsonArray.length()) {
-//                                                                                    val item =
-//                                                                                        jsonArray.getJSONObject(
-//                                                                                            i
-//                                                                                        )
-//                                                                                    val id_comment2 =
-//                                                                                        item.getString("id")
+                                                                            "http://seonho.dothome.co.kr/Medal_Comment2_Test.php"
 //
                                                                         val request =
                                                                             Login_Request(
                                                                                 Request.Method.POST,
                                                                                 comment2medalurl,
                                                                                 { medal2response ->
-
                                                                                     when (medal2response) {
                                                                                         "king" -> {
                                                                                             comment2_medal_text =
@@ -1355,11 +1249,10 @@ class BoardDetail : AppCompatActivity() {
                                                                                                 "bronze"
                                                                                         }
                                                                                     }
-
                                                                                     val commentDetailItem =
                                                                                         CommentDetailItem(
                                                                                             id,
-                                                                                            writerId,
+                                                                                            writerId2,
                                                                                             writerUser,
                                                                                             comment_num,
                                                                                             comment2,
@@ -1367,7 +1260,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                             comment2_num,
                                                                                             comment2_time,
                                                                                             heart,
-                                                                                            isHeart
+                                                                                            isHeart2
                                                                                         )
                                                                                     Log.d("**!대댓글 item", commentDetailItem.comment2)
 
@@ -1402,7 +1295,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     pos: Int
                                                                                                 ) {
                                                                                                     var urlUpdateComment2Cnt =
-                                                                                                        "http://seonho.dothome.co.kr/updateComment2Cnt.php"
+                                                                                                        "http://seonho.dothome.co.kr/updateComment2CntTest.php"
                                                                                                     var urlComment2Heart =
                                                                                                         "http://seonho.dothome.co.kr/comment2Heart.php"
                                                                                                     var id =
@@ -1477,8 +1370,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                         hashMapOf(
                                                                                                                             "board" to board,
                                                                                                                             "post_num" to post_num,
-                                                                                                                            "comment_num" to comment_num.toString(),
-                                                                                                                            "comment2_num" to (pos + 1).toString(),
+                                                                                                                            "comment_num" to data.comment_num.toString(),
+                                                                                                                            "comment2_num" to data.comment2_num.toString(),
                                                                                                                             "flag" to comment2HeartFlag
                                                                                                                         )
                                                                                                                     )
@@ -1505,8 +1398,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 "id" to id,
                                                                                                                 "post_num" to post_num,
                                                                                                                 "board" to board,
-                                                                                                                "comment_num" to comment_num.toString(),
-                                                                                                                "comment2_num" to (pos + 1).toString(),
+                                                                                                                "comment_num" to data.comment_num.toString(),
+                                                                                                                "comment2_num" to data.comment2_num.toString(),
                                                                                                                 "flag" to comment2HeartFlag.toString()
                                                                                                             )
                                                                                                         )
@@ -1539,8 +1432,10 @@ class BoardDetail : AppCompatActivity() {
                                                                                                             "삭제",
                                                                                                             DialogInterface.OnClickListener { dialog, id ->
                                                                                                                 // 대댓글 테이블에서 찾아서 삭제
+//                                                                                                                val urlDelete2 =
+//                                                                                                                    "http://seonho.dothome.co.kr/Comment_Comment_Delete.php"
                                                                                                                 val urlDelete2 =
-                                                                                                                    "http://seonho.dothome.co.kr/Comment_Comment_Delete.php"
+                                                                                                                    "http://seonho.dothome.co.kr/Comment_Comment_Delete_Test.php"
                                                                                                                 val requestDelete2 =
                                                                                                                     Login_Request(
                                                                                                                         Request.Method.POST,
@@ -1670,15 +1565,16 @@ class BoardDetail : AppCompatActivity() {
 
                                                                         if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                                                                             comment_user.size + 1
-
-                                                                        isHeart =
+                                                                        Log.d("comment_userr3", writerUser.toString())
+                                                                        val isHeart =
                                                                             if (isHeartMap.containsKey(appUser)) (isHeartMap[appUser]!!) else false
 
                                                                         val medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
                                                                         var comment_medal_text : String = "bronze"
 
-                                                                        val commentmedalidurl =
-                                                                            "http://seonho.dothome.co.kr/Medal_Comment.php"
+//                                                                        val commentmedalidurl =
+//                                                                            "http://seonho.dothome.co.kr/Medal_Comment.php"
+                                                                        val commentmedalidurl = "http://seonho.dothome.co.kr/Medal_Comment_Test.php"
 
                                                                         val request1 = SignUP_Request(
                                                                             Request.Method.POST,
@@ -1724,6 +1620,9 @@ class BoardDetail : AppCompatActivity() {
                                                                                             Log.d("098230128302193", commentFlagHash.toString())
                                                                                             if(!commentFlagHash.containsKey(comment_num) || commentFlagHash[comment_num]==false){
                                                                                                 Log.d("098230128302193", commentFlagHash.containsKey(comment_num).toString())
+
+                                                                                                Log.d("comment___", writerId)
+                                                                                                Log.d("comment_userr4", writerUser.toString())
                                                                                                 val commentItem = CommentItem(
                                                                                                     id,
                                                                                                     writerId,
@@ -1732,7 +1631,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                     comment_medal_text,
                                                                                                     comment_num,
                                                                                                     comment_time,
-                                                                                                    heart,
+                                                                                                    heart_num,
                                                                                                     isHeart,
                                                                                                     commentDetailAdapterMap[comment_num]
                                                                                                 )
@@ -1850,8 +1749,9 @@ class BoardDetail : AppCompatActivity() {
                                                                                                             data: CommentItem,
                                                                                                             pos: Int
                                                                                                         ) {
+                                                                                                            Log.d("하트하트", "대댓글 있을때 하트")
                                                                                                             var urlUpdateCommentCnt =
-                                                                                                                "http://seonho.dothome.co.kr/updateCommentCnt.php"
+                                                                                                                "http://seonho.dothome.co.kr/updateCommentCntTest.php"
                                                                                                             var id =
                                                                                                                 intent?.getStringExtra("id")
                                                                                                                     .toString()
@@ -1883,6 +1783,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 Request.Method.POST,
                                                                                                                 urlCommentHeart,
                                                                                                                 { response ->
+                                                                                                                    Log.d("하트하트2",response)
                                                                                                                     var commentHeartFlag =
                                                                                                                         ""
                                                                                                                     if (commentHeart.isChecked) commentHeartFlag =
@@ -1895,6 +1796,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                             Request.Method.POST,
                                                                                                                             urlUpdateCommentCnt,
                                                                                                                             { responseLike ->
+                                                                                                                                Log.d("하트하트2",responseLike)
                                                                                                                                 if (!responseLike.equals(
                                                                                                                                         "update fail"
                                                                                                                                     )
@@ -1924,7 +1826,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                             hashMapOf(
                                                                                                                                 "board" to board,
                                                                                                                                 "post_num" to post_num,
-                                                                                                                                "comment_num" to (pos + 1).toString(),
+                                                                                                                                "comment_num" to data.comment_num.toString(),
                                                                                                                                 "flag" to commentHeartFlag
                                                                                                                             )
                                                                                                                         )
@@ -1952,7 +1854,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                     "id" to id,
                                                                                                                     "post_num" to post_num,
                                                                                                                     "board" to board,
-                                                                                                                    "comment_num" to (pos + 1).toString(),
+                                                                                                                     "comment_num" to data.comment_num.toString(),
                                                                                                                     "flag" to commentHeartFlag.toString()
                                                                                                                 )
                                                                                                             )
@@ -2006,7 +1908,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                 .setPositiveButton("삭제",
                                                                                                                     DialogInterface.OnClickListener { dialog, id ->
                                                                                                                         // 대댓글 테이블에서 찾아서 삭제
-                                                                                                                        val urlComment2Count = "http://seonho.dothome.co.kr/Comment2Count.php"
+//                                                                                                                        val urlComment2Count = "http://seonho.dothome.co.kr/Comment2Count.php"
+                                                                                                                        val urlComment2Count = "http://seonho.dothome.co.kr/Comment2CountTest.php"
                                                                                                                         val requestComment2Count = Login_Request(
                                                                                                                             Request.Method.POST,
                                                                                                                             urlComment2Count,
@@ -2020,7 +1923,8 @@ class BoardDetail : AppCompatActivity() {
 
                                                                                                                                     if(comment2Count == 0){
                                                                                                                                         Log.d("09183213","0!")
-                                                                                                                                        val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
+//                                                                                                                                        val urlDelete = "http://seonho.dothome.co.kr/CommentDelete.php"
+                                                                                                                                        val urlDelete = "http://seonho.dothome.co.kr/CommentDeleteTest.php"
                                                                                                                                         val requestDelete = Login_Request(
                                                                                                                                             Request.Method.POST,
                                                                                                                                             urlDelete,
@@ -2079,15 +1983,18 @@ class BoardDetail : AppCompatActivity() {
 
                                                                                                                                     else {
                                                                                                                                         Log.d("09183213","0X")
-                                                                                                                                        val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
+//                                                                                                                                        val urlDelete2 = "http://seonho.dothome.co.kr/Comment2Delete.php"
+                                                                                                                                        val urlDelete2 = "http://seonho.dothome.co.kr/Comment2DeleteTest.php"
                                                                                                                                         val requestDelete2 = Login_Request(
                                                                                                                                             Request.Method.POST,
                                                                                                                                             urlDelete2,
                                                                                                                                             { responseDelete2 ->
                                                                                                                                                 if (responseDelete2 != "comment delete2 fail") {
                                                                                                                                                     // 댓글 테이블에서 찾아서 삭제
+//                                                                                                                                                    val urlDelete =
+//                                                                                                                                                        "http://seonho.dothome.co.kr/CommentDelete.php"
                                                                                                                                                     val urlDelete =
-                                                                                                                                                        "http://seonho.dothome.co.kr/CommentDelete.php"
+                                                                                                                                                        "http://seonho.dothome.co.kr/CommentDeleteTest.php"
                                                                                                                                                     val requestDelete =
                                                                                                                                                         Login_Request(
                                                                                                                                                             Request.Method.POST,
@@ -2757,7 +2664,8 @@ class BoardDetail : AppCompatActivity() {
         var post_num = intent?.getStringExtra("num").toString()
         var comment = findViewById<EditText>(R.id.Comment_editText).text.toString()
 
-        val url = "http://seonho.dothome.co.kr/Comment.php"
+//        val url = "http://seonho.dothome.co.kr/Comment.php"
+        val url = "http://seonho.dothome.co.kr/comment_test.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
 
         val noti_FCM = "http://seonho.dothome.co.kr/notification_FCM.php"
@@ -2919,19 +2827,24 @@ class BoardDetail : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val comment2_time = current.format(formatter)
 
-        val url = "http://seonho.dothome.co.kr/Comment2.php"
+//        val url = "http://seonho.dothome.co.kr/Comment2.php"
+        val url = "http://seonho.dothome.co.kr/comment2_test.php"
         val urlUpdateCnt = "http://seonho.dothome.co.kr/updateBoardCnt.php"
+
+        Log.d("kajfsf", "$board // $id // $post_num // $comment_num // $comment2_num // $comment2")
 
         val request = Login_Request(
             Request.Method.POST,
             url,
             { response ->
+                Log.d(";ljfsd", response)
                 if (!response.equals("Comment2 fail")) {
                     val requestCnt = Login_Request(
                         Request.Method.POST,
                         urlUpdateCnt,
                         { responseComment ->
                             if (!responseComment.equals("update fail")) {
+
                                 Log.d("ssdfklsdf", comment_num.toString())
                                 if(comment2_count[comment_num] == null) comment2_count[comment_num] = 1
                                 else comment2_count[comment_num] = comment2_count[comment_num]!! + 1
