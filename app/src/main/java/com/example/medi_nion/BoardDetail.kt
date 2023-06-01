@@ -1105,22 +1105,22 @@ class BoardDetail : AppCompatActivity() {
                                                                             "http://seonho.dothome.co.kr/Medal_Comment2.php"
 
                                                                         //여기서......문제임 노트북 꺼진다 ㅁㅊ
-                                                                        val request1 = SignUP_Request(
-                                                                            Request.Method.POST,
-                                                                            comment2medalidurl,
-                                                                            { response ->
-                                                                                Log.d("**!대댓글 메달", response)
-                                                                                commentDetail_items.clear()
-                                                                                val jsonArray =
-                                                                                    JSONArray(response)
-                                                                                for (i in 0 until jsonArray.length()) {
-                                                                                    val item =
-                                                                                        jsonArray.getJSONObject(
-                                                                                            i
-                                                                                        )
-                                                                                    val id_comment2 =
-                                                                                        item.getString("id")
-
+//                                                                        val request1 = SignUP_Request(
+//                                                                            Request.Method.POST,
+//                                                                            comment2medalidurl,
+//                                                                            { response ->
+//                                                                                Log.d("**!대댓글 메달", response)
+//                                                                                commentDetail_items.clear()
+//                                                                                val jsonArray =
+//                                                                                    JSONArray(response)
+//                                                                                for (i in 0 until jsonArray.length()) {
+//                                                                                    val item =
+//                                                                                        jsonArray.getJSONObject(
+//                                                                                            i
+//                                                                                        )
+//                                                                                    val id_comment2 =
+//                                                                                        item.getString("id")
+//
                                                                                     val request =
                                                                                         Login_Request(
                                                                                             Request.Method.POST,
@@ -1431,7 +1431,7 @@ class BoardDetail : AppCompatActivity() {
 
                                                                                                         })
                                                                                                 }
-                                                                                                
+
                                                                                             },
                                                                                             {
                                                                                                 Log.d(
@@ -1444,7 +1444,7 @@ class BoardDetail : AppCompatActivity() {
                                                                                                 )
                                                                                             },
                                                                                             hashMapOf(
-                                                                                                "id" to id_comment2
+                                                                                                "id" to writerId
                                                                                             )
                                                                                         )
                                                                                     val queue =
@@ -1453,15 +1453,15 @@ class BoardDetail : AppCompatActivity() {
                                                                                         )
                                                                                     queue.add(request)
 
-                                                                                }
+
 
                                                                                 //================================aiaiaiai=========================================
 
                                                                                 if (!comment_user.containsKey(writerId)) comment_user[writerId] =
                                                                                     comment_user.size + 1
 
-                                                                                val isHeart =
-                                                                                    if (isHeartMap.containsKey(appUser)) (isHeartMap[appUser]) else false
+                                                                                isHeart =
+                                                                                    if (isHeartMap.containsKey(appUser)) (isHeartMap[appUser]!!) else false
 
                                                                                 val medalurl = "http://seonho.dothome.co.kr/Medal_Select.php"
                                                                                 var comment_medal_text : String = "bronze"
@@ -2102,32 +2102,32 @@ class BoardDetail : AppCompatActivity() {
                                                                                     Volley.newRequestQueue(this)
                                                                                 queue1.add(request1)
 
-                                                                            },
-                                                                            {
-                                                                                Log.d(
-                                                                                    "failed",
-                                                                                    "error......${
-                                                                                        error(
-                                                                                            applicationContext
-                                                                                        )
-                                                                                    }"
-                                                                                )
-                                                                            },
-                                                                            hashMapOf(
-                                                                                "board" to board,
-                                                                                "post_num" to post_num,
-                                                                                "comment2_num" to comment2_num.toString()
-                                                                            )
-                                                                        )
-                                                                        request1.retryPolicy =
-                                                                            DefaultRetryPolicy(
-                                                                                0,
-                                                                                -1,
-                                                                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-                                                                            )
-                                                                        val queue1 =
-                                                                            Volley.newRequestQueue(this)
-                                                                        queue1.add(request1)
+//                                                                            },
+//                                                                            {
+//                                                                                Log.d(
+//                                                                                    "failed",
+//                                                                                    "error......${
+//                                                                                        error(
+//                                                                                            applicationContext
+//                                                                                        )
+//                                                                                    }"
+//                                                                                )
+//                                                                            },
+//                                                                            hashMapOf(
+//                                                                                "board" to board,
+//                                                                                "post_num" to post_num,
+//                                                                                "comment2_num" to comment2_num.toString()
+//                                                                            )
+//                                                                        )
+//                                                                        request1.retryPolicy =
+//                                                                            DefaultRetryPolicy(
+//                                                                                0,
+//                                                                                -1,
+//                                                                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//                                                                            )
+//                                                                        val queue1 =
+//                                                                            Volley.newRequestQueue(this)
+//                                                                        queue1.add(request1)
                                                                     }
 
                                                                 }
