@@ -28,7 +28,9 @@ class Business_bookmark__profile : AppCompatActivity() {
     var items = ArrayList<BusinessBoardItem>()
     var all_items = ArrayList<BusinessBoardItem>()
     var new_items = ArrayList<BusinessBoardItem>()
-    var adapter = BusinessDetailRecyclerAdapter(items)
+    var adapter = BusinessProfileRecyclerAdapter(items)  //문제야 문제~
+
+    var profileImg = "" //프로필 이미지
 
     var num = 0 //비즈니스 채널 번호
     var writerId = ""
@@ -182,7 +184,7 @@ class Business_bookmark__profile : AppCompatActivity() {
                                                                                 new_items.clear()
                                                                                 new_items.addAll(items)
                                                                                 adapter =
-                                                                                    BusinessDetailRecyclerAdapter(new_items)
+                                                                                    BusinessProfileRecyclerAdapter(new_items)
 
                                                                                 BusinessBoardRecyclerView.adapter =
                                                                                     adapter
@@ -192,7 +194,7 @@ class Business_bookmark__profile : AppCompatActivity() {
 
                                                                                 adapter.setOnItemClickListener(
                                                                                     object :
-                                                                                        BusinessDetailRecyclerAdapter.OnItemClickListener {
+                                                                                        BusinessProfileRecyclerAdapter.OnItemClickListener {
                                                                                         override fun onProfileClick(
                                                                                             v: View,
                                                                                             data: BusinessBoardItem,
