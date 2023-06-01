@@ -360,7 +360,6 @@ class BoardDetail : AppCompatActivity() {
             Request.Method.POST,
             medalurl,
             { response ->
-                Log.d("medlaSele", response)
 
                 when (response) {
                     "king" -> {
@@ -1330,13 +1329,13 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                         DialogInterface.OnClickListener { dialog, id ->
                                                                                                                             // 대댓글 테이블에서 찾아서 삭제
                                                                                                                             val urlDelete2 =
-                                                                                                                                "http://seonho.dothome.co.kr/Comment2Delete.php"
+                                                                                                                                "http://seonho.dothome.co.kr/Comment_Comment_Delete.php"
                                                                                                                             val requestDelete2 =
                                                                                                                                 Login_Request(
                                                                                                                                     Request.Method.POST,
                                                                                                                                     urlDelete2,
                                                                                                                                     { responseDelete2 ->
-                                                                                                                                        if (responseDelete2 != "comment delete2 fail") {
+                                                                                                                                        if (responseDelete2 != "comment2 delete fail") {
                                                                                                                                             //board 테이블에서 댓글 개수 줄이기
 
                                                                                                                                             val urlCommentDeleteCount =
@@ -1407,7 +1406,8 @@ class BoardDetail : AppCompatActivity() {
                                                                                                                                     hashMapOf(
                                                                                                                                         "board" to board,
                                                                                                                                         "post_num" to post_num,
-                                                                                                                                        "comment_num" to data.comment_num.toString()
+                                                                                                                                        "comment_num" to data.comment_num.toString(),
+                                                                                                                                        "comment2_num" to data.comment2_num.toString()
                                                                                                                                     )
                                                                                                                                 )
                                                                                                                                 val queue =
