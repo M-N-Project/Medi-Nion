@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
@@ -56,6 +57,7 @@ class Profile_opencv: AppCompatActivity() {
         OpenCVLoader.initDebug()
     }
 
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +72,7 @@ class Profile_opencv: AppCompatActivity() {
         var nickname = intent.getStringExtra("nickname")
         var button_opencv = findViewById<Button>(R.id.opencv_button)
         var identity_img = findViewById<ImageView>(R.id.identity_imageView)
+        var opencv_textView = findViewById<TextView>(R.id.opencv_textView)
 
         button_opencv.setOnClickListener {
                 val cameraPermissionCheck = ContextCompat.checkSelfPermission(
@@ -117,8 +120,8 @@ class Profile_opencv: AppCompatActivity() {
                 identity_img.colorFilter = filter
                 identity_img.setImageURI(photoUri)
 
-                doOCR()
 
+                doOCR()
                 updateIdentity()
                 Log.d("update????", "update????")
 
@@ -298,7 +301,7 @@ class Profile_opencv: AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun printOCRResult(src: Mat) {
         with(TessBaseAPI()) {
-//            val result = findViewById<TextView>(R.id.text_result)
+            val opencv_textView = findViewById<TextView>(R.id.opencv_textView)
             dataPath = "$filesDir/tesseracts/"
             checkFile(File(dataPath + "tessdata/"), "kor") //사용할 언어파일의 이름 지정
             checkFile(File(dataPath + "tessdata/"), "eng")
@@ -340,10 +343,11 @@ class Profile_opencv: AppCompatActivity() {
             bitmap = resize(bitmap)!!
             image = BitMapToString(bitmap)
 
+            opencv_textView.visibility = View.VISIBLE
+            opencv_textView.text = utF8Text
+
             Log.d("imagegae", image.length.toString())
 
-//            updateIdentity()
-//            Log.d("update????", "update????")
         }
     }
 
@@ -354,6 +358,8 @@ class Profile_opencv: AppCompatActivity() {
         var userDept = intent.getStringExtra("userDept").toString()
         var userGrade = intent.getStringExtra("userGrade").toString()
         var nickname = intent.getStringExtra("nickname").toString()
+        var opencv_textView = findViewById<TextView>(R.id.opencv_textView).text.toString()
+        var opencv_result = ""
 
         val updateidentityurl = "http://seonho.dothome.co.kr/identity_update.php"
         var img1 : String = ""
@@ -364,6 +370,12 @@ class Profile_opencv: AppCompatActivity() {
             img1 = image.substring(0,image.length/2+1)
             img2 = image.substring(image.length/2+1,image.length)
         }
+
+        opencv_result = opencv_textView.replace("\n", "")
+        opencv_result = opencv_result.replace(" ", "")
+
+        Log.d("result123", opencv_result)
+
 
         val request = Login_Request(
             Request.Method.POST,
@@ -388,17 +400,21 @@ class Profile_opencv: AppCompatActivity() {
                 }
             },
             { error->
-                Log.d("failed", "error.....${error.message}")
-                Toast.makeText(this, "신분증 인식이 완료되면\n모든 게시판을 이용할 수 있습니다.", Toast.LENGTH_SHORT).show()
+//                Log.d("failed", "error.....${error.message}")
+//                Toast.makeText(this, "신분증 인식이 완료되면\n모든 게시판을 이용할 수 있습니다.", Toast.LENGTH_SHORT).show()
             },
             hashMapOf(
                 "id" to id,
                 "identity_image1" to img1,
-                "identity_image2" to img2
+                "identity_image2" to img2,
+                "opencv" to opencv_textView
             )
         )
         val queue = Volley.newRequestQueue(this)
         queue.add(request)
+
+        Log.d("result", opencv_textView)
+//        finish()
 
     }
 

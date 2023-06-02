@@ -527,6 +527,7 @@ class SignUP : AppCompatActivity() {
                     "nickname" to nickname,
                     "userType" to basicUserBtn.text.toString(),
                     "userDept" to userDept,
+                    "opencv" to "",
                     "identity" to identity,
                     "identity_check" to "false",
                     "identity_image" to ""
@@ -539,6 +540,7 @@ class SignUP : AppCompatActivity() {
                     "nickname" to nickname,
                     "userType" to corpUserBtn.text.toString(),
                     "userDept" to corpUserBtn.text.toString(),
+                    "opencv" to "",
                     "identity" to identity,
                     "identity_check" to "false",
                     "identity_image" to ""
