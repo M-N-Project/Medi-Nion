@@ -95,7 +95,7 @@
 
                 <View
                     android:id="@+id/view15"
-                    android:layout_width="60dp"
+                    android:layout_width="10dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
@@ -129,11 +129,11 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_weight="1"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text=""-->
+<!--                android:layout_weight=""/>-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -147,7 +147,7 @@
                     android:gravity="right"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginRight="0dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/cancel2"
                     android:textColor="@color/black"
                     android:visibility="gone"
