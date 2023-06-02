@@ -122,8 +122,10 @@ class Profile_opencv: AppCompatActivity() {
 
 
                 doOCR()
-                updateIdentity()
+                updateImage()
                 Log.d("update????", "update????")
+                updateIdentity()
+                Log.d("456456", "456465")
 
             }
             Log.d("phto", "uri")
@@ -352,14 +354,12 @@ class Profile_opencv: AppCompatActivity() {
     }
 
 
-    fun updateIdentity() {
+    fun updateImage() {
         var id = intent.getStringExtra("id").toString()
         var userType = intent.getStringExtra("userType").toString()
         var userDept = intent.getStringExtra("userDept").toString()
         var userGrade = intent.getStringExtra("userGrade").toString()
         var nickname = intent.getStringExtra("nickname").toString()
-        var opencv_textView = findViewById<TextView>(R.id.opencv_textView).text.toString()
-        var opencv_result = ""
 
         val updateidentityurl = "http://seonho.dothome.co.kr/identity_update.php"
         var img1 : String = ""
@@ -370,12 +370,6 @@ class Profile_opencv: AppCompatActivity() {
             img1 = image.substring(0,image.length/2+1)
             img2 = image.substring(image.length/2+1,image.length)
         }
-
-        opencv_result = opencv_textView.replace("\n", "")
-        opencv_result = opencv_result.replace(" ", "")
-
-        Log.d("result123", opencv_result)
-
 
         val request = Login_Request(
             Request.Method.POST,
@@ -405,8 +399,60 @@ class Profile_opencv: AppCompatActivity() {
             },
             hashMapOf(
                 "id" to id,
+//                "identity_image" to image
                 "identity_image1" to img1,
-                "identity_image2" to img2,
+                "identity_image2" to img2
+            )
+        )
+        val queue = Volley.newRequestQueue(this)
+        queue.add(request)
+    }
+
+    fun updateIdentity() {
+        var id = intent.getStringExtra("id").toString()
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
+        var userGrade = intent.getStringExtra("userGrade").toString()
+        var nickname = intent.getStringExtra("nickname").toString()
+        var opencv_textView = findViewById<TextView>(R.id.opencv_textView).text.toString()
+        var opencv_result = ""
+
+        val imageurl = "http://seonho.dothome.co.kr/identity_opencv.php"
+
+        opencv_result = opencv_textView.replace("\n", "")
+        opencv_result = opencv_result.replace(" ", "")
+
+        Log.d("result123", opencv_result)
+
+
+        val request = Login_Request(
+            Request.Method.POST,
+            imageurl,
+            { response ->
+                Log.d("idendkd", response.toString())
+                if(!response.equals("updateOpencv fail")) {
+                    Log.d("123456", "789")
+
+                    var profileFragment = ProfileFragment()
+                    var bundle = Bundle()
+                    bundle.putString("id", id)
+                    bundle.putString("userType", userType)
+                    bundle.putString("userDept", userDept)
+                    bundle.putString("userGrade", userGrade)
+                    bundle.putString("nickname", nickname)
+                    profileFragment.arguments = bundle
+
+
+                } else {
+                    Toast.makeText(this, "신분증을 다시 촬영해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            },
+            { error->
+//                Log.d("failed", "error.....${error.message}")
+//                Toast.makeText(this, "신분증 인식이 완료되면\n모든 게시판을 이용할 수 있습니다.", Toast.LENGTH_SHORT).show()
+            },
+            hashMapOf(
+                "id" to id,
                 "opencv" to opencv_textView
             )
         )
