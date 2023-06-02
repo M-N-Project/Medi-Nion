@@ -1,5 +1,6 @@
 package com.example.medi_nion
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_MUTABLE
@@ -26,6 +27,7 @@ class AlarmService_comment: Service() {
         super.onCreate()
     }
 
+    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d("onStartConmmet", "dfds")
