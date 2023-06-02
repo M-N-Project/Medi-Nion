@@ -119,6 +119,9 @@ class Profile_opencv: AppCompatActivity() {
 
                 doOCR()
 
+                updateIdentity()
+                Log.d("update????", "update????")
+
             }
             Log.d("phto", "uri")
         }
@@ -339,14 +342,19 @@ class Profile_opencv: AppCompatActivity() {
 
             Log.d("imagegae", image.length.toString())
 
-            updateIdentity()
-            Log.d("update????", "update????")
+//            updateIdentity()
+//            Log.d("update????", "update????")
         }
     }
 
 
     fun updateIdentity() {
         var id = intent.getStringExtra("id").toString()
+        var userType = intent.getStringExtra("userType").toString()
+        var userDept = intent.getStringExtra("userDept").toString()
+        var userGrade = intent.getStringExtra("userGrade").toString()
+        var nickname = intent.getStringExtra("nickname").toString()
+
         val updateidentityurl = "http://seonho.dothome.co.kr/identity_update.php"
         var img1 : String = ""
         var img2 : String = ""
@@ -365,20 +373,24 @@ class Profile_opencv: AppCompatActivity() {
                 if(!response.equals("updateIdentity fail")) {
                     Log.d("123456", "789")
 
-//                    var profileFragment = ProfileFragment()
-//                    var bundle = Bundle()
-//                    bundle.putString("id", id)
-//                    bundle.putString("userType", userType)
-//                    bundle.putString("userDept", userDept)
-//                    bundle.putString("userGrade", userGrade)
-//                    bundle.putString("nickname", nickname)
-//                    profileFragment.arguments = bundle
+                    var profileFragment = ProfileFragment()
+                    var bundle = Bundle()
+                    bundle.putString("id", id)
+                    bundle.putString("userType", userType)
+                    bundle.putString("userDept", userDept)
+                    bundle.putString("userGrade", userGrade)
+                    bundle.putString("nickname", nickname)
+                    profileFragment.arguments = bundle
+
 
                 } else {
                     Toast.makeText(this, "신분증을 다시 촬영해주세요.", Toast.LENGTH_SHORT).show()
                 }
             },
-            { Log.d("failed", "error......${error(this)}") },
+            { error->
+                Log.d("failed", "error.....${error.message}")
+                Toast.makeText(this, "신분증 인식이 완료되면\n모든 게시판을 이용할 수 있습니다.", Toast.LENGTH_SHORT).show()
+            },
             hashMapOf(
                 "id" to id,
                 "identity_image1" to img1,
